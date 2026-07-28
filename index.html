@@ -124,6 +124,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             overflow: hidden;
             border: 1px solid #cbd5e1;
+            position: relative;
         }
         .portal-card-header {
             background-color: #3b82f6;
@@ -139,6 +140,32 @@
             color: #ffffff;
             letter-spacing: 0.5px;
         }
+        
+        /* Back Arrow Styling */
+        .back-arrow-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            z-index: 10;
+        }
+        .back-arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: scale(1.05);
+        }
+
         .portal-badge-logo {
             width: 65px;
             height: 65px;
@@ -360,6 +387,7 @@
     <!-- Teacher Auth / Login Portal -->
     <div id="teacherLoginPortal" class="portal-card hidden">
         <div class="portal-card-header">
+            <button class="back-arrow-btn" onclick="goHome()" title="Back to Main Menu">&#8592;</button>
             <h2>Teacher Portal Login</h2>
             <div class="portal-badge-logo">BLISS</div>
         </div>
@@ -416,7 +444,6 @@
                     </div>
                 </div>
 
-                <button class="btn-secondary" onclick="goHome()" style="width: 100%; margin-top: 25px;">Back to Main Menu</button>
                 <div id="teacherAuthError" class="error"></div>
             </div>
         </div>
@@ -625,6 +652,7 @@
     <!-- Admin Portal View -->
     <div id="adminPortal" class="portal-card hidden" style="max-width: 900px;">
         <div class="portal-card-header" style="background-color: #1e3d59;">
+            <button class="back-arrow-btn" onclick="goHome()" title="Back to Main Menu">&#8592;</button>
             <h2>Admin Portal</h2>
             <div class="portal-badge-logo" style="color: #1e3d59;">BLISS</div>
         </div>
