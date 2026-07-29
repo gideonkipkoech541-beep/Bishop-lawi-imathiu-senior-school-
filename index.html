@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Remedial Management System</title>
+    <title>Bishop Lawi Imathiu Senior School - Portal</title>
     <style>
         :root {
             --sidebar-bg: #1e3d59;
-            --topbar-bg: #f9a826;
-            --topbar-dark: #1e3d59;
-            --light-bg: #f5f7fa;
+            --topbar-bg: #3b82f6;
+            --light-bg: #e2e8f0;
             --dark: #2b2d42;
-            --primary: #1e3d59;
-            --success: #17b978;
-            --warning: #ffb703;
+            --primary: #3b82f6;
+            --success: #059669;
+            --warning: #d97706;
             --danger: #ef4444;
         }
         body {
@@ -45,8 +44,9 @@
         }
         .sidebar-header h3 {
             margin: 0;
-            font-size: 16px;
+            font-size: 15px;
             color: #ffffff;
+            line-height: 1.4;
         }
         .sidebar-menu {
             list-style: none;
@@ -80,8 +80,8 @@
 
         /* Top Bar Styling */
         .topbar {
-            background-color: var(--topbar-bg);
-            color: #1e3d59;
+            background-color: var(--sidebar-bg);
+            color: #ffffff;
             padding: 12px 25px;
             display: flex;
             justify-content: space-between;
@@ -106,7 +106,7 @@
         }
 
         h1, h2, h3 {
-            color: var(--primary);
+            color: var(--dark);
         }
         .portal-section {
             margin-top: 10px;
@@ -114,73 +114,141 @@
         .hidden {
             display: none !important;
         }
+
+        /* Wizard Card Matching Shared Screenshot */
+        .portal-card {
+            max-width: 580px;
+            margin: 60px auto;
+            background: #ffffff;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+        }
+        .portal-card-header {
+            background-color: #3b82f6;
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            position: relative;
+        }
+        .portal-card-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 400;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .portal-badge-logo {
+            width: 65px;
+            height: 65px;
+            background: white;
+            border-radius: 50%;
+            margin: 15px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #3b82f6;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .portal-card-body {
+            padding: 35px 40px;
+        }
+
         label {
             font-weight: 600;
             display: block;
             margin-top: 15px;
             color: var(--dark);
+            font-size: 14px;
         }
         input, select, textarea {
             width: 100%;
             padding: 12px;
             margin-top: 6px;
             border: 1px solid #cbd5e1;
-            border-radius: 6px;
+            border-radius: 4px;
             box-sizing: border-box;
             font-size: 15px;
-            background: #fff;
+            background: #f8fafc;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--primary);
+            background: #fff;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background-color: var(--primary);
+        
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .btn-orange {
+            background-color: #d97706;
             color: white;
             border: none;
-            font-size: 16px;
+            padding: 12px 24px;
+            font-size: 15px;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background 0.2s;
         }
-        button:hover {
-            background-color: #152d42;
+        .btn-orange:hover { background-color: #b45309; }
+
+        .btn-green {
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        .back-btn {
+        .btn-green:hover { background-color: #047857; }
+
+        .btn-secondary {
             background-color: #64748b;
-            margin-top: 12px;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
         }
-        .back-btn:hover {
-            background-color: #475569;
-        }
+        .btn-secondary:hover { background-color: #475569; }
+
         .day-row {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             padding: 18px;
-            border-radius: 8px;
+            border-radius: 6px;
             margin-top: 15px;
         }
         .summary-box {
             background: #ecfdf5;
             border: 1px solid #10b981;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             margin-top: 20px;
         }
         .error {
             color: #ef4444;
             font-weight: 600;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 14px;
         }
         .success {
             color: #10b981;
             font-weight: 600;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 14px;
         }
         .otp-box {
@@ -188,7 +256,7 @@
             border: 2px dashed #10b981;
             padding: 20px;
             margin-top: 15px;
-            border-radius: 8px;
+            border-radius: 6px;
         }
 
         /* Dashboard Metric Cards */
@@ -201,7 +269,7 @@
         .metric-card {
             color: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 6px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
@@ -222,26 +290,20 @@
         }
         .card-box {
             background: #ffffff;
-            border-radius: 8px;
+            border-radius: 6px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0;
+            border: 1px solid #cbd5e1;
             overflow: hidden;
         }
         .card-header {
             background: #f8fafc;
             padding: 15px 20px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #cbd5e1;
             font-weight: bold;
-            color: var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: var(--dark);
         }
         .card-body {
             padding: 20px;
-        }
-        .profile-pic-area {
-            text-align: center;
         }
         .profile-avatar {
             width: 140px;
@@ -262,19 +324,9 @@
             border-bottom: 1px solid #f1f5f9;
             font-size: 14px;
         }
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        .info-label {
-            width: 40%;
-            color: #64748b;
-            font-weight: 600;
-        }
-        .info-value {
-            width: 60%;
-            color: var(--dark);
-            font-weight: 500;
-        }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { width: 40%; color: #64748b; font-weight: 600; }
+        .info-value { width: 60%; color: var(--dark); font-weight: 500; }
         .status-badge {
             display: inline-block;
             padding: 6px 12px;
@@ -291,81 +343,96 @@
 <body>
 
 <div id="fullAppContainer">
-    <!-- Main Entry / Non-logged in Selection Menu -->
-    <div id="mainMenuContainer" class="container" style="max-width: 600px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
-        <h1>School Remedial Management System</h1>
-        <h2>Select Portal</h2>
-        <button onclick="showPortalSelection('teacherLogin')">1. Teacher Portal (Login / Register)</button>
-        <button onclick="showPortalSelection('admin')" style="background-color: #2b2d42;">2. Admin Portal</button>
-    </div>
-
-    <!-- Teacher Auth / Login Portal -->
-    <div id="teacherLoginPortal" class="container hidden" style="max-width: 600px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
-        <h2>Teacher Account Portal</h2>
-        <div id="teacherAuthBox">
-            <label for="authTeacherName">Select Your Name:</label>
-            <select id="authTeacherName" onchange="checkTeacherExists()">
-                <option value="">-- Select Your Name --</option>
-            </select>
-
-            <div id="loginFields" class="hidden">
-                <label for="authPassword">Account Password:</label>
-                <input type="password" id="authPassword" placeholder="Enter your password">
-                <button onclick="handleTeacherLogin()">Login</button>
-                <p style="margin-top: 15px; text-align: right;"><a href="javascript:void(0);" onclick="showForgotPasswordSection()" style="color: #0284c7; font-size: 14px; text-decoration: none; font-weight: 600;">Forgot Password? Reset Here</a></p>
-            </div>
-
-            <!-- Forgot Password Section -->
-            <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-top: 15px;">
-                <h4 style="margin-top: 0; color: var(--primary);">Reset Account Password</h4>
-                <label for="resetPhone">Enter Registered Phone Number:</label>
-                <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
-                <button onclick="requestPasswordResetOTP()" style="background-color: #d97706; margin-top: 10px;">Send Reset Code</button>
-
-                <div id="resetOtpBox" class="otp-box hidden" style="margin-top: 15px;">
-                    <p id="resetOtpNotice" class="success" style="margin-top:0; font-size: 15px; font-weight: bold;"></p>
-                    <label for="enteredResetOtp">Enter 4-digit Code:</label>
-                    <input type="text" id="enteredResetOtp" placeholder="Enter Code" maxlength="4">
-                    <label for="newAccountPassword">Enter New Password:</label>
-                    <input type="password" id="newAccountPassword" placeholder="New secure password">
-                    <button onclick="verifyAndResetPassword()" style="background-color: #10b981; margin-top: 10px;">Update Password</button>
-                </div>
-                <button class="back-btn" onclick="hideForgotPasswordSection()" style="margin-top: 10px;">Back to Login</button>
-            </div>
-
-            <div id="registerFields" class="hidden">
-                <p style="color: #d97706; font-weight: bold; margin-top: 15px; background: #fef3c7; padding: 10px; border-radius: 6px;">New member detected! Please register your account.</p>
-                <label for="regPhone">Phone Number:</label>
-                <input type="text" id="regPhone" placeholder="e.g. 0712345678">
-                
-                <label for="regPassword">Create Password:</label>
-                <input type="password" id="regPassword" placeholder="Create a secure password">
-                
-                <button onclick="requestRegistrationOTP()" style="background-color: #d97706;">Generate Verification Code</button>
-
-                <div id="otpVerificationSection" class="otp-box hidden">
-                    <p id="otpSimulatedNotice" class="success" style="margin-top:0; font-size: 16px; font-weight: bold;"></p>
-                    <label for="enteredOtp">Enter 4-digit Code Shown Above:</label>
-                    <input type="text" id="enteredOtp" placeholder="Enter Code here" maxlength="4">
-                    <button onclick="verifyAndCompleteRegistration()" style="background-color: #10b981;">Verify & Complete Registration</button>
-                </div>
-            </div>
-
-            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
-            <div id="teacherAuthError" class="error"></div>
+    <!-- Main Entry Menu -->
+    <div id="mainMenuContainer" class="portal-card">
+        <div class="portal-card-header">
+            <h2>Bishop Lawi Imathiu Senior School</h2>
+            <div class="portal-badge-logo">BLISS</div>
+        </div>
+        <div class="portal-card-body" style="text-align: center;">
+            <h3 style="margin-top: 0; color: #1e3d59;">School Portal</h3>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">Please select your portal access level below:</p>
+            <button onclick="showPortalSelection('teacherLogin')" class="btn-green" style="width: 100%; margin-bottom: 12px;">Teacher Portal (Login / Register)</button>
+            <button onclick="showPortalSelection('admin')" class="btn-orange" style="width: 100%; background-color: #1e3d59;">Admin Portal</button>
         </div>
     </div>
 
-    <!-- Teacher Portal Dashboard Layout (Styled Like Student Portal) -->
+    <!-- Teacher Auth / Login Portal -->
+    <div id="teacherLoginPortal" class="portal-card hidden">
+        <div class="portal-card-header">
+            <h2>Teacher Portal Login</h2>
+            <div class="portal-badge-logo">BLISS</div>
+        </div>
+        <div class="portal-card-body">
+            <div id="teacherAuthBox">
+                <label for="authTeacherName">Select Your Name:</label>
+                <select id="authTeacherName" onchange="checkTeacherExists()">
+                    <option value="">-- Select Your Name --</option>
+                </select>
+
+                <div id="loginFields" class="hidden">
+                    <label for="authPassword">Password:</label>
+                    <input type="password" id="authPassword" placeholder="Enter your password">
+                    
+                    <div class="button-row">
+                        <button onclick="showForgotPasswordSection()" class="btn-orange" type="button">Reset password</button>
+                        <button onclick="handleTeacherLogin()" class="btn-green" type="button">Sign In</button>
+                    </div>
+                </div>
+
+                <!-- Forgot Password Section -->
+                <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-top: 20px;">
+                    <h4 style="margin-top: 0; color: var(--dark);">Reset Account Password</h4>
+                    <label for="resetPhone">Enter Registered Phone Number:</label>
+                    <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
+                    <button onclick="requestPasswordResetOTP()" class="btn-orange" style="margin-top: 10px; width:100%;">Send Reset Code</button>
+
+                    <div id="resetOtpBox" class="otp-box hidden">
+                        <p id="resetOtpNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
+                        <label for="enteredResetOtp">Enter 4-digit Code:</label>
+                        <input type="text" id="enteredResetOtp" placeholder="Enter Code" maxlength="4">
+                        <label for="newAccountPassword">Enter New Password:</label>
+                        <input type="password" id="newAccountPassword" placeholder="New secure password">
+                        <button onclick="verifyAndResetPassword()" class="btn-green" style="margin-top: 10px; width:100%;">Update Password</button>
+                    </div>
+                    <button class="btn-secondary" onclick="hideForgotPasswordSection()" style="width: 100%; margin-top: 10px;">Back to Login</button>
+                </div>
+
+                <div id="registerFields" class="hidden">
+                    <p style="color: #d97706; font-weight: bold; margin-top: 15px; background: #fef3c7; padding: 10px; border-radius: 4px; font-size: 14px;">New member detected! Please register your account.</p>
+                    <label for="regPhone">Phone Number:</label>
+                    <input type="text" id="regPhone" placeholder="e.g. 0712345678">
+                    
+                    <label for="regPassword">Create Password:</label>
+                    <input type="password" id="regPassword" placeholder="Create a secure password">
+                    
+                    <button onclick="requestRegistrationOTP()" class="btn-orange" style="margin-top: 15px; width: 100%;">Generate Verification Code</button>
+
+                    <div id="otpVerificationSection" class="otp-box hidden">
+                        <p id="otpSimulatedNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
+                        <label for="enteredOtp">Enter 4-digit Code Shown Above:</label>
+                        <input type="text" id="enteredOtp" placeholder="Enter Code here" maxlength="4">
+                        <button onclick="verifyAndCompleteRegistration()" class="btn-green" style="margin-top: 10px; width: 100%;">Verify & Complete Registration</button>
+                    </div>
+                </div>
+
+                <button class="btn-secondary" onclick="goHome()" style="width: 100%; margin-top: 25px;">Back to Main Menu</button>
+                <div id="teacherAuthError" class="error"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Portal Dashboard Layout -->
     <div id="teacherPortalDashboard" class="app-layout hidden">
         <!-- Sidebar Navigation -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h3 id="sidebarTeacherName">TEACHER PORTAL</h3>
+                <h3>BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
+                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;" id="sidebarTeacherName">TEACHER PORTAL</div>
             </div>
             <ul class="sidebar-menu">
                 <li><a id="menuLinkDashboard" class="active" onclick="switchTeacherTab('dashboardHome')">Dashboard</a></li>
-                <li><a id="menuLinkClaim" onclick="switchTeacherTab('claimSection')">Submit Remedial Claims</a></li>
+                <li><a id="menuLinkClaim" onclick="switchTeacherTab('claimSection')">Submit Session Claims</a></li>
                 <li><a id="menuLinkStatus" onclick="switchTeacherTab('statusSection')">Claim Status & Progress</a></li>
                 <li><a id="menuLinkMissed" onclick="switchTeacherTab('missedPortal')">Report Missed Class</a></li>
                 <li><a id="menuLinkFeedback" onclick="switchTeacherTab('feedbackSection')">Feedback to Admin</a></li>
@@ -378,7 +445,7 @@
         <div class="main-content-area">
             <!-- Top Navigation Bar -->
             <div class="topbar">
-                <div>SCHOOL REMEDIAL MANAGEMENT SYSTEM</div>
+                <div>BISHOP LAWI IMATHIU SENIOR SCHOOL - PORTAL</div>
                 <div class="topbar-right">
                     <span>Welcome, <strong id="topbarTeacherName">Teacher</strong></span>
                 </div>
@@ -387,11 +454,10 @@
             <!-- Content Area Body -->
             <div class="content-body">
                 
-                <!-- Tab 1: Dashboard Home (Profile & Metrics) -->
+                <!-- Tab 1: Dashboard Home -->
                 <div id="tabDashboardHome" class="portal-section">
                     <h2 style="margin-top:0;">Dashboard</h2>
                     
-                    <!-- Top Summary Metric Cards -->
                     <div class="metrics-grid">
                         <div class="metric-card orange">
                             <div>
@@ -416,28 +482,23 @@
                         </div>
                     </div>
 
-                    <!-- Profile and Personal Information Grid -->
                     <div class="profile-container">
-                        <!-- Left Box: Avatar & Quick Info -->
                         <div class="card-box">
                             <div class="card-header">User Profile</div>
-                            <div class="card-body profile-pic-area">
+                            <div class="card-body" style="text-align: center;">
                                 <div class="profile-avatar">&#128100;</div>
                                 <h3 id="profileCardName" style="margin: 0 0 5px 0;">Teacher Name</h3>
                                 <p style="color: #64748b; font-size: 13px; margin: 0 0 20px 0;">Active Teaching Staff</p>
-                                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+                                <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 15px 0;">
                                 <div style="text-align: left; font-size: 13px; color: #475569;">
-                                    <p style="margin: 5px 0;"><strong>System Role:</strong> Remedial Instructor</p>
+                                    <p style="margin: 5px 0;"><strong>System Role:</strong> Instructor</p>
                                     <p style="margin: 5px 0;"><strong>Account Status:</strong> Active</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Box: Detailed Info List -->
                         <div class="card-box">
-                            <div class="card-header">
-                                <span>Personal Information</span>
-                            </div>
+                            <div class="card-header">Personal Information</div>
                             <div class="card-body">
                                 <div class="info-row">
                                     <div class="info-label">Full Name:</div>
@@ -449,11 +510,11 @@
                                 </div>
                                 <div class="info-row">
                                     <div class="info-label">Access Portal:</div>
-                                    <div class="info-value">Teacher Remedial Portal</div>
+                                    <div class="info-value">Teacher Portal</div>
                                 </div>
                                 <div class="info-row">
                                     <div class="info-label">Institution:</div>
-                                    <div class="info-value">Secondary Section</div>
+                                    <div class="info-value">Bishop Lawi Imathiu Senior School</div>
                                 </div>
                                 <div class="info-row">
                                     <div class="info-label">Current Term:</div>
@@ -466,7 +527,7 @@
 
                 <!-- Tab 2: Submit Claims Section -->
                 <div id="tabClaimSection" class="portal-section hidden">
-                    <h3>Submit Remedial Claim</h3>
+                    <h3>Submit Session Claim</h3>
                     <label for="claimWeek">Select Week to Claim:</label>
                     <select id="claimWeek" onchange="loadWeekFields()">
                         <option value="">-- Select Week --</option>
@@ -474,7 +535,7 @@
 
                     <div id="daysContainer"></div>
 
-                    <button id="submitClaimBtn" onclick="submitClaim()" class="hidden">Submit and Calculate Claim</button>
+                    <button id="submitClaimBtn" onclick="submitClaim()" class="btn-green hidden" style="margin-top: 20px; width: 100%;">Submit and Calculate Claim</button>
                     <div id="teacherError" class="error"></div>
                     <div id="teacherResult" class="summary-box hidden"></div>
                 </div>
@@ -482,7 +543,7 @@
                 <!-- Tab 3: Status & Progress Section -->
                 <div id="tabStatusSection" class="portal-section hidden">
                     <h3>Claim Status & Reflection Progress</h3>
-                    <p style="color: #64748b; font-size: 14px;">Track the verification progress of your submitted remedial claims across weeks.</p>
+                    <p style="color: #64748b; font-size: 14px;">Track the verification progress of your submitted session claims across weeks.</p>
                     <div id="teacherStatusListContainer"></div>
                 </div>
 
@@ -516,7 +577,7 @@
                     <label for="subName">Substitute Teacher Name:</label>
                     <input type="text" id="subName" placeholder="Enter substitute teacher name">
 
-                    <button onclick="saveMissedClass()">Submit Report</button>
+                    <button onclick="saveMissedClass()" class="btn-green" style="margin-top: 20px; width: 100%;">Submit Report</button>
                     <div id="missedResult" class="success"></div>
                 </div>
 
@@ -533,16 +594,16 @@
                     <label for="feedbackMessage">Your Message / Details:</label>
                     <textarea id="feedbackMessage" rows="5" placeholder="Type your feedback here..."></textarea>
 
-                    <button onclick="submitTeacherFeedback()" style="background-color: #0d9488;">Send Feedback to Admin</button>
+                    <button onclick="submitTeacherFeedback()" class="btn-green" style="margin-top: 20px; width: 100%; background-color: #0d9488;">Send Feedback to Admin</button>
                     <div id="feedbackResult" class="success"></div>
                 </div>
 
-                <!-- Tab 6: Reset Password / Security Section (Inside Portal) -->
+                <!-- Tab 6: Reset Password / Security Section -->
                 <div id="tabSecuritySection" class="portal-section hidden">
                     <h3>Security Settings & Password Reset</h3>
                     <p style="color: #64748b; font-size: 14px;">Update your account password while securely logged into your portal.</p>
                     
-                    <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 8px; max-width: 500px;">
+                    <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; max-width: 500px;">
                         <label for="currentPortalPass">Current Password:</label>
                         <input type="password" id="currentPortalPass" placeholder="Enter current password">
 
@@ -552,7 +613,7 @@
                         <label for="confirmPortalPass">Confirm New Password:</label>
                         <input type="password" id="confirmPortalPass" placeholder="Confirm new password">
 
-                        <button onclick="updatePortalPassword()" style="background-color: #0284c7; margin-top: 20px;">Change Password</button>
+                        <button onclick="updatePortalPassword()" class="btn-green" style="margin-top: 20px; width: 100%;">Change Password</button>
                         <div id="portalPassMsg" class="success"></div>
                     </div>
                 </div>
@@ -562,65 +623,72 @@
     </div>
 
     <!-- Admin Portal View -->
-    <div id="adminPortal" class="container hidden" style="max-width: 950px; margin: 30px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
-        <h2>Admin Portal</h2>
-        <div id="adminLogin">
-            <label for="adminPassword">Enter Admin Security Password:</label>
-            <input type="password" id="adminPassword" placeholder="Password (dos123)">
-            <button onclick="loginAdmin()" style="background-color: #2b2d42;">Login</button>
-            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
-            <div id="adminError" class="error"></div>
+    <div id="adminPortal" class="portal-card hidden" style="max-width: 900px;">
+        <div class="portal-card-header" style="background-color: #1e3d59;">
+            <h2>Admin Portal</h2>
+            <div class="portal-badge-logo" style="color: #1e3d59;">BLISS</div>
         </div>
-
-        <div id="adminDashboard" class="hidden">
-            <h3>Admin Control Panel: Manage Teacher Members</h3>
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 10px;">
-                <label for="newMemberName">Add New Teacher Name:</label>
-                <input type="text" id="newMemberName" placeholder="e.g. JOHN DOE">
-                <button onclick="addNewMember()" style="background-color: #10b981; margin-top: 10px;">Add Member to System</button>
-                <div id="memberAddMsg" class="success"></div>
-
-                <label for="removeMemberSelect" style="margin-top: 20px;">Remove Teacher Member:</label>
-                <select id="removeMemberSelect">
-                    <option value="">-- Select Member to Remove --</option>
-                </select>
-                <button onclick="removeMember()" style="background-color: #ef4444; margin-top: 10px;">Remove Selected Member</button>
-                <div id="memberRemoveMsg" class="error" style="color: #ef4444;"></div>
+        <div class="portal-card-body">
+            <div id="adminLogin">
+                <label for="adminPassword">Enter Admin Security Password:</label>
+                <input type="password" id="adminPassword" placeholder="Password (dos123)">
+                <div class="button-row" style="margin-top: 20px;">
+                    <button class="btn-secondary" onclick="goHome()" type="button">Back to Main Menu</button>
+                    <button onclick="loginAdmin()" class="btn-orange" type="button" style="background-color: #1e3d59;">Login</button>
+                </div>
+                <div id="adminError" class="error"></div>
             </div>
 
-            <hr style="margin: 30px 0;">
-            <h3>Admin Control Panel: Open Weeks for Claiming</h3>
-            <div id="adminWeeksCheckboxes" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 10px;"></div>
-            <button onclick="saveOpenWeeks()" style="background-color: #10b981;">Save Open Weeks Configuration</button>
-            <div id="adminSaveMsg" class="success"></div>
+            <div id="adminDashboard" class="hidden">
+                <h3>Admin Control Panel: Manage Teacher Members</h3>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px;">
+                    <label for="newMemberName">Add New Teacher Name:</label>
+                    <input type="text" id="newMemberName" placeholder="e.g. JOHN DOE">
+                    <button onclick="addNewMember()" class="btn-green" style="margin-top: 10px; width:100%;">Add Member to System</button>
+                    <div id="memberAddMsg" class="success"></div>
 
-            <hr style="margin: 30px 0;">
-            <h3>Teacher Feedback & Inquiries Log</h3>
-            <div id="adminFeedbackContent"></div>
+                    <label for="removeMemberSelect" style="margin-top: 20px;">Remove Teacher Member:</label>
+                    <select id="removeMemberSelect">
+                        <option value="">-- Select Member to Remove --</option>
+                    </select>
+                    <button onclick="removeMember()" class="btn-orange" style="margin-top: 10px; width:100%; background-color: #ef4444;">Remove Selected Member</button>
+                    <div id="memberRemoveMsg" class="error" style="color: #ef4444;"></div>
+                </div>
 
-            <hr style="margin: 30px 0;">
-            <h3>Master Clearance, Verification & Summary</h3>
-            <p style="color: #64748b; font-size: 14px;">Verify claims, review exact lesson sequence and subjects taught per week, and update verification stages.</p>
-            <div style="margin-bottom: 15px;">
-                <button onclick="clearAllRemedials()" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All Records</button>
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #cbd5e1;">
+                <h3>Admin Control Panel: Open Weeks for Claiming</h3>
+                <div id="adminWeeksCheckboxes" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px;"></div>
+                <button onclick="saveOpenWeeks()" class="btn-green" style="margin-top: 15px; width:100%;">Save Open Weeks Configuration</button>
+                <div id="adminSaveMsg" class="success"></div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #cbd5e1;">
+                <h3>Teacher Feedback & Inquiries Log</h3>
+                <div id="adminFeedbackContent"></div>
+
+                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #cbd5e1;">
+                <h3>Master Clearance, Verification & Summary</h3>
+                <p style="color: #64748b; font-size: 14px;">Verify claims, review exact lesson sequence and subjects taught per week, and update verification stages.</p>
+                <div style="margin-bottom: 15px;">
+                    <button onclick="clearAllRemedials()" class="btn-orange" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All Records</button>
+                </div>
+                <div id="auditContent"></div>
+                <button class="btn-secondary" onclick="goHome()" style="margin-top: 25px;">Logout / Back to Main Menu</button>
             </div>
-            <div id="auditContent"></div>
-            <button class="back-btn" onclick="goHome()">Logout / Back to Main Menu</button>
         </div>
     </div>
 </div>
 
 <script>
-    let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig')) || {
+    let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig_bliss')) || {
         1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true
     };
 
-    let teacherList = JSON.parse(localStorage.getItem('teacherList')) || [
+    let teacherList = JSON.parse(localStorage.getItem('teacherList_bliss')) || [
         "MARY M", "MR KIMATHI", "JOSYLN", "FRIDA", "COLLINS M.", "IBAYA", "MERCY", "JOY M.", "SHELDON", "ALIAS", "ROSEMARY K.", "CAROL G.", "EDWIN M.", "WINNIE", "JANE M.", "TIMOTHY", "PAULINE", "EMMANUEL N.", "ANNJOY", "STEPHEN M.", "TONNY M.", "WILSON", "PRISCILA", "BETT K.", "GITONGA N.", "CAROL N.", "CYNTHIA C.", "MUHINDI M.", "ELISHA BETT", "MURANGIRI R.", "MWANGI"
     ];
 
-    let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase')) || {};
-    let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList')) || [];
+    let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase_bliss')) || {};
+    let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList_bliss')) || [];
     let currentLoggedInTeacher = null;
     let generatedOtpStorage = null;
     let pendingRegData = null;
@@ -628,10 +696,10 @@
     let resetTargetName = null;
 
     function saveData() {
-        localStorage.setItem('openWeeksConfig', JSON.stringify(openWeeksConfig));
-        localStorage.setItem('teacherList', JSON.stringify(teacherList));
-        localStorage.setItem('teacherDatabase', JSON.stringify(teacherDatabase));
-        localStorage.setItem('globalFeedbackList', JSON.stringify(globalFeedbackList));
+        localStorage.setItem('openWeeksConfig_bliss', JSON.stringify(openWeeksConfig));
+        localStorage.setItem('teacherList_bliss', JSON.stringify(teacherList));
+        localStorage.setItem('teacherDatabase_bliss', JSON.stringify(teacherDatabase));
+        localStorage.setItem('globalFeedbackList_bliss', JSON.stringify(globalFeedbackList));
     }
 
     function showPortalSelection(portal) {
@@ -969,7 +1037,7 @@
         workDays.forEach((day, index) => {
             html += `
                 <div class="day-row">
-                    <strong>${day} (Morning Remedial)</strong>
+                    <strong>${day} (Morning Session)</strong>
                     <label>Session Conducted:</label>
                     <select id="m_${index}">
                         <option value="1">Attended & Taught (1 Session)</option>
@@ -983,7 +1051,7 @@
 
         html += `
             <div class="day-row" style="background: #f0fdf4;">
-                <strong>Saturday (Weekend Remedial)</strong>
+                <strong>Saturday (Weekend Lesson)</strong>
                 <label>Total Saturday Lessons Taught (0 to 4):</label>
                 <input type="number" id="sat_count" min="0" max="4" value="0">
                 <label>Specify Lesson Numbers (e.g., 1, 2):</label>
@@ -998,7 +1066,6 @@
     function submitClaim() {
         const name = currentLoggedInTeacher;
         const weekNum = parseInt(document.getElementById('claimWeek').value);
-        const errorDiv = document.getElementById('teacherError');
         const resultDiv = document.getElementById('teacherResult');
 
         let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -1099,13 +1166,9 @@
             else if (status === "funds claimed and signed") badgeClass = "status-claimed";
 
             html += `
-                <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:15px; border-radius:8px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <strong>Week ${w} Claim</strong>
-                    </div>
-                    <div>
-                        <span class="status-badge ${badgeClass}">${status}</span>
-                    </div>
+                <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>Week ${w} Claim</strong></div>
+                    <div><span class="status-badge ${badgeClass}">${status}</span></div>
                 </div>
             `;
         }
@@ -1317,11 +1380,10 @@
                 if (weekTotal > 0) {
                     teacherGrandTotal += weekTotal;
                     let currentStatus = wData.status || "pending review";
-                    
                     let combinedLessonsList = [...morningDetails, ...satDetails].join('');
 
                     weekDetailsHtml += `
-                        <div style="margin-top: 8px; padding: 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <div style="margin-top: 8px; padding: 10px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                 <span style="font-size: 15px;"><strong>Week ${w}:</strong> ${weekTotal} KSH</span>
                                 <div>
