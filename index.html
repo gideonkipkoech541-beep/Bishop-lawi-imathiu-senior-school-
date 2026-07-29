@@ -3,517 +3,1367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLISS - Teacher Portal & Administration Dashboard</title>
+    <title>Bishop Lawi Imathiu Senior School - Remedial Management System</title>
     <style>
         :root {
-            --primary: #1e3a8a;
-            --secondary: #3b82f6;
-            --accent: #10b981;
-            --dark: #1f2937;
-            --light: #f3f4f6;
+            --sidebar-bg: #1e3d59;
+            --topbar-bg: #f9a826;
+            --topbar-dark: #1e3d59;
+            --light-bg: #f5f7fa;
+            --dark: #2b2d42;
+            --primary: #1e3d59;
+            --success: #17b978;
+            --warning: #ffb703;
             --danger: #ef4444;
-            --warning: #f59e0b;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: var(--light-bg);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            color: var(--dark);
         }
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+
+        /* App Layout with Sidebar */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
             color: white;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar-header {
             padding: 20px;
+            background: #162c3d;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        header h1 {
+        .sidebar-header h3 {
             margin: 0;
-            font-size: 28px;
+            font-size: 15px;
+            color: #ffffff;
+            line-height: 1.4;
         }
-        header p {
-            margin: 5px 0 0 0;
-            opacity: 0.9;
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
         }
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
+        .sidebar-menu li {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 30px;
-            margin-bottom: 25px;
-        }
-        h2 {
-            color: var(--primary);
-            border-bottom: 2px solid var(--light);
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        button, .btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            text-align: center;
+        .sidebar-menu a {
+            display: block;
+            padding: 15px 20px;
+            color: #cbd5e1;
             text-decoration: none;
-            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
         }
-        button:hover, .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: #ffffff;
+            padding-left: 25px;
         }
-        button.primary { background-color: var(--primary); }
-        button.success { background-color: var(--accent); }
-        button.danger { background-color: var(--danger); }
-        
+        .main-content-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar Styling */
+        .topbar {
+            background-color: var(--topbar-bg);
+            color: #1e3d59;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        /* Container Content Area */
+        .content-body {
+            padding: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+        }
+        .portal-section {
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-top: 15px;
+            color: var(--dark);
+        }
         input, select, textarea {
             width: 100%;
             padding: 12px;
-            margin: 10px 0 20px 0;
+            margin-top: 6px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 15px;
+            background: #fff;
         }
-        label {
-            font-weight: 600;
-            color: #475569;
-            display: block;
-            margin-top: 10px;
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
         }
-        .hidden { display: none !important; }
-        
-        /* Navigation tabs */
-        .nav-tabs {
-            display: flex;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .nav-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            background: white;
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
             border: none;
-            cursor: pointer;
+            font-size: 16px;
             font-weight: 600;
-            color: #64748b;
-            border-bottom: 3px solid transparent;
-            border-radius: 0;
-        }
-        .nav-tab:hover { background: #f8fafc; color: var(--primary); }
-        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: #f1f5f9; }
-
-        /* Dashboard widgets */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .metric-card {
-            background: #f8fafc;
-            border-left: 4px solid var(--secondary);
-            padding: 15px;
             border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
-        .metric-card h3 { margin: 0; font-size: 14px; color: #64748b; }
-        .metric-card p { margin: 10px 0 0 0; font-size: 24px; font-weight: bold; color: var(--primary); }
-
+        button:hover {
+            background-color: #152d42;
+        }
+        .back-btn {
+            background-color: #64748b;
+            margin-top: 12px;
+        }
+        .back-btn:hover {
+            background-color: #475569;
+        }
         .day-row {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .summary-box {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .error {
+            color: #ef4444;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .success {
+            color: #10b981;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .otp-box {
+            background: #f0fdf4;
+            border: 2px dashed #10b981;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+
+        /* Dashboard Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .metric-card {
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .metric-card.orange { background: #d97706; }
+        .metric-card.green { background: #059669; }
+        .metric-card.blue { background: #0284c7; }
+        .metric-card h4 { margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; }
+        .metric-card .metric-val { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+        .metric-card .metric-link { font-size: 13px; color: #fff; text-decoration: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+
+        /* Profile Grid Layout */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+        }
+        .card-box {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .card-header {
+            background: #f8fafc;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: bold;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .profile-pic-area {
+            text-align: center;
+        }
+        .profile-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            color: #64748b;
+            border: 4px solid #f1f5f9;
+        }
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            width: 40%;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .info-value {
+            width: 60%;
+            color: var(--dark);
+            font-weight: 500;
         }
         .status-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
         }
         .status-pending { background: #fef3c7; color: #d97706; }
-        .status-ready { background: #d1fae5; color: #059669; }
         .status-reviewed { background: #e0f2fe; color: #0284c7; }
-        
-        .alert-box {
-            background: #e0f2fe;
-            border-left: 4px solid #0284c7;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+        .status-ready { background: #ecfdf5; color: #059669; }
+        .status-claimed { background: #f1f5f9; color: #475569; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>BLISS Academic Portal</h1>
-        <p>Remedial Claims, Lesson Tracking & Administrative Control System</p>
-    </header>
+<div id="fullAppContainer">
+    <!-- Main Entry / Non-logged in Selection Menu -->
+    <div id="mainMenuContainer" class="container" style="max-width: 600px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: center;">
+        <h3 style="color: #64748b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Bishop Lawi Imathiu Senior School</h3>
+        <h1 style="margin-top: 0;">Remedial Management System</h1>
+        <h2>Select Portal</h2>
+        <button onclick="showPortalSelection('teacherLogin')">1. Teacher Portal (Login / Register)</button>
+        <button onclick="showPortalSelection('admin')" style="background-color: #2b2d42;">2. Admin Portal</button>
+    </div>
 
-    <div class="container">
-
-        <!-- MAIN ENTRY PORTAL -->
-        <div id="mainMenuContainer" class="card">
-            <h2>Welcome to BLISS Portal</h2>
-            <p>Please select your portal to proceed:</p>
-            <div class="btn-grid">
-                <button class="primary" onclick="showPortalSelection('teacherLogin')">Teacher Portal (Remedial Claims)</button>
-                <button class="success" onclick="showPortalSelection('adminPortal')">Administrator Portal (DOS Dashboard)</button>
-            </div>
-        </div>
-
-        <!-- TEACHER LOGIN PORTAL -->
-        <div id="teacherLoginPortal" class="card hidden">
-            <button class="primary" style="margin-bottom: 20px; width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">&larr; Back to Main Menu</button>
-            <h2>Teacher Authentication</h2>
-            
+    <!-- Teacher Auth / Login Portal -->
+    <div id="teacherLoginPortal" class="container hidden" style="max-width: 600px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
+        <h3 style="color: #64748b; font-size: 13px; text-align: center; text-transform: uppercase; margin-bottom: 5px;">Bishop Lawi Imathiu Senior School</h3>
+        <h2 style="text-align: center; margin-top: 0;">Teacher Account Portal</h2>
+        <div id="teacherAuthBox">
             <label for="authTeacherName">Select Your Name:</label>
             <select id="authTeacherName" onchange="checkTeacherExists()">
-                <!-- Populated dynamically -->
+                <option value="">-- Select Your Name --</option>
             </select>
 
-            <div id="teacherAuthError" style="color: var(--danger); font-weight: bold; margin-bottom: 15px;"></div>
-
-            <!-- Login fields (if password exists) -->
             <div id="loginFields" class="hidden">
-                <label for="authPassword">Enter Your Password:</label>
-                <input type="password" id="authPassword" placeholder="Enter password">
-                <button class="primary" onclick="handleTeacherLogin()">Log In to Portal</button>
-                <p style="margin-top: 15px;"><a href="#" onclick="showForgotPasswordSection()" style="color: var(--secondary); text-decoration: none; font-weight: 600;">Forgot Password?</a></p>
-            </div>
-
-            <!-- Register fields (if first time setup) -->
-            <div id="registerFields" class="hidden">
-                <div class="alert-box">
-                    <strong>First Time Setup:</strong> It looks like you haven't set up a password yet. Please register your phone number and create a secure password.
-                </div>
-                <label for="regPhone">Phone Number (for verification/SMS):</label>
-                <input type="text" id="regPhone" placeholder="e.g. 0712345678">
-                
-                <label for="regPassword">Create Password:</label>
-                <input type="password" id="regPassword" placeholder="At least 4 characters">
-                
-                <button class="success" onclick="requestRegistrationOTP()">Send Verification Code</button>
-
-                <!-- OTP Verification Box -->
-                <div id="otpVerificationSection" class="hidden" style="margin-top: 20px; border-top: 1px dashed #cbd5e1; padding-top: 15px;">
-                    <div id="otpSimulatedNotice" class="alert-box" style="background:#fef3c7; border-left-color:#d97706; color:#92400e;"></div>
-                    <label for="enteredOtp">Enter 4-Digit Verification Code:</label>
-                    <input type="text" id="enteredOtp" placeholder="Enter code here" maxlength="4">
-                    <button class="primary" onclick="verifyAndCompleteRegistration()">Verify & Complete Registration</button>
-                </div>
+                <label for="authPassword">Account Password:</label>
+                <input type="password" id="authPassword" placeholder="Enter your password">
+                <button onclick="handleTeacherLogin()">Login</button>
+                <p style="margin-top: 15px; text-align: right;"><a href="javascript:void(0);" onclick="showForgotPasswordSection()" style="color: #0284c7; font-size: 14px; text-decoration: none; font-weight: 600;">Forgot Password? Reset Here</a></p>
             </div>
 
             <!-- Forgot Password Section -->
-            <div id="forgotPasswordSection" class="hidden" style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
-                <h3 style="color: var(--primary); margin-top:0;">Reset Password</h3>
-                <label for="resetPhone">Enter your registered Phone Number:</label>
+            <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                <h4 style="margin-top: 0; color: var(--primary);">Reset Account Password</h4>
+                <label for="resetPhone">Enter Registered Phone Number:</label>
                 <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
-                <button class="secondary" onclick="requestPasswordResetOTP()">Request Reset Code</button>
+                <button onclick="requestPasswordResetOTP()" style="background-color: #d97706; margin-top: 10px;">Send Reset Code</button>
 
-                <div id="resetOtpBox" class="hidden" style="margin-top: 15px;">
-                    <div id="resetOtpNotice" class="alert-box" style="background:#fef3c7; border-left-color:#d97706; color:#92400e;"></div>
-                    <label for="enteredResetOtp">Enter Verification Code:</label>
-                    <input type="text" id="enteredResetOtp" placeholder="4-digit code" maxlength="4">
-                    
-                    <label for="newAccountPassword">New Password:</label>
+                <div id="resetOtpBox" class="otp-box hidden" style="margin-top: 15px;">
+                    <p id="resetOtpNotice" class="success" style="margin-top:0; font-size: 15px; font-weight: bold;"></p>
+                    <label for="enteredResetOtp">Enter 4-digit Code:</label>
+                    <input type="text" id="enteredResetOtp" placeholder="Enter Code" maxlength="4">
+                    <label for="newAccountPassword">Enter New Password:</label>
                     <input type="password" id="newAccountPassword" placeholder="New secure password">
-                    
-                    <button class="success" onclick="verifyAndResetPassword()">Verify & Reset Password</button>
+                    <button onclick="verifyAndResetPassword()" style="background-color: #10b981; margin-top: 10px;">Update Password</button>
                 </div>
-                <p style="margin-top:10px;"><a href="#" onclick="hideForgotPasswordSection()" style="color:#64748b; text-decoration:none;">&larr; Back to Login</a></p>
-            </div>
-        </div>
-
-        <!-- TEACHER DASHBOARD PORTAL -->
-        <div id="teacherPortalDashboard" class="card hidden">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--light); padding-bottom: 10px;">
-                <h2 id="teacherDashboardTitle" style="margin:0; border:none; padding:0;">Teacher Portal</h2>
-                <button class="danger" style="width: auto; padding: 6px 14px; font-size: 14px;" onclick="logoutTeacher()">Log Out</button>
+                <button class="back-btn" onclick="hideForgotPasswordSection()" style="margin-top: 10px;">Back to Login</button>
             </div>
 
-            <!-- Navigation Tabs -->
-            <div class="nav-tabs">
-                <button id="menuLinkDashboard" class="nav-tab active" onclick="switchTeacherTab('dashboardHome')">Dashboard</button>
-                <button id="menuLinkClaim" class="nav-tab" onclick="switchTeacherTab('claimSection')">Submit Claim</button>
-                <button id="menuLinkStatus" class="nav-tab" onclick="switchTeacherTab('statusSection')">Claim Status</button>
-                <button id="menuLinkMissed" class="nav-tab" onclick="switchTeacherTab('missedPortal')">Missed Class</button>
-                <button id="menuLinkFeedback" class="nav-tab" onclick="switchTeacherTab('feedbackSection')">Feedback / Issues</button>
-                <button id="menuLinkSecurity" class="nav-tab" onclick="switchTeacherTab('securitySection')">Security / Password</button>
-            </div>
-
-            <!-- Tab 1: Dashboard Home -->
-            <div id="tabDashboardHome">
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <h3>Total Claims Filed</h3>
-                        <p id="metricTotalClaims">0 KSH</p>
-                    </div>
-                    <div class="metric-card" style="border-left-color: var(--accent);">
-                        <h3>Approved / Ready</h3>
-                        <p id="metricApprovedClaims">0 KSH</p>
-                    </div>
-                    <div class="metric-card" style="border-left-color: var(--warning);">
-                        <h3>Pending Verification</h3>
-                        <p id="metricPendingClaims">0 KSH</p>
-                    </div>
-                </div>
-                <div class="alert-box">
-                    <strong>Notice:</strong> Use the "Submit Claim" tab to log your morning remedial and Saturday classes. Ensure subjects taught and lesson counts are accurate before submission.
-                </div>
-            </div>
-
-            <!-- Tab 2: Submit Claim -->
-            <div id="tabClaimSection" class="hidden">
-                <h3 style="color: var(--primary); margin-top:0;">Submit Remedial Claim</h3>
-                <label for="claimWeek">Select Week:</label>
-                <select id="claimWeek" onchange="loadWeekFields()">
-                    <!-- Populated dynamically based on open weeks config -->
-                </select>
-
-                <div id="daysContainer"></div>
-
-                <div id="teacherError" style="color: var(--danger); font-weight: bold; margin-bottom: 15px;"></div>
+            <div id="registerFields" class="hidden">
+                <p style="color: #d97706; font-weight: bold; margin-top: 15px; background: #fef3c7; padding: 10px; border-radius: 6px;">New member detected! Please register your account.</p>
+                <label for="regPhone">Phone Number:</label>
+                <input type="text" id="regPhone" placeholder="e.g. 0712345678">
                 
-                <button id="submitClaimBtn" class="success hidden" onclick="submitClaim()">Submit Claim for Verification</button>
-
-                <div id="teacherResult" class="card hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-top: 20px;"></div>
-            </div>
-
-            <!-- Tab 3: Claim Status -->
-            <div id="tabStatusSection" class="hidden">
-                <h3 style="color: var(--primary); margin-top:0;">Your Claim History & Status</h3>
-                <div id="teacherStatusListContainer"></div>
-            </div>
-
-            <!-- Tab 4: Missed Class / Substitute Portal -->
-            <div id="tabMissedPortal" class="hidden">
-                <h3 style="color: var(--primary); margin-top:0;">Report Missed Class / Arrange Substitute</h3>
-                <p style="color: #64748b; font-size:14px;">If you missed a scheduled class or arranged a colleague to substitute, record it here for administrative tracking.</p>
+                <label for="regPassword">Create Password:</label>
+                <input type="password" id="regPassword" placeholder="Create a secure password">
                 
-                <label for="missWeek">Week:</label>
-                <select id="missWeek"></select>
+                <button onclick="requestRegistrationOTP()" style="background-color: #d97706;">Generate Verification Code</button>
 
-                <label for="missDay">Day:</label>
-                <select id="missDay">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                </select>
-
-                <label for="missType">Session Type:</label>
-                <select id="missType">
-                    <option value="Morning Remedial">Morning Remedial</option>
-                    <option value="Regular Class">Regular Class</option>
-                    <option value="Weekend Lesson">Weekend Lesson</option>
-                </select>
-
-                <label for="missLessonNo">Lesson Number / Time:</label>
-                <input type="text" id="missLessonNo" placeholder="e.g. Lesson 2 (9:20 AM)">
-
-                <label for="subName">Substitute Teacher Name (if applicable):</label>
-                <input type="text" id="subName" placeholder="Enter teacher name who took the class">
-
-                <button class="primary" onclick="saveMissedClass()">Submit Substitute / Absence Report</button>
-                <div id="missedResult" style="color: var(--accent); font-weight: bold; margin-top: 10px;"></div>
+                <div id="otpVerificationSection" class="otp-box hidden">
+                    <p id="otpSimulatedNotice" class="success" style="margin-top:0; font-size: 16px; font-weight: bold;"></p>
+                    <label for="enteredOtp">Enter 4-digit Code Shown Above:</label>
+                    <input type="text" id="enteredOtp" placeholder="Enter Code here" maxlength="4">
+                    <button onclick="verifyAndCompleteRegistration()" style="background-color: #10b981;">Verify & Complete Registration</button>
+                </div>
             </div>
 
-            <!-- Tab 5: Feedback / Issues -->
-            <div id="tabFeedbackSection" class="hidden">
-                <h3 style="color: var(--primary); margin-top:0;">Send Feedback or Report Issue to DOS</h3>
-                <label for="feedbackCategory">Category:</label>
-                <select id="feedbackCategory">
-                    <option value="Schedule Query">Schedule / Timetable Query</option>
-                    <option value="Payment Inquiry">Payment / Claim Inquiry</option>
-                    <option value="General Feedback">General Feedback</option>
-                    <option value="Technical Issue">Portal Technical Issue</option>
-                </select>
-
-                <label for="feedbackMessage">Your Message:</label>
-                <textarea id="feedbackMessage" rows="4" placeholder="Type your message or inquiry here..."></textarea>
-
-                <button class="primary" onclick="submitTeacherFeedback()">Send to Administration</button>
-                <div id="feedbackResult" style="color: var(--accent); font-weight: bold; margin-top: 10px;"></div>
-            </div>
-
-            <!-- Tab 6: Security / Password Change -->
-            <div id="tabSecuritySection" class="hidden">
-                <h3 style="color: var(--primary); margin-top:0;">Change Portal Password</h3>
-                <label for="currentPortalPass">Current Password:</label>
-                <input type="password" id="currentPortalPass" placeholder="Enter current password">
-
-                <label for="newPortalPass">New Password:</label>
-                <input type="password" id="newPortalPass" placeholder="At least 4 characters">
-
-                <label for="confirmPortalPass">Confirm New Password:</label>
-                <input type="password" id="confirmPortalPass" placeholder="Re-enter new password">
-
-                <button class="primary" onclick="updatePortalPassword()">Update Password</button>
-                <div id="portalPassMsg" style="font-weight: bold; margin-top: 10px;"></div>
-            </div>
+            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
+            <div id="teacherAuthError" class="error"></div>
         </div>
-
-        <!-- ADMINISTRATOR PORTAL -->
-        <div id="adminPortal" class="card hidden">
-            <button class="primary" style="margin-bottom: 20px; width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">&larr; Back to Main Menu</button>
-            <h2>DOS / Administrator Portal</h2>
-
-            <!-- Admin Login View -->
-            <div id="adminLogin">
-                <label for="adminPassword">Enter Admin Password:</label>
-                <input type="password" id="adminPassword" placeholder="Default: dos123">
-                <button class="primary" onclick="loginAdmin()">Log In as Admin</button>
-                <div id="adminError" style="color: var(--danger); font-weight: bold; margin-top: 10px;"></div>
-            </div>
-
-            <!-- Admin Dashboard View -->
-            <div id="adminDashboard" class="hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--light); padding-bottom: 10px;">
-                    <h3 style="margin:0; color: var(--primary);">Director of Studies Dashboard</h3>
-                    <button class="danger" style="width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">Log Out Admin</button>
-                </div>
-
-                <!-- Section A: Open Weeks Control -->
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-                    <h4 style="margin-top:0; color:var(--primary);">Control Open Weeks for Claims</h4>
-                    <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
-                    <button class="primary" style="width: auto; padding: 8px 16px;" onclick="saveOpenWeeks()">Save Open Weeks Config</button>
-                    <span id="adminSaveMsg" style="color: var(--accent); font-weight: bold; margin-left: 15px;"></span>
-                </div>
-
-                <!-- Section B: Teacher List Management -->
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-                    <h4 style="margin-top:0; color:var(--primary);">Manage Faculty Roster</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <label style="margin-top:0; font-size:14px;">Add New Teacher:</label>
-                            <input type="text" id="newMemberName" placeholder="FULL NAME IN CAPS">
-                            <button class="success" style="padding: 8px 16px; margin-top:0;" onclick="addNewMember()">Add Teacher</button>
-                            <div id="memberAddMsg" style="color: var(--accent); font-weight: bold; margin-top: 5px; font-size:13px;"></div>
-                        </div>
-                        <div>
-                            <label style="margin-top:0; font-size:14px;">Remove Teacher:</label>
-                            <select id="removeMemberSelect"></select>
-                            <button class="danger" style="padding: 8px 16px; margin-top:0;" onclick="removeMember()">Remove Selected</button>
-                            <div id="memberRemoveMsg" style="color: var(--danger); font-weight: bold; margin-top: 5px; font-size:13px;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section C: Feedback & Missed Class Reports -->
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-                    <h4 style="margin-top:0; color:var(--primary);">Teacher Feedback & Missed Class Reports</h4>
-                    <div id="adminFeedbackContent"></div>
-                </div>
-
-                <!-- Section D: Audit & Verify Claims -->
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h4 style="margin:0; color:var(--primary);">Audit & Approve Teacher Remedial Claims</h4>
-                        <button class="danger" style="padding: 6px 12px; font-size: 13px; width: auto;" onclick="clearAllRemedials()">Clear All Records</button>
-                    </div>
-                    <div id="auditContent"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // Database keys & initial mock states
-        let teacherList = [
-            "BETTING", "WANJIKU", "KIPRONO", "OTIENO", "MUTUA", 
-            "OMondi", "CHEPCHIRCHIR", "KARANGA", "BARASA", "NAMWAYA"
-        ];
+    <!-- Teacher Portal Dashboard Layout -->
+    <div id="teacherPortalDashboard" class="app-layout hidden">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
+                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;" id="sidebarTeacherName">TEACHER PORTAL</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a id="menuLinkDashboard" class="active" onclick="switchTeacherTab('dashboardHome')">Dashboard</a></li>
+                <li><a id="menuLinkClaim" onclick="switchTeacherTab('claimSection')">Submit Remedial Claims</a></li>
+                <li><a id="menuLinkStatus" onclick="switchTeacherTab('statusSection')">Claim Status & Progress</a></li>
+                <li><a id="menuLinkMissed" onclick="switchTeacherTab('missedPortal')">Report Missed Class</a></li>
+                <li><a id="menuLinkFeedback" onclick="switchTeacherTab('feedbackSection')">Feedback to Admin</a></li>
+                <li><a id="menuLinkSecurity" onclick="switchTeacherTab('securitySection')">Reset Password / Security</a></li>
+                <li><a onclick="logoutTeacher()" style="color: #fca5a5;">Logout Portal</a></li>
+            </ul>
+        </div>
 
-        let teacherDatabase = {};
-        let openWeeksConfig = { 1: true, 2: true, 3: true, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false };
-        let globalFeedbackList = [];
+        <!-- Main Content Wrapper -->
+        <div class="main-content-area">
+            <!-- Top Navigation Bar -->
+            <div class="topbar">
+                <div>BISHOP LAWI IMATHIU SENIOR SCHOOL - REMEDIAL PORTAL</div>
+                <div class="topbar-right">
+                    <span>Welcome, <strong id="topbarTeacherName">Teacher</strong></span>
+                </div>
+            </div>
+
+            <!-- Content Area Body -->
+            <div class="content-body">
+                
+                <!-- Tab 1: Dashboard Home (Profile & Metrics) -->
+                <div id="tabDashboardHome" class="portal-section">
+                    <h2 style="margin-top:0;">Dashboard</h2>
+                    
+                    <!-- Top Summary Metric Cards -->
+                    <div class="metrics-grid">
+                        <div class="metric-card orange">
+                            <div>
+                                <h4>Total Submitted Claims</h4>
+                                <div class="metric-val" id="metricTotalClaims">0 KSH</div>
+                            </div>
+                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
+                        </div>
+                        <div class="metric-card green">
+                            <div>
+                                <h4>Reviewed & Approved</h4>
+                                <div class="metric-val" id="metricApprovedClaims">0 KSH</div>
+                            </div>
+                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
+                        </div>
+                        <div class="metric-card blue">
+                            <div>
+                                <h4>Pending Verification</h4>
+                                <div class="metric-val" id="metricPendingClaims">0 KSH</div>
+                            </div>
+                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
+                        </div>
+                    </div>
+
+                    <!-- Profile and Personal Information Grid -->
+                    <div class="profile-container">
+                        <!-- Left Box: Avatar & Quick Info -->
+                        <div class="card-box">
+                            <div class="card-header">User Profile</div>
+                            <div class="card-body profile-pic-area">
+                                <div class="profile-avatar">&#128100;</div>
+                                <h3 id="profileCardName" style="margin: 0 0 5px 0;">Teacher Name</h3>
+                                <p style="color: #64748b; font-size: 13px; margin: 0 0 20px 0;">Active Teaching Staff</p>
+                                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+                                <div style="text-align: left; font-size: 13px; color: #475569;">
+                                    <p style="margin: 5px 0;"><strong>System Role:</strong> Remedial Instructor</p>
+                                    <p style="margin: 5px 0;"><strong>Account Status:</strong> Active</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Box: Detailed Info List -->
+                        <div class="card-box">
+                            <div class="card-header">
+                                <span>Personal Information</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <div class="info-label">Full Name:</div>
+                                    <div class="info-value" id="infoFullName">-</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Phone Number:</div>
+                                    <div class="info-value" id="infoPhone">-</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Access Portal:</div>
+                                    <div class="info-value">Teacher Remedial Portal</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Institution:</div>
+                                    <div class="info-value">Bishop Lawi Imathiu Senior School</div>
+                                </div>
+                                <div class="info-row">
+                                    <div class="info-label">Current Term:</div>
+                                    <div class="info-value">2026 Academic Year</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Submit Claims Section -->
+                <div id="tabClaimSection" class="portal-section hidden">
+                    <h3>Submit Remedial Claim</h3>
+                    <label for="claimWeek">Select Week to Claim:</label>
+                    <select id="claimWeek" onchange="loadWeekFields()">
+                        <option value="">-- Select Week --</option>
+                    </select>
+
+                    <div id="daysContainer"></div>
+
+                    <button id="submitClaimBtn" onclick="submitClaim()" class="hidden">Submit and Calculate Claim</button>
+                    <div id="teacherError" class="error"></div>
+                    <div id="teacherResult" class="summary-box hidden"></div>
+                </div>
+
+                <!-- Tab 3: Status & Progress Section -->
+                <div id="tabStatusSection" class="portal-section hidden">
+                    <h3>Claim Status & Reflection Progress</h3>
+                    <p style="color: #64748b; font-size: 14px;">Track the verification progress of your submitted remedial claims across weeks.</p>
+                    <div id="teacherStatusListContainer"></div>
+                </div>
+
+                <!-- Tab 4: Report Missed Class Section -->
+                <div id="tabMissedPortal" class="portal-section hidden">
+                    <h3>Report Missed Class to Admin</h3>
+                    <label for="missWeek">Select Week:</label>
+                    <select id="missWeek">
+                        <option value="">-- Select Week --</option>
+                    </select>
+
+                    <label for="missDay">Select Day:</label>
+                    <select id="missDay">
+                        <option value="Mon">Monday (Morning)</option>
+                        <option value="Tue">Tuesday (Morning)</option>
+                        <option value="Wed">Wednesday (Morning)</option>
+                        <option value="Thu">Thursday (Morning)</option>
+                        <option value="Fri">Friday (Morning)</option>
+                        <option value="Sat">Saturday (Weekend Lessons)</option>
+                    </select>
+
+                    <label for="missType">Session Type:</label>
+                    <select id="missType">
+                        <option value="morning">Morning Session</option>
+                        <option value="weekend">Saturday Weekend Lesson</option>
+                    </select>
+
+                    <label for="missLessonNo">Lesson Number (Saturday 1 to 4 if applicable):</label>
+                    <input type="number" id="missLessonNo" min="1" max="4" value="1">
+
+                    <label for="subName">Substitute Teacher Name:</label>
+                    <input type="text" id="subName" placeholder="Enter substitute teacher name">
+
+                    <button onclick="saveMissedClass()">Submit Report</button>
+                    <div id="missedResult" class="success"></div>
+                </div>
+
+                <!-- Tab 5: Feedback Section -->
+                <div id="tabFeedbackSection" class="portal-section hidden">
+                    <h3>Teacher Feedback & Administrative Queries</h3>
+                    <label for="feedbackCategory">Feedback Category:</label>
+                    <select id="feedbackCategory">
+                        <option value="Dispute Claim">Claim Discrepancy / Payment Issue</option>
+                        <option value="Timetable Suggestion">Timetable Modification Request</option>
+                        <option value="General Query">General Inquiry or Comment</option>
+                    </select>
+
+                    <label for="feedbackMessage">Your Message / Details:</label>
+                    <textarea id="feedbackMessage" rows="5" placeholder="Type your feedback here..."></textarea>
+
+                    <button onclick="submitTeacherFeedback()" style="background-color: #0d9488;">Send Feedback to Admin</button>
+                    <div id="feedbackResult" class="success"></div>
+                </div>
+
+                <!-- Tab 6: Reset Password / Security Section (Inside Portal) -->
+                <div id="tabSecuritySection" class="portal-section hidden">
+                    <h3>Security Settings & Password Reset</h3>
+                    <p style="color: #64748b; font-size: 14px;">Update your account password while securely logged into your portal.</p>
+                    
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 8px; max-width: 500px;">
+                        <label for="currentPortalPass">Current Password:</label>
+                        <input type="password" id="currentPortalPass" placeholder="Enter current password">
+
+                        <label for="newPortalPass">New Password:</label>
+                        <input type="password" id="newPortalPass" placeholder="Enter new secure password">
+
+                        <label for="confirmPortalPass">Confirm New Password:</label>
+                        <input type="password" id="confirmPortalPass" placeholder="Confirm new password">
+
+                        <button onclick="updatePortalPassword()" style="background-color: #0284c7; margin-top: 20px;">Change Password</button>
+                        <div id="portalPassMsg" class="success"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Portal View -->
+    <div id="adminPortal" class="container hidden" style="max-width: 950px; margin: 30px auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08);">
+        <h3 style="color: #64748b; font-size: 13px; text-align: center; text-transform: uppercase; margin-bottom: 5px;">Bishop Lawi Imathiu Senior School</h3>
+        <h2 style="text-align: center; margin-top: 0;">Admin Portal</h2>
+        <div id="adminLogin">
+            <label for="adminPassword">Enter Admin Security Password:</label>
+            <input type="password" id="adminPassword" placeholder="Password (dos123)">
+            <button onclick="loginAdmin()" style="background-color: #2b2d42;">Login</button>
+            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
+            <div id="adminError" class="error"></div>
+        </div>
+
+        <div id="adminDashboard" class="hidden">
+            <h3>Admin Control Panel: Manage Teacher Members</h3>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <label for="newMemberName">Add New Teacher Name:</label>
+                <input type="text" id="newMemberName" placeholder="e.g. JOHN DOE">
+                <button onclick="addNewMember()" style="background-color: #10b981; margin-top: 10px;">Add Member to System</button>
+                <div id="memberAddMsg" class="success"></div>
+
+                <label for="removeMemberSelect" style="margin-top: 20px;">Remove Teacher Member:</label>
+                <select id="removeMemberSelect">
+                    <option value="">-- Select Member to Remove --</option>
+                </select>
+                <button onclick="removeMember()" style="background-color: #ef4444; margin-top: 10px;">Remove Selected Member</button>
+                <div id="memberRemoveMsg" class="error" style="color: #ef4444;"></div>
+            </div>
+
+            <hr style="margin: 30px 0;">
+            <h3>Admin Control Panel: Open Weeks for Claiming</h3>
+            <div id="adminWeeksCheckboxes" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 10px;"></div>
+            <button onclick="saveOpenWeeks()" style="background-color: #10b981;">Save Open Weeks Configuration</button>
+            <div id="adminSaveMsg" class="success"></div>
+
+            <hr style="margin: 30px 0;">
+            <h3>Teacher Feedback & Inquiries Log</h3>
+            <div id="adminFeedbackContent"></div>
+
+            <hr style="margin: 30px 0;">
+            <h3>Master Clearance, Verification & Summary</h3>
+            <p style="color: #64748b; font-size: 14px;">Verify claims, review exact lesson sequence and subjects taught per week, and update verification stages.</p>
+            <div style="margin-bottom: 15px;">
+                <button onclick="clearAllRemedials()" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All Records</button>
+            </div>
+            <div id="auditContent"></div>
+            <button class="back-btn" onclick="goHome()">Logout / Back to Main Menu</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig_bliss')) || {
+        1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true
+    };
+
+    let teacherList = JSON.parse(localStorage.getItem('teacherList_bliss')) || [
+        "MARY M", "MR KIMATHI", "JOSYLN", "FRIDA", "COLLINS M.", "IBAYA", "MERCY", "JOY M.", "SHELDON", "ALIAS", "ROSEMARY K.", "CAROL G.", "EDWIN M.", "WINNIE", "JANE M.", "TIMOTHY", "PAULINE", "EMMANUEL N.", "ANNJOY", "STEPHEN M.", "TONNY M.", "WILSON", "PRISCILA", "BETT K.", "GITONGA N.", "CAROL N.", "CYNTHIA C.", "MUHINDI M.", "ELISHA BETT", "MURANGIRI R.", "MWANGI"
+    ];
+
+    let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase_bliss')) || {};
+    let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList_bliss')) || [];
+    let currentLoggedInTeacher = null;
+    let generatedOtpStorage = null;
+    let pendingRegData = null;
+    let resetOtpStorage = null;
+    let resetTargetName = null;
+
+    function saveData() {
+        localStorage.setItem('openWeeksConfig_bliss', JSON.stringify(openWeeksConfig));
+        localStorage.setItem('teacherList_bliss', JSON.stringify(teacherList));
+        localStorage.setItem('teacherDatabase_bliss', JSON.stringify(teacherDatabase));
+        localStorage.setItem('globalFeedbackList_bliss', JSON.stringify(globalFeedbackList));
+    }
+
+    function showPortalSelection(portal) {
+        document.getElementById('mainMenuContainer').classList.add('hidden');
+        document.getElementById('teacherLoginPortal').classList.add('hidden');
+        document.getElementById('teacherPortalDashboard').classList.add('hidden');
+        document.getElementById('adminPortal').classList.add('hidden');
+
+        if (portal === 'teacherLogin') {
+            document.getElementById('teacherLoginPortal').classList.remove('hidden');
+            populateTeacherDropdown();
+            document.getElementById('authTeacherName').value = "";
+            document.getElementById('authPassword').value = '';
+            document.getElementById('teacherAuthError').innerText = '';
+            document.getElementById('loginFields').classList.add('hidden');
+            document.getElementById('registerFields').classList.add('hidden');
+            document.getElementById('forgotPasswordSection').classList.add('hidden');
+        } else if (portal === 'teacherDashboard') {
+            document.getElementById('teacherPortalDashboard').classList.remove('hidden');
+            document.getElementById('sidebarTeacherName').innerText = currentLoggedInTeacher;
+            document.getElementById('topbarTeacherName').innerText = currentLoggedInTeacher;
+            document.getElementById('profileCardName').innerText = currentLoggedInTeacher;
+            document.getElementById('infoFullName').innerText = currentLoggedInTeacher;
+            document.getElementById('infoPhone').innerText = teacherDatabase[currentLoggedInTeacher]?.phone || 'N/A';
+            updateDashboardMetrics();
+            switchTeacherTab('dashboardHome');
+        } else if (portal === 'admin') {
+            document.getElementById('adminPortal').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminError').innerText = '';
+        }
+    }
+
+    function populateTeacherDropdown() {
+        const select = document.getElementById('authTeacherName');
+        select.innerHTML = '<option value="">-- Select Your Name --</option>';
+        teacherList.sort().forEach(name => {
+            let opt = document.createElement('option');
+            opt.value = name;
+            opt.innerText = name;
+            select.appendChild(opt);
+        });
+    }
+
+    function switchTeacherTab(tabId) {
+        document.getElementById('tabDashboardHome').classList.add('hidden');
+        document.getElementById('tabClaimSection').classList.add('hidden');
+        document.getElementById('tabStatusSection').classList.add('hidden');
+        document.getElementById('tabMissedPortal').classList.add('hidden');
+        document.getElementById('tabFeedbackSection').classList.add('hidden');
+        document.getElementById('tabSecuritySection').classList.add('hidden');
+
+        document.getElementById('menuLinkDashboard').classList.remove('active');
+        document.getElementById('menuLinkClaim').classList.remove('active');
+        document.getElementById('menuLinkStatus').classList.remove('active');
+        document.getElementById('menuLinkMissed').classList.remove('active');
+        document.getElementById('menuLinkFeedback').classList.remove('active');
+        document.getElementById('menuLinkSecurity').classList.remove('active');
+
+        if (tabId === 'dashboardHome') {
+            document.getElementById('tabDashboardHome').classList.remove('hidden');
+            document.getElementById('menuLinkDashboard').classList.add('active');
+            updateDashboardMetrics();
+        } else if (tabId === 'claimSection') {
+            document.getElementById('tabClaimSection').classList.remove('hidden');
+            document.getElementById('menuLinkClaim').classList.add('active');
+            document.getElementById('teacherResult').classList.add('hidden');
+            document.getElementById('teacherError').innerText = '';
+            populateTeacherWeekDropdowns();
+        } else if (tabId === 'statusSection') {
+            document.getElementById('tabStatusSection').classList.remove('hidden');
+            document.getElementById('menuLinkStatus').classList.add('active');
+            renderTeacherStatusView();
+        } else if (tabId === 'missedPortal') {
+            document.getElementById('tabMissedPortal').classList.remove('hidden');
+            document.getElementById('menuLinkMissed').classList.add('active');
+            document.getElementById('missedResult').innerText = '';
+            populateMissedWeekDropdown();
+        } else if (tabId === 'feedbackSection') {
+            document.getElementById('tabFeedbackSection').classList.remove('hidden');
+            document.getElementById('menuLinkFeedback').classList.add('active');
+            document.getElementById('feedbackMessage').value = '';
+            document.getElementById('feedbackResult').innerText = '';
+        } else if (tabId === 'securitySection') {
+            document.getElementById('tabSecuritySection').classList.remove('hidden');
+            document.getElementById('menuLinkSecurity').classList.add('active');
+            document.getElementById('currentPortalPass').value = '';
+            document.getElementById('newPortalPass').value = '';
+            document.getElementById('confirmPortalPass').value = '';
+            document.getElementById('portalPassMsg').innerText = '';
+        }
+    }
+
+    function goHome() {
+        currentLoggedInTeacher = null;
+        document.getElementById('mainMenuContainer').classList.remove('hidden');
+        document.getElementById('teacherLoginPortal').classList.add('hidden');
+        document.getElementById('teacherPortalDashboard').classList.add('hidden');
+        document.getElementById('adminPortal').classList.add('hidden');
+    }
+
+    function logoutTeacher() {
+        currentLoggedInTeacher = null;
+        showPortalSelection('teacherLogin');
+    }
+
+    function checkTeacherExists() {
+        const name = document.getElementById('authTeacherName').value;
+        const loginFields = document.getElementById('loginFields');
+        const registerFields = document.getElementById('registerFields');
+        const errDiv = document.getElementById('teacherAuthError');
         
-        let currentLoggedInTeacher = null;
-        let generatedOtpStorage = '';
-        let resetOtpStorage = '';
-        let resetTargetName = '';
+        errDiv.innerText = '';
+        document.getElementById('otpVerificationSection').classList.add('hidden');
+        document.getElementById('forgotPasswordSection').classList.add('hidden');
 
-        // LocalStorage loading / saving
-        function loadData() {
-            const savedList = localStorage.getItem('bliss_teacherList');
-            if (savedList) teacherList = JSON.parse(savedList);
-
-            const savedDb = localStorage.getItem('bliss_teacherDatabase');
-            if (savedDb) teacherDatabase = JSON.parse(savedDb);
-
-            const savedWeeks = localStorage.getItem('bliss_openWeeksConfig');
-            if (savedWeeks) openWeeksConfig = JSON.parse(savedWeeks);
-
-            const savedFeedback = localStorage.getItem('bliss_feedbackList');
-            if (savedFeedback) globalFeedbackList = JSON.parse(savedFeedback);
+        if (!name) {
+            loginFields.classList.add('hidden');
+            registerFields.classList.add('hidden');
+            return;
         }
 
-        function saveData() {
-            localStorage.setItem('bliss_teacherList', JSON.stringify(teacherList));
-            localStorage.setItem('bliss_teacherDatabase', JSON.stringify(teacherDatabase));
-            localStorage.setItem('bliss_openWeeksConfig', JSON.stringify(openWeeksConfig));
-            localStorage.setItem('bliss_feedbackList', JSON.stringify(globalFeedbackList));
+        if (teacherDatabase[name] && teacherDatabase[name].password) {
+            loginFields.classList.remove('hidden');
+            registerFields.classList.add('hidden');
+        } else {
+            loginFields.classList.add('hidden');
+            registerFields.classList.remove('hidden');
+        }
+    }
+
+    function showForgotPasswordSection() {
+        const name = document.getElementById('authTeacherName').value;
+        if (!name) {
+            document.getElementById('teacherAuthError').innerText = "Please select your name first.";
+            return;
+        }
+        resetTargetName = name;
+        document.getElementById('loginFields').classList.add('hidden');
+        document.getElementById('forgotPasswordSection').classList.remove('hidden');
+        document.getElementById('resetPhone').value = '';
+        document.getElementById('resetOtpBox').classList.add('hidden');
+        document.getElementById('teacherAuthError').innerText = '';
+    }
+
+    function hideForgotPasswordSection() {
+        document.getElementById('forgotPasswordSection').classList.add('hidden');
+        document.getElementById('loginFields').classList.remove('hidden');
+    }
+
+    function requestPasswordResetOTP() {
+        const phone = document.getElementById('resetPhone').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (!phone || !teacherDatabase[resetTargetName] || teacherDatabase[resetTargetName].phone !== phone) {
+            errDiv.innerText = "Phone number does not match account records.";
+            return;
         }
 
-        // Initialize app on load
-        window.onload = function() {
-            loadData();
+        errDiv.innerText = "";
+        resetOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
+        
+        document.getElementById('resetOtpNotice').innerText = `Reset Code: ${resetOtpStorage}`;
+        document.getElementById('resetOtpBox').classList.remove('hidden');
+    }
+
+    function verifyAndResetPassword() {
+        const entered = document.getElementById('enteredResetOtp').value.trim();
+        const newPass = document.getElementById('newAccountPassword').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (entered !== resetOtpStorage) {
+            errDiv.innerText = "Invalid verification code entered.";
+            return;
+        }
+
+        if (!newPass) {
+            errDiv.innerText = "Please enter a new password.";
+            return;
+        }
+
+        teacherDatabase[resetTargetName].password = newPass;
+        saveData();
+
+        alert("Password successfully reset! Please login with your new password.");
+        hideForgotPasswordSection();
+        document.getElementById('authPassword').value = "";
+    }
+
+    function updatePortalPassword() {
+        const currentPass = document.getElementById('currentPortalPass').value.trim();
+        const newPass = document.getElementById('newPortalPass').value.trim();
+        const confirmPass = document.getElementById('confirmPortalPass').value.trim();
+        const msgDiv = document.getElementById('portalPassMsg');
+        const teacherObj = teacherDatabase[currentLoggedInTeacher];
+
+        msgDiv.innerText = "";
+        msgDiv.className = "error";
+
+        if (teacherObj.password !== currentPass) {
+            msgDiv.innerText = "Incorrect current password.";
+            return;
+        }
+
+        if (!newPass || newPass !== confirmPass) {
+            msgDiv.innerText = "New passwords do not match or field is empty.";
+            return;
+        }
+
+        teacherObj.password = newPass;
+        saveData();
+
+        msgDiv.className = "success";
+        msgDiv.innerText = "Password successfully updated!";
+        document.getElementById('currentPortalPass').value = '';
+        document.getElementById('newPortalPass').value = '';
+        document.getElementById('confirmPortalPass').value = '';
+    }
+
+    function handleTeacherLogin() {
+        const name = document.getElementById('authTeacherName').value;
+        const pass = document.getElementById('authPassword').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (!teacherDatabase[name] || teacherDatabase[name].password !== pass) {
+            errDiv.innerText = "Incorrect password or account not found.";
+            return;
+        }
+
+        currentLoggedInTeacher = name;
+        showPortalSelection('teacherDashboard');
+    }
+
+    function requestRegistrationOTP() {
+        const name = document.getElementById('authTeacherName').value;
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass = document.getElementById('regPassword').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (!phone || !pass) {
+            errDiv.innerText = "Please enter phone number and create a password.";
+            return;
+        }
+
+        errDiv.innerText = "";
+        generatedOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
+        pendingRegData = { name, phone, pass };
+
+        const notice = document.getElementById('otpSimulatedNotice');
+        notice.innerText = `Verification Code: ${generatedOtpStorage}`;
+        document.getElementById('otpVerificationSection').classList.remove('hidden');
+    }
+
+    function verifyAndCompleteRegistration() {
+        const entered = document.getElementById('enteredOtp').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (entered !== generatedOtpStorage) {
+            errDiv.innerText = "Invalid verification code entered.";
+            return;
+        }
+
+        let name = pendingRegData.name;
+        let phone = pendingRegData.phone;
+        let pass = pendingRegData.pass;
+
+        let weeksData = {};
+        for (let w = 1; w <= 9; w++) {
+            let morningMap = {};
+            ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach(d => {
+                morningMap[d] = { claimed: false, attended: true, substitute: "", subject: "" };
+            });
+            weeksData[w] = {
+                morning: morningMap,
+                sat: { claimedCount: 0, lessons: [], attended: true, substitute: "", subjects: [] },
+                status: "pending review"
+            };
+        }
+
+        teacherDatabase[name] = {
+            name: name,
+            phone: phone,
+            password: pass,
+            weeks: weeksData
         };
 
-        // Navigation helpers
-        function showPortalSelection(portalId) {
-            document.getElementById('mainMenuContainer').classList.add('hidden');
-            document.getElementById('teacherLoginPortal').classList.add('hidden');
-            document.getElementById('teacherPortalDashboard').classList.add('hidden');
-            document.getElementById('adminPortal').classList.add('hidden');
+        saveData();
+        currentLoggedInTeacher = name;
+        showPortalSelection('teacherDashboard');
+    }
 
-            if (portalId === 'teacherLogin') {
-                document.getElementById('teacherLoginPortal').classList.remove('hidden');
-                populateTeacherDropdown();
-                document.getElementById('teacherAuthError').innerText = '';
-                document.getElementById('loginFields').classList.add('hidden');
-                document.getElementById('registerFields').classList.add('hidden');
-                document.getElementById('forgotPasswordSection').classList.add('hidden');
-            } else if (portalId === 'teacherDashboard') {
-                document.getElementById('teacherPortalDashboard').classList.remove('hidden');
-                document.getElementById('teacherDashboardTitle').innerText = `Teacher Portal — Welcome, ${currentLoggedInTeacher}`;
-                switchTeacherTab('dashboardHome');
-            } else if (portalId === 'adminPortal') {
-                document.getElementById('adminPortal').classList.remove('hidden');
-                document.getElementById('adminLogin').classList.remove('hidden');
-                document.getElementById('adminDashboard').classList.add('hidden');
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('adminError').innerText = '';
+    function populateTeacherWeekDropdowns() {
+        const select = document.getElementById('claimWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        for (let w = 1; w <= 9; w++) {
+            if (openWeeksConfig[w]) {
+                let opt = document.createElement('option');
+                opt.value = w;
+                opt.innerText = `Week ${w}`;
+                select.appendChild(opt);
             }
         }
+    }
+
+    function populateMissedWeekDropdown() {
+        const select = document.getElementById('missWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        for (let w = 1; w <= 9; w++) {
+            if (openWeeksConfig[w]) {
+                let opt = document.createElement('option');
+                opt.value = w;
+                opt.innerText = `Week ${w}`;
+                select.appendChild(opt);
+            }
+        }
+    }
+
+    function loadWeekFields() {
+        const weekVal = document.getElementById('claimWeek').value;
+        const daysContainer = document.getElementById('daysContainer');
+        const submitBtn = document.getElementById('submitClaimBtn');
+        const errorDiv = document.getElementById('teacherError');
+
+        if (!weekVal) {
+            daysContainer.innerHTML = "";
+            submitBtn.classList.add('hidden');
+            return;
+        }
+
+        errorDiv.innerText = "";
+        submitBtn.classList.remove('hidden');
+
+        const workDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        let html = "";
+        workDays.forEach((day, index) => {
+            html += `
+                <div class="day-row">
+                    <strong>${day} (Morning Remedial)</strong>
+                    <label>Session Conducted:</label>
+                    <select id="m_${index}">
+                        <option value="1">Attended & Taught (1 Session)</option>
+                        <option value="0">Did Not Teach / Absent (0 Sessions)</option>
+                    </select>
+                    <label>Subject Taught:</label>
+                    <input type="text" id="subj_${index}" placeholder="e.g. Mathematics">
+                </div>
+            `;
+        });
+
+        html += `
+            <div class="day-row" style="background: #f0fdf4;">
+                <strong>Saturday (Weekend Remedial)</strong>
+                <label>Total Saturday Lessons Taught (0 to 4):</label>
+                <input type="number" id="sat_count" min="0" max="4" value="0">
+                <label>Specify Lesson Numbers (e.g., 1, 2):</label>
+                <input type="text" id="sat_lessons" placeholder="e.g. 1, 2">
+                <label>Subjects Taught (comma separated or per lesson):</label>
+                <input type="text" id="sat_subjects" placeholder="e.g. Physics, Chemistry">
+            </div>
+        `;
+        daysContainer.innerHTML = html;
+    }
+
+    function submitClaim() {
+        const name = currentLoggedInTeacher;
+        const weekNum = parseInt(document.getElementById('claimWeek').value);
+        const errorDiv = document.getElementById('teacherError');
+        const resultDiv = document.getElementById('teacherResult');
+
+        let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+        let morningClaimsCount = 0;
+        let morningValues = {};
+        let morningSubjects = {};
+
+        for (let i = 0; i < workDaysKeys.length; i++) {
+            let val = parseInt(document.getElementById(`m_${i}`).value) || 0;
+            let subj = document.getElementById(`subj_${i}`).value.trim();
+            morningValues[workDaysKeys[i]] = (val === 1);
+            morningSubjects[workDaysKeys[i]] = subj;
+            if (val === 1) morningClaimsCount++;
+        }
+
+        let satCount = parseInt(document.getElementById('sat_count').value) || 0;
+        let satLessonsInput = document.getElementById('sat_lessons').value.trim();
+        let satLessonsArr = satLessonsInput ? satLessonsInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x)) : [];
+        let satSubjectsInput = document.getElementById('sat_subjects').value.trim();
+        let satSubjectsArr = satSubjectsInput ? satSubjectsInput.split(',').map(x => x.trim()) : [];
+
+        let teacherObj = teacherDatabase[name];
+        workDaysKeys.forEach((d) => {
+            teacherObj.weeks[weekNum].morning[d].claimed = morningValues[d];
+            teacherObj.weeks[weekNum].morning[d].subject = morningSubjects[d];
+        });
+        teacherObj.weeks[weekNum].sat.claimedCount = satCount;
+        teacherObj.weeks[weekNum].sat.lessons = satLessonsArr;
+        teacherObj.weeks[weekNum].sat.subjects = satSubjectsArr;
+        
+        teacherObj.weeks[weekNum].status = "pending review";
+
+        saveData();
+
+        let morningAmt = morningClaimsCount * 500;
+        let weekendAmt = satCount * 700;
+        let totalAmt = morningAmt + weekendAmt;
+
+        resultDiv.classList.remove('hidden');
+        resultDiv.innerHTML = `
+            <h3 style="margin-top:0; color:#065f46;">Claim Submitted Successfully (Week ${weekNum})</h3>
+            <p><strong>Total Amount:</strong> ${totalAmt} KSH</p>
+            <p><strong>Current Status:</strong> <span class="status-badge status-pending">pending review</span></p>
+        `;
+        updateDashboardMetrics();
+    }
+
+    function updateDashboardMetrics() {
+        const teacherObj = teacherDatabase[currentLoggedInTeacher];
+        if (!teacherObj) return;
+
+        let totalSum = 0;
+        let approvedSum = 0;
+        let pendingSum = 0;
+
+        for (let w = 1; w <= 9; w++) {
+            let wData = teacherObj.weeks[w];
+            let morningCount = 0;
+            let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+            workDaysKeys.forEach(d => {
+                if (wData.morning && wData.morning[d] && wData.morning[d].claimed) morningCount++;
+            });
+            let satCount = (wData.sat && wData.sat.claimedCount) ? wData.sat.claimedCount : 0;
+            let weekTotal = (morningCount * 500) + (satCount * 700);
+
+            if (weekTotal > 0) {
+                totalSum += weekTotal;
+                let status = wData.status || "pending review";
+                if (status === "reviewed" || status === "funds ready to be claim" || status === "funds claimed and signed") {
+                    approvedSum += weekTotal;
+                } else {
+                    pendingSum += weekTotal;
+                }
+            }
+        }
+
+        document.getElementById('metricTotalClaims').innerText = `${totalSum} KSH`;
+        document.getElementById('metricApprovedClaims').innerText = `${approvedSum} KSH`;
+        document.getElementById('metricPendingClaims').innerText = `${pendingSum} KSH`;
+    }
+
+    function renderTeacherStatusView() {
+        const container = document.getElementById('teacherStatusListContainer');
+        const teacherObj = teacherDatabase[currentLoggedInTeacher];
+
+        if (!teacherObj) {
+            container.innerHTML = "<p style='color:#64748b;'>No records found.</p>";
+            return;
+        }
+
+        let html = "";
+        for (let w = 1; w <= 9; w++) {
+            let wData = teacherObj.weeks[w];
+            let status = wData.status || "pending review";
+            let badgeClass = "status-pending";
+            if (status === "reviewed") badgeClass = "status-reviewed";
+            else if (status === "funds ready to be claim") badgeClass = "status-ready";
+            else if (status === "funds claimed and signed") badgeClass = "status-claimed";
+
+            html += `
+                <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:15px; border-radius:8px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong>Week ${w} Claim</strong>
+                    </div>
+                    <div>
+                        <span class="status-badge ${badgeClass}">${status}</span>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    function saveMissedClass() {
+        const name = currentLoggedInTeacher;
+        const weekNum = parseInt(document.getElementById('missWeek').value);
+        const dayKey = document.getElementById('missDay').value;
+        const sessionType = document.getElementById('missType').value;
+        const lessonNo = parseInt(document.getElementById('missLessonNo').value);
+        const subName = document.getElementById('subName').value.trim();
+
+        let teacherObj = teacherDatabase[name];
+        let wData = teacherObj.weeks[weekNum];
+
+        if (sessionType === 'morning') {
+            wData.morning[dayKey].attended = false;
+            wData.morning[dayKey].substitute = subName;
+        } else {
+            wData.sat.attended = false;
+            wData.sat.substitute = subName + " (Lesson " + lessonNo + ")";
+        }
+
+        saveData();
+        document.getElementById('missedResult').innerText = "Successfully reported missed class/substitute.";
+    }
+
+    function submitTeacherFeedback() {
+        const name = currentLoggedInTeacher;
+        const category = document.getElementById('feedbackCategory').value;
+        const message = document.getElementById('feedbackMessage').value.trim();
+        const resDiv = document.getElementById('feedbackResult');
+
+        if (!message) return;
+
+        globalFeedbackList.push({
+            teacher: name,
+            category: category,
+            message: message,
+            date: new Date().toLocaleDateString()
+        });
+
+        saveData();
+        resDiv.innerText = "Feedback sent successfully!";
+    }
+
+    function loginAdmin() {
+        const pass = document.getElementById('adminPassword').value;
+        const err = document.getElementById('adminError');
+        if (pass === "dos123") {
+            document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            renderAdminCheckboxes();
+            renderAdminFeedback();
+            renderAudit();
+            populateRemoveMemberDropdown();
+        } else {
+            err.innerText = "Incorrect password.";
+        }
+    }
+
+    function addNewMember() {
+        const newNameInput = document.getElementById('newMemberName');
+        const msgDiv = document.getElementById('memberAddMsg');
+        const name = newNameInput.value.trim().toUpperCase();
+
+        if (!name || teacherList.includes(name)) return;
+
+        teacherList.push(name);
+        saveData();
+        newNameInput.value = "";
+        msgDiv.innerText = `Successfully added ${name}!`;
+        populateRemoveMemberDropdown();
+    }
+
+    function populateRemoveMemberDropdown() {
+        const select = document.getElementById('removeMemberSelect');
+        select.innerHTML = '<option value="">-- Select Member --</option>';
+        teacherList.sort().forEach(name => {
+            let opt = document.createElement('option');
+            opt.value = name;
+            opt.innerText = name;
+            select.appendChild(opt);
+        });
+    }
+
+    function removeMember() {
+        const select = document.getElementById('removeMemberSelect');
+        const name = select.value;
+        if (!name) return;
+
+        if (confirm(`Remove ${name}?`)) {
+            teacherList = teacherList.filter(t => t !== name);
+            delete teacherDatabase[name];
+            saveData();
+            populateRemoveMemberDropdown();
+            renderAudit();
+        }
+    }
+
+    function renderAdminCheckboxes() {
+        const container = document.getElementById('adminWeeksCheckboxes');
+        let html = "";
+        for (let w = 1; w <= 9; w++) {
+            let checked = openWeeksConfig[w] ? "checked" : "";
+            html += `<label style="display:inline-block; margin-right:15px; font-weight:normal;">
+                        <input type="checkbox" id="admin_w_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
+                     </label>`;
+        }
+        container.innerHTML = html;
+    }
+
+    function saveOpenWeeks() {
+        for (let w = 1; w <= 9; w++) {
+            let cb = document.getElementById(`admin_w_${w}`);
+            if (cb) openWeeksConfig[w] = cb.checked;
+        }
+        saveData();
+        document.getElementById('adminSaveMsg').innerText = "Updated successfully!";
+    }
+
+    function renderAdminFeedback() {
+        const container = document.getElementById('adminFeedbackContent');
+        if (globalFeedbackList.length === 0) {
+            container.innerHTML = "<p style='color:#64748b;'>No feedback submitted.</p>";
+            return;
+        }
+        let html = "";
+        globalFeedbackList.forEach((fb) => {
+            html += `
+                <div style="background:#f8fafc; border-left:4px solid #0d9488; padding:12px; margin-top:10px; border-radius:4px;">
+                    <p style="margin:0 0 5px 0;"><strong>${fb.teacher}</strong> | <span style="color:#0d9488;">[${fb.category}]</span></p>
+                    <p style="margin:0;">${fb.message}</p>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function updateTeacherStatus(teacherName, weekNum, newStatus) {
+        if (teacherDatabase[teacherName] && teacherDatabase[teacherName].weeks[weekNum]) {
+            teacherDatabase[teacherName].weeks[weekNum].status = newStatus;
+            saveData();
+            renderAudit();
+        }
+    }
+
+    function clearAllRemedials() {
+        if (confirm("Clear all records?")) {
+            teacherDatabase = {};
+            saveData();
+            renderAudit();
+        }
+    }
+
+    function renderAudit() {
+        const auditContent = document.getElementById('auditContent');
+        const keys = Object.keys(teacherDatabase);
+
+        if (keys.length === 0) {
+            auditContent.innerHTML = "<p style='color:#64748b;'>No records found.</p>";
+            return;
+        }
+
+        let html = `<table style="width:100%; border-collapse: collapse; margin-top: 10px; background: #f8fafc;">
+                        <thead>
+                            <tr style="background: #1e3d59; color: white; text-align: left;">
+                                <th style="padding: 12px; border: 1px solid #cbd5e1;">Teacher Name</th>
+                                <th style="padding: 12px; border: 1px solid #cbd5e1;">Detailed Lessons, Subject Taught & Verification Stage</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+        keys.forEach(key => {
+            let t = teacherDatabase[key];
+            let teacherGrandTotal = 0;
+            let weekDetailsHtml = "";
+
+            for (let w = 1; w <= 9; w++) {
+                let wData = t.weeks[w];
+                let morningCount = 0;
+                let morningDetails = [];
+                let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+                let dayNamesMap = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday" };
+
+                workDaysKeys.forEach(d => {
+                    if (wData.morning && wData.morning[d] && wData.morning[d].claimed) {
+                        morningCount++;
+                        let subj = wData.morning[d].subject ? ` - Subject: <strong>${wData.morning[d].subject}</strong>` : ' - Subject: (Not specified)';
+                        morningDetails.push(`<li>Morning Session (${dayNamesMap[d]}) ${subj}</li>`);
+                    }
+                });
+
+                let satDetails = [];
+                let satCount = (wData.sat && wData.sat.claimedCount) ? wData.sat.claimedCount : 0;
+                if (satCount > 0 && wData.sat.lessons) {
+                    let lessonsArr = wData.sat.lessons;
+                    let subjectsArr = wData.sat.subjects || [];
+                    for (let i = 0; i < lessonsArr.length; i++) {
+                        let lNum = lessonsArr[i];
+                        let sName = subjectsArr[i] || subjectsArr[0] || "General";
+                        satDetails.push(`<li>Saturday Lesson ${lNum} - Subject: <strong>${sName}</strong></li>`);
+                    }
+                }
+
+                let weekTotal = (morningCount * 500) + (satCount * 700);
+                if (weekTotal > 0) {
+                    teacherGrandTotal += weekTotal;
+                    let currentStatus = wData.status || "pending review";
+                    
+                    let combinedLessonsList = [...morningDetails, ...satDetails].join('');
+
+                    weekDetailsHtml += `
+                        <div style="margin-top: 8px; padding: 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span style="font-size: 15px;"><strong>Week ${w}:</strong> ${weekTotal} KSH</span>
+                                <div>
+                                    <select onchange="updateTeacherStatus('${key}', ${w}, this.value)" style="padding: 4px; font-size: 13px; width: auto;">
+                                        <option value="pending review" ${currentStatus === 'pending review' ? 'selected' : ''}>pending review</option>
+                                        <option value="reviewed" ${currentStatus === 'reviewed' ? 'selected' : ''}>reviewed</option>
+                                        <option value="funds ready to be claim" ${currentStatus === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
+                                        <option value="funds claimed and signed" ${currentStatus === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="font-size: 13px; color: #334155; background: #f8fafc; padding: 6px 10px; border-radius: 4px; border: 1px dashed #cbd5e1;">
+                                <strong style="display:block; margin-bottom:4px; color:#1e3d59;">Lessons & Subjects Taught As They Occurred:</strong>
+                                <ul style="margin: 0; padding-left: 18px;">
+                                    ${combinedLessonsList || '<li>No specific lessons recorded</li>'}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (teacherGrandTotal > 0) {
+                html += `<tr>
+                            <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; vertical-align: top;">${t.name}</td>
+                            <td style="padding: 12px; border: 1px solid #cbd5e1; vertical-align: top;">
+                                <div style="color: #065f46; font-weight: bold; margin-bottom: 8px; font-size: 16px;">Total Cleared: ${teacherGrandTotal} KSH</div>
+                                ${weekDetailsHtml}
+                            </td>
+                         </tr>`;
+            }
+        });
+
+        html += `</tbody></table>`;
+        auditContent.innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
