@@ -115,68 +115,108 @@
             display: none !important;
         }
 
-        /* Wizard Card Styling */
+        /* Clean Card Styling Inspired by Reference */
         .portal-card {
-            max-width: 580px;
-            margin: 60px auto;
+            max-width: 620px;
+            margin: 80px auto;
             background: #ffffff;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             overflow: hidden;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #e2e8f0;
         }
         .portal-card-header {
-            background-color: #3b82f6;
-            color: white;
+            background-color: #ffffff;
+            color: var(--dark);
             text-align: center;
-            padding: 25px 20px;
-            position: relative;
+            padding: 35px 30px 15px 30px;
         }
         .portal-card-header h2 {
             margin: 0;
-            font-size: 24px;
-            font-weight: 400;
-            color: #ffffff;
-            letter-spacing: 0.5px;
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e3d59;
+            letter-spacing: -0.5px;
         }
         .portal-badge-logo {
             width: 65px;
             height: 65px;
-            background: white;
+            background: #1e3d59;
             border-radius: 50%;
-            margin: 15px auto 0 auto;
+            margin: 0 auto 15px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #3b82f6;
-            font-size: 20px;
+            color: #ffffff;
+            font-size: 18px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
         .portal-card-body {
-            padding: 35px 40px;
+            padding: 20px 45px 45px 45px;
+        }
+
+        /* Input Group with Icon prefix */
+        .input-group-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #ffffff;
+            overflow: hidden;
+        }
+        .input-group-container:focus-within {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+        .input-icon-box {
+            padding: 0 14px;
+            color: #64748b;
+            font-size: 16px;
+            background: #f8fafc;
+            border-right: 1px solid #e2e8f0;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .input-group-container input, .input-group-container select {
+            border: none;
+            margin-top: 0;
+            background: transparent;
+            padding: 12px 15px;
+            font-size: 15px;
+            width: 100%;
+        }
+        .input-group-container input:focus, .input-group-container select:focus {
+            outline: none;
+            background: transparent;
+            border-color: transparent;
         }
 
         label {
             font-weight: 600;
             display: block;
-            margin-top: 15px;
+            margin-top: 20px;
             color: var(--dark);
             font-size: 14px;
         }
+        
         input, select, textarea {
             width: 100%;
             padding: 12px;
             margin-top: 6px;
             border: 1px solid #cbd5e1;
-            border-radius: 4px;
+            border-radius: 6px;
             box-sizing: border-box;
             font-size: 15px;
             background: #f8fafc;
         }
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: #059669;
             background: #fff;
         }
         
@@ -186,29 +226,20 @@
             align-items: center;
             margin-top: 30px;
         }
-        .btn-orange {
-            background-color: #d97706;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-orange:hover { background-color: #b45309; }
 
         .btn-green {
             background-color: #059669;
             color: white;
             border: none;
-            padding: 12px 28px;
-            font-size: 15px;
+            padding: 14px 28px;
+            font-size: 16px;
             font-weight: 600;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background 0.2s;
+            width: 100%;
+            margin-top: 25px;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
         }
         .btn-green:hover { background-color: #047857; }
 
@@ -216,12 +247,13 @@
             background-color: #64748b;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             font-size: 14px;
             font-weight: 600;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             margin-top: 15px;
+            width: 100%;
         }
         .btn-secondary:hover { background-color: #475569; }
 
@@ -244,6 +276,7 @@
             font-weight: 600;
             margin-top: 12px;
             font-size: 14px;
+            text-align: center;
         }
         .success {
             color: #10b981;
@@ -346,46 +379,54 @@
     <!-- Main Entry Menu -->
     <div id="mainMenuContainer" class="portal-card">
         <div class="portal-card-header">
-            <h2>Bishop Lawi Imathiu Senior School</h2>
             <div class="portal-badge-logo">BLISS</div>
+            <h2>Welcome to BLISS Portal</h2>
         </div>
-        <div class="portal-card-body" style="text-align: center;">
-            <h3 style="margin-top: 0; color: #1e3d59;">School Portal</h3>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">Please select your portal access level below:</p>
-            <button onclick="showPortalSelection('teacherLogin')" class="btn-green" style="width: 100%; margin-bottom: 12px;">Teacher Portal (Login / Register)</button>
-            <button onclick="showPortalSelection('admin')" class="btn-orange" style="width: 100%; background-color: #1e3d59;">Admin Portal</button>
+        <div class="portal-card-body" style="text-align: center; padding-top: 0;">
+            <p style="color: #64748b; font-size: 15px; margin-bottom: 30px;">Please select your portal access level below:</p>
+            <button onclick="showPortalSelection('teacherLogin')" class="btn-green" style="margin-top: 0; margin-bottom: 15px;">Teacher Portal (Login / Register)</button>
+            <button onclick="showPortalSelection('admin')" class="btn-secondary" style="background-color: #1e3d59; margin-top: 0; padding: 14px 20px; font-size: 16px;">Admin Portal</button>
         </div>
     </div>
 
-    <!-- Teacher Auth / Login Portal -->
+    <!-- Teacher Auth / Login Portal (Styled like reference) -->
     <div id="teacherLoginPortal" class="portal-card hidden">
         <div class="portal-card-header">
-            <h2>Teacher Portal Login</h2>
-            <div class="portal-badge-logo">BLISS</div>
+            <h2>Welcome to Teacher Portal!</h2>
         </div>
         <div class="portal-card-body">
             <div id="teacherAuthBox">
-                <label for="authTeacherName">Select Your Name:</label>
-                <select id="authTeacherName" onchange="checkTeacherExists()">
-                    <option value="">-- Select Your Name --</option>
-                </select>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <label for="authTeacherName" style="margin-top: 0;">Username</label>
+                    <a onclick="showForgotPasswordSection()" style="font-size: 13px; color: #059669; text-decoration: none; font-weight: 600; cursor: pointer;">Forgot Username?</a>
+                </div>
 
-                <div id="loginFields" class="hidden">
+                <div class="input-group-container">
+                    <div class="input-icon-box">&#128100;</div>
+                    <select id="authTeacherName" onchange="checkTeacherExists()" style="border: none; background: transparent; padding: 12px; font-size: 15px; width: 100%;">
+                        <option value="">-- Select Your Name or Phone No. --</option>
+                    </select>
+                </div>
+
+                <div id="loginFields" class="hidden" style="margin-top: 15px;">
                     <label for="authPassword">Password:</label>
-                    <input type="password" id="authPassword" placeholder="Enter your password">
+                    <div class="input-group-container">
+                        <div class="input-icon-box">&#128274;</div>
+                        <input type="password" id="authPassword" placeholder="Enter your password" style="border: none; background: transparent;">
+                    </div>
                     
-                    <div class="button-row">
-                        <button onclick="showForgotPasswordSection()" class="btn-orange" type="button">Reset password</button>
-                        <button onclick="handleTeacherLogin()" class="btn-green" type="button">Sign In</button>
+                    <button onclick="handleTeacherLogin()" class="btn-green" type="button">Continue</button>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <a onclick="showForgotPasswordSection()" style="font-size: 14px; color: #059669; text-decoration: none; font-weight: 600; cursor: pointer;">Reset password</a>
                     </div>
                 </div>
 
                 <!-- Forgot Password Section -->
-                <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-top: 20px;">
+                <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-top: 20px;">
                     <h4 style="margin-top: 0; color: var(--dark);">Reset Account Password</h4>
                     <label for="resetPhone">Enter Registered Phone Number:</label>
                     <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
-                    <button onclick="requestPasswordResetOTP()" class="btn-orange" style="margin-top: 10px; width:100%;">Send Reset Code</button>
+                    <button onclick="requestPasswordResetOTP()" class="btn-green" style="margin-top: 10px; width:100%;">Send Reset Code</button>
 
                     <div id="resetOtpBox" class="otp-box hidden">
                         <p id="resetOtpNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
@@ -398,15 +439,15 @@
                     <button class="btn-secondary" onclick="hideForgotPasswordSection()" style="width: 100%; margin-top: 10px;">Back to Login</button>
                 </div>
 
-                <div id="registerFields" class="hidden">
-                    <p style="color: #d97706; font-weight: bold; margin-top: 15px; background: #fef3c7; padding: 10px; border-radius: 4px; font-size: 14px;">New member detected! Please register your account.</p>
+                <div id="registerFields" class="hidden" style="margin-top: 15px;">
+                    <p style="color: #d97706; font-weight: bold; background: #fef3c7; padding: 12px; border-radius: 6px; font-size: 14px; text-align: center;">New member detected! Please register your account.</p>
                     <label for="regPhone">Phone Number:</label>
                     <input type="text" id="regPhone" placeholder="e.g. 0712345678">
                     
                     <label for="regPassword">Create Password:</label>
                     <input type="password" id="regPassword" placeholder="Create a secure password">
                     
-                    <button onclick="requestRegistrationOTP()" class="btn-orange" style="margin-top: 15px; width: 100%;">Generate Verification Code</button>
+                    <button onclick="requestRegistrationOTP()" class="btn-green" style="width: 100%;">Generate Verification Code</button>
 
                     <div id="otpVerificationSection" class="otp-box hidden">
                         <p id="otpSimulatedNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
@@ -622,26 +663,28 @@
         </div>
     </div>
 
-    <!-- Admin Portal View (Login Card) -->
+    <!-- Admin Portal View (Login Card matching reference style) -->
     <div id="adminPortal" class="portal-card hidden">
-        <div class="portal-card-header" style="background-color: #1e3d59;">
-            <h2>Admin Portal</h2>
-            <div class="portal-badge-logo" style="color: #1e3d59;">BLISS</div>
+        <div class="portal-card-header">
+            <div class="portal-badge-logo" style="background: #1e3d59;">BLISS</div>
+            <h2>Admin Portal Access</h2>
         </div>
         <div class="portal-card-body">
             <div id="adminLogin">
                 <label for="adminPassword">Enter Admin Security Password:</label>
-                <input type="password" id="adminPassword" placeholder="Password (dos123)">
-                <div class="button-row" style="margin-top: 20px;">
-                    <button class="btn-secondary" onclick="goHome()" type="button">Back to Main Menu</button>
-                    <button onclick="loginAdmin()" class="btn-orange" type="button" style="background-color: #1e3d59;">Login</button>
+                <div class="input-group-container">
+                    <div class="input-icon-box">&#128274;</div>
+                    <input type="password" id="adminPassword" placeholder="Password (dos123)" style="border: none; background: transparent;">
                 </div>
+                
+                <button onclick="loginAdmin()" class="btn-green" type="button" style="background-color: #1e3d59;">Continue</button>
+                <button class="btn-secondary" onclick="goHome()" type="button">Back to Main Menu</button>
                 <div id="adminError" class="error"></div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Portal Dashboard Layout (Matches Teacher Layout Exactly) -->
+    <!-- Admin Portal Dashboard Layout -->
     <div id="adminDashboard" class="app-layout hidden">
         <!-- Sidebar Navigation -->
         <div class="sidebar">
@@ -684,7 +727,7 @@
                         <select id="removeMemberSelect">
                             <option value="">-- Select Member to Remove --</option>
                         </select>
-                        <button onclick="removeMember()" class="btn-orange" style="margin-top: 15px; width:100%; background-color: #ef4444;">Remove Selected Member</button>
+                        <button onclick="removeMember()" class="btn-secondary" style="margin-top: 15px; width:100%; background-color: #ef4444;">Remove Selected Member</button>
                         <div id="memberRemoveMsg" class="error" style="color: #ef4444;"></div>
                     </div>
                 </div>
@@ -712,7 +755,7 @@
                     <h2 style="margin-top:0;">Master Clearance, Verification & Summary</h2>
                     <p style="color: #64748b; font-size: 14px;">Verify claims, review exact lesson sequences and subjects taught per week, and approve payouts.</p>
                     <div style="margin-bottom: 20px;">
-                        <button onclick="clearAllRemedials()" class="btn-orange" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All System Records</button>
+                        <button onclick="clearAllRemedials()" class="btn-secondary" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All System Records</button>
                     </div>
                     <div id="auditContent"></div>
                 </div>
@@ -768,7 +811,7 @@
 
     function populateTeacherDropdowns() {
         const select = document.getElementById('authTeacherName');
-        select.innerHTML = '<option value="">-- Select Your Name --</option>';
+        select.innerHTML = '<option value="">-- Select Your Name or Phone No. --</option>';
         teacherList.sort().forEach(name => {
             const opt = document.createElement('option');
             opt.value = name;
@@ -1232,7 +1275,7 @@
                             <strong>${tName}</strong> - Week ${c.week} (${c.amount} KSH)<br>
                             <span style="font-size: 13px; color: #64748b;">Status: ${c.status}</span>
                         </div>
-                        <button onclick="approveClaim('${tName}', '${c.week}')" class="btn-green" style="padding: 6px 15px; font-size: 13px;">Approve Claim</button>
+                        <button onclick="approveClaim('${tName}', '${c.week}')" class="btn-green" style="padding: 6px 15px; font-size: 13px; width: auto; margin-top: 0;">Approve Claim</button>
                     </div>
                 `;
             });
