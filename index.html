@@ -1,61 +1,721 @@
-function populateTeacherSelect() {
-        // Populate teacher selection dropdown or list for the login portal
-        const teacherSelect = document.getElementById('teacherSelect');
-        if (!teacherSelect) return;
-        
-        // Clear existing options except default
-        teacherSelect.innerHTML = '<option value="">-- Select Your Name --</option>';
-        
-        // Example teacher list (can be expanded based on school records)
-        const teachers = [
-            "Teacher Bett",
-            // Add more teachers here as needed
-        ];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Remedial Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .portal-section {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .back-btn {
+            background-color: #95a5a6;
+            margin-top: 10px;
+        }
+        .back-btn:hover {
+            background-color: #7f8c8d;
+        }
+        .day-row {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        .summary-box {
+            background: #e8f8f5;
+            border: 1px solid #27ae60;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        .error {
+            color: #c0392b;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .otp-box {
+            background: #fdfefe;
+            border: 2px dashed #3498db;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
 
-        teachers.forEach(teacher => {
-            const option = document.createElement('option');
-            option.value = teacher;
-            option.textContent = teacher;
-            teacherSelect.appendChild(option);
-        });
+<div class="container">
+    <h1>School Remedial Management System</h1>
+
+    <!-- Main Menu -->
+    <div id="mainMenu" class="portal-section">
+        <h2>Select Portal</h2>
+        <button onclick="showPortal('teacherLogin')">1. Teacher Portal (Login / Register)</button>
+        <button onclick="showPortal('dos')">2. Deputy of Studies (DOS) / Admin Portal</button>
+    </div>
+
+    <!-- Teacher Auth / Login Portal -->
+    <div id="teacherLoginPortal" class="portal-section hidden">
+        <h2>Teacher Account Portal</h2>
+        <div id="teacherAuthBox">
+            <label for="authTeacherName">Select Your Name:</label>
+            <select id="authTeacherName" onchange="checkTeacherExists()">
+                <option value="">-- Select Your Name --</option>
+                <option value="MARY M">MARY M</option>
+                <option value="MR KIMATHI">MR KIMATHI</option>
+                <option value="JOSYLN">JOSYLN</option>
+                <option value="FRIDA">FRIDA</option>
+                <option value="COLLINS M.">COLLINS M.</option>
+                <option value="IBAYA">IBAYA</option>
+                <option value="MERCY">MERCY</option>
+                <option value="JOY M.">JOY M.</option>
+                <option value="SHELDON">SHELDON</option>
+                <option value="ALIAS">ALIAS</option>
+                <option value="ROSEMARY K.">ROSEMARY K.</option>
+                <option value="CAROL G.">CAROL G.</option>
+                <option value="EDWIN M.">EDWIN M.</option>
+                <option value="WINNIE">WINNIE</option>
+                <option value="JANE M.">JANE M.</option>
+                <option value="TIMOTHY">TIMOTHY</option>
+                <option value="PAULINE">PAULINE</option>
+                <option value="EMMANUEL N.">EMMANUEL N.</option>
+                <option value="ANNJOY">ANNJOY</option>
+                <option value="STEPHEN M.">STEPHEN M.</option>
+                <option value="TONNY M.">TONNY M.</option>
+                <option value="WILSON">WILSON</option>
+                <option value="PRISCILA">PRISCILA</option>
+                <option value="BETT K.">BETT K.</option>
+                <option value="GITONGA N.">GITONGA N.</option>
+                <option value="CAROL N.">CAROL N.</option>
+                <option value="CYNTHIA C.">CYNTHIA C.</option>
+                <option value="MUHINDI M.">MUHINDI M.</option>
+                <option value="ELISHA BETT">ELISHA BETT</option>
+                <option value="MURANGIRI R.">MURANGIRI R.</option>
+                <option value="MWANGI">MWANGI</option>
+            </select>
+
+            <div id="loginFields" class="hidden">
+                <label for="authPassword">Account Password:</label>
+                <input type="password" id="authPassword" placeholder="Enter your password">
+                <button onclick="handleTeacherLogin()">Login</button>
+            </div>
+
+            <div id="registerFields" class="hidden">
+                <p style="color: #e67e22; font-weight: bold; margin-top: 15px;">New member detected! Please register your account.</p>
+                <label for="regPhone">Phone Number (for OTP):</label>
+                <input type="text" id="regPhone" placeholder="e.g. 0712345678">
+                
+                <label for="regPassword">Create Password:</label>
+                <input type="password" id="regPassword" placeholder="Create a secure password">
+                
+                <button onclick="requestRegistrationOTP()" style="background-color: #e67e22;">Send Verification OTP</button>
+
+                <div id="otpVerificationSection" class="otp-box hidden">
+                    <p id="otpSimulatedNotice" class="success" style="margin-top:0;"></p>
+                    <label for="enteredOtp">Enter 4-digit OTP Code:</label>
+                    <input type="text" id="enteredOtp" placeholder="Enter OTP here" maxlength="4">
+                    <button onclick="verifyAndCompleteRegistration()" style="background-color: #27ae60;">Verify OTP & Complete Registration</button>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
+            <div id="teacherAuthError" class="error"></div>
+        </div>
+    </div>
+
+    <!-- Teacher Dashboard Portal -->
+    <div id="teacherPortal" class="portal-section hidden">
+        <h2>Teacher Dashboard (<span id="loggedInTeacherTitle"></span>)</h2>
+        
+        <label for="claimWeek">Select Week to Claim:</label>
+        <select id="claimWeek" onchange="loadWeekFields()">
+            <option value="">-- Select Week --</option>
+        </select>
+
+        <div id="daysContainer"></div>
+
+        <button id="submitClaimBtn" onclick="submitClaim()" class="hidden">Submit and Calculate Claim</button>
+        <button onclick="showMissedPortal()">Report Missed Class / Substitute</button>
+        <button class="back-btn" onclick="logoutTeacher()">Logout Account / Back to Menu</button>
+
+        <div id="teacherError" class="error"></div>
+        <div id="teacherResult" class="summary-box hidden"></div>
+    </div>
+
+    <!-- Report Missed Class Section -->
+    <div id="missedPortal" class="portal-section hidden">
+        <h2>Report Missed Class to DOS</h2>
+        <label for="missWeek">Select Week:</label>
+        <select id="missWeek">
+            <option value="">-- Select Week --</option>
+        </select>
+
+        <label for="missDay">Select Day:</label>
+        <select id="missDay">
+            <option value="Mon">Monday (Morning)</option>
+            <option value="Tue">Tuesday (Morning)</option>
+            <option value="Wed">Wednesday (Morning)</option>
+            <option value="Thu">Thursday (Morning)</option>
+            <option value="Fri">Friday (Morning)</option>
+            <option value="Sat">Saturday (Weekend Lessons)</option>
+        </select>
+
+        <label for="missType">Session Type:</label>
+        <select id="missType">
+            <option value="morning">Morning Session</option>
+            <option value="weekend">Saturday Weekend Lesson</option>
+        </select>
+
+        <label for="missLessonNo">Lesson Number (Saturday 1 to 4 if applicable):</label>
+        <input type="number" id="missLessonNo" min="1" max="4" value="1">
+
+        <label for="subName">Substitute Teacher Name:</label>
+        <input type="text" id="subName" placeholder="Enter substitute teacher name">
+
+        <button onclick="saveMissedClass()">Submit Report</button>
+        <button class="back-btn" onclick="showPortal('teacherDashboard')">Back to Teacher Dashboard</button>
+        <div id="missedResult" class="success"></div>
+    </div>
+
+    <!-- DOS Portal -->
+    <div id="dosPortal" class="portal-section hidden">
+        <h2>Deputy of Studies (DOS) / Admin Portal</h2>
+        <div id="dosLogin">
+            <label for="dosPassword">Enter DOS Security Password:</label>
+            <input type="password" id="dosPassword" placeholder="Password (dos123)">
+            <button onclick="loginDOS()">Login</button>
+            <button class="back-btn" onclick="goHome()">Back to Main Menu</button>
+            <div id="dosError" class="error"></div>
+        </div>
+
+        <div id="dosDashboard" class="hidden">
+            <h3>DOS Control Panel: Open Weeks for Claiming</h3>
+            <p>Select which weeks teachers are permitted to submit claims for:</p>
+            <div id="dosWeeksCheckboxes" style="background: #ecf0f1; padding: 15px; border-radius: 6px; margin-top: 10px;"></div>
+            <button onclick="saveOpenWeeks()" style="background-color: #27ae60;">Save Open Weeks Configuration</button>
+            <div id="dosSaveMsg" class="success"></div>
+
+            <hr style="margin: 30px 0;">
+            <h3>Master Audit & Claims Summary</h3>
+            <div id="auditContent"></div>
+            <button class="back-btn" onclick="goHome()">Logout / Back to Main Menu</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig')) || {
+        1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true
+    };
+
+    let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase')) || {};
+    let currentLoggedInTeacher = null;
+    let generatedOtpStorage = null;
+    let pendingRegData = null;
+
+    function saveData() {
+        localStorage.setItem('openWeeksConfig', JSON.stringify(openWeeksConfig));
+        localStorage.setItem('teacherDatabase', JSON.stringify(teacherDatabase));
     }
 
-    function handleTeacherLogin(event) {
-        if (event) event.preventDefault();
-        const selectedTeacher = document.getElementById('teacherSelect').value;
-        const errorDiv = document.getElementById('teacherLoginError');
+    function showPortal(portal) {
+        document.getElementById('mainMenu').classList.add('hidden');
+        document.getElementById('teacherLoginPortal').classList.add('hidden');
+        document.getElementById('teacherPortal').classList.add('hidden');
+        document.getElementById('missedPortal').classList.add('hidden');
+        document.getElementById('dosPortal').classList.add('hidden');
 
-        if (!selectedTeacher) {
-            if (errorDiv) errorDiv.innerText = "Please select a teacher name to continue.";
+        if (portal === 'teacherLogin') {
+            document.getElementById('teacherLoginPortal').classList.remove('hidden');
+            document.getElementById('authTeacherName').value = "";
+            document.getElementById('authPassword').value = '';
+            document.getElementById('teacherAuthError').innerText = '';
+            document.getElementById('loginFields').classList.add('hidden');
+            document.getElementById('registerFields').classList.add('hidden');
+        } else if (portal === 'teacherDashboard') {
+            document.getElementById('teacherPortal').classList.remove('hidden');
+            document.getElementById('loggedInTeacherTitle').innerText = currentLoggedInTeacher;
+            document.getElementById('teacherResult').classList.add('hidden');
+            document.getElementById('teacherError').innerText = '';
+            populateTeacherWeekDropdowns();
+        } else if (portal === 'dos') {
+            document.getElementById('dosPortal').classList.remove('hidden');
+            document.getElementById('dosPassword').value = '';
+            document.getElementById('dosError').innerText = '';
+        } else if (portal === 'missed') {
+            document.getElementById('missedPortal').classList.remove('hidden');
+            document.getElementById('missedResult').innerText = '';
+            populateMissedWeekDropdown();
+        }
+    }
+
+    function goHome() {
+        currentLoggedInTeacher = null;
+        document.getElementById('mainMenu').classList.remove('hidden');
+        document.getElementById('teacherLoginPortal').classList.add('hidden');
+        document.getElementById('teacherPortal').classList.add('hidden');
+        document.getElementById('missedPortal').classList.add('hidden');
+        document.getElementById('dosPortal').classList.add('hidden');
+    }
+
+    function logoutTeacher() {
+        currentLoggedInTeacher = null;
+        showPortal('teacherLogin');
+    }
+
+    function checkTeacherExists() {
+        const name = document.getElementById('authTeacherName').value;
+        const loginFields = document.getElementById('loginFields');
+        const registerFields = document.getElementById('registerFields');
+        const errDiv = document.getElementById('teacherAuthError');
+        
+        errDiv.innerText = '';
+        document.getElementById('otpVerificationSection').classList.add('hidden');
+
+        if (!name) {
+            loginFields.classList.add('hidden');
+            registerFields.classList.add('hidden');
             return;
         }
 
-        // Proceed to teacher dashboard or main interface
-        document.getElementById('teacherLoginPortal').classList.add('hidden');
-        document.getElementById('teacherDashboard').classList.remove('hidden');
-        
-        // Initialize dashboard elements for the logged-in teacher
-        const welcomeHeading = document.getElementById('teacherWelcomeHeader');
-        if (welcomeHeading) {
-            welcomeHeading.innerText = `Welcome, ${selectedTeacher}`;
-        }
-    }
-
-    function handleAdminLogin(event) {
-        if (event) event.preventDefault();
-        const passwordInput = document.getElementById('adminPassword').value;
-        const errorDiv = document.getElementById('adminError');
-
-        // Simple placeholder check for admin password
-        if (passwordInput === "admin123") {
-            document.getElementById('adminPortal').classList.add('hidden');
-            document.getElementById('adminDashboard').classList.remove('hidden');
+        if (teacherDatabase[name] && teacherDatabase[name].password) {
+            // Existing registered member
+            loginFields.classList.remove('hidden');
+            registerFields.classList.add('hidden');
         } else {
-            if (errorDiv) errorDiv.innerText = "Incorrect password. Please try again.";
+            // New member registration setup (or uninitialized profile)
+            loginFields.classList.add('hidden');
+            registerFields.classList.remove('hidden');
         }
     }
 
-    function goBackToMain(portalId) {
-        document.getElementById(portalId).classList.add('hidden');
-        document.getElementById('mainMenuContainer').classList.remove('hidden');
+    function handleTeacherLogin() {
+        const name = document.getElementById('authTeacherName').value;
+        const pass = document.getElementById('authPassword').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (!teacherDatabase[name] || teacherDatabase[name].password !== pass) {
+            errDiv.innerText = "Incorrect password or account not found.";
+            return;
+        }
+
+        currentLoggedInTeacher = name;
+        showPortal('teacherDashboard');
     }
+
+    function requestRegistrationOTP() {
+        const name = document.getElementById('authTeacherName').value;
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass = document.getElementById('regPassword').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (!phone) {
+            errDiv.innerText = "Please enter your registered phone number.";
+            return;
+        }
+        if (!pass) {
+            errDiv.innerText = "Please create a password.";
+            return;
+        }
+
+        errDiv.innerText = "";
+        
+        // Generate a random 4-digit OTP code
+        generatedOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
+        pendingRegData = { name, phone, pass };
+
+        // Simulate sending OTP via SMS
+        const notice = document.getElementById('otpSimulatedNotice');
+        notice.innerText = `[SMS SIMULATION]: OTP Code ${generatedOtpStorage} sent successfully to phone number ${phone}!`;
+        
+        document.getElementById('otpVerificationSection').classList.remove('hidden');
+    }
+
+    function verifyAndCompleteRegistration() {
+        const entered = document.getElementById('enteredOtp').value.trim();
+        const errDiv = document.getElementById('teacherAuthError');
+
+        if (entered !== generatedOtpStorage) {
+            errDiv.innerText = "Invalid OTP code entered. Please try again.";
+            return;
+        }
+
+        let name = pendingRegData.name;
+        let phone = pendingRegData.phone;
+        let pass = pendingRegData.pass;
+
+        let weeksData = {};
+        for (let w = 1; w <= 9; w++) {
+            let morningMap = {};
+            ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach(d => {
+                morningMap[d] = { claimed: false, attended: true, substitute: "" };
+            });
+            weeksData[w] = {
+                morning: morningMap,
+                sat: { claimedCount: 0, lessons: [], attended: true, substitute: "" }
+            };
+        }
+
+        teacherDatabase[name] = {
+            name: name,
+            phone: phone,
+            password: pass,
+            weeks: weeksData
+        };
+
+        saveData();
+        currentLoggedInTeacher = name;
+        showPortal('teacherDashboard');
+    }
+
+    function populateTeacherWeekDropdowns() {
+        const select = document.getElementById('claimWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        let anyOpen = false;
+
+        for (let w = 1; w <= 9; w++) {
+            if (openWeeksConfig[w]) {
+                anyOpen = true;
+                let opt = document.createElement('option');
+                opt.value = w;
+                opt.innerText = `Week ${w}`;
+                select.appendChild(opt);
+            }
+        }
+
+        const errorDiv = document.getElementById('teacherError');
+        const daysContainer = document.getElementById('daysContainer');
+        const submitBtn = document.getElementById('submitClaimBtn');
+
+        if (!anyOpen) {
+            errorDiv.innerText = "No open weeks available.";
+            daysContainer.innerHTML = "";
+            submitBtn.classList.add('hidden');
+        } else {
+            errorDiv.innerText = "";
+        }
+    }
+
+    function populateMissedWeekDropdown() {
+        const select = document.getElementById('missWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        for (let w = 1; w <= 9; w++) {
+            if (openWeeksConfig[w]) {
+                let opt = document.createElement('option');
+                opt.value = w;
+                opt.innerText = `Week ${w}`;
+                select.appendChild(opt);
+            }
+        }
+    }
+
+    function loadWeekFields() {
+        const weekVal = document.getElementById('claimWeek').value;
+        const daysContainer = document.getElementById('daysContainer');
+        const submitBtn = document.getElementById('submitClaimBtn');
+        const errorDiv = document.getElementById('teacherError');
+
+        if (!weekVal) {
+            daysContainer.innerHTML = "";
+            submitBtn.classList.add('hidden');
+            return;
+        }
+
+        if (!openWeeksConfig[weekVal]) {
+            errorDiv.innerText = "Selected week is closed.";
+            daysContainer.innerHTML = "";
+            submitBtn.classList.add('hidden');
+            return;
+        }
+
+        errorDiv.innerText = "";
+        submitBtn.classList.remove('hidden');
+
+        const workDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+        let html = "";
+
+        workDays.forEach((day, index) => {
+            html += `
+                <div class="day-row">
+                    <strong>${day} (Working Day)</strong>
+                    <label>Teach Morning Session (0 or 1):</label>
+                    <input type="number" id="m_${index}" min="0" max="1" value="0">
+                </div>
+            `;
+        });
+
+        html += `
+            <div class="day-row" style="background: #e8f4f8;">
+                <strong>Saturday (Weekend Remedial)</strong>
+                <label>Total Saturday Lessons Claimed (0 to 4):</label>
+                <input type="number" id="sat_count" min="0" max="4" value="0">
+                <label>Specify Exact Lesson Numbers (e.g., 1, 2, 3 or 4):</label>
+                <input type="text" id="sat_lessons" placeholder="e.g. 1, 2" value="">
+            </div>
+        `;
+
+        daysContainer.innerHTML = html;
+    }
+
+    function showMissedPortal() {
+        showPortal('missed');
+    }
+
+    function submitClaim() {
+        const name = currentLoggedInTeacher;
+        const weekNum = parseInt(document.getElementById('claimWeek').value);
+        const errorDiv = document.getElementById('teacherError');
+        const resultDiv = document.getElementById('teacherResult');
+
+        if (!name) {
+            errorDiv.innerText = "Error: Not logged in.";
+            return;
+        }
+
+        if (!openWeeksConfig[weekNum]) {
+            errorDiv.innerText = "Error: Week is closed.";
+            resultDiv.classList.add('hidden');
+            return;
+        }
+
+        let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+        let morningClaimsCount = 0;
+        let morningValues = {};
+
+        for (let i = 0; i < workDaysKeys.length; i++) {
+            let val = parseInt(document.getElementById(`m_${i}`).value) || 0;
+            if (val > 1) {
+                errorDiv.innerText = `Error: Morning sessions cannot exceed 1 per weekday.`;
+                return;
+            }
+            morningValues[workDaysKeys[i]] = (val === 1);
+            if (val === 1) morningClaimsCount++;
+        }
+
+        let satCount = parseInt(document.getElementById('sat_count').value) || 0;
+        let satLessonsInput = document.getElementById('sat_lessons').value.trim();
+        let satLessonsArr = satLessonsInput ? satLessonsInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x)) : [];
+
+        if (satCount > 4) {
+            errorDiv.innerText = "Error: Saturday weekend remedials have a maximum limit of 4 lessons.";
+            return;
+        }
+
+        for (let l of satLessonsArr) {
+            if (l < 1 || l > 4) {
+                errorDiv.innerText = `Error: Invalid Saturday lesson number ${l}. Must be between 1 and 4.`;
+                return;
+            }
+        }
+
+        errorDiv.innerText = "";
+        let teacherObj = teacherDatabase[name];
+        let wData = teacherObj.weeks[weekNum];
+
+        workDaysKeys.forEach(d => {
+            wData.morning[d].claimed = morningValues[d];
+        });
+        wData.sat.claimedCount = satCount;
+        wData.sat.lessons = satLessonsArr;
+
+        saveData();
+
+        let morningAmt = morningClaimsCount * 500;
+        let weekendAmt = satCount * 700;
+        let totalAmt = morningAmt + weekendAmt;
+
+        resultDiv.classList.remove('hidden');
+        resultDiv.innerHTML = `
+            <h3>Remedial Payment Claim Summary (Week ${weekNum})</h3>
+            <p><strong>Teacher Name:</strong> ${name}</p>
+            <p><strong>Morning Sessions (Mon-Fri):</strong> ${morningClaimsCount} @ 500 = ${morningAmt} KSH</p>
+            <p><strong>Saturday Weekend Lessons:</strong> ${satCount} @ 700 = ${weekendAmt} KSH</p>
+            <hr>
+            <p><strong>TOTAL AMOUNT OF MONEY:</strong> ${totalAmt} KSH</p>
+        `;
+    }
+
+    function saveMissedClass() {
+        const name = currentLoggedInTeacher;
+        const weekNum = parseInt(document.getElementById('missWeek').value);
+        const dayKey = document.getElementById('missDay').value;
+        const sessionType = document.getElementById('missType').value;
+        const lessonNo = parseInt(document.getElementById('missLessonNo').value);
+        const subName = document.getElementById('subName').value.trim();
+
+        if (!name || !weekNum) {
+            alert("Please ensure week is selected.");
+            return;
+        }
+
+        let teacherObj = teacherDatabase[name];
+        let wData = teacherObj.weeks[weekNum];
+
+        if (sessionType === 'morning') {
+            wData.morning[dayKey].attended = false;
+            wData.morning[dayKey].substitute = subName;
+        } else {
+            wData.sat.attended = false;
+            wData.sat.substitute = subName + " (Lesson " + lessonNo + ")";
+        }
+
+        saveData();
+        alert("Successfully reported missed class/substitute to DOS.");
+    }
+
+    function loginDOS() {
+        const pass = document.getElementById('dosPassword').value;
+        const err = document.getElementById('dosError');
+        if (pass === "dos123") {
+            document.getElementById('dosLogin').classList.add('hidden');
+            document.getElementById('dosDashboard').classList.remove('hidden');
+            renderDOSCheckboxes();
+            renderAudit();
+        } else {
+            err.innerText = "Access Denied! Incorrect password.";
+        }
+    }
+
+    function renderDOSCheckboxes() {
+        const container = document.getElementById('dosWeeksCheckboxes');
+        let html = "";
+        for (let w = 1; w <= 9; w++) {
+            let checked = openWeeksConfig[w] ? "checked" : "";
+            html += `<label style="display:inline-block; margin-right:15px; font-weight:normal;">
+                        <input type="checkbox" id="dos_w_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
+                     </label>`;
+        }
+        container.innerHTML = html;
+    }
+
+    function saveOpenWeeks() {
+        for (let w = 1; w <= 9; w++) {
+            let cb = document.getElementById(`dos_w_${w}`);
+            if (cb) {
+                openWeeksConfig[w] = cb.checked;
+            }
+        }
+        saveData();
+        document.getElementById('dosSaveMsg').innerText = "Open weeks successfully updated!";
+        renderAudit();
+    }
+
+    function renderAudit() {
+        const auditContent = document.getElementById('auditContent');
+        const keys = Object.keys(teacherDatabase);
+
+        if (keys.length === 0) {
+            auditContent.innerHTML = "<p>No teacher accounts or claims found in the system yet.</p>";
+            return;
+        }
+
+        let html = "";
+        keys.forEach(key => {
+            let t = teacherDatabase[key];
+            let teacherGrandTotal = 0;
+            let teacherDetailsHTML = "";
+
+            for (let w = 1; w <= 9; w++) {
+                let wData = t.weeks[w];
+                let morningCount = 0;
+                let wDetails = "";
+
+                ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach(d => {
+                    if (wData.morning[d].claimed) {
+                        morningCount++;
+                        wDetails += `<li>[Week ${w} - ${d} Morning]: Claimed`;
+                        if (!wData.morning[d].attended) {
+                            wDetails += ` | <span style="color:red">Missed! Sub: ${wData.morning[d].substitute}</span>`;
+                        } else {
+                            wDetails += ` | <span style="color:green">Attended</span>`;
+                        }
+                        wDetails += `</li>`;
+                    }
+                });
+
+                if (wData.sat.claimedCount > 0) {
+                    let lessonsStr = wData.sat.lessons.length > 0 ? " (Lessons: " + wData.sat.lessons.join(", ") + ")" : "";
+                    wDetails += `<li>[Week ${w} - Saturday]: ${wData.sat.claimedCount} lessons claimed${lessonsStr}`;
+                    if (!wData.sat.attended) {
+                        wDetails += ` | <span style="color:red">Missed! Sub: ${wData.sat.substitute}</span>`;
+                    } else {
+                        wDetails += ` | <span style="color:green">Attended</span>`;
+                    }
+                    wDetails += `</li>`;
+                }
+
+                let weekTotal = (morningCount * 500) + (wData.sat.claimedCount * 700);
+                teacherGrandTotal += weekTotal;
+
+                if (wDetails) {
+                    teacherDetailsHTML += `<ul><strong>Week ${w}:</strong>${wDetails}</ul>`;
+                }
+            }
+
+            let phoneDisplay = t.phone ? ` (Phone: ${t.phone})` : "";
+            html += `
+                <div style="background:#fff; border:1px solid #ccc; padding:15px; margin-top:10px; border-radius:5px;">
+                    <h4>Teacher: ${t.name}${phoneDisplay}</h4>
+                    ${teacherDetailsHTML || '<p>No sessions claimed across any week.</p>'}
+                    <p><strong>Grand Total Claim Calculated: ${teacherGrandTotal} KSH</strong></p>
+                </div>
+            `;
+        });
+
+        auditContent.innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
