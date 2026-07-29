@@ -704,117 +704,44 @@
 
     function showPortalSelection(portal) {
         document.getElementById('mainMenuContainer').classList.add('hidden');
-        document.getElementById('teacherLoginPortal').classList.add('hidden');
-        document.getElementById('teacherPortalDashboard').classList.add('hidden');
-        document.getElementById('adminPortal').classList.add('hidden');
-
         if (portal === 'teacherLogin') {
             document.getElementById('teacherLoginPortal').classList.remove('hidden');
-            populateTeacherDropdown();
-            document.getElementById('authTeacherName').value = "";
-            document.getElementById('authPassword').value = '';
-            document.getElementById('teacherAuthError').innerText = '';
-            document.getElementById('loginFields').classList.add('hidden');
-            document.getElementById('registerFields').classList.add('hidden');
-            document.getElementById('forgotPasswordSection').classList.add('hidden');
-        } else if (portal === 'teacherDashboard') {
-            document.getElementById('teacherPortalDashboard').classList.remove('hidden');
-            document.getElementById('sidebarTeacherName').innerText = currentLoggedInTeacher;
-            document.getElementById('topbarTeacherName').innerText = currentLoggedInTeacher;
-            document.getElementById('profileCardName').innerText = currentLoggedInTeacher;
-            document.getElementById('infoFullName').innerText = currentLoggedInTeacher;
-            document.getElementById('infoPhone').innerText = teacherDatabase[currentLoggedInTeacher]?.phone || 'N/A';
-            updateDashboardMetrics();
-            switchTeacherTab('dashboardHome');
+            populateTeacherDropdowns();
         } else if (portal === 'admin') {
             document.getElementById('adminPortal').classList.remove('hidden');
-            document.getElementById('adminPassword').value = '';
-            document.getElementById('adminError').innerText = '';
-        }
-    }
-
-    function populateTeacherDropdown() {
-        const select = document.getElementById('authTeacherName');
-        select.innerHTML = '<option value="">-- Select Your Name --</option>';
-        teacherList.sort().forEach(name => {
-            let opt = document.createElement('option');
-            opt.value = name;
-            opt.innerText = name;
-            select.appendChild(opt);
-        });
-    }
-
-    function switchTeacherTab(tabId) {
-        document.getElementById('tabDashboardHome').classList.add('hidden');
-        document.getElementById('tabClaimSection').classList.add('hidden');
-        document.getElementById('tabStatusSection').classList.add('hidden');
-        document.getElementById('tabMissedPortal').classList.add('hidden');
-        document.getElementById('tabFeedbackSection').classList.add('hidden');
-        document.getElementById('tabSecuritySection').classList.add('hidden');
-
-        document.getElementById('menuLinkDashboard').classList.remove('active');
-        document.getElementById('menuLinkClaim').classList.remove('active');
-        document.getElementById('menuLinkStatus').classList.remove('active');
-        document.getElementById('menuLinkMissed').classList.remove('active');
-        document.getElementById('menuLinkFeedback').classList.remove('active');
-        document.getElementById('menuLinkSecurity').classList.remove('active');
-
-        if (tabId === 'dashboardHome') {
-            document.getElementById('tabDashboardHome').classList.remove('hidden');
-            document.getElementById('menuLinkDashboard').classList.add('active');
-            updateDashboardMetrics();
-        } else if (tabId === 'claimSection') {
-            document.getElementById('tabClaimSection').classList.remove('hidden');
-            document.getElementById('menuLinkClaim').classList.add('active');
-            document.getElementById('teacherResult').classList.add('hidden');
-            document.getElementById('teacherError').innerText = '';
-            populateTeacherWeekDropdowns();
-        } else if (tabId === 'statusSection') {
-            document.getElementById('tabStatusSection').classList.remove('hidden');
-            document.getElementById('menuLinkStatus').classList.add('active');
-            renderTeacherStatusView();
-        } else if (tabId === 'missedPortal') {
-            document.getElementById('tabMissedPortal').classList.remove('hidden');
-            document.getElementById('menuLinkMissed').classList.add('active');
-            document.getElementById('missedResult').innerText = '';
-            populateMissedWeekDropdown();
-        } else if (tabId === 'feedbackSection') {
-            document.getElementById('tabFeedbackSection').classList.remove('hidden');
-            document.getElementById('menuLinkFeedback').classList.add('active');
-            document.getElementById('feedbackMessage').value = '';
-            document.getElementById('feedbackResult').innerText = '';
-        } else if (tabId === 'securitySection') {
-            document.getElementById('tabSecuritySection').classList.remove('hidden');
-            document.getElementById('menuLinkSecurity').classList.add('active');
-            document.getElementById('currentPortalPass').value = '';
-            document.getElementById('newPortalPass').value = '';
-            document.getElementById('confirmPortalPass').value = '';
-            document.getElementById('portalPassMsg').innerText = '';
         }
     }
 
     function goHome() {
-        currentLoggedInTeacher = null;
         document.getElementById('mainMenuContainer').classList.remove('hidden');
         document.getElementById('teacherLoginPortal').classList.add('hidden');
         document.getElementById('teacherPortalDashboard').classList.add('hidden');
         document.getElementById('adminPortal').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.add('hidden');
+        document.getElementById('adminLogin').classList.remove('hidden');
+        document.getElementById('adminPassword').value = '';
+        currentLoggedInTeacher = null;
     }
 
-    function logoutTeacher() {
-        currentLoggedInTeacher = null;
-        showPortalSelection('teacherLogin');
+    function populateTeacherDropdowns() {
+        const select = document.getElementById('authTeacherName');
+        select.innerHTML = '<option value="">-- Select Your Name --</option>';
+        teacherList.sort().forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            select.appendChild(opt);
+        });
     }
 
     function checkTeacherExists() {
         const name = document.getElementById('authTeacherName').value;
         const loginFields = document.getElementById('loginFields');
         const registerFields = document.getElementById('registerFields');
-        const errDiv = document.getElementById('teacherAuthError');
-        
-        errDiv.innerText = '';
-        document.getElementById('otpVerificationSection').classList.add('hidden');
-        document.getElementById('forgotPasswordSection').classList.add('hidden');
+        const forgotSection = document.getElementById('forgotPasswordSection');
+
+        forgotSection.classList.add('hidden');
+        document.getElementById('teacherAuthError').textContent = '';
 
         if (!name) {
             loginFields.classList.add('hidden');
@@ -822,7 +749,7 @@
             return;
         }
 
-        if (teacherDatabase[name] && teacherDatabase[name].password) {
+        if (teacherDatabase[name]) {
             loginFields.classList.remove('hidden');
             registerFields.classList.add('hidden');
         } else {
@@ -831,18 +758,312 @@
         }
     }
 
-    function showForgotPasswordSection() {
+    function requestRegistrationOTP() {
         const name = document.getElementById('authTeacherName').value;
-        if (!name) {
-            document.getElementById('teacherAuthError').innerText = "Please select your name first.";
+        const phone = document.getElementById('regPhone').value.trim();
+        const pass = document.getElementById('regPassword').value;
+
+        if (!phone || !pass) {
+            document.getElementById('teacherAuthError').textContent = 'Please fill in all registration fields.';
             return;
         }
-        resetTargetName = name;
+
+        document.getElementById('teacherAuthError').textContent = '';
+        generatedOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
+        pendingRegData = { phone, pass };
+
+        document.getElementById('otpSimulatedNotice').textContent = `[SIMULATED SMS to ${phone}]: Your BLISS Portal Verification Code is ${generatedOtpStorage}`;
+        document.getElementById('otpVerificationSection').classList.remove('hidden');
+    }
+
+    function verifyAndCompleteRegistration() {
+        const entered = document.getElementById('enteredOtp').value.trim();
+        if (entered !== generatedOtpStorage) {
+            document.getElementById('teacherAuthError').textContent = 'Invalid OTP verification code. Try again.';
+            return;
+        }
+
+        const name = document.getElementById('authTeacherName').value;
+        teacherDatabase[name] = {
+            phone: pendingRegData.phone,
+            password: pendingRegData.pass,
+            claims: {},
+            missedClasses: []
+        };
+        saveData();
+        alert('Registration successful! You can now log in.');
+        checkTeacherExists();
+        document.getElementById('regPhone').value = '';
+        document.getElementById('regPassword').value = '';
+        document.getElementById('enteredOtp').value = '';
+        document.getElementById('otpVerificationSection').classList.add('hidden');
+    }
+
+    function handleTeacherLogin() {
+        const name = document.getElementById('authTeacherName').value;
+        const pass = document.getElementById('authPassword').value;
+
+        if (!teacherDatabase[name] || teacherDatabase[name].password !== pass) {
+            document.getElementById('teacherAuthError').textContent = 'Incorrect password. Please try again.';
+            return;
+        }
+
+        currentLoggedInTeacher = name;
+        document.getElementById('teacherLoginPortal').classList.add('hidden');
+        document.getElementById('teacherPortalDashboard').classList.remove('hidden');
+        loadDashboardData();
+        switchTeacherTab('dashboardHome');
+    }
+
+    function logoutTeacher() {
+        currentLoggedInTeacher = null;
+        goHome();
+    }
+
+    function switchTeacherTab(tabId) {
+        document.querySelectorAll('#teacherPortalDashboard .portal-section').forEach(sec => sec.classList.add('hidden'));
+        document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+
+        if (tabId === 'dashboardHome') {
+            document.getElementById('tabDashboardHome').classList.remove('hidden');
+            document.getElementById('menuLinkDashboard').classList.add('active');
+            loadDashboardData();
+        } else if (tabId === 'claimSection') {
+            document.getElementById('tabClaimSection').classList.remove('hidden');
+            document.getElementById('menuLinkClaim').classList.add('active');
+            populateClaimWeeks();
+        } else if (tabId === 'statusSection') {
+            document.getElementById('tabStatusSection').classList.remove('hidden');
+            document.getElementById('menuLinkStatus').classList.add('active');
+            loadStatusSection();
+        } else if (tabId === 'missedPortal') {
+            document.getElementById('tabMissedPortal').classList.remove('hidden');
+            document.getElementById('menuLinkMissed').classList.add('active');
+            populateMissedWeeks();
+        } else if (tabId === 'feedbackSection') {
+            document.getElementById('tabFeedbackSection').classList.remove('hidden');
+            document.getElementById('menuLinkFeedback').classList.add('active');
+        } else if (tabId === 'securitySection') {
+            document.getElementById('tabSecuritySection').classList.remove('hidden');
+            document.getElementById('menuLinkSecurity').classList.add('active');
+        }
+    }
+
+    function loadDashboardData() {
+        if (!currentLoggedInTeacher) return;
+        const data = teacherDatabase[currentLoggedInTeacher];
+
+        document.getElementById('sidebarTeacherName').textContent = currentLoggedInTeacher;
+        document.getElementById('topbarTeacherName').textContent = currentLoggedInTeacher;
+        document.getElementById('profileCardName').textContent = currentLoggedInTeacher;
+        document.getElementById('infoFullName').textContent = currentLoggedInTeacher;
+        document.getElementById('infoPhone').textContent = data.phone || '-';
+
+        let total = 0;
+        let approved = 0;
+        let pending = 0;
+
+        Object.values(data.claims || {}).forEach(c => {
+            const amount = c.amount || 0;
+            total += amount;
+            if (c.status === 'Approved') approved += amount;
+            else pending += amount;
+        });
+
+        document.getElementById('metricTotalClaims').textContent = `${total} KSH`;
+        document.getElementById('metricApprovedClaims').textContent = `${approved} KSH`;
+        document.getElementById('metricPendingClaims').textContent = `${pending} KSH`;
+    }
+
+    function populateClaimWeeks() {
+        const select = document.getElementById('claimWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        for (let i = 1; i <= 9; i++) {
+            if (openWeeksConfig[i]) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `Week ${i}`;
+                select.appendChild(opt);
+            }
+        }
+    }
+
+    function loadWeekFields() {
+        const week = document.getElementById('claimWeek').value;
+        const container = document.getElementById('daysContainer');
+        const submitBtn = document.getElementById('submitClaimBtn');
+        container.innerHTML = '';
+
+        if (!week) {
+            submitBtn.classList.add('hidden');
+            return;
+        }
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        days.forEach(day => {
+            const div = document.createElement('div');
+            div.className = 'day-row';
+            div.innerHTML = `
+                <h4 style="margin: 0 0 10px 0;">${day}</h4>
+                <label>Number of Sessions / Lessons Taught:</label>
+                <input type="number" min="0" max="6" value="0" id="sessions_${day}">
+                <label>Subject / Topic Details:</label>
+                <input type="text" placeholder="e.g. Physics - Mechanics" id="details_${day}">
+            `;
+            container.appendChild(div);
+        });
+        submitBtn.classList.remove('hidden');
+    }
+
+    function submitClaim() {
+        const week = document.getElementById('claimWeek').value;
+        if (!week) return;
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let totalSessions = 0;
+        let summaryDetails = {};
+
+        days.forEach(day => {
+            const count = parseInt(document.getElementById(`sessions_${day}`).value) || 0;
+            const details = document.getElementById(`details_${day}`).value;
+            totalSessions += count;
+            summaryDetails[day] = { count, details };
+        });
+
+        const ratePerSession = 500; // Standard nominal rate
+        const amount = totalSessions * ratePerSession;
+
+        teacherDatabase[currentLoggedInTeacher].claims[week] = {
+            week: week,
+            totalSessions: totalSessions,
+            amount: amount,
+            details: summaryDetails,
+            status: 'Pending Verification',
+            dateSubmitted: new Date().toLocaleDateString()
+        };
+        saveData();
+
+        document.getElementById('teacherResult').classList.remove('hidden');
+        document.getElementById('teacherResult').innerHTML = `
+            <strong>Claim Submitted Successfully!</strong><br>
+            Total Sessions: ${totalSessions}<br>
+            Calculated Payout: ${amount} KSH<br>
+            Status: Pending Verification
+        `;
+        loadDashboardData();
+    }
+
+    function loadStatusSection() {
+        const container = document.getElementById('teacherStatusListContainer');
+        const claims = teacherDatabase[currentLoggedInTeacher]?.claims || {};
+
+        if (Object.keys(claims).length === 0) {
+            container.innerHTML = '<p style="color: #64748b;">No claims submitted yet.</p>';
+            return;
+        }
+
+        let html = '';
+        Object.values(claims).forEach(c => {
+            html += `
+                <div style="background: white; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="margin: 0;">Week ${c.week} Claim</h4>
+                        <span class="status-badge status-pending">${c.status}</span>
+                    </div>
+                    <p style="margin: 8px 0 0 0; font-size: 14px; color: #64748b;">Submitted on: ${c.dateSubmitted} | Total Payout: <strong>${c.amount} KSH</strong></p>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function populateMissedWeeks() {
+        const select = document.getElementById('missWeek');
+        select.innerHTML = '<option value="">-- Select Week --</option>';
+        for (let i = 1; i <= 9; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = `Week ${i}`;
+            select.appendChild(opt);
+        }
+    }
+
+    function saveMissedClass() {
+        const week = document.getElementById('missWeek').value;
+        const day = document.getElementById('missDay').value;
+        const type = document.getElementById('missType').value;
+        const lessonNo = document.getElementById('missLessonNo').value;
+        const sub = document.getElementById('subName').value;
+
+        if (!week || !sub) {
+            alert('Please select a week and provide the substitute teacher name.');
+            return;
+        }
+
+        if (!teacherDatabase[currentLoggedInTeacher].missedClasses) {
+            teacherDatabase[currentLoggedInTeacher].missedClasses = [];
+        }
+
+        teacherDatabase[currentLoggedInTeacher].missedClasses.push({
+            week, day, type, lessonNo, sub, date: new Date().toLocaleDateString()
+        });
+        saveData();
+
+        document.getElementById('missedResult').textContent = 'Missed class report successfully submitted to Admin!';
+        document.getElementById('subName').value = '';
+    }
+
+    function submitTeacherFeedback() {
+        const category = document.getElementById('feedbackCategory').value;
+        const message = document.getElementById('feedbackMessage').value.trim();
+
+        if (!message) {
+            alert('Please enter your feedback message.');
+            return;
+        }
+
+        globalFeedbackList.push({
+            teacher: currentLoggedInTeacher,
+            category,
+            message,
+            date: new Date().toLocaleDateString()
+        });
+        saveData();
+
+        document.getElementById('feedbackResult').textContent = 'Feedback successfully sent to Admin!';
+        document.getElementById('feedbackMessage').value = '';
+    }
+
+    function updatePortalPassword() {
+        const current = document.getElementById('currentPortalPass').value;
+        const newPass = document.getElementById('newPortalPass').value;
+        const confirmPass = document.getElementById('confirmPortalPass').value;
+        const msg = document.getElementById('portalPassMsg');
+
+        if (current !== teacherDatabase[currentLoggedInTeacher].password) {
+            msg.className = 'error';
+            msg.textContent = 'Current password is incorrect.';
+            return;
+        }
+
+        if (!newPass || newPass !== confirmPass) {
+            msg.className = 'error';
+            msg.textContent = 'New passwords do not match or are empty.';
+            return;
+        }
+
+        teacherDatabase[currentLoggedInTeacher].password = newPass;
+        saveData();
+        msg.className = 'success';
+        msg.textContent = 'Password successfully updated!';
+        document.getElementById('currentPortalPass').value = '';
+        document.getElementById('newPortalPass').value = '';
+        document.getElementById('confirmPortalPass').value = '';
+    }
+
+    function showForgotPasswordSection() {
         document.getElementById('loginFields').classList.add('hidden');
         document.getElementById('forgotPasswordSection').classList.remove('hidden');
-        document.getElementById('resetPhone').value = '';
-        document.getElementById('resetOtpBox').classList.add('hidden');
-        document.getElementById('teacherAuthError').innerText = '';
     }
 
     function hideForgotPasswordSection() {
@@ -851,576 +1072,164 @@
     }
 
     function requestPasswordResetOTP() {
+        const name = document.getElementById('authTeacherName').value;
         const phone = document.getElementById('resetPhone').value.trim();
-        const errDiv = document.getElementById('teacherAuthError');
 
-        if (!phone || !teacherDatabase[resetTargetName] || teacherDatabase[resetTargetName].phone !== phone) {
-            errDiv.innerText = "Phone number does not match account records.";
+        if (!teacherDatabase[name] || teacherDatabase[name].phone !== phone) {
+            document.getElementById('teacherAuthError').textContent = 'Phone number does not match registered records.';
             return;
         }
 
-        errDiv.innerText = "";
+        resetTargetName = name;
         resetOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
-        
-        document.getElementById('resetOtpNotice').innerText = `Reset Code: ${resetOtpStorage}`;
+        document.getElementById('resetOtpNotice').textContent = `[SIMULATED SMS]: Reset Code is ${resetOtpStorage}`;
         document.getElementById('resetOtpBox').classList.remove('hidden');
     }
 
     function verifyAndResetPassword() {
         const entered = document.getElementById('enteredResetOtp').value.trim();
-        const newPass = document.getElementById('newAccountPassword').value.trim();
-        const errDiv = document.getElementById('teacherAuthError');
+        const newPass = document.getElementById('newAccountPassword').value;
 
-        if (entered !== resetOtpStorage) {
-            errDiv.innerText = "Invalid verification code entered.";
-            return;
-        }
-
-        if (!newPass) {
-            errDiv.innerText = "Please enter a new password.";
+        if (entered !== resetOtpStorage || !newPass) {
+            alert('Invalid verification code or empty password.');
             return;
         }
 
         teacherDatabase[resetTargetName].password = newPass;
         saveData();
-
-        alert("Password successfully reset! Please login with your new password.");
+        alert('Password reset successfully! Please log in.');
         hideForgotPasswordSection();
-        document.getElementById('authPassword').value = "";
-    }
-
-    function updatePortalPassword() {
-        const currentPass = document.getElementById('currentPortalPass').value.trim();
-        const newPass = document.getElementById('newPortalPass').value.trim();
-        const confirmPass = document.getElementById('confirmPortalPass').value.trim();
-        const msgDiv = document.getElementById('portalPassMsg');
-        const teacherObj = teacherDatabase[currentLoggedInTeacher];
-
-        msgDiv.innerText = "";
-        msgDiv.className = "error";
-
-        if (teacherObj.password !== currentPass) {
-            msgDiv.innerText = "Incorrect current password.";
-            return;
-        }
-
-        if (!newPass || newPass !== confirmPass) {
-            msgDiv.innerText = "New passwords do not match or field is empty.";
-            return;
-        }
-
-        teacherObj.password = newPass;
-        saveData();
-
-        msgDiv.className = "success";
-        msgDiv.innerText = "Password successfully updated!";
-        document.getElementById('currentPortalPass').value = '';
-        document.getElementById('newPortalPass').value = '';
-        document.getElementById('confirmPortalPass').value = '';
-    }
-
-    function handleTeacherLogin() {
-        const name = document.getElementById('authTeacherName').value;
-        const pass = document.getElementById('authPassword').value.trim();
-        const errDiv = document.getElementById('teacherAuthError');
-
-        if (!teacherDatabase[name] || teacherDatabase[name].password !== pass) {
-            errDiv.innerText = "Incorrect password or account not found.";
-            return;
-        }
-
-        currentLoggedInTeacher = name;
-        showPortalSelection('teacherDashboard');
-    }
-
-    function requestRegistrationOTP() {
-        const name = document.getElementById('authTeacherName').value;
-        const phone = document.getElementById('regPhone').value.trim();
-        const pass = document.getElementById('regPassword').value.trim();
-        const errDiv = document.getElementById('teacherAuthError');
-
-        if (!phone || !pass) {
-            errDiv.innerText = "Please enter phone number and create a password.";
-            return;
-        }
-
-        errDiv.innerText = "";
-        generatedOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
-        pendingRegData = { name, phone, pass };
-
-        const notice = document.getElementById('otpSimulatedNotice');
-        notice.innerText = `Verification Code: ${generatedOtpStorage}`;
-        document.getElementById('otpVerificationSection').classList.remove('hidden');
-    }
-
-    function verifyAndCompleteRegistration() {
-        const entered = document.getElementById('enteredOtp').value.trim();
-        const errDiv = document.getElementById('teacherAuthError');
-
-        if (entered !== generatedOtpStorage) {
-            errDiv.innerText = "Invalid verification code entered.";
-            return;
-        }
-
-        let name = pendingRegData.name;
-        let phone = pendingRegData.phone;
-        let pass = pendingRegData.pass;
-
-        let weeksData = {};
-        for (let w = 1; w <= 9; w++) {
-            let morningMap = {};
-            ["Mon", "Tue", "Wed", "Thu", "Fri"].forEach(d => {
-                morningMap[d] = { claimed: false, attended: true, substitute: "", subject: "" };
-            });
-            weeksData[w] = {
-                morning: morningMap,
-                sat: { claimedCount: 0, lessons: [], attended: true, substitute: "", subjects: [] },
-                status: "pending review"
-            };
-        }
-
-        teacherDatabase[name] = {
-            name: name,
-            phone: phone,
-            password: pass,
-            weeks: weeksData
-        };
-
-        saveData();
-        currentLoggedInTeacher = name;
-        showPortalSelection('teacherDashboard');
-    }
-
-    function populateTeacherWeekDropdowns() {
-        const select = document.getElementById('claimWeek');
-        select.innerHTML = '<option value="">-- Select Week --</option>';
-        for (let w = 1; w <= 9; w++) {
-            if (openWeeksConfig[w]) {
-                let opt = document.createElement('option');
-                opt.value = w;
-                opt.innerText = `Week ${w}`;
-                select.appendChild(opt);
-            }
-        }
-    }
-
-    function populateMissedWeekDropdown() {
-        const select = document.getElementById('missWeek');
-        select.innerHTML = '<option value="">-- Select Week --</option>';
-        for (let w = 1; w <= 9; w++) {
-            if (openWeeksConfig[w]) {
-                let opt = document.createElement('option');
-                opt.value = w;
-                opt.innerText = `Week ${w}`;
-                select.appendChild(opt);
-            }
-        }
-    }
-
-    function loadWeekFields() {
-        const weekVal = document.getElementById('claimWeek').value;
-        const daysContainer = document.getElementById('daysContainer');
-        const submitBtn = document.getElementById('submitClaimBtn');
-        const errorDiv = document.getElementById('teacherError');
-
-        if (!weekVal) {
-            daysContainer.innerHTML = "";
-            submitBtn.classList.add('hidden');
-            return;
-        }
-
-        errorDiv.innerText = "";
-        submitBtn.classList.remove('hidden');
-
-        const workDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-        let html = "";
-        workDays.forEach((day, index) => {
-            html += `
-                <div class="day-row">
-                    <strong>${day} (Morning Session)</strong>
-                    <label>Session Conducted:</label>
-                    <select id="m_${index}">
-                        <option value="1">Attended & Taught (1 Session)</option>
-                        <option value="0">Did Not Teach / Absent (0 Sessions)</option>
-                    </select>
-                    <label>Subject Taught:</label>
-                    <input type="text" id="subj_${index}" placeholder="e.g. Mathematics">
-                </div>
-            `;
-        });
-
-        html += `
-            <div class="day-row" style="background: #f0fdf4;">
-                <strong>Saturday (Weekend Lesson)</strong>
-                <label>Total Saturday Lessons Taught (0 to 4):</label>
-                <input type="number" id="sat_count" min="0" max="4" value="0">
-                <label>Specify Lesson Numbers (e.g., 1, 2):</label>
-                <input type="text" id="sat_lessons" placeholder="e.g. 1, 2">
-                <label>Subjects Taught (comma separated or per lesson):</label>
-                <input type="text" id="sat_subjects" placeholder="e.g. Physics, Chemistry">
-            </div>
-        `;
-        daysContainer.innerHTML = html;
-    }
-
-    function submitClaim() {
-        const name = currentLoggedInTeacher;
-        const weekNum = parseInt(document.getElementById('claimWeek').value);
-        const resultDiv = document.getElementById('teacherResult');
-
-        let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-        let morningClaimsCount = 0;
-        let morningValues = {};
-        let morningSubjects = {};
-
-        for (let i = 0; i < workDaysKeys.length; i++) {
-            let val = parseInt(document.getElementById(`m_${i}`).value) || 0;
-            let subj = document.getElementById(`subj_${i}`).value.trim();
-            morningValues[workDaysKeys[i]] = (val === 1);
-            morningSubjects[workDaysKeys[i]] = subj;
-            if (val === 1) morningClaimsCount++;
-        }
-
-        let satCount = parseInt(document.getElementById('sat_count').value) || 0;
-        let satLessonsInput = document.getElementById('sat_lessons').value.trim();
-        let satLessonsArr = satLessonsInput ? satLessonsInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x)) : [];
-        let satSubjectsInput = document.getElementById('sat_subjects').value.trim();
-        let satSubjectsArr = satSubjectsInput ? satSubjectsInput.split(',').map(x => x.trim()) : [];
-
-        let teacherObj = teacherDatabase[name];
-        workDaysKeys.forEach((d) => {
-            teacherObj.weeks[weekNum].morning[d].claimed = morningValues[d];
-            teacherObj.weeks[weekNum].morning[d].subject = morningSubjects[d];
-        });
-        teacherObj.weeks[weekNum].sat.claimedCount = satCount;
-        teacherObj.weeks[weekNum].sat.lessons = satLessonsArr;
-        teacherObj.weeks[weekNum].sat.subjects = satSubjectsArr;
-        
-        teacherObj.weeks[weekNum].status = "pending review";
-
-        saveData();
-
-        let morningAmt = morningClaimsCount * 500;
-        let weekendAmt = satCount * 700;
-        let totalAmt = morningAmt + weekendAmt;
-
-        resultDiv.classList.remove('hidden');
-        resultDiv.innerHTML = `
-            <h3 style="margin-top:0; color:#065f46;">Claim Submitted Successfully (Week ${weekNum})</h3>
-            <p><strong>Total Amount:</strong> ${totalAmt} KSH</p>
-            <p><strong>Current Status:</strong> <span class="status-badge status-pending">pending review</span></p>
-        `;
-        updateDashboardMetrics();
-    }
-
-    function updateDashboardMetrics() {
-        const teacherObj = teacherDatabase[currentLoggedInTeacher];
-        if (!teacherObj) return;
-
-        let totalSum = 0;
-        let approvedSum = 0;
-        let pendingSum = 0;
-
-        for (let w = 1; w <= 9; w++) {
-            let wData = teacherObj.weeks[w];
-            let morningCount = 0;
-            let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-            workDaysKeys.forEach(d => {
-                if (wData.morning && wData.morning[d] && wData.morning[d].claimed) morningCount++;
-            });
-            let satCount = (wData.sat && wData.sat.claimedCount) ? wData.sat.claimedCount : 0;
-            let weekTotal = (morningCount * 500) + (satCount * 700);
-
-            if (weekTotal > 0) {
-                totalSum += weekTotal;
-                let status = wData.status || "pending review";
-                if (status === "reviewed" || status === "funds ready to be claim" || status === "funds claimed and signed") {
-                    approvedSum += weekTotal;
-                } else {
-                    pendingSum += weekTotal;
-                }
-            }
-        }
-
-        document.getElementById('metricTotalClaims').innerText = `${totalSum} KSH`;
-        document.getElementById('metricApprovedClaims').innerText = `${approvedSum} KSH`;
-        document.getElementById('metricPendingClaims').innerText = `${pendingSum} KSH`;
-    }
-
-    function renderTeacherStatusView() {
-        const container = document.getElementById('teacherStatusListContainer');
-        const teacherObj = teacherDatabase[currentLoggedInTeacher];
-
-        if (!teacherObj) {
-            container.innerHTML = "<p style='color:#64748b;'>No records found.</p>";
-            return;
-        }
-
-        let html = "";
-        for (let w = 1; w <= 9; w++) {
-            let wData = teacherObj.weeks[w];
-            let status = wData.status || "pending review";
-            let badgeClass = "status-pending";
-            if (status === "reviewed") badgeClass = "status-reviewed";
-            else if (status === "funds ready to be claim") badgeClass = "status-ready";
-            else if (status === "funds claimed and signed") badgeClass = "status-claimed";
-
-            html += `
-                <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong>Week ${w} Claim</strong></div>
-                    <div><span class="status-badge ${badgeClass}">${status}</span></div>
-                </div>
-            `;
-        }
-        container.innerHTML = html;
-    }
-
-    function saveMissedClass() {
-        const name = currentLoggedInTeacher;
-        const weekNum = parseInt(document.getElementById('missWeek').value);
-        const dayKey = document.getElementById('missDay').value;
-        const sessionType = document.getElementById('missType').value;
-        const lessonNo = parseInt(document.getElementById('missLessonNo').value);
-        const subName = document.getElementById('subName').value.trim();
-
-        let teacherObj = teacherDatabase[name];
-        let wData = teacherObj.weeks[weekNum];
-
-        if (sessionType === 'morning') {
-            wData.morning[dayKey].attended = false;
-            wData.morning[dayKey].substitute = subName;
-        } else {
-            wData.sat.attended = false;
-            wData.sat.substitute = subName + " (Lesson " + lessonNo + ")";
-        }
-
-        saveData();
-        document.getElementById('missedResult').innerText = "Successfully reported missed class/substitute.";
-    }
-
-    function submitTeacherFeedback() {
-        const name = currentLoggedInTeacher;
-        const category = document.getElementById('feedbackCategory').value;
-        const message = document.getElementById('feedbackMessage').value.trim();
-        const resDiv = document.getElementById('feedbackResult');
-
-        if (!message) return;
-
-        globalFeedbackList.push({
-            teacher: name,
-            category: category,
-            message: message,
-            date: new Date().toLocaleDateString()
-        });
-
-        saveData();
-        resDiv.innerText = "Feedback sent successfully!";
+        document.getElementById('resetOtpBox').classList.add('hidden');
+        document.getElementById('resetPhone').value = '';
+        document.getElementById('newAccountPassword').value = '';
+        document.getElementById('enteredResetOtp').value = '';
     }
 
     function loginAdmin() {
         const pass = document.getElementById('adminPassword').value;
-        const err = document.getElementById('adminError');
-        if (pass === "dos123") {
-            document.getElementById('adminLogin').classList.add('hidden');
-            document.getElementById('adminDashboard').classList.remove('hidden');
-            renderAdminCheckboxes();
-            renderAdminFeedback();
-            renderAudit();
-            populateRemoveMemberDropdown();
+        if (pass !== 'dos123') {
+            document.getElementById('adminError').textContent = 'Incorrect admin security password.';
+            return;
+        }
+
+        document.getElementById('adminLogin').classList.add('hidden');
+        document.getElementById('adminDashboard').classList.remove('hidden');
+        loadAdminDashboard();
+    }
+
+    function loadAdminDashboard() {
+        // Populate remove member select
+        const removeSelect = document.getElementById('removeMemberSelect');
+        removeSelect.innerHTML = '<option value="">-- Select Member to Remove --</option>';
+        teacherList.sort().forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            removeSelect.appendChild(opt);
+        });
+
+        // Populate open weeks checkboxes
+        const weeksBox = document.getElementById('adminWeeksCheckboxes');
+        weeksBox.innerHTML = '';
+        for (let i = 1; i <= 9; i++) {
+            const checked = openWeeksConfig[i] ? 'checked' : '';
+            weeksBox.innerHTML += `
+                <label style="display: inline-flex; align-items: center; gap: 8px; margin-right: 15px; margin-top: 5px;">
+                    <input type="checkbox" id="adminWeek_${i}" ${checked} style="width: auto; margin:0;"> Week ${i}
+                </label>
+            `;
+        }
+
+        // Load Feedback
+        const feedbackContainer = document.getElementById('adminFeedbackContent');
+        if (globalFeedbackList.length === 0) {
+            feedbackContainer.innerHTML = '<p style="color: #64748b;">No feedback messages recorded.</p>';
         } else {
-            err.innerText = "Incorrect password.";
+            let fbHtml = '';
+            globalFeedbackList.forEach(fb => {
+                fbHtml += `
+                    <div style="background: white; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px;">
+                        <strong>${fb.teacher}</strong> (${fb.category}) - <span style="color: #64748b; font-size: 12px;">${fb.date}</span>
+                        <p style="margin: 5px 0 0 0; font-size: 14px;">${fb.message}</p>
+                    </div>
+                `;
+            });
+            feedbackContainer.innerHTML = fbHtml;
+        }
+
+        // Load Audit / Claims Summary
+        const auditContainer = document.getElementById('auditContent');
+        let auditHtml = '';
+        let hasClaims = false;
+
+        Object.keys(teacherDatabase).forEach(tName => {
+            const claims = teacherDatabase[tName].claims || {};
+            Object.values(claims).forEach(c => {
+                hasClaims = true;
+                auditHtml += `
+                    <div style="background: white; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${tName}</strong> - Week ${c.week} (${c.amount} KSH)<br>
+                            <span style="font-size: 13px; color: #64748b;">Status: ${c.status}</span>
+                        </div>
+                        <button onclick="approveClaim('${tName}', '${c.week}')" class="btn-green" style="padding: 6px 15px; font-size: 13px;">Approve Claim</button>
+                    </div>
+                `;
+            });
+        });
+
+        auditContainer.innerHTML = hasClaims ? auditHtml : '<p style="color: #64748b;">No active claims submitted for audit.</p>';
+    }
+
+    function approveClaim(teacherName, weekNum) {
+        if (teacherDatabase[teacherName] && teacherDatabase[teacherName].claims[weekNum]) {
+            teacherDatabase[teacherName].claims[weekNum].status = 'Approved';
+            saveData();
+            loadAdminDashboard();
         }
     }
 
     function addNewMember() {
-        const newNameInput = document.getElementById('newMemberName');
-        const msgDiv = document.getElementById('memberAddMsg');
-        const name = newNameInput.value.trim().toUpperCase();
+        const name = document.getElementById('newMemberName').value.trim().toUpperCase();
+        if (!name) return;
 
-        if (!name || teacherList.includes(name)) return;
-
-        teacherList.push(name);
-        saveData();
-        newNameInput.value = "";
-        msgDiv.innerText = `Successfully added ${name}!`;
-        populateRemoveMemberDropdown();
-    }
-
-    function populateRemoveMemberDropdown() {
-        const select = document.getElementById('removeMemberSelect');
-        select.innerHTML = '<option value="">-- Select Member --</option>';
-        teacherList.sort().forEach(name => {
-            let opt = document.createElement('option');
-            opt.value = name;
-            opt.innerText = name;
-            select.appendChild(opt);
-        });
+        if (!teacherList.includes(name)) {
+            teacherList.push(name);
+            saveData();
+            document.getElementById('memberAddMsg').textContent = `Successfully added ${name} to system list!`;
+            document.getElementById('newMemberName').value = '';
+            loadAdminDashboard();
+        } else {
+            document.getElementById('memberAddMsg').textContent = 'Teacher member already exists.';
+        }
     }
 
     function removeMember() {
-        const select = document.getElementById('removeMemberSelect');
-        const name = select.value;
+        const name = document.getElementById('removeMemberSelect').value;
         if (!name) return;
 
-        if (confirm(`Remove ${name}?`)) {
-            teacherList = teacherList.filter(t => t !== name);
-            delete teacherDatabase[name];
-            saveData();
-            populateRemoveMemberDropdown();
-            renderAudit();
-        }
-    }
-
-    function renderAdminCheckboxes() {
-        const container = document.getElementById('adminWeeksCheckboxes');
-        let html = "";
-        for (let w = 1; w <= 9; w++) {
-            let checked = openWeeksConfig[w] ? "checked" : "";
-            html += `<label style="display:inline-block; margin-right:15px; font-weight:normal;">
-                        <input type="checkbox" id="admin_w_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
-                     </label>`;
-        }
-        container.innerHTML = html;
+        teacherList = teacherList.filter(t => t !== name);
+        delete teacherDatabase[name];
+        saveData();
+        document.getElementById('memberRemoveMsg').textContent = `Successfully removed ${name}.`;
+        loadAdminDashboard();
     }
 
     function saveOpenWeeks() {
-        for (let w = 1; w <= 9; w++) {
-            let cb = document.getElementById(`admin_w_${w}`);
-            if (cb) openWeeksConfig[w] = cb.checked;
+        for (let i = 1; i <= 9; i++) {
+            const chk = document.getElementById(`adminWeek_${i}`);
+            if (chk) openWeeksConfig[i] = chk.checked;
         }
         saveData();
-        document.getElementById('adminSaveMsg').innerText = "Updated successfully!";
-    }
-
-    function renderAdminFeedback() {
-        const container = document.getElementById('adminFeedbackContent');
-        if (globalFeedbackList.length === 0) {
-            container.innerHTML = "<p style='color:#64748b;'>No feedback submitted.</p>";
-            return;
-        }
-        let html = "";
-        globalFeedbackList.forEach((fb) => {
-            html += `
-                <div style="background:#f8fafc; border-left:4px solid #0d9488; padding:12px; margin-top:10px; border-radius:4px;">
-                    <p style="margin:0 0 5px 0;"><strong>${fb.teacher}</strong> | <span style="color:#0d9488;">[${fb.category}]</span></p>
-                    <p style="margin:0;">${fb.message}</p>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-    }
-
-    function updateTeacherStatus(teacherName, weekNum, newStatus) {
-        if (teacherDatabase[teacherName] && teacherDatabase[teacherName].weeks[weekNum]) {
-            teacherDatabase[teacherName].weeks[weekNum].status = newStatus;
-            saveData();
-            renderAudit();
-        }
+        document.getElementById('adminSaveMsg').textContent = 'Open weeks configuration successfully saved!';
     }
 
     function clearAllRemedials() {
-        if (confirm("Clear all records?")) {
-            teacherDatabase = {};
-            saveData();
-            renderAudit();
+        if (confirm('Are you sure you want to clear all system records and databases?')) {
+            localStorage.clear();
+            location.reload();
         }
-    }
-
-    function renderAudit() {
-        const auditContent = document.getElementById('auditContent');
-        const keys = Object.keys(teacherDatabase);
-
-        if (keys.length === 0) {
-            auditContent.innerHTML = "<p style='color:#64748b;'>No records found.</p>";
-            return;
-        }
-
-        let html = `<table style="width:100%; border-collapse: collapse; margin-top: 10px; background: #f8fafc;">
-                        <thead>
-                            <tr style="background: #1e3d59; color: white; text-align: left;">
-                                <th style="padding: 12px; border: 1px solid #cbd5e1;">Teacher Name</th>
-                                <th style="padding: 12px; border: 1px solid #cbd5e1;">Detailed Lessons, Subject Taught & Verification Stage</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-
-        keys.forEach(key => {
-            let t = teacherDatabase[key];
-            let teacherGrandTotal = 0;
-            let weekDetailsHtml = "";
-
-            for (let w = 1; w <= 9; w++) {
-                let wData = t.weeks[w];
-                let morningCount = 0;
-                let morningDetails = [];
-                let workDaysKeys = ["Mon", "Tue", "Wed", "Thu", "Fri"];
-                let dayNamesMap = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday" };
-
-                workDaysKeys.forEach(d => {
-                    if (wData.morning && wData.morning[d] && wData.morning[d].claimed) {
-                        morningCount++;
-                        let subj = wData.morning[d].subject ? ` - Subject: <strong>${wData.morning[d].subject}</strong>` : ' - Subject: (Not specified)';
-                        morningDetails.push(`<li>Morning Session (${dayNamesMap[d]}) ${subj}</li>`);
-                    }
-                });
-
-                let satDetails = [];
-                let satCount = (wData.sat && wData.sat.claimedCount) ? wData.sat.claimedCount : 0;
-                if (satCount > 0 && wData.sat.lessons) {
-                    let lessonsArr = wData.sat.lessons;
-                    let subjectsArr = wData.sat.subjects || [];
-                    for (let i = 0; i < lessonsArr.length; i++) {
-                        let lNum = lessonsArr[i];
-                        let sName = subjectsArr[i] || subjectsArr[0] || "General";
-                        satDetails.push(`<li>Saturday Lesson ${lNum} - Subject: <strong>${sName}</strong></li>`);
-                    }
-                }
-
-                let weekTotal = (morningCount * 500) + (satCount * 700);
-                if (weekTotal > 0) {
-                    teacherGrandTotal += weekTotal;
-                    let currentStatus = wData.status || "pending review";
-                    let combinedLessonsList = [...morningDetails, ...satDetails].join('');
-
-                    weekDetailsHtml += `
-                        <div style="margin-top: 8px; padding: 10px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <span style="font-size: 15px;"><strong>Week ${w}:</strong> ${weekTotal} KSH</span>
-                                <div>
-                                    <select onchange="updateTeacherStatus('${key}', ${w}, this.value)" style="padding: 4px; font-size: 13px; width: auto;">
-                                        <option value="pending review" ${currentStatus === 'pending review' ? 'selected' : ''}>pending review</option>
-                                        <option value="reviewed" ${currentStatus === 'reviewed' ? 'selected' : ''}>reviewed</option>
-                                        <option value="funds ready to be claim" ${currentStatus === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
-                                        <option value="funds claimed and signed" ${currentStatus === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div style="font-size: 13px; color: #334155; background: #f8fafc; padding: 6px 10px; border-radius: 4px; border: 1px dashed #cbd5e1;">
-                                <strong style="display:block; margin-bottom:4px; color:#1e3d59;">Lessons & Subjects Taught As They Occurred:</strong>
-                                <ul style="margin: 0; padding-left: 18px;">
-                                    ${combinedLessonsList || '<li>No specific lessons recorded</li>'}
-                                </ul>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            if (teacherGrandTotal > 0) {
-                html += `<tr>
-                            <td style="padding: 12px; border: 1px solid #cbd5e1; font-weight: 600; vertical-align: top;">${t.name}</td>
-                            <td style="padding: 12px; border: 1px solid #cbd5e1; vertical-align: top;">
-                                <div style="color: #065f46; font-weight: bold; margin-bottom: 8px; font-size: 16px;">Total Cleared: ${teacherGrandTotal} KSH</div>
-                                ${weekDetailsHtml}
-                            </td>
-                         </tr>`;
-            }
-        });
-
-        html += `</tbody></table>`;
-        auditContent.innerHTML = html;
     }
 </script>
-
 </body>
 </html>
