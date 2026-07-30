@@ -724,7 +724,7 @@
                         <h4>Morning Sessions (Monday - Friday)</h4>
                         <div id="morningSessionsContainer"></div>
 
-                        <h4 style="margin-top: 25px;">Saturday Sessions (Multiple Classes Support)</h4>
+                        <h4 style="margin-top: 25px;">Saturday Sessions (Max 4 Lessons Limit)</h4>
                         <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px;">
                             <label style="display:inline-block; margin-right: 15px; font-weight:normal; cursor:pointer; margin-bottom: 15px;">
                                 <input type="checkbox" id="satClaimed" style="width: auto; margin-right: 5px;" onchange="toggleSaturdayMain()"> Claim Saturday Remedial Sessions
@@ -732,6 +732,9 @@
 
                             <!-- Dynamic Saturday Entries Container -->
                             <div id="saturdayEntriesWrapper" class="hidden">
+                                <div id="saturdayTotalLimitNotice" style="font-size: 13px; color: #b45309; font-weight: 600; margin-bottom: 10px;">
+                                    Total Saturday Lessons Selected: <span id="satTotalCountDisplay">0</span> / 4 Max
+                                </div>
                                 <div id="saturdayRowsContainer">
                                     <!-- Dynamic rows inserted here -->
                                 </div>
@@ -1017,11 +1020,10 @@
                         satSessions: []
                     };
                 } else if (!teacherDatabase[name].weeks[w].satSessions) {
-                    // Backward compatibility conversion if old sat structure exists
                     let oldSat = teacherDatabase[name].weeks[w].sat;
                     teacherDatabase[name].weeks[w].satSessions = (oldSat && oldSat.claimedCount > 0) ? [{
                         classVal: oldSat.classVal || "",
-                        count: oldSat.claimedCount || 1,
+                        count: Math.min(4, oldSat.claimedCount || 1),
                         subjects: (oldSat.subjects || []).join(', ')
                     }] : [];
                 }
@@ -1105,7 +1107,7 @@
                 });
                 if (wData.satSessions) {
                     wData.satSessions.forEach(s => {
-                        totalClaimedCount += (parseInt(s.count) || 0);
+                        totalClaimedCount += Math.min(4, parseInt(s.count) || 0);
                     });
                 }
 
@@ -1132,7 +1134,7 @@
                 });
                 if (wData.satSessions) {
                     wData.satSessions.forEach(s => {
-                        totalClaimedCount += (parseInt(s.count) || 0);
+                        totalClaimedCount += Math.min(4, parseInt(s.count) || 0);
                     });
                 }
             });
@@ -1263,8 +1265,11 @@
         function renderSaturdayRows(sessionsArray) {
             const container = document.getElementById('saturdayRowsContainer');
             let html = "";
+            let totalCount = 0;
 
             sessionsArray.forEach((sess, index) => {
+                totalCount += (parseInt(sess.count) || 0);
+
                 let tempSelect = document.createElement('select');
                 tempSelect.innerHTML = classOptionsHTML;
                 if (sess.classVal) tempSelect.value = sess.classVal;
@@ -1283,8 +1288,8 @@
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Number of Lessons:</label>
-                                <input type="number" id="sat_count_${index}" min="1" max="10" value="${sess.count || 1}" onchange="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
+                                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Number of Lessons (Max 4 total):</label>
+                                <input type="number" id="sat_count_${index}" min="1" max="4" value="${sess.count || 1}" onchange="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
                             </div>
                         </div>
                         <div>
@@ -1295,24 +1300,39 @@
                 `;
             });
             container.innerHTML = html;
+
+            let badge = document.getElementById('satTotalCountDisplay');
+            if (badge) {
+                badge.innerText = totalCount;
+                if (totalCount > 4) {
+                    badge.style.color = "#dc2626";
+                } else {
+                    badge.style.color = "#059669";
+                }
+            }
         }
 
         function addSaturdayRow() {
             const weekNum = document.getElementById('weekSelect').value;
             if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) return;
 
-            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions) {
-                teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = [];
+            let sessions = teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions || [];
+            let currentTotal = sessions.reduce((sum, s) => sum + (parseInt(s.count) || 0), 0);
+
+            if (currentTotal >= 4) {
+                alert("Saturday remedial lessons cannot exceed four (4) in total per Saturday.");
+                return;
             }
 
-            teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions.push({
+            sessions.push({
                 classVal: "",
-                count: 1,
+                count: Math.min(1, 4 - currentTotal),
                 subjects: ""
             });
 
+            teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = sessions;
             saveData();
-            renderSaturdayRows(teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions);
+            renderSaturdayRows(sessions);
             updateDashboardMetrics();
             updateBursarLetterDetails();
         }
@@ -1341,17 +1361,32 @@
             let sessions = teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions;
             if (!sessions) return;
 
+            let calculatedTotal = 0;
+
             sessions.forEach((sess, index) => {
                 let classEl = document.getElementById(`sat_class_${index}`);
                 let countEl = document.getElementById(`sat_count_${index}`);
                 let subjEl = document.getElementById(`sat_subj_${index}`);
 
                 if (classEl) sess.classVal = classEl.value;
-                if (countEl) sess.count = parseInt(countEl.value) || 1;
+                if (countEl) {
+                    let val = parseInt(countEl.value) || 1;
+                    if (val > 4) val = 4;
+                    if (val < 1) val = 1;
+                    countEl.value = val;
+                    sess.count = val;
+                }
                 if (subjEl) sess.subjects = subjEl.value;
+
+                calculatedTotal += (parseInt(sess.count) || 0);
             });
 
+            if (calculatedTotal > 4) {
+                alert("Warning: Total Saturday lessons cannot exceed four (4). Please adjust your lesson counts.");
+            }
+
             saveData();
+            renderSaturdayRows(sessions);
             updateDashboardMetrics();
             updateBursarLetterDetails();
         }
@@ -1387,6 +1422,15 @@
             if (!openWeeksConfig[weekNum]) {
                 alert("Cannot submit claims for a week that is not active/set by the administration.");
                 return;
+            }
+
+            let weekData = teacherDatabase[currentActiveTeacher].weeks[weekNum];
+            if (weekData && weekData.satSessions) {
+                let totalSatCount = weekData.satSessions.reduce((sum, s) => sum + (parseInt(s.count) || 0), 0);
+                if (totalSatCount > 4) {
+                    alert("Submission blocked: Saturday remedial lessons exceed the maximum limit of four (4) lessons.");
+                    return;
+                }
             }
 
             if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
