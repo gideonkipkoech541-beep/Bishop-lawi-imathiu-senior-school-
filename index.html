@@ -711,17 +711,9 @@
                     
                     <div class="content-card">
                         <div class="form-group" style="max-width: 300px;">
-                            <label for="weekSelect">Select Week (1 to 9):</label>
+                            <label for="weekSelect">Select Week:</label>
                             <select id="weekSelect" onchange="loadWeekData()">
-                                <option value="1">Week 1</option>
-                                <option value="2">Week 2</option>
-                                <option value="3">Week 3</option>
-                                <option value="4">Week 4</option>
-                                <option value="5">Week 5</option>
-                                <option value="6">Week 6</option>
-                                <option value="7">Week 7</option>
-                                <option value="8">Week 8</option>
-                                <option value="9">Week 9</option>
+                                <!-- Dynamically populated based on active weeks -->
                             </select>
                         </div>
 
@@ -883,7 +875,13 @@
                     </div>
 
                     <div class="content-card">
-                        <h3>Open Weeks Configuration</h3>
+                        <h3>Manage Weeks (Add / Enable / Disable)</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                            <input type="number" id="newWeekNumber" placeholder="Enter week number to add (e.g. 10)" min="1" style="max-width: 280px; margin-bottom: 0;">
+                            <button class="btn-success" onclick="addNewWeek()">Add New Week</button>
+                        </div>
+                        <div id="adminWeekAddMsg" style="color: var(--success); font-size: 13px; margin-bottom: 15px;"></div>
+
                         <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
                         <button class="btn-primary-custom" onclick="saveOpenWeeks()">Save Week Configurations</button>
                         <div id="adminSaveMsg" style="color: var(--success); margin-top: 5px; font-size: 13px;"></div>
@@ -979,7 +977,13 @@
                     phone: phone,
                     weeks: {}
                 };
-                for (let w = 1; w <= 9; w++) {
+            } else {
+                teacherDatabase[name].phone = phone;
+            }
+
+            // Ensure all configured weeks exist in the teacher's record structure
+            Object.keys(openWeeksConfig).forEach(w => {
+                if (!teacherDatabase[name].weeks[w]) {
                     teacherDatabase[name].weeks[w] = {
                         status: "pending review",
                         morning: {
@@ -995,9 +999,7 @@
                         }
                     };
                 }
-            } else {
-                teacherDatabase[name].phone = phone;
-            }
+            });
 
             saveData();
 
@@ -1014,9 +1016,30 @@
             document.getElementById('sidebarInitials').innerText = initials;
             document.getElementById('profileInitialsDisplay').innerText = initials;
 
+            populateWeekDropdown();
             updateDashboardMetrics();
             loadWeekData();
             updateBursarLetterDetails();
+        }
+
+        function populateWeekDropdown() {
+            const weekSelect = document.getElementById('weekSelect');
+            let currentVal = weekSelect.value;
+            weekSelect.innerHTML = "";
+
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            sortedWeeks.forEach(w => {
+                if (openWeeksConfig[w]) {
+                    let opt = document.createElement('option');
+                    opt.value = w;
+                    opt.innerText = `Week ${w}`;
+                    weekSelect.appendChild(opt);
+                }
+            });
+
+            if (sortedWeeks.includes(Number(currentVal))) {
+                weekSelect.value = currentVal;
+            }
         }
 
         function switchTab(tabId, element) {
@@ -1030,6 +1053,10 @@
             if (tabId === 'dashboard') {
                 updateDashboardMetrics();
             }
+            if (tabId === 'remedials') {
+                populateWeekDropdown();
+                loadWeekData();
+            }
             if (tabId === 'bursarLetter') {
                 updateBursarLetterDetails();
             }
@@ -1042,9 +1069,10 @@
             let approvedCount = 0;
             let activeWeeksCount = 0;
 
-            for (let w = 1; w <= 9; w++) {
-                if (!openWeeksConfig[w]) continue;
+            Object.keys(openWeeksConfig).forEach(w => {
+                if (!openWeeksConfig[w]) return;
                 activeWeeksCount++;
+                if (!tObj.weeks[w]) return;
                 let wData = tObj.weeks[w];
                 Object.keys(wData.morning).forEach(d => {
                     if (wData.morning[d].claimed) totalClaimedCount++;
@@ -1054,7 +1082,7 @@
                 if (wData.status === 'reviewed' || wData.status === 'funds ready to be claim' || wData.status === 'funds claimed and signed') {
                     approvedCount++;
                 }
-            }
+            });
 
             document.getElementById('metricTotalClaimed').innerText = totalClaimedCount;
             document.getElementById('metricApproved').innerText = `${approvedCount} / ${activeWeeksCount} Weeks`;
@@ -1065,14 +1093,15 @@
             let tObj = teacherDatabase[currentActiveTeacher];
             let totalClaimedCount = 0;
 
-            for (let w = 1; w <= 9; w++) {
-                if (!openWeeksConfig[w]) continue;
+            Object.keys(openWeeksConfig).forEach(w => {
+                if (!openWeeksConfig[w]) return;
+                if (!tObj.weeks[w]) return;
                 let wData = tObj.weeks[w];
                 Object.keys(wData.morning).forEach(d => {
                     if (wData.morning[d].claimed) totalClaimedCount++;
                 });
                 totalClaimedCount += (wData.sat.claimedCount || 0);
-            }
+            });
 
             document.getElementById('letterTeacherName').innerText = currentActiveTeacher;
             document.getElementById('letterStaffId').innerText = `BLISS/TCH/2026/${currentActiveTeacher.length * 7}`;
@@ -1096,6 +1125,22 @@
         function loadWeekData() {
             if (!currentActiveTeacher) return;
             const weekNum = document.getElementById('weekSelect').value;
+            if (!weekNum) return;
+
+            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
+                teacherDatabase[currentActiveTeacher].weeks[weekNum] = {
+                    status: "pending review",
+                    morning: {
+                        "Monday": { claimed: false, subject: "" },
+                        "Tuesday": { claimed: false, subject: "" },
+                        "Wednesday": { claimed: false, subject: "" },
+                        "Thursday": { claimed: false, subject: "" },
+                        "Friday": { claimed: false, subject: "" }
+                    },
+                    sat: { claimedCount: 0, subjects: [] }
+                };
+            }
+
             const tData = teacherDatabase[currentActiveTeacher].weeks[weekNum];
 
             const lockedMsg = document.getElementById('weekLockedMsg');
@@ -1110,7 +1155,7 @@
             const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
             days.forEach(day => {
-                let dayData = tData.morning[day];
+                let dayData = tData.morning[day] || { claimed: false, subject: "" };
                 mHtml += `
                     <div style="background:#f8fafc; border:1px solid var(--border); padding:10px 15px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
                         <label style="margin:0; display:flex; align-items:center; cursor:pointer; font-weight:normal;">
@@ -1122,23 +1167,31 @@
             });
             morningContainer.innerHTML = mHtml;
 
-            document.getElementById('satClaimed').checked = tData.sat.claimedCount > 0;
-            document.getElementById('satCount').value = tData.sat.claimedCount || 1;
-            document.getElementById('satSubjects').value = tData.sat.subjects ? tData.sat.subjects.join(', ') : '';
+            document.getElementById('satClaimed').checked = (tData.sat && tData.sat.claimedCount > 0);
+            document.getElementById('satCount').value = (tData.sat && tData.sat.claimedCount) || 1;
+            document.getElementById('satSubjects').value = (tData.sat && tData.sat.subjects) ? tData.sat.subjects.join(', ') : '';
 
-            if (tData.sat.claimedCount > 0) {
+            if (tData.sat && tData.sat.claimedCount > 0) {
                 document.getElementById('satDetailsContainer').classList.remove('hidden');
             } else {
                 document.getElementById('satDetailsContainer').classList.add('hidden');
             }
 
-            document.getElementById('currentStatusBadge').innerText = tData.status;
+            document.getElementById('currentStatusBadge').innerText = tData.status || "pending review";
         }
 
         function updateMorningData(day) {
             const weekNum = document.getElementById('weekSelect').value;
             const isChecked = document.getElementById(`morn_${day}`).checked;
             const subjectVal = document.getElementById(`subj_${day}`).value;
+
+            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
+                teacherDatabase[currentActiveTeacher].weeks[weekNum] = {
+                    status: "pending review",
+                    morning: {},
+                    sat: { claimedCount: 0, subjects: [] }
+                };
+            }
 
             teacherDatabase[currentActiveTeacher].weeks[weekNum].morning[day] = {
                 claimed: isChecked,
@@ -1153,6 +1206,14 @@
             const weekNum = document.getElementById('weekSelect').value;
             const isChecked = document.getElementById('satClaimed').checked;
             const detailsDiv = document.getElementById('satDetailsContainer');
+
+            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
+                teacherDatabase[currentActiveTeacher].weeks[weekNum] = {
+                    status: "pending review",
+                    morning: {},
+                    sat: { claimedCount: 0, subjects: [] }
+                };
+            }
 
             if (isChecked) {
                 detailsDiv.classList.remove('hidden');
@@ -1183,6 +1244,10 @@
             if (!openWeeksConfig[weekNum]) {
                 alert("Cannot submit claims for a week that is not active/set by the administration.");
                 return;
+            }
+
+            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
+                teacherDatabase[currentActiveTeacher].weeks[weekNum] = { status: "pending review", morning: {}, sat: { claimedCount: 0, subjects: [] } };
             }
 
             teacherDatabase[currentActiveTeacher].weeks[weekNum].status = "pending review";
@@ -1253,29 +1318,57 @@
             renderAdminAudit();
         }
 
+        function addNewWeek() {
+            const input = document.getElementById('newWeekNumber');
+            const msgDiv = document.getElementById('adminWeekAddMsg');
+            const weekNum = parseInt(input.value.trim());
+
+            if (!weekNum || weekNum < 1) {
+                alert("Please enter a valid positive week number.");
+                return;
+            }
+
+            if (openWeeksConfig[weekNum] !== undefined) {
+                alert(`Week ${weekNum} already exists in the system configuration.`);
+                return;
+            }
+
+            openWeeksConfig[weekNum] = true; // Automatically enable newly added week
+            saveData();
+
+            input.value = "";
+            msgDiv.innerText = `Successfully added and enabled Week ${weekNum}!`;
+            renderAdminCheckboxes();
+            renderAdminAudit();
+        }
+
         function renderAdminCheckboxes() {
             const container = document.getElementById('adminWeeksCheckboxes');
             let html = "<p style='margin-top:0; font-weight:600;'>Select active weeks available for teacher claims:</p>";
-            for (let w = 1; w <= 9; w++) {
+            
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            sortedWeeks.forEach(w => {
                 let checked = openWeeksConfig[w] ? "checked" : "";
                 html += `
-                    <label style="display:inline-block; margin-right:15px; font-weight:normal;">
+                    <label style="display:inline-block; margin-right:15px; margin-bottom:10px; font-weight:normal;">
                         <input type="checkbox" id="admin_week_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
                     </label>
                 `;
-            }
+            });
             container.innerHTML = html;
         }
 
         function saveOpenWeeks() {
-            for (let w = 1; w <= 9; w++) {
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            sortedWeeks.forEach(w => {
                 let el = document.getElementById(`admin_week_${w}`);
                 if (el) {
                     openWeeksConfig[w] = el.checked;
                 }
-            }
+            });
             saveData();
             document.getElementById('adminSaveMsg').innerText = "Open weeks configuration updated successfully.";
+            renderAdminAudit();
         }
 
         function renderAdminMembers() {
@@ -1340,7 +1433,7 @@
             let html = "";
             globalFeedbackList.forEach((fb) => {
                 html += `
-                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-rdius:8px; margin-top:10px;">
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-radius:8px; margin-top:10px;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
                             <strong>${fb.teacher}</strong>
                             <span style="font-size:12px; color:#6b7280;">${fb.date}</span>
@@ -1362,6 +1455,8 @@
                 return;
             }
 
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+
             let html = "";
             teachers.forEach(tName => {
                 let tObj = teacherDatabase[tName];
@@ -1370,8 +1465,22 @@
                         <h4 style="margin-top:0; color:#1e3d59; border-bottom:1px solid #e5e7eb; padding-bottom:10px;">Teacher: ${tName} (Phone: ${tObj.phone})</h4>
                 `;
 
-                for (let w = 1; w <= 9; w++) {
-                    if (!openWeeksConfig[w]) continue; // Skip inactive weeks from reflecting in admin audit view
+                sortedWeeks.forEach(w => {
+                    if (!openWeeksConfig[w]) return; // Skip inactive weeks from reflecting in admin audit view
+
+                    if (!tObj.weeks[w]) {
+                        tObj.weeks[w] = {
+                            status: "pending review",
+                            morning: {
+                                "Monday": { claimed: false, subject: "" },
+                                "Tuesday": { claimed: false, subject: "" },
+                                "Wednesday": { claimed: false, subject: "" },
+                                "Thursday": { claimed: false, subject: "" },
+                                "Friday": { claimed: false, subject: "" }
+                            },
+                            sat: { claimedCount: 0, subjects: [] }
+                        };
+                    }
 
                     let wData = tObj.weeks[w];
                     let morningSummary = [];
@@ -1381,7 +1490,7 @@
                         }
                     });
 
-                    let satSummary = wData.sat.claimedCount > 0 ? `${wData.sat.claimedCount} lessons [Subj: ${wData.sat.subjects.join(', ')}]` : "None";
+                    let satSummary = (wData.sat && wData.sat.claimedCount > 0) ? `${wData.sat.claimedCount} lessons [Subj: ${wData.sat.subjects.join(', ')}]` : "None";
 
                     html += `
                         <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:12px; border-radius:6px; margin-top:10px;">
@@ -1400,7 +1509,7 @@
                             <p style="margin:0; font-size:13px;"><strong>Saturday Sessions:</strong> ${satSummary}</p>
                         </div>
                     `;
-                }
+                });
                 html += `</div>`;
             });
             container.innerHTML = html;
