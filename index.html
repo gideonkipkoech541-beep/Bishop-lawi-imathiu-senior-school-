@@ -732,15 +732,17 @@
 
                             <!-- Dynamic Saturday Entries Container -->
                             <div id="saturdayEntriesWrapper" class="hidden">
+                                <div class="form-group" style="max-width: 320px; background: #fff; padding: 12px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 15px;">
+                                    <label for="satTotalLessonsInput" style="font-weight: 600; color: var(--text-main); margin-bottom: 5px;">Number of Classes Attended (Max 4):</label>
+                                    <input type="number" id="satTotalLessonsInput" min="1" max="4" value="1" onchange="updateSaturdayCountSetting()">
+                                </div>
+
                                 <div id="saturdayTotalLimitNotice" style="font-size: 13px; color: #b45309; font-weight: 600; margin-bottom: 10px;">
-                                    Total Saturday Lessons Selected: <span id="satTotalCountDisplay">0</span> / 4 Max
+                                    Total Saturday Lessons Sequenced: <span id="satTotalCountDisplay">0</span> / <span id="satMaxAllowedDisplay">1</span> Target
                                 </div>
                                 <div id="saturdayRowsContainer">
-                                    <!-- Dynamic rows inserted here -->
+                                    <!-- Dynamic rows inserted here matching class-by-class sequence -->
                                 </div>
-                                <button class="btn-primary-custom" type="button" onclick="addSaturdayRow()" style="margin-top: 10px; background-color: #0284c7;">
-                                    + Add Another Class Session
-                                </button>
                             </div>
                         </div>
 
@@ -1023,8 +1025,7 @@
                     let oldSat = teacherDatabase[name].weeks[w].sat;
                     teacherDatabase[name].weeks[w].satSessions = (oldSat && oldSat.claimedCount > 0) ? [{
                         classVal: oldSat.classVal || "",
-                        count: Math.min(4, oldSat.claimedCount || 1),
-                        subjects: (oldSat.subjects || []).join(', ')
+                        subject: (oldSat.subjects || []).join(', ')
                     }] : [];
                 }
             });
@@ -1106,9 +1107,7 @@
                     if (wData.morning[d].claimed) totalClaimedCount++;
                 });
                 if (wData.satSessions) {
-                    wData.satSessions.forEach(s => {
-                        totalClaimedCount += Math.min(4, parseInt(s.count) || 0);
-                    });
+                    totalClaimedCount += wData.satSessions.length;
                 }
 
                 if (wData.status === 'reviewed' || wData.status === 'funds ready to be claim' || wData.status === 'funds claimed and signed') {
@@ -1133,9 +1132,7 @@
                     if (wData.morning[d].claimed) totalClaimedCount++;
                 });
                 if (wData.satSessions) {
-                    wData.satSessions.forEach(s => {
-                        totalClaimedCount += Math.min(4, parseInt(s.count) || 0);
-                    });
+                    totalClaimedCount += wData.satSessions.length;
                 }
             });
 
@@ -1226,14 +1223,17 @@
             // Saturday Sessions loading
             let satCheckbox = document.getElementById('satClaimed');
             let satWrapper = document.getElementById('saturdayEntriesWrapper');
+            let satTotalInput = document.getElementById('satTotalLessonsInput');
             
             if (tData.satSessions && tData.satSessions.length > 0) {
                 satCheckbox.checked = true;
                 satWrapper.classList.remove('hidden');
+                satTotalInput.value = tData.satSessions.length;
                 renderSaturdayRows(tData.satSessions);
             } else {
                 satCheckbox.checked = false;
                 satWrapper.classList.add('hidden');
+                satTotalInput.value = 1;
                 renderSaturdayRows([]);
             }
 
@@ -1249,10 +1249,18 @@
 
             if (isChecked) {
                 satWrapper.classList.remove('hidden');
-                if (!teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions || teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions.length === 0) {
-                    teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = [{ classVal: "", count: 1, subjects: "" }];
+                let satTotalInput = document.getElementById('satTotalLessonsInput');
+                let count = parseInt(satTotalInput.value) || 1;
+                if (count > 4) count = 4;
+                if (count < 1) count = 1;
+                satTotalInput.value = count;
+
+                let sessions = [];
+                for (let i = 0; i < count; i++) {
+                    sessions.push({ classVal: "", subject: "" });
                 }
-                renderSaturdayRows(teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions);
+                teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = sessions;
+                renderSaturdayRows(sessions);
             } else {
                 satWrapper.classList.add('hidden');
                 teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = [];
@@ -1262,25 +1270,55 @@
             updateBursarLetterDetails();
         }
 
+        function updateSaturdayCountSetting() {
+            const weekNum = document.getElementById('weekSelect').value;
+            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) return;
+
+            let satTotalInput = document.getElementById('satTotalLessonsInput');
+            let targetCount = parseInt(satTotalInput.value) || 1;
+            if (targetCount > 4) {
+                alert("Saturday remedial classes cannot exceed a maximum of four (4).");
+                targetCount = 4;
+                satTotalInput.value = 4;
+            }
+            if (targetCount < 1) {
+                targetCount = 1;
+                satTotalInput.value = 1;
+            }
+
+            let currentSessions = teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions || [];
+            
+            // Adjust array size to match the specified number of classes
+            if (currentSessions.length < targetCount) {
+                while (currentSessions.length < targetCount) {
+                    currentSessions.push({ classVal: "", subject: "" });
+                }
+            } else if (currentSessions.length > targetCount) {
+                currentSessions = currentSessions.slice(0, targetCount);
+            }
+
+            teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = currentSessions;
+            saveData();
+            renderSaturdayRows(currentSessions);
+            updateDashboardMetrics();
+            updateBursarLetterDetails();
+        }
+
         function renderSaturdayRows(sessionsArray) {
             const container = document.getElementById('saturdayRowsContainer');
             let html = "";
-            let totalCount = 0;
 
             sessionsArray.forEach((sess, index) => {
-                totalCount += (parseInt(sess.count) || 0);
-
                 let tempSelect = document.createElement('select');
                 tempSelect.innerHTML = classOptionsHTML;
                 if (sess.classVal) tempSelect.value = sess.classVal;
 
                 html += `
-                    <div style="background:#ffffff; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-bottom:12px; position:relative;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                            <strong>Saturday Session #${index + 1}</strong>
-                            <button type="button" onclick="removeSaturdayRow(${index})" style="background:#dc2626; color:white; border:none; padding:4px 10px; border-radius:4px; font-size:12px; cursor:pointer;">Remove</button>
+                    <div style="background:#ffffff; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-bottom:12px;">
+                        <div style="margin-bottom:8px; font-weight:600; color:var(--text-main);">
+                            Saturday Class Occurrence #${index + 1}
                         </div>
-                        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px; margin-bottom:10px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
                             <div>
                                 <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Class Attended:</label>
                                 <select id="sat_class_${index}" onchange="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
@@ -1288,13 +1326,9 @@
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Number of Lessons (Max 4 total):</label>
-                                <input type="number" id="sat_count_${index}" min="1" max="4" value="${sess.count || 1}" onchange="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
+                                <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Subject Name:</label>
+                                <input type="text" id="sat_subj_${index}" value="${sess.subject || ''}" placeholder="e.g. Physics" oninput="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
                             </div>
-                        </div>
-                        <div>
-                            <label style="font-size:12px; font-weight:600; display:block; margin-bottom:3px;">Subjects Covered (comma separated):</label>
-                            <input type="text" id="sat_subj_${index}" value="${sess.subjects || ''}" placeholder="e.g. Mathematics, Physics" oninput="saveSaturdayRowsFromDOM()" style="margin-bottom:0;">
                         </div>
                     </div>
                 `;
@@ -1303,55 +1337,12 @@
 
             let badge = document.getElementById('satTotalCountDisplay');
             if (badge) {
-                badge.innerText = totalCount;
-                if (totalCount > 4) {
-                    badge.style.color = "#dc2626";
-                } else {
-                    badge.style.color = "#059669";
-                }
+                badge.innerText = sessionsArray.length;
             }
-        }
-
-        function addSaturdayRow() {
-            const weekNum = document.getElementById('weekSelect').value;
-            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) return;
-
-            let sessions = teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions || [];
-            let currentTotal = sessions.reduce((sum, s) => sum + (parseInt(s.count) || 0), 0);
-
-            if (currentTotal >= 4) {
-                alert("Saturday remedial lessons cannot exceed four (4) in total per Saturday.");
-                return;
+            let maxAllowedDisplay = document.getElementById('satMaxAllowedDisplay');
+            if (maxAllowedDisplay) {
+                maxAllowedDisplay.innerText = document.getElementById('satTotalLessonsInput').value || sessionsArray.length;
             }
-
-            sessions.push({
-                classVal: "",
-                count: Math.min(1, 4 - currentTotal),
-                subjects: ""
-            });
-
-            teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions = sessions;
-            saveData();
-            renderSaturdayRows(sessions);
-            updateDashboardMetrics();
-            updateBursarLetterDetails();
-        }
-
-        function removeSaturdayRow(index) {
-            const weekNum = document.getElementById('weekSelect').value;
-            if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) return;
-
-            teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions.splice(index, 1);
-
-            if (teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions.length === 0) {
-                document.getElementById('satClaimed').checked = false;
-                document.getElementById('saturdayEntriesWrapper').classList.add('hidden');
-            }
-
-            saveData();
-            renderSaturdayRows(teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions);
-            updateDashboardMetrics();
-            updateBursarLetterDetails();
         }
 
         function saveSaturdayRowsFromDOM() {
@@ -1361,32 +1352,15 @@
             let sessions = teacherDatabase[currentActiveTeacher].weeks[weekNum].satSessions;
             if (!sessions) return;
 
-            let calculatedTotal = 0;
-
             sessions.forEach((sess, index) => {
                 let classEl = document.getElementById(`sat_class_${index}`);
-                let countEl = document.getElementById(`sat_count_${index}`);
                 let subjEl = document.getElementById(`sat_subj_${index}`);
 
                 if (classEl) sess.classVal = classEl.value;
-                if (countEl) {
-                    let val = parseInt(countEl.value) || 1;
-                    if (val > 4) val = 4;
-                    if (val < 1) val = 1;
-                    countEl.value = val;
-                    sess.count = val;
-                }
-                if (subjEl) sess.subjects = subjEl.value;
-
-                calculatedTotal += (parseInt(sess.count) || 0);
+                if (subjEl) sess.subject = subjEl.value;
             });
 
-            if (calculatedTotal > 4) {
-                alert("Warning: Total Saturday lessons cannot exceed four (4). Please adjust your lesson counts.");
-            }
-
             saveData();
-            renderSaturdayRows(sessions);
             updateDashboardMetrics();
             updateBursarLetterDetails();
         }
@@ -1426,9 +1400,8 @@
 
             let weekData = teacherDatabase[currentActiveTeacher].weeks[weekNum];
             if (weekData && weekData.satSessions) {
-                let totalSatCount = weekData.satSessions.reduce((sum, s) => sum + (parseInt(s.count) || 0), 0);
-                if (totalSatCount > 4) {
-                    alert("Submission blocked: Saturday remedial lessons exceed the maximum limit of four (4) lessons.");
+                if (weekData.satSessions.length > 4) {
+                    alert("Submission blocked: Saturday remedial classes exceed the maximum limit of four (4).");
                     return;
                 }
             }
@@ -1680,7 +1653,7 @@
                     let satSummaries = [];
                     let sessionsList = wData.satSessions || [];
                     sessionsList.forEach((sess, sIdx) => {
-                        satSummaries.push(`[Session #${sIdx+1}: ${sess.classVal || 'No Class'} - ${sess.count} lessons (Subj: ${sess.subjects || 'None'})]`);
+                        satSummaries.push(`[Occurrence #${sIdx+1}: ${sess.classVal || 'No Class'} (Subj: ${sess.subject || 'None'})]`);
                     });
                     let satSummaryStr = satSummaries.length > 0 ? satSummaries.join(' | ') : "None";
 
@@ -1698,7 +1671,7 @@
                                 </div>
                             </div>
                             <p style="margin:8px 0 4px 0; font-size:13px;"><strong>Morning Sessions:</strong> ${morningSummary.length > 0 ? morningSummary.join(' | ') : 'None'}</p>
-                            <p style="margin:0; font-size:13px;"><strong>Saturday Sessions:</strong> ${satSummaryStr}</p>
+                            <p style="margin:0; font-size:13px;"><strong>Saturday Occurrences:</strong> ${satSummaryStr}</p>
                         </div>
                     `;
                 });
