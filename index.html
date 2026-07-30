@@ -6,10 +6,9 @@
     <title>School Remedial Management System</title>
     <style>
         :root {
-            --primary: #1e3d59;
-            --secondary: #17b978;
-            --accent: #ff6e40;
-            --background: #f5f7fa;
+            --primary: #2563eb;
+            --secondary: #059669;
+            --background: #94a3b8;
             --card-bg: #ffffff;
             --text-main: #333333;
             --text-muted: #64748b;
@@ -22,94 +21,160 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
+            width: 100%;
             max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+            margin: 20px;
         }
 
-        .card {
+        /* Portal Card Styling matching the uploaded design */
+        .portal-card {
             background: var(--card-bg);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
+            border-radius: 4px;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            overflow: hidden;
         }
 
-        h2, h3 {
-            color: var(--primary);
-            margin-top: 0;
+        .portal-header {
+            background-color: #3b82f6;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
+        .portal-header h2 {
+            margin: 0 0 15px 0;
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .portal-logo-container {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .portal-logo-container img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
+
+        .portal-body {
+            padding: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-row label {
+            width: 110px;
             font-weight: 600;
             font-size: 14px;
+            color: var(--text-main);
+            margin-bottom: 0;
+        }
+
+        .form-row .input-wrapper {
+            flex: 1;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 10px 12px;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 14px;
             box-sizing: border-box;
+            background-color: #f8fafc;
         }
 
-        button {
-            background-color: var(--secondary);
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            background-color: #fff;
+        }
+
+        .portal-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+        }
+
+        .btn-warning {
+            background-color: #d97706;
             color: white;
             border: none;
             padding: 10px 20px;
             font-size: 14px;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background 0.2s;
+        }
+
+        .btn-success {
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
         }
 
         button:hover {
             opacity: 0.9;
         }
 
+        /* Standard Dashboard Card Styling */
+        .card {
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        h2, h3, h4 {
+            color: #1e3d59;
+            margin-top: 0;
+        }
+
         .btn-danger {
             background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
         }
 
         .hidden {
-            display: none;
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
+            display: none !important;
         }
 
         table {
@@ -132,33 +197,46 @@
 </head>
 <body>
 
-    <header>
-        <h1>School Remedial Management System</h1>
-    </header>
-
     <div class="container">
 
-        <!-- Teacher Login Section -->
-        <div class="card" id="loginSection">
-            <h2>Teacher Portal Login</h2>
-            <p style="color: var(--text-muted); font-size: 14px;">Select your name and enter your contact number to access your schedule and claims.</p>
-            
-            <label for="teacherSelect">Select Your Name:</label>
-            <select id="teacherSelect">
-                <option value="">-- Choose Teacher --</option>
-            </select>
+        <!-- Teacher Login Portal Card -->
+        <div class="portal-card" id="loginSection">
+            <div class="portal-header">
+                <h2>Teacher Remedial Portal</h2>
+                <div class="portal-logo-container">
+                    <!-- Placeholder institutional crest/logo graphic -->
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                </div>
+            </div>
+            <div class="portal-body">
+                <div class="form-row">
+                    <label for="teacherSelect">Username:</label>
+                    <div class="input-wrapper">
+                        <select id="teacherSelect">
+                            <option value="">-- Choose Teacher --</option>
+                        </select>
+                    </div>
+                </div>
 
-            <label for="teacherPhone">Phone Number:</label>
-            <input type="text" id="teacherPhone" placeholder="e.g. 0712345678">
+                <div class="form-row">
+                    <label for="teacherPhone">Password:</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="teacherPhone" placeholder="Phone Number">
+                    </div>
+                </div>
 
-            <button onclick="teacherLogin()">Login</button>
+                <div class="portal-actions">
+                    <button class="btn-warning" onclick="alert('Please contact the system administrator to reset your credentials.')">Reset password</button>
+                    <button class="btn-success" onclick="teacherLogin()">Sign In</button>
+                </div>
+            </div>
         </div>
 
         <!-- Teacher Dashboard Section -->
         <div class="card hidden" id="teacherDashboard">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
                 <h2 id="welcomeTeacher" style="margin: 0;">Welcome</h2>
-                <button onclick="location.reload()" style="background-color: #64748b;">Logout</button>
+                <button onclick="location.reload()" style="background-color: #64748b; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Logout</button>
             </div>
 
             <h3>Remedial Claims & Schedule Management</h3>
@@ -185,7 +263,7 @@
 
                 <h4>Saturday Sessions</h4>
                 <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 15px;">
-                    <label style="display:inline-block; margin-right: 15px;">
+                    <label style="display:inline-block; margin-right: 15px; font-weight:normal;">
                         <input type="checkbox" id="satClaimed" style="width: auto; margin-right: 5px;" onchange="updateSaturdayData()"> Claim Saturday Remedial
                     </label>
                     <div id="satDetailsContainer" class="hidden" style="margin-top: 10px;">
@@ -197,7 +275,7 @@
                 </div>
 
                 <div style="background: #f1f5f9; padding: 12px; border-radius: 6px; margin-top: 15px;">
-                    <strong>Current Week Status: </strong> <span id="currentStatusBadge" style="color: var(--accent); text-transform: uppercase; font-size: 13px;">pending review</span>
+                    <strong>Current Week Status: </strong> <span id="currentStatusBadge" style="color: #d97706; text-transform: uppercase; font-size: 13px;">pending review</span>
                 </div>
             </div>
 
@@ -213,30 +291,30 @@
             </select>
             <label>Message:</label>
             <textarea id="feedbackMessage" rows="3" placeholder="Type your message or inquiry here..."></textarea>
-            <button onclick="sendFeedback()">Send to Admin</button>
+            <button onclick="sendFeedback()" style="background-color: var(--secondary); color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:600;">Send to Admin</button>
             <div id="feedbackResult" style="margin-top: 10px; font-size: 13px; color: var(--secondary);"></div>
         </div>
 
-        <!-- Admin Access Toggle / Login Section -->
-        <div class="card" id="adminPortal">
+        <!-- Admin Access Portal Card -->
+        <div class="card" id="adminPortal" style="margin-top: 30px;">
             <h2>Administration Portal</h2>
             <div id="adminLogin">
                 <p style="color: var(--text-muted); font-size: 14px;">Enter administrative security password to manage configuration, members, and auditing.</p>
                 <label for="adminPassword">Admin Password:</label>
                 <input type="password" id="adminPassword" placeholder="Enter password">
-                <button onclick="loginAdmin()">Admin Login</button>
+                <button onclick="loginAdmin()" style="background-color: #1e3d59; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:600; margin-top:10px;">Admin Login</button>
                 <div id="adminError" style="color: #ef4444; margin-top: 10px; font-size: 13px;"></div>
             </div>
 
             <div class="hidden" id="adminDashboard">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
                     <h3 style="margin: 0;">Admin Control Panel</h3>
-                    <button onclick="location.reload()" style="background-color: #64748b;">Admin Logout</button>
+                    <button onclick="location.reload()" style="background-color: #64748b; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Admin Logout</button>
                 </div>
 
                 <h4>Open Weeks Configuration</h4>
                 <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
-                <button onclick="saveOpenWeeks()">Save Week Configurations</button>
+                <button onclick="saveOpenWeeks()" style="background-color: #1e3d59; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Save Week Configurations</button>
                 <div id="adminSaveMsg" style="color: var(--secondary); margin-top: 5px; font-size: 13px;"></div>
 
                 <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
@@ -244,7 +322,7 @@
                 <h4>Member Management</h4>
                 <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                     <input type="text" id="newMemberName" placeholder="Enter Full Name (e.g. JOHN DOE)" style="margin-bottom:0;">
-                    <button onclick="addNewMember()" style="white-space: nowrap;">Add Teacher</button>
+                    <button onclick="addNewMember()" style="background-color: var(--secondary); color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer; white-space: nowrap;">Add Teacher</button>
                 </div>
                 <div id="memberAddMsg" style="color: var(--secondary); font-size: 13px; margin-bottom: 15px;"></div>
 
@@ -319,7 +397,7 @@
                 return;
             }
             if (!phone) {
-                alert("Please enter your phone number.");
+                alert("Please enter your password / phone number.");
                 return;
             }
 
@@ -382,7 +460,7 @@
                 let dayData = tData.morning[day];
                 mHtml += `
                     <div style="background:#f8fafc; border:1px solid var(--border); padding:10px 15px; border-radius:6px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                        <label style="margin:0; display:flex; align-items:center; cursor:pointer;">
+                        <label style="margin:0; display:flex; align-items:center; cursor:pointer; font-weight:normal;">
                             <input type="checkbox" id="morn_${day}" ${dayData.claimed ? 'checked' : ''} onchange="updateMorningData('${day}')" style="width:auto; margin-right:10px;"> ${day} Morning
                         </label>
                         <input type="text" id="subj_${day}" value="${dayData.subject || ''}" placeholder="Subject name" oninput="updateMorningData('${day}')" style="width:200px; margin-bottom:0;">
