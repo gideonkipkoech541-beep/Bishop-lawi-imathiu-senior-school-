@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Ensures proper scaling and mobile responsiveness on Android screens -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLISS Portal - Admin Dashboard</title>
     <style>
         * {
@@ -15,8 +14,6 @@
 
         body {
             background-color: #f4f6f9;
-            font-size: 14px; /* Optimized base size for mobile readability */
-            -webkit-text-size-adjust: 100%;
         }
 
         /* Top Navigation Bar */
@@ -26,34 +23,33 @@
             align-items: center;
             background-color: #1e3a8a;
             color: white;
-            padding: 8px 12px;
+            padding: 10px 20px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .user-avatar {
             background-color: #3b82f6;
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 12px;
         }
 
         .user-details h4 {
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .user-details span {
-            font-size: 11px;
+            font-size: 12px;
             color: #4ade80;
         }
 
@@ -61,54 +57,49 @@
         .portal-header-banner {
             background-color: #f59e0b;
             color: white;
-            padding: 10px 12px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         /* Notice Box */
         .notice-banner {
             background-color: #dc2626;
             color: white;
-            padding: 10px 12px;
-            font-size: 12px;
-            line-height: 1.4;
+            padding: 12px 20px;
+            font-size: 14px;
             text-align: center;
         }
 
-        /* Layout Container - Stacks vertically on mobile screens */
+        /* Layout Container */
         .main-container {
             display: flex;
-            flex-direction: column;
-            min-height: auto;
+            min-height: 80vh;
         }
 
-        /* Sidebar - Repositioned horizontally or compacted for mobile usability */
+        /* Sidebar */
         .sidebar {
-            width: 100%;
+            width: 250px;
             background-color: #1e293b;
             color: white;
-            padding: 5px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            justify-content: space-around;
-            border-bottom: 2px solid #334155;
+            padding-top: 20px;
         }
 
         .sidebar-title {
-            display: none; /* Hidden on mobile to save vertical space */
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #94a3b8;
+            letter-spacing: 1px;
         }
 
         .sidebar-link {
-            padding: 8px 10px;
+            display: block;
+            padding: 12px 20px;
             color: #cbd5e1;
             text-decoration: none;
-            font-size: 12px;
-            border-radius: 4px;
             transition: background 0.2s;
         }
 
@@ -123,15 +114,13 @@
 
         /* Content Area / Timetable Grid */
         .content-area {
-            width: 100%;
-            padding: 10px;
-            overflow-x: auto; /* Allows smooth horizontal swipe for wide tables without breaking layout */
-            -webkit-overflow-scrolling: touch;
+            flex-grow: 1;
+            padding: 20px;
+            overflow-x: auto;
         }
 
         .timetable-table {
             width: 100%;
-            min-width: 450px; /* Prevents text crunching on very small displays */
             border-collapse: collapse;
             background: white;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -139,9 +128,9 @@
 
         .timetable-table th, .timetable-table td {
             border: 1px solid #e2e8f0;
-            padding: 8px 6px;
+            padding: 12px;
             text-align: center;
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .timetable-table th {
@@ -163,7 +152,7 @@
         </div>
     </div>
 
-    <!-- Portal Header Banner -->
+    <!-- Portal Header Banner (Fixed to show ADMINISTRATOR instead of Teacher Bett) -->
     <div class="portal-header-banner">
         <span>BLISS Teacher Portal</span>
         <span id="welcome-banner">Welcome: ADMINISTRATOR</span>
@@ -176,12 +165,13 @@
 
     <!-- Main Dashboard Container -->
     <div class="main-container">
-        <!-- Sidebar / Mobile Navigation Strip -->
+        <!-- Sidebar -->
         <div class="sidebar">
-            <a href="#" class="sidebar-link">Dashboard</a>
-            <a href="#" class="sidebar-link">Teachers</a>
-            <a href="#" class="sidebar-link">Timetable</a>
-            <a href="#" class="sidebar-link logout-link">🔒 Logout</a>
+            <div class="sidebar-title">ADMIN CONTROL</div>
+            <a href="#" class="sidebar-link">Dashboard Overview</a>
+            <a href="#" class="sidebar-link">Manage Teachers</a>
+            <a href="#" class="sidebar-link">Timetable Management</a>
+            <a href="#" class="sidebar-link logout-link">🔒 Logout / Exit</a>
         </div>
 
         <!-- Timetable View Area -->
@@ -217,9 +207,11 @@
     </div>
 
     <script>
+        // Dynamic safety wrapper to ensure admin panel always renders administrative text
         window.addEventListener("DOMContentLoaded", () => {
             const welcomeBanner = document.getElementById("welcome-banner");
             if (welcomeBanner) {
+                // Forces correct designation on admin views
                 welcomeBanner.innerText = "Welcome: ADMINISTRATOR";
             }
         });
