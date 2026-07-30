@@ -1307,14 +1307,14 @@
         function renderSaturdayRows(sessionsArray) {
             const container = document.getElementById('saturdayRowsContainer');
             let html = "";
-            const sessionLabels = ["First session", "Second session", "Third session", "Fourth session"];
+            const sessionLabels = ["first session", "second session", "third session", "fourth session"];
 
             sessionsArray.forEach((sess, index) => {
                 let tempSelect = document.createElement('select');
                 tempSelect.innerHTML = classOptionsHTML;
                 if (sess.classVal) tempSelect.value = sess.classVal;
 
-                let labelName = sessionLabels[index] || `Session #${index + 1}`;
+                let labelName = sessionLabels[index] || `session ${index + 1}`;
 
                 html += `
                     <div style="background:#ffffff; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-bottom:12px;">
@@ -1407,6 +1407,33 @@
                     alert("Submission blocked: Saturday remedial classes exceed the maximum limit of four (4).");
                     return;
                 }
+
+                // Restriction check: ensure no blank spaces are left in active Saturday filling section
+                let unassignedCount = 0;
+                weekData.satSessions.forEach((sess, idx) => {
+                    if (!sess.classVal || !sess.classVal.trim() || !sess.subject || !sess.subject.trim()) {
+                        unassignedCount++;
+                    }
+                });
+
+                if (unassignedCount > 0) {
+                    alert("Make sure you fill all blank spaces in the Saturday section before submitting!");
+                    return;
+                }
+            }
+
+            // Check morning sessions if claimed
+            let morningIncomplete = false;
+            Object.keys(weekData.morning).forEach(day => {
+                let m = weekData.morning[day];
+                if (m.claimed && (!m.classVal || !m.classVal.trim() || !m.subject || !m.subject.trim())) {
+                    morningIncomplete = true;
+                }
+            });
+
+            if (morningIncomplete) {
+                alert("Make sure you fill all blank spaces in your claimed morning sessions before submitting!");
+                return;
             }
 
             if (!teacherDatabase[currentActiveTeacher].weeks[weekNum]) {
