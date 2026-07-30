@@ -749,6 +749,17 @@
                             </div>
                         </div>
 
+                        <!-- SUBMIT REMEDIALS ACTION PANEL -->
+                        <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 20px; border-radius: 6px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4 style="margin: 0 0 5px 0; color: #1e40af;">Submit Week Remedials</h4>
+                                <p style="margin: 0; font-size: 13px; color: #4b5563;">Click submit once you have finished selecting all attended morning and Saturday sessions for this week.</p>
+                            </div>
+                            <button class="btn-success" onclick="submitCurrentWeekRemedials()" style="padding: 12px 25px; font-size: 15px;">
+                                🚀 Submit Week Remedials
+                            </button>
+                        </div>
+
                         <div style="background: #f1f5f9; padding: 12px; border-radius: 6px; margin-top: 15px;">
                             <strong>Current Week Status: </strong> <span id="currentStatusBadge" style="color: #d97706; text-transform: uppercase; font-size: 13px;">pending review</span>
                         </div>
@@ -1159,6 +1170,21 @@
             saveData();
             updateDashboardMetrics();
             updateBursarLetterDetails();
+        }
+
+        function submitCurrentWeekRemedials() {
+            if (!currentActiveTeacher) return;
+            const weekNum = document.getElementById('weekSelect').value;
+            
+            // Mark status as submitted/pending review for admin audit
+            teacherDatabase[currentActiveTeacher].weeks[weekNum].status = "pending review";
+            saveData();
+            
+            document.getElementById('currentStatusBadge').innerText = "pending review";
+            updateDashboardMetrics();
+            updateBursarLetterDetails();
+            
+            alert(`Remedials for Week ${weekNum} have been successfully submitted for administrative review!`);
         }
 
         function sendFeedback() {
