@@ -913,7 +913,7 @@
 
                     <div class="content-card">
                         <h3>Audit & Claim Status Overview</h3>
-                        <div id="auditContent"></div>
+                        <div id="auditContent" style="overflow-x: auto;"></div>
                         <br>
                         <button class="btn-danger-custom" onclick="clearAllRemedials()">Clear All System Records</button>
                     </div>
@@ -1646,16 +1646,25 @@
             }
 
             let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
-            const sessionLabelsWords = ["first session", "second session", "third session", "fourth session"];
+            const sessionLabelsWords = ["1st", "2nd", "3rd", "4th"];
 
-            let html = "";
+            let html = `
+                <table style="width:100%; border-collapse:collapse; font-size:13px; background:#fff;">
+                    <thead>
+                        <tr style="background-color:#1e3d59; color:white; text-align:left;">
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Teacher Name</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Phone</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Week</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Morning Sessions Claimed</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Saturday Sessions Claimed</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
             teachers.forEach(tName => {
                 let tObj = teacherDatabase[tName];
-                html += `
-                    <div style="background:#ffffff; border:1px solid #e5e7eb; padding:20px; border-radius:8px; margin-top:20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <h4 style="margin-top:0; color:#1e3d59; border-bottom:1px solid #e5e7eb; padding-bottom:10px;">Teacher: ${tName} (Phone: ${tObj.phone})</h4>
-                `;
-
                 sortedWeeks.forEach(w => {
                     if (!openWeeksConfig[w]) return;
 
@@ -1677,38 +1686,44 @@
                     let morningSummary = [];
                     Object.keys(wData.morning).forEach(d => {
                         if (wData.morning[d].claimed) {
-                            morningSummary.push(`${d}: ${wData.morning[d].classVal || 'No Class'} [${wData.morning[d].subject || 'General'}]`);
+                            morningSummary.push(`${d.substring(0,3)}: ${wData.morning[d].classVal || 'N/A'} (${wData.morning[d].subject || 'N/A'})`);
                         }
                     });
 
                     let satSummaries = [];
                     let sessionsList = wData.satSessions || [];
                     sessionsList.forEach((sess, sIdx) => {
-                        let labelWord = sessionLabelsWords[sIdx] || `session ${sIdx + 1}`;
-                        satSummaries.push(`[${labelWord}: ${sess.classVal || 'No Class'} (Subj: ${sess.subject || 'None'})]`);
+                        let labelWord = sessionLabelsWords[sIdx] || `${sIdx + 1}th`;
+                        satSummaries.push(`${labelWord}: ${sess.classVal || 'N/A'} (${sess.subject || 'N/A'})`);
                     });
-                    let satSummaryStr = satSummaries.length > 0 ? satSummaries.join(' | ') : "None";
+
+                    let morningStr = morningSummary.length > 0 ? morningSummary.join('<br>') : '<span style="color:#9ca3af;">None</span>';
+                    let satStr = satSummaries.length > 0 ? satSummaries.join('<br>') : '<span style="color:#9ca3af;">None</span>';
 
                     html += `
-                        <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:12px; border-radius:6px; margin-top:10px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <strong>Week ${w}</strong>
-                                <div>
-                                    <select onchange="adminUpdateStatus('${tName}', ${w}, this.value)" style="padding:6px; font-size:13px; width:auto; display:inline-block; margin-right:10px;">
-                                        <option value="pending review" ${wData.status === 'pending review' ? 'selected' : ''}>pending review</option>
-                                        <option value="reviewed" ${wData.status === 'reviewed' ? 'selected' : ''}>reviewed</option>
-                                        <option value="funds ready to be claim" ${wData.status === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
-                                        <option value="funds claimed and signed" ${wData.status === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <p style="margin:8px 0 4px 0; font-size:13px;"><strong>Morning Sessions:</strong> ${morningSummary.length > 0 ? morningSummary.join(' | ') : 'None'}</p>
-                            <p style="margin:0; font-size:13px;"><strong>Saturday Occurrences:</strong> ${satSummaryStr}</p>
-                        </div>
+                        <tr style="border-bottom:1px solid #e2e8f0;">
+                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">${tName}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0;">${tObj.phone}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">Week ${w}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${morningStr}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${satStr}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0;">
+                                <select onchange="adminUpdateStatus('${tName}', ${w}, this.value)" style="padding:6px; font-size:12px; width:100%; box-sizing:border-box;">
+                                    <option value="pending review" ${wData.status === 'pending review' ? 'selected' : ''}>pending review</option>
+                                    <option value="reviewed" ${wData.status === 'reviewed' ? 'selected' : ''}>reviewed</option>
+                                    <option value="funds ready to be claim" ${wData.status === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
+                                    <option value="funds claimed and signed" ${wData.status === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
+                                </select>
+                            </td>
+                        </tr>
                     `;
                 });
-                html += `</div>`;
             });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
             container.innerHTML = html;
         }
 
