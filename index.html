@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLISS Teacher Portal - Dashboard</title>
+    <!-- Include html2pdf library for generating downloadable PDF letters -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
             --sidebar-bg: #1e3a8a;
@@ -149,7 +151,7 @@
             cursor: pointer;
         }
 
-        /* App Layout Styles (Dashboard layout matching uploaded screenshot) */
+        /* App Layout Styles */
         .app-container {
             display: flex;
             width: 100vw;
@@ -157,7 +159,6 @@
             overflow: hidden;
         }
 
-        /* Sidebar Navigation */
         .sidebar {
             width: 260px;
             background-color: var(--sidebar-bg);
@@ -236,7 +237,6 @@
             stroke-width: 2;
         }
 
-        /* Main Content Pane */
         .main-content-pane {
             flex: 1;
             display: flex;
@@ -244,7 +244,6 @@
             overflow: hidden;
         }
 
-        /* Top Bar Header */
         .topbar {
             height: 60px;
             background-color: var(--topbar-bg);
@@ -271,7 +270,6 @@
             font-weight: 500;
         }
 
-        /* Ticker Notification Banner */
         .notification-ticker {
             background-color: #dc2626;
             color: white;
@@ -282,7 +280,6 @@
             flex-shrink: 0;
         }
 
-        /* Workspace Content Area */
         .workspace {
             flex: 1;
             overflow-y: auto;
@@ -309,7 +306,6 @@
             color: var(--text-muted);
         }
 
-        /* Dashboard Metric Cards Grid */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -366,7 +362,6 @@
             text-decoration: underline;
         }
 
-        /* Split Section Panels */
         .panels-grid {
             display: grid;
             grid-template-columns: 4fr 6fr;
@@ -393,7 +388,6 @@
             align-items: center;
         }
 
-        /* Profile details layout */
         .profile-center {
             text-align: center;
             padding: 10px 0;
@@ -439,7 +433,6 @@
             display: none !important;
         }
 
-        /* Form elements for schedule/claims inside main workspace */
         .form-group {
             margin-bottom: 15px;
         }
@@ -473,21 +466,16 @@
             font-size: 13px;
         }
 
-        table.data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        table.data-table th, table.data-table td {
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            text-align: left;
-            font-size: 13px;
-        }
-
-        table.data-table th {
-            background-color: #f8fafc;
+        /* Printable Letter Template Style (Hidden on screen unless previewed/downloaded) */
+        #printableLetterContainer {
+            background: white;
+            color: #000;
+            padding: 40px;
+            font-family: 'Times New Roman', Times, serif;
+            width: 210mm;
+            min-height: 297mm;
+            box-sizing: border-box;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -550,7 +538,7 @@
         </div>
     </div>
 
-    <!-- Application Dashboard Layout (Hidden initially) -->
+    <!-- Application Dashboard Layout -->
     <div class="app-container hidden" id="appContainer">
         
         <!-- Sidebar -->
@@ -571,6 +559,10 @@
             <a class="nav-item" onclick="switchTab('remedials', this)">
                 <svg viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
                 Remedial Claims
+            </a>
+            <a class="nav-item" onclick="switchTab('bursarLetter', this)">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Bursar Cash Claim Letter
             </a>
             <a class="nav-item" onclick="switchTab('support', this)">
                 <svg viewBox="0 0 24 24"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path></svg>
@@ -596,7 +588,7 @@
 
             <!-- Ticker Banner -->
             <div class="notification-ticker">
-                Notice: All teachers handling session activities, please ensure you submit your remedial claims promptly.
+                Notice: Download your Bursar Remedial Report Letter, get it stamped by administration/bursar, and collect your cash payout.
             </div>
 
             <!-- Workspace Area -->
@@ -640,20 +632,19 @@
                         <div class="metric-card blue">
                             <div class="metric-card-top">
                                 <div>
-                                    <div class="metric-title">Pending Status</div>
-                                    <div class="metric-value" id="metricPending">Active</div>
+                                    <div class="metric-title">Cash Payout Letter</div>
+                                    <div class="metric-value" style="font-size: 16px; margin-top: 8px;">Ready to Print</div>
                                 </div>
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
                             </div>
-                            <div class="metric-footer" onclick="switchTab('support')">
-                                View Details ➔
+                            <div class="metric-footer" onclick="switchTab('bursarLetter')">
+                                Go to Letter ➔
                             </div>
                         </div>
                     </div>
 
                     <!-- Split Profile / Information Layout -->
                     <div class="panels-grid">
-                        <!-- Left Panel: Profile Picture and Identity Card -->
                         <div>
                             <div class="content-card">
                                 <h3>User Profile</h3>
@@ -677,7 +668,6 @@
                             </div>
                         </div>
 
-                        <!-- Right Panel: Personal/System Information Details -->
                         <div>
                             <div class="content-card">
                                 <h3>Personal Information <button class="btn-primary-custom" style="padding: 4px 10px; font-size: 11px;" onclick="alert('Account parameters are locked. Contact DOS for updates.')">Update Profile</button></h3>
@@ -765,7 +755,89 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: SUPPORT -->
+                <!-- TAB 3: BURSAR CASH CLAIM LETTER -->
+                <div id="tab-bursarLetter" class="tab-pane hidden">
+                    <div class="breadcrumb-row">
+                        <h2>Bursar Remedial Cash Claim Letter</h2>
+                        <div class="breadcrumb-path">Dashboard > Bursar Letter</div>
+                    </div>
+
+                    <div class="content-card">
+                        <p style="color: var(--text-muted); font-size: 14px; margin-top: 0;">
+                            Generate your official remedial report letter below. Once downloaded and printed, take this document to the school administration office for an official stamp, and present it to the school bursar to receive your cash disbursement.
+                        </p>
+                        
+                        <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+                            <button class="btn-success" onclick="downloadBursarLetterPDF()" style="font-size: 15px; padding: 10px 20px;">
+                                📥 Download Official Letter (PDF)
+                            </button>
+                            <span style="font-size: 13px; color: var(--success); font-weight: 600;">Status: Ready for Generation</span>
+                        </div>
+
+                        <!-- Live Letter Preview Box -->
+                        <div style="border: 1px solid var(--border); background: #f8fafc; padding: 20px; border-radius: 6px; overflow-x: auto;">
+                            
+                            <!-- Printable Letter Template HTML -->
+                            <div id="printableLetterContainer">
+                                <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px;">
+                                    <h2 style="margin: 0; font-size: 20px; text-transform: uppercase;">BLISS SECONDARY SCHOOL</h2>
+                                    <p style="margin: 4px 0; font-size: 14px;">OFFICE OF THE DIRECTOR OF STUDIES & SCHOOL BURSAR</p>
+                                    <p style="margin: 2px 0; font-size: 12px;">P.O. Box 45 - 60400, Meru, Kenya | Email: accounts@bliss.ac.ke</p>
+                                </div>
+
+                                <div style="text-align: right; font-size: 14px; margin-bottom: 15px;">
+                                    <strong>Date:</strong> <span id="letterDateSpan"></span>
+                                </div>
+
+                                <div style="font-size: 14px; margin-bottom: 15px;">
+                                    <p style="margin: 0;">To: <strong>The School Bursar</strong></p>
+                                    <p style="margin: 2px 0 0 0;">BLISS Secondary School</p>
+                                </div>
+
+                                <div style="font-size: 14px; font-weight: bold; text-decoration: underline; text-align: center; margin: 20px 0;">
+                                    SUBJECT: REQUISITION AND AUTHORIZATION FOR CASH DISBURSEMENT – TEACHER REMEDIAL CLAIM
+                                </div>
+
+                                <div style="font-size: 14px; line-height: 1.6; text-align: justify; margin-bottom: 20px;">
+                                    <p>Dear Sir/Madam,</p>
+                                    <p>
+                                        This letter serves as an official formal request and verification report for 
+                                        <strong><span id="letterTeacherName"></span></strong> (Staff ID: <span id="letterStaffId">BLISS/TCH/2026/01</span>), 
+                                        who has successfully conducted verified morning and Saturday remedial teaching sessions for the current academic term.
+                                    </p>
+                                    <p>
+                                        The records submitted through the BLISS Teacher Portal confirm a total of 
+                                        <strong><span id="letterTotalSessions">0</span> verified remedial sessions</strong> completed across active term weeks. 
+                                        Following review and approval by the administration, authorization is hereby granted for the disbursement of cash compensation corresponding to the verified lessons.
+                                    </p>
+                                    <p>
+                                        Kindly verify the teacher's identification, apply the official institutional stamp below, and disburse the allocated cash payment.
+                                    </p>
+                                </div>
+
+                                <div style="margin-top: 40px; display: flex; justify-content: space-between; font-size: 14px;">
+                                    <div>
+                                        <p style="margin: 0 0 40px 0;">Prepared By (Teacher Signature): _______________________</p>
+                                        <p style="margin: 0;">Sign: ........................................................</p>
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0 0 40px 0;">Approved By (DOS / Principal): _______________________</p>
+                                        <p style="margin: 0;">Official Stamp: [ . . . . . . . . . . . . . . . . . . . ]</p>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 50px; border-top: 1px dashed #000; padding-top: 15px; font-size: 13px;">
+                                    <strong>Bursar Cash Disbursement Record:</strong>
+                                    <p style="margin: 5px 0;">Amount Paid (Cash): Ksh. ___________________ &nbsp;&nbsp;&nbsp; Date Paid: ___ / ___ / 2026</p>
+                                    <p style="margin: 5px 0;">Bursar Signature: _______________________ &nbsp;&nbsp;&nbsp; Stamp / Seal: ___________________</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: SUPPORT -->
                 <div id="tab-support" class="tab-pane hidden">
                     <div class="breadcrumb-row">
                         <h2>Support & Inquiries</h2>
@@ -792,7 +864,7 @@
                     </div>
                 </div>
 
-                <!-- Admin Dashboard Section (Hidden by default, unlocked via admin login) -->
+                <!-- Admin Dashboard Section -->
                 <div id="adminDashboardPane" class="tab-pane hidden">
                     <div class="breadcrumb-row">
                         <h2>Admin Control Panel</h2>
@@ -918,11 +990,9 @@
 
             saveData();
 
-            // Hide login, show dashboard app shell
             document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
 
-            // Populate UI Fields
             document.getElementById('sidebarTeacherName').innerText = name;
             document.getElementById('topbarWelcome').innerText = `Welcome: ${name}`;
             document.getElementById('profileNameDisplay').innerText = name;
@@ -935,6 +1005,7 @@
 
             updateDashboardMetrics();
             loadWeekData();
+            updateBursarLetterDetails();
         }
 
         function switchTab(tabId, element) {
@@ -947,6 +1018,9 @@
             }
             if (tabId === 'dashboard') {
                 updateDashboardMetrics();
+            }
+            if (tabId === 'bursarLetter') {
+                updateBursarLetterDetails();
             }
         }
 
@@ -970,6 +1044,38 @@
 
             document.getElementById('metricTotalClaimed').innerText = totalClaimedCount;
             document.getElementById('metricApproved').innerText = `${approvedCount} / 9 Weeks`;
+        }
+
+        function updateBursarLetterDetails() {
+            if (!currentActiveTeacher || !teacherDatabase[currentActiveTeacher]) return;
+            let tObj = teacherDatabase[currentActiveTeacher];
+            let totalClaimedCount = 0;
+
+            for (let w = 1; w <= 9; w++) {
+                let wData = tObj.weeks[w];
+                Object.keys(wData.morning).forEach(d => {
+                    if (wData.morning[d].claimed) totalClaimedCount++;
+                });
+                totalClaimedCount += (wData.sat.claimedCount || 0);
+            }
+
+            document.getElementById('letterTeacherName').innerText = currentActiveTeacher;
+            document.getElementById('letterStaffId').innerText = `BLISS/TCH/2026/${currentActiveTeacher.length * 7}`;
+            document.getElementById('letterTotalSessions').innerText = totalClaimedCount;
+            document.getElementById('letterDateSpan').innerText = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function downloadBursarLetterPDF() {
+            const element = document.getElementById('printableLetterContainer');
+            const opt = {
+                margin:       10,
+                filename:     `BLISS_Remedial_Cash_Letter_${currentActiveTeacher.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save();
         }
 
         function loadWeekData() {
@@ -1025,6 +1131,7 @@
             };
             saveData();
             updateDashboardMetrics();
+            updateBursarLetterDetails();
         }
 
         function updateSaturdayData() {
@@ -1051,6 +1158,7 @@
             }
             saveData();
             updateDashboardMetrics();
+            updateBursarLetterDetails();
         }
 
         function sendFeedback() {
@@ -1087,11 +1195,9 @@
             document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
 
-            // Switch to Admin Dashboard view
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
             document.getElementById('adminDashboardPane').classList.remove('hidden');
 
-            // Hide sidebar items not relevant to admin view or configure display
             document.querySelector('.sidebar').innerHTML = `
                 <div class="sidebar-user-box">
                     <div class="sidebar-avatar">AD</div>
