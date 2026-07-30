@@ -40,7 +40,7 @@
             border-radius: 4px;
             width: 100%;
             max-width: 480px;
-            margin: 0 auto;
+            margin: 0 auto 25px auto;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             overflow: hidden;
         }
@@ -56,6 +56,7 @@
             margin: 0 0 15px 0;
             font-size: 22px;
             font-weight: 500;
+            color: white;
         }
 
         .portal-logo-container {
@@ -70,10 +71,8 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .portal-logo-container img {
-            width: 55px;
-            height: 55px;
-            object-fit: contain;
+        .portal-logo-container svg {
+            stroke: #3b82f6;
         }
 
         .portal-body {
@@ -197,15 +196,14 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="loginContainer">
 
         <!-- Teacher Login Portal Card -->
         <div class="portal-card" id="loginSection">
             <div class="portal-header">
                 <h2>Teacher Remedial Portal</h2>
                 <div class="portal-logo-container">
-                    <!-- Placeholder institutional crest/logo graphic -->
-                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="#2563eb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 </div>
             </div>
             <div class="portal-body">
@@ -232,7 +230,33 @@
             </div>
         </div>
 
-        <!-- Teacher Dashboard Section -->
+        <!-- Admin Login Portal Card (Styled identical to teacher card header/body layout) -->
+        <div class="portal-card" id="adminPortalCard">
+            <div class="portal-header" style="background-color: #1e3d59;">
+                <h2>Administration Portal</h2>
+                <div class="portal-logo-container">
+                    <svg viewBox="0 0 24 24" width="32" height="32" stroke="#1e3d59" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+            </div>
+            <div class="portal-body">
+                <p style="color: var(--text-muted); font-size: 13px; margin-top: 0; margin-bottom: 20px;">Enter administrative security password to manage configuration, members, and auditing.</p>
+                <div class="form-row">
+                    <label for="adminPassword" style="width: 130px;">Admin Password:</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="adminPassword" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="portal-actions" style="justify-content: flex-end;">
+                    <button onclick="loginAdmin()" style="background-color: #1e3d59; color:white; border:none; padding:10px 25px; font-size:14px; font-weight:600; border-radius:4px; cursor:pointer;">Admin Login</button>
+                </div>
+                <div id="adminError" style="color: #ef4444; margin-top: 10px; font-size: 13px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Teacher Dashboard Section -->
+    <div class="container">
         <div class="card hidden" id="teacherDashboard">
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
                 <h2 id="welcomeTeacher" style="margin: 0;">Welcome</h2>
@@ -295,61 +319,48 @@
             <div id="feedbackResult" style="margin-top: 10px; font-size: 13px; color: var(--secondary);"></div>
         </div>
 
-        <!-- Admin Access Portal Card -->
-        <div class="card" id="adminPortal" style="margin-top: 30px;">
-            <h2>Administration Portal</h2>
-            <div id="adminLogin">
-                <p style="color: var(--text-muted); font-size: 14px;">Enter administrative security password to manage configuration, members, and auditing.</p>
-                <label for="adminPassword">Admin Password:</label>
-                <input type="password" id="adminPassword" placeholder="Enter password">
-                <button onclick="loginAdmin()" style="background-color: #1e3d59; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:600; margin-top:10px;">Admin Login</button>
-                <div id="adminError" style="color: #ef4444; margin-top: 10px; font-size: 13px;"></div>
+        <!-- Admin Dashboard Section -->
+        <div class="card hidden" id="adminDashboard">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                <h3 style="margin: 0;">Admin Control Panel</h3>
+                <button onclick="location.reload()" style="background-color: #64748b; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Admin Logout</button>
             </div>
 
-            <div class="hidden" id="adminDashboard">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
-                    <h3 style="margin: 0;">Admin Control Panel</h3>
-                    <button onclick="location.reload()" style="background-color: #64748b; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Admin Logout</button>
-                </div>
+            <h4>Open Weeks Configuration</h4>
+            <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
+            <button onclick="saveOpenWeeks()" style="background-color: #1e3d59; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Save Week Configurations</button>
+            <div id="adminSaveMsg" style="color: var(--secondary); margin-top: 5px; font-size: 13px;"></div>
 
-                <h4>Open Weeks Configuration</h4>
-                <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
-                <button onclick="saveOpenWeeks()" style="background-color: #1e3d59; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer;">Save Week Configurations</button>
-                <div id="adminSaveMsg" style="color: var(--secondary); margin-top: 5px; font-size: 13px;"></div>
+            <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
 
-                <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
-
-                <h4>Member Management</h4>
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <input type="text" id="newMemberName" placeholder="Enter Full Name (e.g. JOHN DOE)" style="margin-bottom:0;">
-                    <button onclick="addNewMember()" style="background-color: var(--secondary); color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer; white-space: nowrap;">Add Teacher</button>
-                </div>
-                <div id="memberAddMsg" style="color: var(--secondary); font-size: 13px; margin-bottom: 15px;"></div>
-
-                <label for="removeMemberSelect">Remove Existing Member:</label>
-                <select id="removeMemberSelect" style="margin-bottom: 10px;"></select>
-                <button onclick="removeMember()" class="btn-danger">Remove Selected Member</button>
-                <div id="memberRemoveMsg" style="color: #ef4444; font-size: 13px; margin-top: 5px;"></div>
-
-                <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
-
-                <h4>Teacher Feedbacks & Inquiries</h4>
-                <div id="adminFeedbackContent"></div>
-
-                <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
-
-                <h4>Audit & Claim Status Overview</h4>
-                <div id="auditContent"></div>
-
-                <br>
-                <button onclick="clearAllRemedials()" class="btn-danger">Clear All System Records</button>
+            <h4>Member Management</h4>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="text" id="newMemberName" placeholder="Enter Full Name (e.g. JOHN DOE)" style="margin-bottom:0;">
+                <button onclick="addNewMember()" style="background-color: var(--secondary); color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer; white-space: nowrap;">Add Teacher</button>
             </div>
+            <div id="memberAddMsg" style="color: var(--secondary); font-size: 13px; margin-bottom: 15px;"></div>
+
+            <label for="removeMemberSelect">Remove Existing Member:</label>
+            <select id="removeMemberSelect" style="margin-bottom: 10px;"></select>
+            <button onclick="removeMember()" class="btn-danger">Remove Selected Member</button>
+            <div id="memberRemoveMsg" style="color: #ef4444; font-size: 13px; margin-top: 5px;"></div>
+
+            <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
+
+            <h4>Teacher Feedbacks & Inquiries</h4>
+            <div id="adminFeedbackContent"></div>
+
+            <hr style="margin: 25px 0; border:0; border-top: 1px solid var(--border);">
+
+            <h4>Audit & Claim Status Overview</h4>
+            <div id="auditContent"></div>
+
+            <br>
+            <button onclick="clearAllRemedials()" class="btn-danger">Clear All System Records</button>
         </div>
-
     </div>
 
     <script>
-        // Initial Database Setup & LocalStorage Sync
         let teacherList = JSON.parse(localStorage.getItem('teacherList')) || [
             "TEACHER BETT",
             "ALICE WANJIKU",
@@ -403,7 +414,6 @@
 
             currentActiveTeacher = name;
 
-            // Initialize teacher structure if not exists
             if (!teacherDatabase[name]) {
                 teacherDatabase[name] = {
                     phone: phone,
@@ -431,7 +441,7 @@
 
             saveData();
 
-            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('teacherDashboard').classList.remove('hidden');
             document.getElementById('welcomeTeacher').innerText = `Welcome, ${name}`;
             loadWeekData();
@@ -441,17 +451,13 @@
             const weekNum = document.getElementById('weekSelect').value;
             const tData = teacherDatabase[currentActiveTeacher].weeks[weekNum];
 
-            // Check config lock
             const lockedMsg = document.getElementById('weekLockedMsg');
-            const contentArea = document.getElementById('weekContentArea');
-
             if (!openWeeksConfig[weekNum]) {
                 lockedMsg.classList.remove('hidden');
             } else {
                 lockedMsg.classList.add('hidden');
             }
 
-            // Render morning checkboxes
             const morningContainer = document.getElementById('morningSessionsContainer');
             let mHtml = "";
             const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -469,7 +475,6 @@
             });
             morningContainer.innerHTML = mHtml;
 
-            // Render Saturday data
             document.getElementById('satClaimed').checked = tData.sat.claimedCount > 0;
             document.getElementById('satCount').value = tData.sat.claimedCount || 1;
             document.getElementById('satSubjects').value = tData.sat.subjects ? tData.sat.subjects.join(', ') : '';
@@ -551,7 +556,7 @@
                 return;
             }
 
-            document.getElementById('adminLogin').classList.add('hidden');
+            document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('adminDashboard').classList.remove('hidden');
             renderAdminCheckboxes();
             renderAdminMembers();
@@ -644,7 +649,7 @@
             }
 
             let html = "";
-            globalFeedbackList.forEach((fb, index) => {
+            globalFeedbackList.forEach((fb) => {
                 html += `
                     <div style="background:#f8fafc; border:1px solid #cbd5e1; padding:15px; border-radius:8px; margin-top:10px;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
