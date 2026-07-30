@@ -1307,16 +1307,19 @@
         function renderSaturdayRows(sessionsArray) {
             const container = document.getElementById('saturdayRowsContainer');
             let html = "";
+            const sessionLabels = ["First session", "Second session", "Third session", "Fourth session"];
 
             sessionsArray.forEach((sess, index) => {
                 let tempSelect = document.createElement('select');
                 tempSelect.innerHTML = classOptionsHTML;
                 if (sess.classVal) tempSelect.value = sess.classVal;
 
+                let labelName = sessionLabels[index] || `Session #${index + 1}`;
+
                 html += `
                     <div style="background:#ffffff; border:1px solid #cbd5e1; padding:15px; border-radius:6px; margin-bottom:12px;">
                         <div style="margin-bottom:8px; font-weight:600; color:var(--text-main);">
-                            Saturday Class Occurrence #${index + 1}
+                            Saturday ${labelName}
                         </div>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
                             <div>
@@ -1616,6 +1619,7 @@
             }
 
             let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            const sessionLabelsWords = ["first session", "second session", "third session", "fourth session"];
 
             let html = "";
             teachers.forEach(tName => {
@@ -1653,7 +1657,8 @@
                     let satSummaries = [];
                     let sessionsList = wData.satSessions || [];
                     sessionsList.forEach((sess, sIdx) => {
-                        satSummaries.push(`[Occurrence #${sIdx+1}: ${sess.classVal || 'No Class'} (Subj: ${sess.subject || 'None'})]`);
+                        let labelWord = sessionLabelsWords[sIdx] || `session ${sIdx + 1}`;
+                        satSummaries.push(`[${labelWord}: ${sess.classVal || 'No Class'} (Subj: ${sess.subject || 'None'})]`);
                     });
                     let satSummaryStr = satSummaries.length > 0 ? satSummaries.join(' | ') : "None";
 
