@@ -814,7 +814,7 @@
                                     <p>
                                         This letter serves as an official formal request and verification report for 
                                         <strong><span id="letterTeacherName"></span></strong> (Staff ID: <span id="letterStaffId">BLISS/TCH/2026/01</span>), 
-                                        who has successfully conducted verified morning and Saturday remedial teaching sessions for the current academic term.
+                                        who has successfully conducted verified morning and Saturday remedial teaching sessions for active term weeks.
                                     </p>
                                     <p>
                                         The records submitted through the BLISS Teacher Portal confirm a total of 
@@ -929,7 +929,7 @@
         ];
 
         let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig')) || {
-            1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true
+            1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false
         };
 
         let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase')) || {};
@@ -1040,8 +1040,11 @@
             let tObj = teacherDatabase[currentActiveTeacher];
             let totalClaimedCount = 0;
             let approvedCount = 0;
+            let activeWeeksCount = 0;
 
             for (let w = 1; w <= 9; w++) {
+                if (!openWeeksConfig[w]) continue;
+                activeWeeksCount++;
                 let wData = tObj.weeks[w];
                 Object.keys(wData.morning).forEach(d => {
                     if (wData.morning[d].claimed) totalClaimedCount++;
@@ -1054,7 +1057,7 @@
             }
 
             document.getElementById('metricTotalClaimed').innerText = totalClaimedCount;
-            document.getElementById('metricApproved').innerText = `${approvedCount} / 9 Weeks`;
+            document.getElementById('metricApproved').innerText = `${approvedCount} / ${activeWeeksCount} Weeks`;
         }
 
         function updateBursarLetterDetails() {
@@ -1063,6 +1066,7 @@
             let totalClaimedCount = 0;
 
             for (let w = 1; w <= 9; w++) {
+                if (!openWeeksConfig[w]) continue;
                 let wData = tObj.weeks[w];
                 Object.keys(wData.morning).forEach(d => {
                     if (wData.morning[d].claimed) totalClaimedCount++;
@@ -1176,7 +1180,11 @@
             if (!currentActiveTeacher) return;
             const weekNum = document.getElementById('weekSelect').value;
             
-            // Mark status as submitted/pending review for admin audit
+            if (!openWeeksConfig[weekNum]) {
+                alert("Cannot submit claims for a week that is not active/set by the administration.");
+                return;
+            }
+
             teacherDatabase[currentActiveTeacher].weeks[weekNum].status = "pending review";
             saveData();
             
@@ -1332,7 +1340,7 @@
             let html = "";
             globalFeedbackList.forEach((fb) => {
                 html += `
-                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-radius:8px; margin-top:10px;">
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-rdius:8px; margin-top:10px;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
                             <strong>${fb.teacher}</strong>
                             <span style="font-size:12px; color:#6b7280;">${fb.date}</span>
@@ -1363,6 +1371,8 @@
                 `;
 
                 for (let w = 1; w <= 9; w++) {
+                    if (!openWeeksConfig[w]) continue; // Skip inactive weeks from reflecting in admin audit view
+
                     let wData = tObj.weeks[w];
                     let morningSummary = [];
                     Object.keys(wData.morning).forEach(d => {
