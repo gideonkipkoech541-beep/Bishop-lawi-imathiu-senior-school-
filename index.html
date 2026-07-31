@@ -477,6 +477,36 @@
             box-sizing: border-box;
             margin: 0 auto;
         }
+
+        /* Enhanced Admin Panel */
+        .admin-shell { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:20px; }
+        .admin-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+        .admin-stat .label { color:var(--text-muted); font-size:12px; text-transform:uppercase; font-weight:700; letter-spacing:.04em; }
+        .admin-stat .value { font-size:25px; font-weight:800; margin-top:5px; color:#1e3d59; }
+        .admin-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:15px; }
+        .admin-toolbar input, .admin-toolbar select { max-width:240px; margin:0; }
+        .admin-table-wrap { overflow:auto; border:1px solid var(--border); border-radius:7px; }
+        .admin-table { width:100%; border-collapse:collapse; min-width:900px; font-size:12px; background:#fff; }
+        .admin-table th { position:sticky; top:0; background:#1e3d59; color:#fff; padding:10px; text-align:left; white-space:nowrap; }
+        .admin-table td { padding:9px 10px; border-top:1px solid #e5e7eb; vertical-align:top; }
+        .admin-table tr:hover { background:#f8fafc; }
+        .status-pill { display:inline-block; padding:4px 8px; border-radius:999px; font-size:11px; font-weight:700; }
+        .status-pending { background:#fef3c7; color:#92400e; }
+        .status-reviewed { background:#dbeafe; color:#1e40af; }
+        .status-ready { background:#d1fae5; color:#065f46; }
+        .status-paid { background:#dcfce7; color:#166534; }
+        .admin-section { margin-bottom:20px; }
+        .admin-section h3 { margin-bottom:12px; }
+        .admin-actions { display:flex; flex-wrap:wrap; gap:8px; }
+        .btn-secondary-admin { background:#475569; color:#fff; border:0; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
+        .btn-outline-admin { background:#fff; color:#1e3d59; border:1px solid #94a3b8; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
+        .btn-danger-admin { background:#b91c1c; color:#fff; border:0; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
+        .admin-note { background:#eff6ff; border-left:4px solid #2563eb; padding:11px 13px; font-size:13px; color:#334155; margin-bottom:15px; }
+        .feedback-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:10px; }
+        .feedback-card.resolved { opacity:.65; }
+        .member-row { display:grid; grid-template-columns:1.4fr 1fr auto; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid #eef2f7; }
+        @media(max-width:900px){ .admin-shell{grid-template-columns:repeat(2,1fr);} .member-row{grid-template-columns:1fr;} }
+        @media(max-width:600px){ .admin-shell{grid-template-columns:1fr;} }
     </style>
 </head>
 <body>
@@ -872,53 +902,93 @@
                     </div>
                 </div>
 
-                <!-- Admin Dashboard Section -->
+                <!-- Enhanced Admin Dashboard Section -->
                 <div id="adminDashboardPane" class="tab-pane hidden">
                     <div class="breadcrumb-row">
-                        <h2>Admin Control Panel</h2>
-                        <button class="btn-danger-custom" onclick="location.reload()">Admin Logout</button>
-                    </div>
-
-                    <div class="content-card">
-                        <h3>Manage Weeks (Add / Enable / Disable)</h3>
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
-                            <input type="number" id="newWeekNumber" placeholder="Enter week number to add (e.g. 10)" min="1" style="max-width: 280px; margin-bottom: 0;">
-                            <button class="btn-success" onclick="addNewWeek()">Add New Week</button>
+                        <div>
+                            <h2>Admin Control Panel</h2>
+                            <div class="breadcrumb-path">Administration > Overview & Management</div>
                         </div>
-                        <div id="adminWeekAddMsg" style="color: var(--success); font-size: 13px; margin-bottom: 15px;"></div>
-
-                        <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
-                        <button class="btn-primary-custom" onclick="saveOpenWeeks()">Save Week Configurations</button>
-                        <div id="adminSaveMsg" style="color: var(--success); margin-top: 5px; font-size: 13px;"></div>
-                    </div>
-
-                    <div class="content-card">
-                        <h3>Member Management</h3>
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <input type="text" id="newMemberName" placeholder="Enter Full Name (e.g. JOHN DOE)" style="margin-bottom:0;">
-                            <button class="btn-success" onclick="addNewMember()">Add Teacher</button>
+                        <div class="admin-actions">
+                            <button class="btn-outline-admin" onclick="exportSystemBackup()">Export Backup</button>
+                            <button class="btn-outline-admin" onclick="document.getElementById('restoreFileInput').click()">Restore Backup</button>
+                            <input type="file" id="restoreFileInput" accept="application/json" style="display:none" onchange="restoreSystemBackup(event)">
+                            <button class="btn-danger-admin" onclick="adminLogout()">Logout</button>
                         </div>
-                        <div id="memberAddMsg" style="color: var(--success); font-size: 13px; margin-bottom: 15px;"></div>
-
-                        <label for="removeMemberSelect" style="display:block; font-weight:600; font-size:13px; margin-bottom:5px;">Remove Existing Member:</label>
-                        <select id="removeMemberSelect" style="margin-bottom: 10px;"></select>
-                        <button class="btn-danger-custom" onclick="removeMember()">Remove Selected Member</button>
-                        <div id="memberRemoveMsg" style="color: #dc2626; font-size: 13px; margin-top: 5px;"></div>
                     </div>
 
-                    <div class="content-card">
-                        <h3>Teacher Feedbacks & Inquiries</h3>
+                    <div class="admin-note"><strong>Administrator workspace:</strong> Manage claim weeks, teachers, payment status, inquiries and system records from one place. Changes are stored locally in this browser.</div>
+
+                    <div class="admin-shell">
+                        <div class="admin-stat"><div class="label">Registered Teachers</div><div class="value" id="adminStatTeachers">0</div></div>
+                        <div class="admin-stat"><div class="label">Active Weeks</div><div class="value" id="adminStatWeeks">0</div></div>
+                        <div class="admin-stat"><div class="label">Pending Reviews</div><div class="value" id="adminStatPending">0</div></div>
+                        <div class="admin-stat"><div class="label">Total Sessions</div><div class="value" id="adminStatSessions">0</div></div>
+                    </div>
+
+                    <div class="content-card admin-section">
+                        <h3>Week Management</h3>
+                        <div class="admin-toolbar">
+                            <input type="number" id="newWeekNumber" placeholder="Week number e.g. 10" min="1">
+                            <button class="btn-success" onclick="addNewWeek()">Add & Enable Week</button>
+                            <button class="btn-outline-admin" onclick="enableAllWeeks()">Enable All</button>
+                            <button class="btn-outline-admin" onclick="disableAllWeeks()">Disable All</button>
+                        </div>
+                        <div id="adminWeekAddMsg" style="color:var(--success);font-size:13px;margin-bottom:10px;"></div>
+                        <div id="adminWeeksCheckboxes"></div>
+                        <button class="btn-primary-custom" onclick="saveOpenWeeks()">Save Week Configuration</button>
+                        <div id="adminSaveMsg" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+                    </div>
+
+                    <div class="content-card admin-section">
+                        <h3>Teacher / Member Management</h3>
+                        <div class="admin-toolbar">
+                            <input type="text" id="newMemberName" placeholder="Full teacher name">
+                            <input type="text" id="newMemberPhone" placeholder="Phone / password">
+                            <button class="btn-success" onclick="addNewMemberEnhanced()">Add Teacher</button>
+                        </div>
+                        <div id="memberAddMsg" style="color:var(--success);font-size:13px;margin-bottom:10px;"></div>
+                        <div id="adminMembersList"></div>
+                    </div>
+
+                    <div class="content-card admin-section">
+                        <h3>Teacher Claims & Audit</h3>
+                        <div class="admin-toolbar">
+                            <input type="search" id="auditSearch" placeholder="Search teacher or phone" oninput="renderAdminAuditEnhanced()">
+                            <select id="auditWeekFilter" onchange="renderAdminAuditEnhanced()"><option value="all">All Weeks</option></select>
+                            <select id="auditStatusFilter" onchange="renderAdminAuditEnhanced()">
+                                <option value="all">All Statuses</option>
+                                <option value="pending review">Pending Review</option>
+                                <option value="reviewed">Reviewed</option>
+                                <option value="funds ready to be claim">Funds Ready</option>
+                                <option value="funds claimed and signed">Funds Claimed</option>
+                            </select>
+                            <button class="btn-secondary-admin" onclick="exportClaimsCSV()">Export Claims CSV</button>
+                        </div>
+                        <div id="auditContent"></div>
+                    </div>
+
+                    <div class="content-card admin-section">
+                        <h3>Teacher Feedback & Inquiries</h3>
+                        <div class="admin-toolbar">
+                            <input type="search" id="feedbackSearch" placeholder="Search inquiries" oninput="renderAdminFeedbackEnhanced()">
+                            <select id="feedbackFilter" onchange="renderAdminFeedbackEnhanced()">
+                                <option value="all">All Inquiries</option><option value="open">Open</option><option value="resolved">Resolved</option>
+                            </select>
+                        </div>
                         <div id="adminFeedbackContent"></div>
                     </div>
 
-                    <div class="content-card">
-                        <h3>Audit & Claim Status Overview</h3>
-                        <div id="auditContent" style="overflow-x: auto;"></div>
-                        <br>
-                        <button class="btn-danger-custom" onclick="clearAllRemedials()">Clear All System Records</button>
+                    <div class="content-card admin-section">
+                        <h3>System Tools & Audit Safety</h3>
+                        <div class="admin-actions">
+                            <button class="btn-outline-admin" onclick="exportSystemBackup()">Download Full JSON Backup</button>
+                            <button class="btn-outline-admin" onclick="refreshAdminPanel()">Refresh Dashboard</button>
+                            <button class="btn-danger-admin" onclick="clearAllRemedialsEnhanced()">Clear Claim Records</button>
+                        </div>
+                        <p style="font-size:12px;color:#64748b;margin-bottom:0;">A backup is recommended before clearing records. Teacher names and week configuration are preserved when claim records are cleared.</p>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -1475,276 +1545,156 @@
         function loginAdmin() {
             const pass = document.getElementById('adminPassword').value.trim();
             const errDiv = document.getElementById('adminError');
-
             if (pass !== "dos123") {
                 errDiv.innerText = "Incorrect admin security password.";
                 return;
             }
-
+            errDiv.innerText = "";
             document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
-
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
             document.getElementById('adminDashboardPane').classList.remove('hidden');
-
             document.querySelector('.sidebar').innerHTML = `
-                <div class="sidebar-user-box">
-                    <div class="sidebar-avatar">AD</div>
-                    <div class="sidebar-user-info">
-                        <p class="name">ADMINISTRATOR</p>
-                        <p class="status">? System DOS</p>
-                    </div>
-                </div>
+                <div class="sidebar-user-box"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><p class="name">ADMINISTRATOR</p><p class="status">● System DOS</p></div></div>
                 <p class="sidebar-nav-title">Admin Control</p>
-                <a class="nav-item active" onclick="location.reload()">
-                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    Logout / Exit
-                </a>
-            `;
+                <a class="nav-item active" onclick="refreshAdminPanel()"><span>▣</span> Dashboard</a>
+                <a class="nav-item" onclick="document.getElementById('auditSearch').focus();document.getElementById('auditContent').scrollIntoView({behavior:'smooth'})"><span>✓</span> Claims Audit</a>
+                <a class="nav-item" onclick="document.getElementById('adminMembersList').scrollIntoView({behavior:'smooth'})"><span>♙</span> Teachers</a>
+                <a class="nav-item" onclick="document.getElementById('adminFeedbackContent').scrollIntoView({behavior:'smooth'})"><span>✉</span> Inquiries</a>
+                <p class="sidebar-nav-title" style="margin-top:auto;">Session & System</p>
+                <a class="nav-item" onclick="exportSystemBackup()"><span>⇩</span> Backup Data</a>
+                <a class="nav-item" onclick="adminLogout()"><span>⇥</span> Logout</a>`;
+            refreshAdminPanel();
+        }
 
+        function adminLogout(){ location.reload(); }
+
+        function refreshAdminPanel(){
             renderAdminCheckboxes();
-            renderAdminMembers();
-            renderAdminFeedback();
-            renderAdminAudit();
+            renderAdminMembersEnhanced();
+            populateAuditWeekFilter();
+            renderAdminAuditEnhanced();
+            renderAdminFeedbackEnhanced();
+            updateAdminStats();
+        }
+
+        function updateAdminStats(){
+            let teachers = teacherList.length, activeWeeks = Object.values(openWeeksConfig).filter(Boolean).length;
+            let pending=0, sessions=0;
+            Object.values(teacherDatabase).forEach(t=>Object.values(t.weeks||{}).forEach(w=>{
+                if(w.status==='pending review') pending++;
+                Object.values(w.morning||{}).forEach(d=>{if(d.claimed)sessions++;});
+                sessions += (w.satSessions||[]).length;
+            }));
+            document.getElementById('adminStatTeachers').innerText=teachers;
+            document.getElementById('adminStatWeeks').innerText=activeWeeks;
+            document.getElementById('adminStatPending').innerText=pending;
+            document.getElementById('adminStatSessions').innerText=sessions;
         }
 
         function addNewWeek() {
-            const input = document.getElementById('newWeekNumber');
-            const msgDiv = document.getElementById('adminWeekAddMsg');
-            const weekNum = parseInt(input.value.trim());
+            const input=document.getElementById('newWeekNumber'), msg=document.getElementById('adminWeekAddMsg');
+            const weekNum=parseInt(input.value,10);
+            if(!weekNum||weekNum<1){alert('Please enter a valid positive week number.');return;}
+            if(openWeeksConfig[weekNum]!==undefined){alert(`Week ${weekNum} already exists.`);return;}
+            openWeeksConfig[weekNum]=true; saveData(); input.value='';
+            msg.innerText=`Week ${weekNum} added and enabled.`; refreshAdminPanel();
+        }
+        function enableAllWeeks(){Object.keys(openWeeksConfig).forEach(w=>openWeeksConfig[w]=true);saveData();refreshAdminPanel();}
+        function disableAllWeeks(){if(!confirm('Disable all weeks? Teachers will not be able to submit claims until a week is enabled.'))return;Object.keys(openWeeksConfig).forEach(w=>openWeeksConfig[w]=false);saveData();refreshAdminPanel();}
 
-            if (!weekNum || weekNum < 1) {
-                alert("Please enter a valid positive week number.");
-                return;
-            }
-
-            if (openWeeksConfig[weekNum] !== undefined) {
-                alert(`Week ${weekNum} already exists in the system configuration.`);
-                return;
-            }
-
-            openWeeksConfig[weekNum] = true;
-            saveData();
-
-            input.value = "";
-            msgDiv.innerText = `Successfully added and enabled Week ${weekNum}!`;
-            renderAdminCheckboxes();
-            renderAdminAudit();
+        function renderAdminCheckboxes(){
+            const c=document.getElementById('adminWeeksCheckboxes'); if(!c)return;
+            let weeks=Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b);
+            c.innerHTML='<p style="margin-top:0;font-weight:600;">Active claim weeks:</p>'+weeks.map(w=>`<label style="display:inline-block;margin:0 18px 10px 0;font-weight:normal;"><input type="checkbox" id="admin_week_${w}" ${openWeeksConfig[w]?'checked':''} style="width:auto;margin-right:5px;"> Week ${w}</label>`).join('');
+        }
+        function saveOpenWeeks(){
+            Object.keys(openWeeksConfig).forEach(w=>{let e=document.getElementById(`admin_week_${w}`);if(e)openWeeksConfig[w]=e.checked;});
+            saveData(); document.getElementById('adminSaveMsg').innerText='Week configuration saved successfully.'; refreshAdminPanel();
         }
 
-        function renderAdminCheckboxes() {
-            const container = document.getElementById('adminWeeksCheckboxes');
-            let html = "<p style='margin-top:0; font-weight:600;'>Select active weeks available for teacher claims:</p>";
-            
-            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
-            sortedWeeks.forEach(w => {
-                let checked = openWeeksConfig[w] ? "checked" : "";
-                html += `
-                    <label style="display:inline-block; margin-right:15px; margin-bottom:10px; font-weight:normal;">
-                        <input type="checkbox" id="admin_week_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
-                    </label>
-                `;
-            });
-            container.innerHTML = html;
+        function addNewMemberEnhanced(){
+            const n=document.getElementById('newMemberName').value.trim().toUpperCase();
+            const phone=document.getElementById('newMemberPhone').value.trim();
+            if(!n){alert('Enter the teacher full name.');return;}
+            if(teacherList.includes(n)){alert('Teacher already exists.');return;}
+            teacherList.push(n);
+            teacherDatabase[n]={phone:phone||'',weeks:{}};
+            saveData(); document.getElementById('newMemberName').value='';document.getElementById('newMemberPhone').value='';
+            document.getElementById('memberAddMsg').innerText=`${n} added successfully.`; refreshAdminPanel();
+        }
+        function renderAdminMembersEnhanced(){
+            const c=document.getElementById('adminMembersList'); if(!c)return;
+            if(!teacherList.length){c.innerHTML='<p style="color:#64748b">No teachers registered.</p>';return;}
+            c.innerHTML=teacherList.slice().sort().map(name=>{
+                const t=teacherDatabase[name]||{}; const phone=t.phone||'Not set';
+                return `<div class="member-row"><div><strong>${escapeHTML(name)}</strong><div style="font-size:11px;color:#64748b">${Object.keys(t.weeks||{}).length} week records</div></div><div><span style="font-size:12px">Password/Phone: ${escapeHTML(phone)}</span></div><div class="admin-actions"><button class="btn-outline-admin" onclick="resetTeacherPassword('${escapeJS(name)}')">Reset Password</button><button class="btn-danger-admin" onclick="removeMemberEnhanced('${escapeJS(name)}')">Remove</button></div></div>`;
+            }).join('');
+        }
+        function resetTeacherPassword(name){
+            const p=prompt(`Enter new password/phone for ${name}:`); if(p===null)return; if(!p.trim()){alert('Password cannot be blank.');return;}
+            if(!teacherDatabase[name])teacherDatabase[name]={phone:'',weeks:{}}; teacherDatabase[name].phone=p.trim(); saveData(); renderAdminMembersEnhanced(); alert(`Credentials updated for ${name}.`);
+        }
+        function removeMemberEnhanced(name){
+            if(name==='TEACHER BETT' && teacherList.length===1){alert('At least one teacher account must remain.');return;}
+            if(!confirm(`Remove ${name} and all of this teacher's claim records? This cannot be undone.`))return;
+            teacherList=teacherList.filter(t=>t!==name); delete teacherDatabase[name]; saveData(); refreshAdminPanel();
         }
 
-        function saveOpenWeeks() {
-            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
-            sortedWeeks.forEach(w => {
-                let el = document.getElementById(`admin_week_${w}`);
-                if (el) {
-                    openWeeksConfig[w] = el.checked;
-                }
-            });
-            saveData();
-            document.getElementById('adminSaveMsg').innerText = "Open weeks configuration updated successfully.";
-            renderAdminAudit();
+        function populateAuditWeekFilter(){
+            const s=document.getElementById('auditWeekFilter'); if(!s)return; const old=s.value;
+            s.innerHTML='<option value="all">All Weeks</option>'+Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b).map(w=>`<option value="${w}">Week ${w}</option>`).join('');
+            if([...s.options].some(o=>o.value===old))s.value=old;
         }
-
-        function renderAdminMembers() {
-            const select = document.getElementById('removeMemberSelect');
-            select.innerHTML = '<option value="">-- Select Member to Remove --</option>';
-            teacherList.sort().forEach(name => {
-                let opt = document.createElement('option');
-                opt.value = name;
-                opt.innerText = name;
-                select.appendChild(opt);
-            });
-        }
-
-        function addNewMember() {
-            const nameInput = document.getElementById('newMemberName');
-            const msgDiv = document.getElementById('memberAddMsg');
-            const name = nameInput.value.trim().toUpperCase();
-
-            if (!name) {
-                alert("Please enter a valid member name.");
-                return;
-            }
-
-            if (teacherList.includes(name)) {
-                alert("Teacher already exists in the list.");
-                return;
-            }
-
-            teacherList.push(name);
-            saveData();
-            nameInput.value = '';
-            msgDiv.innerText = `Successfully added ${name} to the system.`;
-            renderAdminMembers();
-        }
-
-        function removeMember() {
-            const select = document.getElementById('removeMemberSelect');
-            const msgDiv = document.getElementById('memberRemoveMsg');
-            const name = select.value;
-
-            if (!name) {
-                alert("Please select a member to remove.");
-                return;
-            }
-
-            if (confirm(`Are you sure you want to remove ${name}?`)) {
-                teacherList = teacherList.filter(t => t !== name);
-                delete teacherDatabase[name];
-                saveData();
-                msgDiv.innerText = `Successfully removed ${name}.`;
-                renderAdminMembers();
-            }
-        }
-
-        function renderAdminFeedback() {
-            const container = document.getElementById('adminFeedbackContent');
-            if (globalFeedbackList.length === 0) {
-                container.innerHTML = "<p style='color:#6b7280;'>No feedback or inquiries logged yet.</p>";
-                return;
-            }
-
-            let html = "";
-            globalFeedbackList.forEach((fb) => {
-                html += `
-                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-radius:8px; margin-top:10px;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                            <strong>${fb.teacher}</strong>
-                            <span style="font-size:12px; color:#6b7280;">${fb.date}</span>
-                        </div>
-                        <div style="font-size:13px; color:#d97706; font-weight:600; margin-bottom:5px;">Category: ${fb.category}</div>
-                        <p style="margin:0; font-size:14px;">${fb.message}</p>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function renderAdminAudit() {
-            const container = document.getElementById('auditContent');
-            let teachers = Object.keys(teacherDatabase);
-
-            if (teachers.length === 0) {
-                container.innerHTML = "<p style='color:#6b7280;'>No registered teacher claim data available for audit.</p>";
-                return;
-            }
-
-            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
-            const sessionLabelsWords = ["1st", "2nd", "3rd", "4th"];
-
-            let html = `
-                <table style="width:100%; border-collapse:collapse; font-size:13px; background:#fff;">
-                    <thead>
-                        <tr style="background-color:#1e3d59; color:white; text-align:left;">
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Teacher Name</th>
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Phone</th>
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Week</th>
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Morning Sessions Claimed</th>
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Saturday Sessions Claimed</th>
-                            <th style="padding:10px; border:1px solid #cbd5e1;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            teachers.forEach(tName => {
-                let tObj = teacherDatabase[tName];
-                sortedWeeks.forEach(w => {
-                    if (!openWeeksConfig[w]) return;
-
-                    if (!tObj.weeks[w]) {
-                        tObj.weeks[w] = {
-                            status: "pending review",
-                            morning: {
-                                "Monday": { claimed: false, classVal: "", subject: "" },
-                                "Tuesday": { claimed: false, classVal: "", subject: "" },
-                                "Wednesday": { claimed: false, classVal: "", subject: "" },
-                                "Thursday": { claimed: false, classVal: "", subject: "" },
-                                "Friday": { claimed: false, classVal: "", subject: "" }
-                            },
-                            satSessions: []
-                        };
-                    }
-
-                    let wData = tObj.weeks[w];
-                    let morningSummary = [];
-                    Object.keys(wData.morning).forEach(d => {
-                        if (wData.morning[d].claimed) {
-                            morningSummary.push(`${d.substring(0,3)}: ${wData.morning[d].classVal || 'N/A'} (${wData.morning[d].subject || 'N/A'})`);
-                        }
-                    });
-
-                    let satSummaries = [];
-                    let sessionsList = wData.satSessions || [];
-                    sessionsList.forEach((sess, sIdx) => {
-                        let labelWord = sessionLabelsWords[sIdx] || `${sIdx + 1}th`;
-                        satSummaries.push(`${labelWord}: ${sess.classVal || 'N/A'} (${sess.subject || 'N/A'})`);
-                    });
-
-                    let morningStr = morningSummary.length > 0 ? morningSummary.join('<br>') : '<span style="color:#9ca3af;">None</span>';
-                    let satStr = satSummaries.length > 0 ? satSummaries.join('<br>') : '<span style="color:#9ca3af;">None</span>';
-
-                    html += `
-                        <tr style="border-bottom:1px solid #e2e8f0;">
-                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">${tName}</td>
-                            <td style="padding:10px; border:1px solid #e2e8f0;">${tObj.phone}</td>
-                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">Week ${w}</td>
-                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${morningStr}</td>
-                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${satStr}</td>
-                            <td style="padding:10px; border:1px solid #e2e8f0;">
-                                <select onchange="adminUpdateStatus('${tName}', ${w}, this.value)" style="padding:6px; font-size:12px; width:100%; box-sizing:border-box;">
-                                    <option value="pending review" ${wData.status === 'pending review' ? 'selected' : ''}>pending review</option>
-                                    <option value="reviewed" ${wData.status === 'reviewed' ? 'selected' : ''}>reviewed</option>
-                                    <option value="funds ready to be claim" ${wData.status === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
-                                    <option value="funds claimed and signed" ${wData.status === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
-                                </select>
-                            </td>
-                        </tr>
-                    `;
+        function statusClass(status){if(status==='pending review')return' status-pending';if(status==='reviewed')return' status-reviewed';if(status==='funds ready to be claim')return' status-ready';return' status-paid';}
+        function renderAdminAuditEnhanced(){
+            const c=document.getElementById('auditContent'); if(!c)return;
+            const q=(document.getElementById('auditSearch')?.value||'').toLowerCase(); const wf=document.getElementById('auditWeekFilter')?.value||'all'; const sf=document.getElementById('auditStatusFilter')?.value||'all';
+            let rows=[];
+            Object.keys(teacherDatabase).forEach(name=>{
+                const t=teacherDatabase[name]||{}; Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b).forEach(w=>{
+                    if(wf!=='all'&&String(w)!==String(wf))return;
+                    const d=(t.weeks||{})[w]||{status:'pending review',morning:{},satSessions:[]}; const status=d.status||'pending review';
+                    if(sf!=='all'&&status!==sf)return;
+                    if(q&&!(`${name} ${t.phone||''}`.toLowerCase().includes(q)))return;
+                    let morning=[], sat=[]; Object.keys(d.morning||{}).forEach(day=>{const x=d.morning[day];if(x.claimed)morning.push(`${day.slice(0,3)}: ${escapeHTML(x.classVal||'N/A')} (${escapeHTML(x.subject||'N/A')})`)}); (d.satSessions||[]).forEach((x,i)=>sat.push(`${i+1}: ${escapeHTML(x.classVal||'N/A')} (${escapeHTML(x.subject||'N/A')})`));
+                    rows.push(`<tr><td><strong>${escapeHTML(name)}</strong><br><span style="font-size:11px;color:#64748b">${escapeHTML(t.phone||'No phone')}</span></td><td><strong>Week ${w}</strong></td><td>${morning.length?morning.join('<br>'):'<span style="color:#94a3b8">None</span>'}</td><td>${sat.length?sat.join('<br>'):'<span style="color:#94a3b8">None</span>'}</td><td><select onchange="adminUpdateStatus('${escapeJS(name)}',${w},this.value);updateAdminStats()"><option ${status==='pending review'?'selected':''}>pending review</option><option ${status==='reviewed'?'selected':''}>reviewed</option><option ${status==='funds ready to be claim'?'selected':''}>funds ready to be claim</option><option ${status==='funds claimed and signed'?'selected':''}>funds claimed and signed</option></select><div class="status-pill${statusClass(status)}" style="margin-top:5px">${escapeHTML(status)}</div></td></tr>`);
                 });
             });
-
-            html += `
-                    </tbody>
-                </table>
-            `;
-            container.innerHTML = html;
+            if(!rows.length){c.innerHTML='<p style="color:#64748b">No claim records match the selected filters.</p>';return;}
+            c.innerHTML=`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Teacher</th><th>Week</th><th>Morning Sessions</th><th>Saturday Sessions</th><th>Status</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
         }
+        function adminUpdateStatus(teacherName,weekNum,newStatus){if(teacherDatabase[teacherName]?.weeks[weekNum]){teacherDatabase[teacherName].weeks[weekNum].status=newStatus;saveData();}}
 
-        function adminUpdateStatus(teacherName, weekNum, newStatus) {
-            if (teacherDatabase[teacherName] && teacherDatabase[teacherName].weeks[weekNum]) {
-                teacherDatabase[teacherName].weeks[weekNum].status = newStatus;
-                saveData();
-            }
+        function renderAdminFeedbackEnhanced(){
+            const c=document.getElementById('adminFeedbackContent'); if(!c)return; const q=(document.getElementById('feedbackSearch')?.value||'').toLowerCase(); const f=document.getElementById('feedbackFilter')?.value||'all';
+            let list=globalFeedbackList.map((x,i)=>({...x,index:i,resolved:!!x.resolved})).filter(x=>{const hay=`${x.teacher} ${x.category} ${x.message}`.toLowerCase();return(!q||hay.includes(q))&&(f==='all'||(f==='resolved')===x.resolved)});
+            if(!list.length){c.innerHTML='<p style="color:#64748b">No inquiries match the selected filter.</p>';return;}
+            c.innerHTML=list.slice().reverse().map(fb=>`<div class="feedback-card ${fb.resolved?'resolved':''}"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${escapeHTML(fb.teacher)}</strong><span style="font-size:11px;color:#64748b">${escapeHTML(fb.date||'')}</span></div><div style="font-size:12px;color:#b45309;font-weight:700;margin:5px 0">${escapeHTML(fb.category)} · ${fb.resolved?'RESOLVED':'OPEN'}</div><p style="margin:0 0 10px;font-size:13px">${escapeHTML(fb.message)}</p><button class="btn-outline-admin" onclick="toggleFeedbackResolved(${fb.index})">${fb.resolved?'Re-open':'Mark Resolved'}</button></div>`).join('');
         }
+        function toggleFeedbackResolved(i){if(globalFeedbackList[i]){globalFeedbackList[i].resolved=!globalFeedbackList[i].resolved;saveData();renderAdminFeedbackEnhanced();updateAdminStats();}}
 
-        function clearAllRemedials() {
-            if (confirm("Are you sure you want to clear all teacher records and database information? This cannot be undone.")) {
-                localStorage.removeItem('teacherDatabase');
-                localStorage.removeItem('globalFeedbackList');
-                teacherDatabase = {};
-                globalFeedbackList = [];
-                renderAdminAudit();
-                renderAdminFeedback();
-                alert("All records have been cleared.");
-            }
+        function exportClaimsCSV(){
+            const rows=[['Teacher','Phone','Week','Morning Sessions','Saturday Sessions','Status']];
+            Object.keys(teacherDatabase).forEach(name=>Object.keys(openWeeksConfig).forEach(w=>{const d=teacherDatabase[name]?.weeks?.[w];if(!d)return;const m=Object.keys(d.morning||{}).filter(k=>d.morning[k].claimed).map(k=>`${k}: ${d.morning[k].classVal} (${d.morning[k].subject})`).join(' | ');const sat=(d.satSessions||[]).map(x=>`${x.classVal} (${x.subject})`).join(' | ');rows.push([name,teacherDatabase[name].phone||'',`Week ${w}`,m,sat,d.status||'pending review']);}));
+            downloadTextFile('BLISS_claim_audit.csv',rows.map(r=>r.map(csvEscape).join(',')).join('\n'),'text/csv');
         }
+        function exportSystemBackup(){
+            const data={exportedAt:new Date().toISOString(),teacherList,openWeeksConfig,teacherDatabase,globalFeedbackList};
+            downloadTextFile('BLISS_system_backup.json',JSON.stringify(data,null,2),'application/json');
+        }
+        function restoreSystemBackup(event){
+            const file=event.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{try{const d=JSON.parse(reader.result);if(!Array.isArray(d.teacherList)||!d.openWeeksConfig||!d.teacherDatabase){throw new Error('Invalid backup structure');} if(!confirm('Restore this backup? Current local data will be replaced.'))return;teacherList=d.teacherList;openWeeksConfig=d.openWeeksConfig;teacherDatabase=d.teacherDatabase;globalFeedbackList=Array.isArray(d.globalFeedbackList)?d.globalFeedbackList:[];saveData();refreshAdminPanel();alert('Backup restored successfully.');}catch(e){alert('Could not restore backup: '+e.message);}event.target.value='';};reader.readAsText(file);
+        }
+        function clearAllRemedialsEnhanced(){
+            const confirmation=prompt('This will delete all teacher claim records and inquiries. Type CLEAR to continue:');
+            if(confirmation!=='CLEAR'){alert('Action cancelled.');return;}
+            localStorage.removeItem('teacherDatabase');localStorage.removeItem('globalFeedbackList');teacherDatabase={};globalFeedbackList=[];saveData();refreshAdminPanel();alert('Claim records and inquiries cleared. Teacher accounts and week configuration were preserved.');
+        }
+        function downloadTextFile(filename,text,type){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
+        function csvEscape(v){v=String(v??'');return '"'+v.replace(/"/g,'""')+'"';}
+        function escapeHTML(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+        function escapeJS(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
     </script>
 </body>
 </html>
