@@ -533,7 +533,7 @@
                 <div class="form-row">
                     <label for="teacherPhone">Password:</label>
                     <div class="input-wrapper">
-                        <input type="password" id="teacherPhone" placeholder="Phone Number">
+                        <input type="password" id="teacherPhone" placeholder="Enter password">
                     </div>
                 </div>
 
@@ -733,7 +733,7 @@
                 </div>
 
                 <!-- TAB 2: REMEDIALS -->
-                <div id="tab-remedials" class="tab-pane hidden">
+                <div \n                    <div class="content-card" id="weeklyCATUploadCard" style="margin-top:20px;">\n                        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">\n                            <div>\n                                <h3 style="margin:0;">Weekly C.A.T. Exam Papers</h3>\n                                <p style="margin:6px 0 0;color:#64748b;font-size:13px;">Upload your weekly Continuous Assessment Test paper for the selected week, class and subject.</p>\n                            </div>\n                            <span id="catUploadCount" style="font-size:12px;font-weight:700;color:#1e3d59;">0 papers</span>\n                        </div>\n                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:15px;">\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Week</span><select id="catWeek" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;"></select></label>\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Class</span><input id="catClass" type="text" placeholder="e.g. FORM FOUR EAST" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;box-sizing:border-box;"></label>\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Subject</span><input id="catSubject" type="text" placeholder="e.g. Physics" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;box-sizing:border-box;"></label>\n                        </div>\n                        <div style="margin-top:12px;"><input id="catPaperFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png" style="width:100%;"><small style="display:block;margin-top:5px;color:#64748b;">Accepted: PDF, Word, PowerPoint or image files. Maximum 4 MB per paper in this standalone version.</small></div>\n                        <button type="button" class="btn-success" onclick="uploadWeeklyCAT()" style="margin-top:12px;">Upload C.A.T. Paper</button>\n                        <div id="catUploadMsg" style="margin-top:8px;font-size:13px;"></div>\n                        <div id="teacherCatList" style="margin-top:14px;"></div>\n                    </div>\nid="tab-remedials" class="tab-pane hidden">
                     <div class="breadcrumb-row">
                         <h2>Remedials & Schedule Management</h2>
                         <div class="breadcrumb-path">Dashboard > Remedials</div>
@@ -944,7 +944,7 @@
                         <h3>Teacher / Member Management</h3>
                         <div class="admin-toolbar">
                             <input type="text" id="newMemberName" placeholder="Full teacher name">
-                            <input type="text" id="newMemberPhone" placeholder="Phone / password">
+                            <input type="password" id="newMemberPhone" placeholder="Initial password (min 6 characters)" minlength="6">
                             <button class="btn-success" onclick="addNewMemberEnhanced()">Add Teacher</button>
                         </div>
                         <div id="memberAddMsg" style="color:var(--success);font-size:13px;margin-bottom:10px;"></div>
@@ -1006,6 +1006,14 @@
         };
 
         let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase')) || {};
+        // Password migration: older versions used the phone field as the login secret.
+        // Preserve existing credentials once, but never replace them with whatever is typed at login.
+        Object.keys(teacherDatabase).forEach(function(name){
+            const a=teacherDatabase[name]||{};
+            if(!a.password && a.phone) a.password=String(a.phone);
+            if(!a.weeks) a.weeks={};
+        });
+        localStorage.setItem('teacherDatabase', JSON.stringify(teacherDatabase));
         let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList')) || [];
 
         let currentActiveTeacher = null;
@@ -1055,27 +1063,30 @@
 
         function teacherLogin() {
             const name = document.getElementById('teacherSelect').value;
-            const phone = document.getElementById('teacherPhone').value.trim();
+            const password = document.getElementById('teacherPhone').value;
 
             if (!name) {
                 alert("Please select your name from the list.");
                 return;
             }
-            if (!phone) {
-                alert("Please enter your password / phone number.");
+            if (!password) {
+                alert("Please enter your password.");
+                return;
+            }
+
+            const account = teacherDatabase[name];
+            if (!account || !account.password) {
+                alert("This teacher account has no password configured. Please contact the administrator to set or reset it.");
+                return;
+            }
+
+            if (password !== account.password) {
+                alert("Incorrect password. Please try again or contact the administrator to reset your password.");
+                document.getElementById('teacherPhone').focus();
                 return;
             }
 
             currentActiveTeacher = name;
-
-            if (!teacherDatabase[name]) {
-                teacherDatabase[name] = {
-                    phone: phone,
-                    weeks: {}
-                };
-            } else {
-                teacherDatabase[name].phone = phone;
-            }
 
             // Ensure all configured weeks exist in the teacher's record structure
             Object.keys(openWeeksConfig).forEach(w => {
@@ -1119,6 +1130,8 @@
             updateDashboardMetrics();
             loadWeekData();
             updateBursarLetterDetails();
+            populateCATWeeks();
+            renderTeacherCATs();
         }
 
         function populateWeekDropdown() {
@@ -1615,11 +1628,12 @@
 
         function addNewMemberEnhanced(){
             const n=document.getElementById('newMemberName').value.trim().toUpperCase();
-            const phone=document.getElementById('newMemberPhone').value.trim();
+            const password=document.getElementById('newMemberPhone').value.trim();
             if(!n){alert('Enter the teacher full name.');return;}
+            if(!password || password.length < 6){alert('Set an initial password of at least 6 characters.');return;}
             if(teacherList.includes(n)){alert('Teacher already exists.');return;}
             teacherList.push(n);
-            teacherDatabase[n]={phone:phone||'',weeks:{}};
+            teacherDatabase[n]={phone:'',password:password,weeks:{}};
             saveData(); document.getElementById('newMemberName').value='';document.getElementById('newMemberPhone').value='';
             document.getElementById('memberAddMsg').innerText=`${n} added successfully.`; refreshAdminPanel();
         }
@@ -1627,13 +1641,18 @@
             const c=document.getElementById('adminMembersList'); if(!c)return;
             if(!teacherList.length){c.innerHTML='<p style="color:#64748b">No teachers registered.</p>';return;}
             c.innerHTML=teacherList.slice().sort().map(name=>{
-                const t=teacherDatabase[name]||{}; const phone=t.phone||'Not set';
-                return `<div class="member-row"><div><strong>${escapeHTML(name)}</strong><div style="font-size:11px;color:#64748b">${Object.keys(t.weeks||{}).length} week records</div></div><div><span style="font-size:12px">Password/Phone: ${escapeHTML(phone)}</span></div><div class="admin-actions"><button class="btn-outline-admin" onclick="resetTeacherPassword('${escapeJS(name)}')">Reset Password</button><button class="btn-danger-admin" onclick="removeMemberEnhanced('${escapeJS(name)}')">Remove</button></div></div>`;
+                const t=teacherDatabase[name]||{}; const hasPassword=typeof t.password==='string' && t.password.length>0;
+                return `<div class="member-row"><div><strong>${escapeHTML(name)}</strong><div style="font-size:11px;color:#64748b">${Object.keys(t.weeks||{}).length} week records · ${hasPassword?'Password set':'Password not set'}</div></div><div class="admin-actions"><button class="btn-outline-admin" onclick="resetTeacherPassword('${escapeJS(name)}')">Reset Password</button><button class="btn-danger-admin" onclick="removeMemberEnhanced('${escapeJS(name)}')">Remove</button></div></div>`;
             }).join('');
         }
         function resetTeacherPassword(name){
-            const p=prompt(`Enter new password/phone for ${name}:`); if(p===null)return; if(!p.trim()){alert('Password cannot be blank.');return;}
-            if(!teacherDatabase[name])teacherDatabase[name]={phone:'',weeks:{}}; teacherDatabase[name].phone=p.trim(); saveData(); renderAdminMembersEnhanced(); alert(`Credentials updated for ${name}.`);
+            const p=prompt(`Enter a new password for ${name} (minimum 6 characters):`);
+            if(p===null)return;
+            if(p.trim().length < 6){alert('Password must be at least 6 characters.');return;}
+            if(!teacherDatabase[name])teacherDatabase[name]={phone:'',weeks:{}};
+            teacherDatabase[name].password=p.trim();
+            saveData(); renderAdminMembersEnhanced();
+            alert(`Password updated for ${name}.`);
         }
         function removeMemberEnhanced(name){
             if(name==='TEACHER BETT' && teacherList.length===1){alert('At least one teacher account must remain.');return;}
@@ -1695,6 +1714,16 @@
         function csvEscape(v){v=String(v??'');return '"'+v.replace(/"/g,'""')+'"';}
         function escapeHTML(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
         function escapeJS(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
-    </script>
+    
+        const CAT_DB_NAME = 'BLISSTeacherPortalCATs';
+        const CAT_STORE = 'papers';
+        function catOpenDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(CAT_DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(CAT_STORE))r.result.createObjectStore(CAT_STORE,{keyPath:'id'});};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
+        async function catPut(record){const db=await catOpenDB();return new Promise((resolve,reject)=>{const tx=db.transaction(CAT_STORE,'readwrite');tx.objectStore(CAT_STORE).put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
+        async function catGetAll(){const db=await catOpenDB();return new Promise((resolve,reject)=>{const tx=db.transaction(CAT_STORE,'readonly');const r=tx.objectStore(CAT_STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});}
+        async function populateCATWeeks(){const s=document.getElementById('catWeek');if(!s)return;const weeks=Object.keys(openWeeksConfig||{}).map(Number).sort((a,b)=>a-b);s.innerHTML=weeks.length?weeks.map(w=>`<option value="${w}">Week ${w}</option>`).join(''):'<option value="">No weeks configured</option>';}
+        async function renderTeacherCATs(){const c=document.getElementById('teacherCatList');if(!c||!currentActiveTeacher)return;try{const all=await catGetAll();const mine=all.filter(p=>p.teacher===currentActiveTeacher).sort((a,b)=>b.uploadedAt-a.uploadedAt);const count=document.getElementById('catUploadCount');if(count)count.textContent=`${mine.length} paper${mine.length===1?'':'s'}`;if(!mine.length){c.innerHTML='<div style="padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;color:#64748b;">No C.A.T. papers uploaded yet.</div>';return;}c.innerHTML=mine.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:11px;border:1px solid #e2e8f0;border-radius:7px;margin-top:8px;background:#fff;"><div><strong>Week ${p.week} · ${escapeHTML(p.subject)}</strong><div style="font-size:12px;color:#64748b;margin-top:3px;">${escapeHTML(p.className)} · ${escapeHTML(p.fileName)}</div></div><button type="button" class="btn-outline-admin" onclick="downloadWeeklyCAT('${p.id}')">Download</button></div>`).join('');}catch(e){c.innerHTML='<p style="color:#b91c1c">Unable to load uploaded papers in this browser.</p>';}}
+        async function uploadWeeklyCAT(){if(!currentActiveTeacher){alert('Please sign in first.');return;}const week=document.getElementById('catWeek').value,cls=document.getElementById('catClass').value.trim(),subject=document.getElementById('catSubject').value.trim(),input=document.getElementById('catPaperFile'),msg=document.getElementById('catUploadMsg'),file=input.files[0];if(!week||!cls||!subject||!file){msg.textContent='Please select a week, enter the class and subject, and choose the exam paper.';msg.style.color='#b91c1c';return;}if(file.size>4*1024*1024){msg.textContent='File is larger than 4 MB. Please compress it or choose a smaller file.';msg.style.color='#b91c1c';return;}const allowed=['pdf','doc','docx','ppt','pptx','jpg','jpeg','png'],ext=file.name.toLowerCase().split('.').pop();if(!allowed.includes(ext)){msg.textContent='Unsupported file type.';msg.style.color='#b91c1c';return;}try{await catPut({id:'cat_'+Date.now()+'_'+Math.random().toString(36).slice(2),teacher:currentActiveTeacher,week:Number(week),className:cls,subject,fileName:file.name,fileType:file.type,blob:file,uploadedAt:Date.now()});input.value='';msg.textContent='C.A.T. paper uploaded successfully.';msg.style.color='#15803d';renderTeacherCATs();}catch(e){msg.textContent='Upload failed. Please try again.';msg.style.color='#b91c1c';}}
+        async function downloadWeeklyCAT(id){try{const all=await catGetAll(),p=all.find(x=>x.id===id&&x.teacher===currentActiveTeacher);if(!p)return;const url=URL.createObjectURL(p.blob),a=document.createElement('a');a.href=url;a.download=p.fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){alert('Unable to download this paper.');}}
+</script>
 </body>
 </html>
