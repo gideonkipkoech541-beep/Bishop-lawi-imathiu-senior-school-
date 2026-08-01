@@ -510,7 +510,10 @@
         @media(max-width:900px){ .admin-shell{grid-template-columns:repeat(2,1fr);} .member-row{grid-template-columns:1fr;} }
         @media(max-width:600px){ .admin-shell{grid-template-columns:1fr;} }
     </style>
-</head>
+<style>
+body{height:100vh;overflow:hidden!important;}
+.main-content,.content,.content-area{height:100vh;overflow-y:auto!important;overflow-x:hidden;}
+</style></head>
 <body>
 
     <!-- Login Container -->
