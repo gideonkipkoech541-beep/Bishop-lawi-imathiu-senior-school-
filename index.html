@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--
+PHASE 1 READY
+Tasks for this version:
+- Secure login (to be wired to Firebase)
+- Teacher portal scrolling fix
+- Teacher CAT/Exam upload section
+- Sidebar/content synchronization fix
+-->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLISS Teacher Portal - Dashboard</title>
@@ -28,9 +37,8 @@
             margin: 0;
             padding: 0;
             display: flex;
-            min-height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
         }
 
         /* Login Container Style */
@@ -156,9 +164,8 @@
         .app-container {
             display: flex;
             width: 100vw;
-            min-height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .sidebar {
@@ -479,41 +486,8 @@
             box-sizing: border-box;
             margin: 0 auto;
         }
-
-        /* Enhanced Admin Panel */
-        .admin-shell { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; margin-bottom:20px; }
-        .admin-stat { background:#fff; border:1px solid var(--border); border-radius:8px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
-        .admin-stat .label { color:var(--text-muted); font-size:12px; text-transform:uppercase; font-weight:700; letter-spacing:.04em; }
-        .admin-stat .value { font-size:25px; font-weight:800; margin-top:5px; color:#1e3d59; }
-        .admin-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:15px; }
-        .admin-toolbar input, .admin-toolbar select { max-width:240px; margin:0; }
-        .admin-table-wrap { overflow:auto; border:1px solid var(--border); border-radius:7px; }
-        .admin-table { width:100%; border-collapse:collapse; min-width:900px; font-size:12px; background:#fff; }
-        .admin-table th { position:sticky; top:0; background:#1e3d59; color:#fff; padding:10px; text-align:left; white-space:nowrap; }
-        .admin-table td { padding:9px 10px; border-top:1px solid #e5e7eb; vertical-align:top; }
-        .admin-table tr:hover { background:#f8fafc; }
-        .status-pill { display:inline-block; padding:4px 8px; border-radius:999px; font-size:11px; font-weight:700; }
-        .status-pending { background:#fef3c7; color:#92400e; }
-        .status-reviewed { background:#dbeafe; color:#1e40af; }
-        .status-ready { background:#d1fae5; color:#065f46; }
-        .status-paid { background:#dcfce7; color:#166534; }
-        .admin-section { margin-bottom:20px; }
-        .admin-section h3 { margin-bottom:12px; }
-        .admin-actions { display:flex; flex-wrap:wrap; gap:8px; }
-        .btn-secondary-admin { background:#475569; color:#fff; border:0; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
-        .btn-outline-admin { background:#fff; color:#1e3d59; border:1px solid #94a3b8; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
-        .btn-danger-admin { background:#b91c1c; color:#fff; border:0; padding:8px 14px; border-radius:4px; cursor:pointer; font-weight:600; font-size:12px; }
-        .admin-note { background:#eff6ff; border-left:4px solid #2563eb; padding:11px 13px; font-size:13px; color:#334155; margin-bottom:15px; }
-        .feedback-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:10px; }
-        .feedback-card.resolved { opacity:.65; }
-        .member-row { display:grid; grid-template-columns:1.4fr 1fr auto; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid #eef2f7; }
-        @media(max-width:900px){ .admin-shell{grid-template-columns:repeat(2,1fr);} .member-row{grid-template-columns:1fr;} }
-        @media(max-width:600px){ .admin-shell{grid-template-columns:1fr;} }
     </style>
-<style>
-body{height:100vh;overflow:hidden!important;}
-.main-content,.content,.content-area{height:100vh;overflow-y:auto!important;overflow-x:hidden;}
-</style></head>
+</head>
 <body>
 
     <!-- Login Container -->
@@ -538,7 +512,7 @@ body{height:100vh;overflow:hidden!important;}
                 <div class="form-row">
                     <label for="teacherPhone">Password:</label>
                     <div class="input-wrapper">
-                        <input type="password" id="teacherPhone" placeholder="Enter password">
+                        <input type="password" id="teacherPhone" placeholder="Phone Number">
                     </div>
                 </div>
 
@@ -738,7 +712,7 @@ body{height:100vh;overflow:hidden!important;}
                 </div>
 
                 <!-- TAB 2: REMEDIALS -->
-                <div \n                    <div class="content-card" id="weeklyCATUploadCard" style="margin-top:20px;">\n                        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">\n                            <div>\n                                <h3 style="margin:0;">Weekly C.A.T. Exam Papers</h3>\n                                <p style="margin:6px 0 0;color:#64748b;font-size:13px;">Upload your weekly Continuous Assessment Test paper for the selected week, class and subject.</p>\n                            </div>\n                            <span id="catUploadCount" style="font-size:12px;font-weight:700;color:#1e3d59;">0 papers</span>\n                        </div>\n                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:15px;">\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Week</span><select id="catWeek" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;"></select></label>\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Class</span><input id="catClass" type="text" placeholder="e.g. FORM FOUR EAST" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;box-sizing:border-box;"></label>\n                            <label><span style="display:block;font-size:12px;font-weight:700;margin-bottom:5px;">Subject</span><input id="catSubject" type="text" placeholder="e.g. Physics" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;box-sizing:border-box;"></label>\n                        </div>\n                        <div style="margin-top:12px;"><input id="catPaperFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png" style="width:100%;"><small style="display:block;margin-top:5px;color:#64748b;">Accepted: PDF, Word, PowerPoint or image files. Maximum 4 MB per paper in this standalone version.</small></div>\n                        <button type="button" class="btn-success" onclick="uploadWeeklyCAT()" style="margin-top:12px;">Upload C.A.T. Paper</button>\n                        <div id="catUploadMsg" style="margin-top:8px;font-size:13px;"></div>\n                        <div id="teacherCatList" style="margin-top:14px;"></div>\n                    </div>\nid="tab-remedials" class="tab-pane hidden">
+                <div id="tab-remedials" class="tab-pane hidden">
                     <div class="breadcrumb-row">
                         <h2>Remedials & Schedule Management</h2>
                         <div class="breadcrumb-path">Dashboard > Remedials</div>
@@ -838,7 +812,7 @@ body{height:100vh;overflow:hidden!important;}
                                 </div>
 
                                 <div style="font-size: 14px; font-weight: bold; text-decoration: underline; text-align: center; margin: 20px 0;">
-                                    SUBJECT: REQUISITION AND AUTHORIZATION FOR CASH DISBURSEMENT – TEACHER REMEDIAL CLAIM
+                                    SUBJECT: REQUISITION AND AUTHORIZATION FOR CASH DISBURSEMENT  TEACHER REMEDIAL CLAIM
                                 </div>
 
                                 <div style="font-size: 14px; line-height: 1.6; text-align: justify; margin-bottom: 20px;">
@@ -907,93 +881,53 @@ body{height:100vh;overflow:hidden!important;}
                     </div>
                 </div>
 
-                <!-- Enhanced Admin Dashboard Section -->
+                <!-- Admin Dashboard Section -->
                 <div id="adminDashboardPane" class="tab-pane hidden">
                     <div class="breadcrumb-row">
-                        <div>
-                            <h2>Admin Control Panel</h2>
-                            <div class="breadcrumb-path">Administration > Overview & Management</div>
-                        </div>
-                        <div class="admin-actions">
-                            <button class="btn-outline-admin" onclick="exportSystemBackup()">Export Backup</button>
-                            <button class="btn-outline-admin" onclick="document.getElementById('restoreFileInput').click()">Restore Backup</button>
-                            <input type="file" id="restoreFileInput" accept="application/json" style="display:none" onchange="restoreSystemBackup(event)">
-                            <button class="btn-danger-admin" onclick="adminLogout()">Logout</button>
-                        </div>
+                        <h2>Admin Control Panel</h2>
+                        <button class="btn-danger-custom" onclick="location.reload()">Admin Logout</button>
                     </div>
 
-                    <div class="admin-note"><strong>Administrator workspace:</strong> Manage claim weeks, teachers, payment status, inquiries and system records from one place. Changes are stored locally in this browser.</div>
+                    <div class="content-card">
+                        <h3>Manage Weeks (Add / Enable / Disable)</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                            <input type="number" id="newWeekNumber" placeholder="Enter week number to add (e.g. 10)" min="1" style="max-width: 280px; margin-bottom: 0;">
+                            <button class="btn-success" onclick="addNewWeek()">Add New Week</button>
+                        </div>
+                        <div id="adminWeekAddMsg" style="color: var(--success); font-size: 13px; margin-bottom: 15px;"></div>
 
-                    <div class="admin-shell">
-                        <div class="admin-stat"><div class="label">Registered Teachers</div><div class="value" id="adminStatTeachers">0</div></div>
-                        <div class="admin-stat"><div class="label">Active Weeks</div><div class="value" id="adminStatWeeks">0</div></div>
-                        <div class="admin-stat"><div class="label">Pending Reviews</div><div class="value" id="adminStatPending">0</div></div>
-                        <div class="admin-stat"><div class="label">Total Sessions</div><div class="value" id="adminStatSessions">0</div></div>
+                        <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
+                        <button class="btn-primary-custom" onclick="saveOpenWeeks()">Save Week Configurations</button>
+                        <div id="adminSaveMsg" style="color: var(--success); margin-top: 5px; font-size: 13px;"></div>
                     </div>
 
-                    <div class="content-card admin-section">
-                        <h3>Week Management</h3>
-                        <div class="admin-toolbar">
-                            <input type="number" id="newWeekNumber" placeholder="Week number e.g. 10" min="1">
-                            <button class="btn-success" onclick="addNewWeek()">Add & Enable Week</button>
-                            <button class="btn-outline-admin" onclick="enableAllWeeks()">Enable All</button>
-                            <button class="btn-outline-admin" onclick="disableAllWeeks()">Disable All</button>
+                    <div class="content-card">
+                        <h3>Member Management</h3>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <input type="text" id="newMemberName" placeholder="Enter Full Name (e.g. JOHN DOE)" style="margin-bottom:0;">
+                            <button class="btn-success" onclick="addNewMember()">Add Teacher</button>
                         </div>
-                        <div id="adminWeekAddMsg" style="color:var(--success);font-size:13px;margin-bottom:10px;"></div>
-                        <div id="adminWeeksCheckboxes"></div>
-                        <button class="btn-primary-custom" onclick="saveOpenWeeks()">Save Week Configuration</button>
-                        <div id="adminSaveMsg" style="color:var(--success);margin-top:8px;font-size:13px;"></div>
+                        <div id="memberAddMsg" style="color: var(--success); font-size: 13px; margin-bottom: 15px;"></div>
+
+                        <label for="removeMemberSelect" style="display:block; font-weight:600; font-size:13px; margin-bottom:5px;">Remove Existing Member:</label>
+                        <select id="removeMemberSelect" style="margin-bottom: 10px;"></select>
+                        <button class="btn-danger-custom" onclick="removeMember()">Remove Selected Member</button>
+                        <div id="memberRemoveMsg" style="color: #dc2626; font-size: 13px; margin-top: 5px;"></div>
                     </div>
 
-                    <div class="content-card admin-section">
-                        <h3>Teacher / Member Management</h3>
-                        <div class="admin-toolbar">
-                            <input type="text" id="newMemberName" placeholder="Full teacher name">
-                            <input type="password" id="newMemberPhone" placeholder="Initial password (min 6 characters)" minlength="6">
-                            <button class="btn-success" onclick="addNewMemberEnhanced()">Add Teacher</button>
-                        </div>
-                        <div id="memberAddMsg" style="color:var(--success);font-size:13px;margin-bottom:10px;"></div>
-                        <div id="adminMembersList"></div>
-                    </div>
-
-                    <div class="content-card admin-section">
-                        <h3>Teacher Claims & Audit</h3>
-                        <div class="admin-toolbar">
-                            <input type="search" id="auditSearch" placeholder="Search teacher or phone" oninput="renderAdminAuditEnhanced()">
-                            <select id="auditWeekFilter" onchange="renderAdminAuditEnhanced()"><option value="all">All Weeks</option></select>
-                            <select id="auditStatusFilter" onchange="renderAdminAuditEnhanced()">
-                                <option value="all">All Statuses</option>
-                                <option value="pending review">Pending Review</option>
-                                <option value="reviewed">Reviewed</option>
-                                <option value="funds ready to be claim">Funds Ready</option>
-                                <option value="funds claimed and signed">Funds Claimed</option>
-                            </select>
-                            <button class="btn-secondary-admin" onclick="exportClaimsCSV()">Export Claims CSV</button>
-                        </div>
-                        <div id="auditContent"></div>
-                    </div>
-
-                    <div class="content-card admin-section">
-                        <h3>Teacher Feedback & Inquiries</h3>
-                        <div class="admin-toolbar">
-                            <input type="search" id="feedbackSearch" placeholder="Search inquiries" oninput="renderAdminFeedbackEnhanced()">
-                            <select id="feedbackFilter" onchange="renderAdminFeedbackEnhanced()">
-                                <option value="all">All Inquiries</option><option value="open">Open</option><option value="resolved">Resolved</option>
-                            </select>
-                        </div>
+                    <div class="content-card">
+                        <h3>Teacher Feedbacks & Inquiries</h3>
                         <div id="adminFeedbackContent"></div>
                     </div>
 
-                    <div class="content-card admin-section">
-                        <h3>System Tools & Audit Safety</h3>
-                        <div class="admin-actions">
-                            <button class="btn-outline-admin" onclick="exportSystemBackup()">Download Full JSON Backup</button>
-                            <button class="btn-outline-admin" onclick="refreshAdminPanel()">Refresh Dashboard</button>
-                            <button class="btn-danger-admin" onclick="clearAllRemedialsEnhanced()">Clear Claim Records</button>
-                        </div>
-                        <p style="font-size:12px;color:#64748b;margin-bottom:0;">A backup is recommended before clearing records. Teacher names and week configuration are preserved when claim records are cleared.</p>
+                    <div class="content-card">
+                        <h3>Audit & Claim Status Overview</h3>
+                        <div id="auditContent" style="overflow-x: auto;"></div>
+                        <br>
+                        <button class="btn-danger-custom" onclick="clearAllRemedials()">Clear All System Records</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -1011,14 +945,6 @@ body{height:100vh;overflow:hidden!important;}
         };
 
         let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase')) || {};
-        // Password migration: older versions used the phone field as the login secret.
-        // Preserve existing credentials once, but never replace them with whatever is typed at login.
-        Object.keys(teacherDatabase).forEach(function(name){
-            const a=teacherDatabase[name]||{};
-            if(!a.password && a.phone) a.password=String(a.phone);
-            if(!a.weeks) a.weeks={};
-        });
-        localStorage.setItem('teacherDatabase', JSON.stringify(teacherDatabase));
         let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList')) || [];
 
         let currentActiveTeacher = null;
@@ -1068,30 +994,27 @@ body{height:100vh;overflow:hidden!important;}
 
         function teacherLogin() {
             const name = document.getElementById('teacherSelect').value;
-            const password = document.getElementById('teacherPhone').value;
+            const phone = document.getElementById('teacherPhone').value.trim();
 
             if (!name) {
                 alert("Please select your name from the list.");
                 return;
             }
-            if (!password) {
-                alert("Please enter your password.");
-                return;
-            }
-
-            const account = teacherDatabase[name];
-            if (!account || !account.password) {
-                alert("This teacher account has no password configured. Please contact the administrator to set or reset it.");
-                return;
-            }
-
-            if (password !== account.password) {
-                alert("Incorrect password. Please try again or contact the administrator to reset your password.");
-                document.getElementById('teacherPhone').focus();
+            if (!phone) {
+                alert("Please enter your password / phone number.");
                 return;
             }
 
             currentActiveTeacher = name;
+
+            if (!teacherDatabase[name]) {
+                teacherDatabase[name] = {
+                    phone: phone,
+                    weeks: {}
+                };
+            } else {
+                teacherDatabase[name].phone = phone;
+            }
 
             // Ensure all configured weeks exist in the teacher's record structure
             Object.keys(openWeeksConfig).forEach(w => {
@@ -1135,8 +1058,6 @@ body{height:100vh;overflow:hidden!important;}
             updateDashboardMetrics();
             loadWeekData();
             updateBursarLetterDetails();
-            populateCATWeeks();
-            renderTeacherCATs();
         }
 
         function populateWeekDropdown() {
@@ -1563,172 +1484,2031 @@ body{height:100vh;overflow:hidden!important;}
         function loginAdmin() {
             const pass = document.getElementById('adminPassword').value.trim();
             const errDiv = document.getElementById('adminError');
+
             if (pass !== "dos123") {
                 errDiv.innerText = "Incorrect admin security password.";
                 return;
             }
-            errDiv.innerText = "";
+
             document.getElementById('loginContainer').classList.add('hidden');
             document.getElementById('appContainer').classList.remove('hidden');
+
             document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
             document.getElementById('adminDashboardPane').classList.remove('hidden');
+
             document.querySelector('.sidebar').innerHTML = `
-                <div class="sidebar-user-box"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><p class="name">ADMINISTRATOR</p><p class="status">● System DOS</p></div></div>
+                <div class="sidebar-user-box">
+                    <div class="sidebar-avatar">AD</div>
+                    <div class="sidebar-user-info">
+                        <p class="name">ADMINISTRATOR</p>
+                        <p class="status">? System DOS</p>
+                    </div>
+                </div>
                 <p class="sidebar-nav-title">Admin Control</p>
-                <a class="nav-item active" onclick="refreshAdminPanel()"><span>▣</span> Dashboard</a>
-                <a class="nav-item" onclick="document.getElementById('auditSearch').focus();document.getElementById('auditContent').scrollIntoView({behavior:'smooth'})"><span>✓</span> Claims Audit</a>
-                <a class="nav-item" onclick="document.getElementById('adminMembersList').scrollIntoView({behavior:'smooth'})"><span>♙</span> Teachers</a>
-                <a class="nav-item" onclick="document.getElementById('adminFeedbackContent').scrollIntoView({behavior:'smooth'})"><span>✉</span> Inquiries</a>
-                <p class="sidebar-nav-title" style="margin-top:auto;">Session & System</p>
-                <a class="nav-item" onclick="exportSystemBackup()"><span>⇩</span> Backup Data</a>
-                <a class="nav-item" onclick="adminLogout()"><span>⇥</span> Logout</a>`;
-            refreshAdminPanel();
-        }
+                <a class="nav-item active" onclick="location.reload()">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout / Exit
+                </a>
+            `;
 
-        function adminLogout(){ location.reload(); }
-
-        function refreshAdminPanel(){
             renderAdminCheckboxes();
-            renderAdminMembersEnhanced();
-            populateAuditWeekFilter();
-            renderAdminAuditEnhanced();
-            renderAdminFeedbackEnhanced();
-            updateAdminStats();
-        }
-
-        function updateAdminStats(){
-            let teachers = teacherList.length, activeWeeks = Object.values(openWeeksConfig).filter(Boolean).length;
-            let pending=0, sessions=0;
-            Object.values(teacherDatabase).forEach(t=>Object.values(t.weeks||{}).forEach(w=>{
-                if(w.status==='pending review') pending++;
-                Object.values(w.morning||{}).forEach(d=>{if(d.claimed)sessions++;});
-                sessions += (w.satSessions||[]).length;
-            }));
-            document.getElementById('adminStatTeachers').innerText=teachers;
-            document.getElementById('adminStatWeeks').innerText=activeWeeks;
-            document.getElementById('adminStatPending').innerText=pending;
-            document.getElementById('adminStatSessions').innerText=sessions;
+            renderAdminMembers();
+            renderAdminFeedback();
+            renderAdminAudit();
         }
 
         function addNewWeek() {
-            const input=document.getElementById('newWeekNumber'), msg=document.getElementById('adminWeekAddMsg');
-            const weekNum=parseInt(input.value,10);
-            if(!weekNum||weekNum<1){alert('Please enter a valid positive week number.');return;}
-            if(openWeeksConfig[weekNum]!==undefined){alert(`Week ${weekNum} already exists.`);return;}
-            openWeeksConfig[weekNum]=true; saveData(); input.value='';
-            msg.innerText=`Week ${weekNum} added and enabled.`; refreshAdminPanel();
-        }
-        function enableAllWeeks(){Object.keys(openWeeksConfig).forEach(w=>openWeeksConfig[w]=true);saveData();refreshAdminPanel();}
-        function disableAllWeeks(){if(!confirm('Disable all weeks? Teachers will not be able to submit claims until a week is enabled.'))return;Object.keys(openWeeksConfig).forEach(w=>openWeeksConfig[w]=false);saveData();refreshAdminPanel();}
+            const input = document.getElementById('newWeekNumber');
+            const msgDiv = document.getElementById('adminWeekAddMsg');
+            const weekNum = parseInt(input.value.trim());
 
-        function renderAdminCheckboxes(){
-            const c=document.getElementById('adminWeeksCheckboxes'); if(!c)return;
-            let weeks=Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b);
-            c.innerHTML='<p style="margin-top:0;font-weight:600;">Active claim weeks:</p>'+weeks.map(w=>`<label style="display:inline-block;margin:0 18px 10px 0;font-weight:normal;"><input type="checkbox" id="admin_week_${w}" ${openWeeksConfig[w]?'checked':''} style="width:auto;margin-right:5px;"> Week ${w}</label>`).join('');
-        }
-        function saveOpenWeeks(){
-            Object.keys(openWeeksConfig).forEach(w=>{let e=document.getElementById(`admin_week_${w}`);if(e)openWeeksConfig[w]=e.checked;});
-            saveData(); document.getElementById('adminSaveMsg').innerText='Week configuration saved successfully.'; refreshAdminPanel();
-        }
+            if (!weekNum || weekNum < 1) {
+                alert("Please enter a valid positive week number.");
+                return;
+            }
 
-        function addNewMemberEnhanced(){
-            const n=document.getElementById('newMemberName').value.trim().toUpperCase();
-            const password=document.getElementById('newMemberPhone').value.trim();
-            if(!n){alert('Enter the teacher full name.');return;}
-            if(!password || password.length < 6){alert('Set an initial password of at least 6 characters.');return;}
-            if(teacherList.includes(n)){alert('Teacher already exists.');return;}
-            teacherList.push(n);
-            teacherDatabase[n]={phone:'',password:password,weeks:{}};
-            saveData(); document.getElementById('newMemberName').value='';document.getElementById('newMemberPhone').value='';
-            document.getElementById('memberAddMsg').innerText=`${n} added successfully.`; refreshAdminPanel();
-        }
-        function renderAdminMembersEnhanced(){
-            const c=document.getElementById('adminMembersList'); if(!c)return;
-            if(!teacherList.length){c.innerHTML='<p style="color:#64748b">No teachers registered.</p>';return;}
-            c.innerHTML=teacherList.slice().sort().map(name=>{
-                const t=teacherDatabase[name]||{}; const hasPassword=typeof t.password==='string' && t.password.length>0;
-                return `<div class="member-row"><div><strong>${escapeHTML(name)}</strong><div style="font-size:11px;color:#64748b">${Object.keys(t.weeks||{}).length} week records · ${hasPassword?'Password set':'Password not set'}</div></div><div class="admin-actions"><button class="btn-outline-admin" onclick="resetTeacherPassword('${escapeJS(name)}')">Reset Password</button><button class="btn-danger-admin" onclick="removeMemberEnhanced('${escapeJS(name)}')">Remove</button></div></div>`;
-            }).join('');
-        }
-        function resetTeacherPassword(name){
-            const p=prompt(`Enter a new password for ${name} (minimum 6 characters):`);
-            if(p===null)return;
-            if(p.trim().length < 6){alert('Password must be at least 6 characters.');return;}
-            if(!teacherDatabase[name])teacherDatabase[name]={phone:'',weeks:{}};
-            teacherDatabase[name].password=p.trim();
-            saveData(); renderAdminMembersEnhanced();
-            alert(`Password updated for ${name}.`);
-        }
-        function removeMemberEnhanced(name){
-            if(name==='TEACHER BETT' && teacherList.length===1){alert('At least one teacher account must remain.');return;}
-            if(!confirm(`Remove ${name} and all of this teacher's claim records? This cannot be undone.`))return;
-            teacherList=teacherList.filter(t=>t!==name); delete teacherDatabase[name]; saveData(); refreshAdminPanel();
+            if (openWeeksConfig[weekNum] !== undefined) {
+                alert(`Week ${weekNum} already exists in the system configuration.`);
+                return;
+            }
+
+            openWeeksConfig[weekNum] = true;
+            saveData();
+
+            input.value = "";
+            msgDiv.innerText = `Successfully added and enabled Week ${weekNum}!`;
+            renderAdminCheckboxes();
+            renderAdminAudit();
         }
 
-        function populateAuditWeekFilter(){
-            const s=document.getElementById('auditWeekFilter'); if(!s)return; const old=s.value;
-            s.innerHTML='<option value="all">All Weeks</option>'+Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b).map(w=>`<option value="${w}">Week ${w}</option>`).join('');
-            if([...s.options].some(o=>o.value===old))s.value=old;
+        function renderAdminCheckboxes() {
+            const container = document.getElementById('adminWeeksCheckboxes');
+            let html = "<p style='margin-top:0; font-weight:600;'>Select active weeks available for teacher claims:</p>";
+            
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            sortedWeeks.forEach(w => {
+                let checked = openWeeksConfig[w] ? "checked" : "";
+                html += `
+                    <label style="display:inline-block; margin-right:15px; margin-bottom:10px; font-weight:normal;">
+                        <input type="checkbox" id="admin_week_${w}" ${checked} style="width:auto; margin-right:5px;"> Week ${w}
+                    </label>
+                `;
+            });
+            container.innerHTML = html;
         }
-        function statusClass(status){if(status==='pending review')return' status-pending';if(status==='reviewed')return' status-reviewed';if(status==='funds ready to be claim')return' status-ready';return' status-paid';}
-        function renderAdminAuditEnhanced(){
-            const c=document.getElementById('auditContent'); if(!c)return;
-            const q=(document.getElementById('auditSearch')?.value||'').toLowerCase(); const wf=document.getElementById('auditWeekFilter')?.value||'all'; const sf=document.getElementById('auditStatusFilter')?.value||'all';
-            let rows=[];
-            Object.keys(teacherDatabase).forEach(name=>{
-                const t=teacherDatabase[name]||{}; Object.keys(openWeeksConfig).map(Number).sort((a,b)=>a-b).forEach(w=>{
-                    if(wf!=='all'&&String(w)!==String(wf))return;
-                    const d=(t.weeks||{})[w]||{status:'pending review',morning:{},satSessions:[]}; const status=d.status||'pending review';
-                    if(sf!=='all'&&status!==sf)return;
-                    if(q&&!(`${name} ${t.phone||''}`.toLowerCase().includes(q)))return;
-                    let morning=[], sat=[]; Object.keys(d.morning||{}).forEach(day=>{const x=d.morning[day];if(x.claimed)morning.push(`${day.slice(0,3)}: ${escapeHTML(x.classVal||'N/A')} (${escapeHTML(x.subject||'N/A')})`)}); (d.satSessions||[]).forEach((x,i)=>sat.push(`${i+1}: ${escapeHTML(x.classVal||'N/A')} (${escapeHTML(x.subject||'N/A')})`));
-                    rows.push(`<tr><td><strong>${escapeHTML(name)}</strong><br><span style="font-size:11px;color:#64748b">${escapeHTML(t.phone||'No phone')}</span></td><td><strong>Week ${w}</strong></td><td>${morning.length?morning.join('<br>'):'<span style="color:#94a3b8">None</span>'}</td><td>${sat.length?sat.join('<br>'):'<span style="color:#94a3b8">None</span>'}</td><td><select onchange="adminUpdateStatus('${escapeJS(name)}',${w},this.value);updateAdminStats()"><option ${status==='pending review'?'selected':''}>pending review</option><option ${status==='reviewed'?'selected':''}>reviewed</option><option ${status==='funds ready to be claim'?'selected':''}>funds ready to be claim</option><option ${status==='funds claimed and signed'?'selected':''}>funds claimed and signed</option></select><div class="status-pill${statusClass(status)}" style="margin-top:5px">${escapeHTML(status)}</div></td></tr>`);
+
+        function saveOpenWeeks() {
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            sortedWeeks.forEach(w => {
+                let el = document.getElementById(`admin_week_${w}`);
+                if (el) {
+                    openWeeksConfig[w] = el.checked;
+                }
+            });
+            saveData();
+            document.getElementById('adminSaveMsg').innerText = "Open weeks configuration updated successfully.";
+            renderAdminAudit();
+        }
+
+        function renderAdminMembers() {
+            const select = document.getElementById('removeMemberSelect');
+            select.innerHTML = '<option value="">-- Select Member to Remove --</option>';
+            teacherList.sort().forEach(name => {
+                let opt = document.createElement('option');
+                opt.value = name;
+                opt.innerText = name;
+                select.appendChild(opt);
+            });
+        }
+
+        function addNewMember() {
+            const nameInput = document.getElementById('newMemberName');
+            const msgDiv = document.getElementById('memberAddMsg');
+            const name = nameInput.value.trim().toUpperCase();
+
+            if (!name) {
+                alert("Please enter a valid member name.");
+                return;
+            }
+
+            if (teacherList.includes(name)) {
+                alert("Teacher already exists in the list.");
+                return;
+            }
+
+            teacherList.push(name);
+            saveData();
+            nameInput.value = '';
+            msgDiv.innerText = `Successfully added ${name} to the system.`;
+            renderAdminMembers();
+        }
+
+        function removeMember() {
+            const select = document.getElementById('removeMemberSelect');
+            const msgDiv = document.getElementById('memberRemoveMsg');
+            const name = select.value;
+
+            if (!name) {
+                alert("Please select a member to remove.");
+                return;
+            }
+
+            if (confirm(`Are you sure you want to remove ${name}?`)) {
+                teacherList = teacherList.filter(t => t !== name);
+                delete teacherDatabase[name];
+                saveData();
+                msgDiv.innerText = `Successfully removed ${name}.`;
+                renderAdminMembers();
+            }
+        }
+
+        function renderAdminFeedback() {
+            const container = document.getElementById('adminFeedbackContent');
+            if (globalFeedbackList.length === 0) {
+                container.innerHTML = "<p style='color:#6b7280;'>No feedback or inquiries logged yet.</p>";
+                return;
+            }
+
+            let html = "";
+            globalFeedbackList.forEach((fb) => {
+                html += `
+                    <div style="background:#f8fafc; border:1px solid #e5e7eb; padding:15px; border-radius:8px; margin-top:10px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <strong>${fb.teacher}</strong>
+                            <span style="font-size:12px; color:#6b7280;">${fb.date}</span>
+                        </div>
+                        <div style="font-size:13px; color:#d97706; font-weight:600; margin-bottom:5px;">Category: ${fb.category}</div>
+                        <p style="margin:0; font-size:14px;">${fb.message}</p>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderAdminAudit() {
+            const container = document.getElementById('auditContent');
+            let teachers = Object.keys(teacherDatabase);
+
+            if (teachers.length === 0) {
+                container.innerHTML = "<p style='color:#6b7280;'>No registered teacher claim data available for audit.</p>";
+                return;
+            }
+
+            let sortedWeeks = Object.keys(openWeeksConfig).map(Number).sort((a,b) => a - b);
+            const sessionLabelsWords = ["1st", "2nd", "3rd", "4th"];
+
+            let html = `
+                <table style="width:100%; border-collapse:collapse; font-size:13px; background:#fff;">
+                    <thead>
+                        <tr style="background-color:#1e3d59; color:white; text-align:left;">
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Teacher Name</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Phone</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Week</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Morning Sessions Claimed</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Saturday Sessions Claimed</th>
+                            <th style="padding:10px; border:1px solid #cbd5e1;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            teachers.forEach(tName => {
+                let tObj = teacherDatabase[tName];
+                sortedWeeks.forEach(w => {
+                    if (!openWeeksConfig[w]) return;
+
+                    if (!tObj.weeks[w]) {
+                        tObj.weeks[w] = {
+                            status: "pending review",
+                            morning: {
+                                "Monday": { claimed: false, classVal: "", subject: "" },
+                                "Tuesday": { claimed: false, classVal: "", subject: "" },
+                                "Wednesday": { claimed: false, classVal: "", subject: "" },
+                                "Thursday": { claimed: false, classVal: "", subject: "" },
+                                "Friday": { claimed: false, classVal: "", subject: "" }
+                            },
+                            satSessions: []
+                        };
+                    }
+
+                    let wData = tObj.weeks[w];
+                    let morningSummary = [];
+                    Object.keys(wData.morning).forEach(d => {
+                        if (wData.morning[d].claimed) {
+                            morningSummary.push(`${d.substring(0,3)}: ${wData.morning[d].classVal || 'N/A'} (${wData.morning[d].subject || 'N/A'})`);
+                        }
+                    });
+
+                    let satSummaries = [];
+                    let sessionsList = wData.satSessions || [];
+                    sessionsList.forEach((sess, sIdx) => {
+                        let labelWord = sessionLabelsWords[sIdx] || `${sIdx + 1}th`;
+                        satSummaries.push(`${labelWord}: ${sess.classVal || 'N/A'} (${sess.subject || 'N/A'})`);
+                    });
+
+                    let morningStr = morningSummary.length > 0 ? morningSummary.join('<br>') : '<span style="color:#9ca3af;">None</span>';
+                    let satStr = satSummaries.length > 0 ? satSummaries.join('<br>') : '<span style="color:#9ca3af;">None</span>';
+
+                    html += `
+                        <tr style="border-bottom:1px solid #e2e8f0;">
+                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">${tName}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0;">${tObj.phone}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; font-weight:600;">Week ${w}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${morningStr}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0; line-height:1.4;">${satStr}</td>
+                            <td style="padding:10px; border:1px solid #e2e8f0;">
+                                <select onchange="adminUpdateStatus('${tName}', ${w}, this.value)" style="padding:6px; font-size:12px; width:100%; box-sizing:border-box;">
+                                    <option value="pending review" ${wData.status === 'pending review' ? 'selected' : ''}>pending review</option>
+                                    <option value="reviewed" ${wData.status === 'reviewed' ? 'selected' : ''}>reviewed</option>
+                                    <option value="funds ready to be claim" ${wData.status === 'funds ready to be claim' ? 'selected' : ''}>funds ready to be claim</option>
+                                    <option value="funds claimed and signed" ${wData.status === 'funds claimed and signed' ? 'selected' : ''}>funds claimed and signed</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `;
                 });
             });
-            if(!rows.length){c.innerHTML='<p style="color:#64748b">No claim records match the selected filters.</p>';return;}
-            c.innerHTML=`<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Teacher</th><th>Week</th><th>Morning Sessions</th><th>Saturday Sessions</th><th>Status</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
-        }
-        function adminUpdateStatus(teacherName,weekNum,newStatus){if(teacherDatabase[teacherName]?.weeks[weekNum]){teacherDatabase[teacherName].weeks[weekNum].status=newStatus;saveData();}}
 
-        function renderAdminFeedbackEnhanced(){
-            const c=document.getElementById('adminFeedbackContent'); if(!c)return; const q=(document.getElementById('feedbackSearch')?.value||'').toLowerCase(); const f=document.getElementById('feedbackFilter')?.value||'all';
-            let list=globalFeedbackList.map((x,i)=>({...x,index:i,resolved:!!x.resolved})).filter(x=>{const hay=`${x.teacher} ${x.category} ${x.message}`.toLowerCase();return(!q||hay.includes(q))&&(f==='all'||(f==='resolved')===x.resolved)});
-            if(!list.length){c.innerHTML='<p style="color:#64748b">No inquiries match the selected filter.</p>';return;}
-            c.innerHTML=list.slice().reverse().map(fb=>`<div class="feedback-card ${fb.resolved?'resolved':''}"><div style="display:flex;justify-content:space-between;gap:10px"><strong>${escapeHTML(fb.teacher)}</strong><span style="font-size:11px;color:#64748b">${escapeHTML(fb.date||'')}</span></div><div style="font-size:12px;color:#b45309;font-weight:700;margin:5px 0">${escapeHTML(fb.category)} · ${fb.resolved?'RESOLVED':'OPEN'}</div><p style="margin:0 0 10px;font-size:13px">${escapeHTML(fb.message)}</p><button class="btn-outline-admin" onclick="toggleFeedbackResolved(${fb.index})">${fb.resolved?'Re-open':'Mark Resolved'}</button></div>`).join('');
+            html += `
+                    </tbody>
+                </table>
+            `;
+            container.innerHTML = html;
         }
-        function toggleFeedbackResolved(i){if(globalFeedbackList[i]){globalFeedbackList[i].resolved=!globalFeedbackList[i].resolved;saveData();renderAdminFeedbackEnhanced();updateAdminStats();}}
 
-        function exportClaimsCSV(){
-            const rows=[['Teacher','Phone','Week','Morning Sessions','Saturday Sessions','Status']];
-            Object.keys(teacherDatabase).forEach(name=>Object.keys(openWeeksConfig).forEach(w=>{const d=teacherDatabase[name]?.weeks?.[w];if(!d)return;const m=Object.keys(d.morning||{}).filter(k=>d.morning[k].claimed).map(k=>`${k}: ${d.morning[k].classVal} (${d.morning[k].subject})`).join(' | ');const sat=(d.satSessions||[]).map(x=>`${x.classVal} (${x.subject})`).join(' | ');rows.push([name,teacherDatabase[name].phone||'',`Week ${w}`,m,sat,d.status||'pending review']);}));
-            downloadTextFile('BLISS_claim_audit.csv',rows.map(r=>r.map(csvEscape).join(',')).join('\n'),'text/csv');
+        function adminUpdateStatus(teacherName, weekNum, newStatus) {
+            if (teacherDatabase[teacherName] && teacherDatabase[teacherName].weeks[weekNum]) {
+                teacherDatabase[teacherName].weeks[weekNum].status = newStatus;
+                saveData();
+            }
         }
-        function exportSystemBackup(){
-            const data={exportedAt:new Date().toISOString(),teacherList,openWeeksConfig,teacherDatabase,globalFeedbackList};
-            downloadTextFile('BLISS_system_backup.json',JSON.stringify(data,null,2),'application/json');
+
+        function clearAllRemedials() {
+            if (confirm("Are you sure you want to clear all teacher records and database information? This cannot be undone.")) {
+                localStorage.removeItem('teacherDatabase');
+                localStorage.removeItem('globalFeedbackList');
+                teacherDatabase = {};
+                globalFeedbackList = [];
+                renderAdminAudit();
+                renderAdminFeedback();
+                alert("All records have been cleared.");
+            }
         }
-        function restoreSystemBackup(event){
-            const file=event.target.files[0]; if(!file)return; const reader=new FileReader(); reader.onload=()=>{try{const d=JSON.parse(reader.result);if(!Array.isArray(d.teacherList)||!d.openWeeksConfig||!d.teacherDatabase){throw new Error('Invalid backup structure');} if(!confirm('Restore this backup? Current local data will be replaced.'))return;teacherList=d.teacherList;openWeeksConfig=d.openWeeksConfig;teacherDatabase=d.teacherDatabase;globalFeedbackList=Array.isArray(d.globalFeedbackList)?d.globalFeedbackList:[];saveData();refreshAdminPanel();alert('Backup restored successfully.');}catch(e){alert('Could not restore backup: '+e.message);}event.target.value='';};reader.readAsText(file);
-        }
-        function clearAllRemedialsEnhanced(){
-            const confirmation=prompt('This will delete all teacher claim records and inquiries. Type CLEAR to continue:');
-            if(confirmation!=='CLEAR'){alert('Action cancelled.');return;}
-            localStorage.removeItem('teacherDatabase');localStorage.removeItem('globalFeedbackList');teacherDatabase={};globalFeedbackList=[];saveData();refreshAdminPanel();alert('Claim records and inquiries cleared. Teacher accounts and week configuration were preserved.');
-        }
-        function downloadTextFile(filename,text,type){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500);}
-        function csvEscape(v){v=String(v??'');return '"'+v.replace(/"/g,'""')+'"';}
-        function escapeHTML(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-        function escapeJS(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
-    
-        const CAT_DB_NAME = 'BLISSTeacherPortalCATs';
-        const CAT_STORE = 'papers';
-        function catOpenDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(CAT_DB_NAME,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(CAT_STORE))r.result.createObjectStore(CAT_STORE,{keyPath:'id'});};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});}
-        async function catPut(record){const db=await catOpenDB();return new Promise((resolve,reject)=>{const tx=db.transaction(CAT_STORE,'readwrite');tx.objectStore(CAT_STORE).put(record);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
-        async function catGetAll(){const db=await catOpenDB();return new Promise((resolve,reject)=>{const tx=db.transaction(CAT_STORE,'readonly');const r=tx.objectStore(CAT_STORE).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});}
-        async function populateCATWeeks(){const s=document.getElementById('catWeek');if(!s)return;const weeks=Object.keys(openWeeksConfig||{}).map(Number).sort((a,b)=>a-b);s.innerHTML=weeks.length?weeks.map(w=>`<option value="${w}">Week ${w}</option>`).join(''):'<option value="">No weeks configured</option>';}
-        async function renderTeacherCATs(){const c=document.getElementById('teacherCatList');if(!c||!currentActiveTeacher)return;try{const all=await catGetAll();const mine=all.filter(p=>p.teacher===currentActiveTeacher).sort((a,b)=>b.uploadedAt-a.uploadedAt);const count=document.getElementById('catUploadCount');if(count)count.textContent=`${mine.length} paper${mine.length===1?'':'s'}`;if(!mine.length){c.innerHTML='<div style="padding:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:7px;color:#64748b;">No C.A.T. papers uploaded yet.</div>';return;}c.innerHTML=mine.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:11px;border:1px solid #e2e8f0;border-radius:7px;margin-top:8px;background:#fff;"><div><strong>Week ${p.week} · ${escapeHTML(p.subject)}</strong><div style="font-size:12px;color:#64748b;margin-top:3px;">${escapeHTML(p.className)} · ${escapeHTML(p.fileName)}</div></div><button type="button" class="btn-outline-admin" onclick="downloadWeeklyCAT('${p.id}')">Download</button></div>`).join('');}catch(e){c.innerHTML='<p style="color:#b91c1c">Unable to load uploaded papers in this browser.</p>';}}
-        async function uploadWeeklyCAT(){if(!currentActiveTeacher){alert('Please sign in first.');return;}const week=document.getElementById('catWeek').value,cls=document.getElementById('catClass').value.trim(),subject=document.getElementById('catSubject').value.trim(),input=document.getElementById('catPaperFile'),msg=document.getElementById('catUploadMsg'),file=input.files[0];if(!week||!cls||!subject||!file){msg.textContent='Please select a week, enter the class and subject, and choose the exam paper.';msg.style.color='#b91c1c';return;}if(file.size>4*1024*1024){msg.textContent='File is larger than 4 MB. Please compress it or choose a smaller file.';msg.style.color='#b91c1c';return;}const allowed=['pdf','doc','docx','ppt','pptx','jpg','jpeg','png'],ext=file.name.toLowerCase().split('.').pop();if(!allowed.includes(ext)){msg.textContent='Unsupported file type.';msg.style.color='#b91c1c';return;}try{await catPut({id:'cat_'+Date.now()+'_'+Math.random().toString(36).slice(2),teacher:currentActiveTeacher,week:Number(week),className:cls,subject,fileName:file.name,fileType:file.type,blob:file,uploadedAt:Date.now()});input.value='';msg.textContent='C.A.T. paper uploaded successfully.';msg.style.color='#15803d';renderTeacherCATs();}catch(e){msg.textContent='Upload failed. Please try again.';msg.style.color='#b91c1c';}}
-        async function downloadWeeklyCAT(id){try{const all=await catGetAll(),p=all.find(x=>x.id===id&&x.teacher===currentActiveTeacher);if(!p)return;const url=URL.createObjectURL(p.blob),a=document.createElement('a');a.href=url;a.download=p.fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){alert('Unable to download this paper.');}}
-</script>
+    </script>
 </body>
 </html>
+<div id="student-management" class="portal-page">
+
+    <h2>Student Management</h2>
+
+    <div class="dashboard-cards">
+
+        <div class="card">
+            <h3>Total Students</h3>
+            <h1 id="totalStudents">0</h1>
+        </div>
+
+        <div class="card">
+            <h3>Boys</h3>
+            <h1 id="boysCount">0</h1>
+        </div>
+
+        <div class="card">
+            <h3>Girls</h3>
+            <h1 id="girlsCount">0</h1>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h3>Register Student</h3>
+
+    <form id="studentForm">
+
+        <input type="text" id="admNo" placeholder="Admission Number" required>
+
+        <input type="text" id="studentName" placeholder="Full Name" required>
+
+        <select id="gender">
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+
+        <select id="studentClass">
+            <option>Form 1</option>
+            <option>Form 2</option>
+            <option>Form 3</option>
+            <option>Form 4</option>
+        </select>
+
+        <input type="text" id="stream" placeholder="Stream">
+
+        <button type="submit">
+            Save Student
+        </button>
+
+    </form>
+
+    <hr>
+
+    <input type="text"
+           id="searchStudent"
+           placeholder="Search Student..."
+           onkeyup="searchStudent()">
+
+    <table id="studentTable">
+
+        <thead>
+
+            <tr>
+
+                <th>Adm No</th>
+
+                <th>Name</th>
+
+                <th>Gender</th>
+
+                <th>Class</th>
+
+                <th>Stream</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+let students=[];
+
+const form=document.getElementById("studentForm");
+
+form.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const student={
+
+adm:admNo.value,
+
+name:studentName.value,
+
+gender:gender.value,
+
+className:studentClass.value,
+
+stream:stream.value
+
+};
+
+students.push(student);
+
+displayStudents();
+
+form.reset();
+
+});
+
+function displayStudents(){
+
+const tbody=document.querySelector("#studentTable tbody");
+
+tbody.innerHTML="";
+
+let boys=0;
+let girls=0;
+
+students.forEach((s,index)=>{
+
+if(s.gender==="Male") boys++;
+else girls++;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${s.adm}</td>
+
+<td>${s.name}</td>
+
+<td>${s.gender}</td>
+
+<td>${s.className}</td>
+
+<td>${s.stream}</td>
+
+<td>
+
+<button onclick="deleteStudent(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("totalStudents").innerHTML=students.length;
+
+document.getElementById("boysCount").innerHTML=boys;
+
+document.getElementById("girlsCount").innerHTML=girls;
+
+}
+
+function deleteStudent(index){
+
+students.splice(index,1);
+
+displayStudents();
+
+}
+
+function searchStudent(){
+
+let input=document.getElementById("searchStudent").value.toUpperCase();
+
+let rows=document.querySelectorAll("#studentTable tbody tr");
+
+rows.forEach(row=>{
+
+let txt=row.innerText.toUpperCase();
+
+row.style.display=txt.includes(input)?"":"none";
+
+});
+
+}
+
+</script>
+
+<div id="bursar-management" class="portal-page">
+
+<h2>Fees Management</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Total Collected</h3>
+<h1 id="totalCollected">KES 0</h1>
+</div>
+
+<div class="card">
+<h3>Outstanding Balance</h3>
+<h1 id="totalBalance">KES 0</h1>
+</div>
+
+<div class="card">
+<h3>Total Students Paid</h3>
+<h1 id="studentsPaid">0</h1>
+</div>
+
+</div>
+
+<hr>
+
+<h3>Record Fee Payment</h3>
+
+<form id="feeForm">
+
+<input type="text" id="feeAdm" placeholder="Admission Number" required>
+
+<input type="text" id="feeName" placeholder="Student Name" required>
+
+<select id="feeClass">
+<option>Form 1</option>
+<option>Form 2</option>
+<option>Form 3</option>
+<option>Form 4</option>
+</select>
+
+<input type="number" id="amountPaid" placeholder="Amount Paid" required>
+
+<input type="number" id="feeBalance" placeholder="Balance" required>
+
+<select id="paymentMode">
+<option>Cash</option>
+<option>M-PESA</option>
+<option>Bank</option>
+<option>Cheque</option>
+</select>
+
+<button type="submit">
+Save Payment
+</button>
+
+</form>
+
+<hr>
+
+<input type="text"
+id="searchFee"
+placeholder="Search Student..."
+onkeyup="searchFees()">
+
+<table id="feesTable">
+
+<thead>
+
+<tr>
+
+<th>Adm No</th>
+
+<th>Name</th>
+
+<th>Class</th>
+
+<th>Paid</th>
+
+<th>Balance</th>
+
+<th>Mode</th>
+
+<th>Receipt</th>
+
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let feeRecords=[];
+
+document.getElementById("feeForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let payment={
+
+adm:feeAdm.value,
+
+name:feeName.value,
+
+className:feeClass.value,
+
+paid:Number(amountPaid.value),
+
+balance:Number(feeBalance.value),
+
+mode:paymentMode.value,
+
+receipt:"RCPT-"+Date.now()
+
+};
+
+feeRecords.push(payment);
+
+displayFees();
+
+this.reset();
+
+});
+
+function displayFees(){
+
+let tbody=document.querySelector("#feesTable tbody");
+
+tbody.innerHTML="";
+
+let collected=0;
+
+let balance=0;
+
+feeRecords.forEach((p,index)=>{
+
+collected+=p.paid;
+
+balance+=p.balance;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${p.adm}</td>
+
+<td>${p.name}</td>
+
+<td>${p.className}</td>
+
+<td>KES ${p.paid.toLocaleString()}</td>
+
+<td>KES ${p.balance.toLocaleString()}</td>
+
+<td>${p.mode}</td>
+
+<td>${p.receipt}</td>
+
+<td>
+
+<button onclick="deletePayment(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("totalCollected").innerHTML="KES "+collected.toLocaleString();
+
+document.getElementById("totalBalance").innerHTML="KES "+balance.toLocaleString();
+
+document.getElementById("studentsPaid").innerHTML=feeRecords.length;
+
+}
+
+function deletePayment(index){
+
+feeRecords.splice(index,1);
+
+displayFees();
+
+}
+
+function searchFees(){
+
+let input=document.getElementById("searchFee").value.toUpperCase();
+
+let rows=document.querySelectorAll("#feesTable tbody tr");
+
+rows.forEach(row=>{
+
+let txt=row.innerText.toUpperCase();
+
+row.style.display=txt.includes(input)?"":"none";
+
+});
+
+}
+
+</script>
+<div id="exam-management" class="portal-page">
+
+<h2>Examination Management</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Total Students</h3>
+<h1 id="examStudents">0</h1>
+</div>
+
+<div class="card">
+<h3>Class Mean</h3>
+<h1 id="classMean">0</h1>
+</div>
+
+<div class="card">
+<h3>Top Student</h3>
+<h1 id="topStudent">-</h1>
+</div>
+
+</div>
+
+<hr>
+
+<h3>Enter Student Marks</h3>
+
+<form id="examForm">
+
+<input type="text" id="examAdm" placeholder="Admission Number" required>
+
+<input type="text" id="examName" placeholder="Student Name" required>
+
+<select id="examClass">
+<option>Form 1</option>
+<option>Form 2</option>
+<option>Form 3</option>
+<option>Form 4</option>
+</select>
+
+<input type="number" id="catMarks" placeholder="CAT Marks (/30)" required>
+
+<input type="number" id="examMarks" placeholder="Exam Marks (/70)" required>
+
+<button type="submit">
+Save Marks
+</button>
+
+</form>
+
+<hr>
+
+<input
+type="text"
+id="examSearch"
+placeholder="Search Student..."
+onkeyup="searchExam()">
+
+<table id="examTable">
+
+<thead>
+
+<tr>
+
+<th>Adm No</th>
+<th>Name</th>
+<th>Class</th>
+<th>CAT</th>
+<th>Exam</th>
+<th>Total</th>
+<th>Grade</th>
+<th>Remarks</th>
+<th>Position</th>
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let examRecords=[];
+
+document.getElementById("examForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let total=
+Number(catMarks.value)+
+Number(examMarks.value);
+
+let grade="";
+let remarks="";
+
+if(total>=80){
+grade="A";
+remarks="Excellent";
+}
+else if(total>=75){
+grade="A-";
+remarks="Very Good";
+}
+else if(total>=70){
+grade="B+";
+remarks="Very Good";
+}
+else if(total>=65){
+grade="B";
+remarks="Good";
+}
+else if(total>=60){
+grade="B-";
+remarks="Good";
+}
+else if(total>=55){
+grade="C+";
+remarks="Fair";
+}
+else if(total>=50){
+grade="C";
+remarks="Fair";
+}
+else if(total>=45){
+grade="C-";
+remarks="Average";
+}
+else if(total>=40){
+grade="D+";
+remarks="Needs Improvement";
+}
+else if(total>=35){
+grade="D";
+remarks="Needs Improvement";
+}
+else{
+grade="E";
+remarks="Fail";
+}
+
+examRecords.push({
+
+adm:examAdm.value,
+
+name:examName.value,
+
+className:examClass.value,
+
+cat:Number(catMarks.value),
+
+exam:Number(examMarks.value),
+
+total,
+
+grade,
+
+remarks
+
+});
+
+displayExam();
+
+this.reset();
+
+});
+
+function displayExam(){
+
+examRecords.sort((a,b)=>b.total-a.total);
+
+let tbody=document.querySelector("#examTable tbody");
+
+tbody.innerHTML="";
+
+let mean=0;
+
+examRecords.forEach((s,index)=>{
+
+mean+=s.total;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${s.adm}</td>
+
+<td>${s.name}</td>
+
+<td>${s.className}</td>
+
+<td>${s.cat}</td>
+
+<td>${s.exam}</td>
+
+<td>${s.total}</td>
+
+<td>${s.grade}</td>
+
+<td>${s.remarks}</td>
+
+<td>${index+1}</td>
+
+<td>
+
+<button onclick="deleteResult(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("examStudents").innerHTML=examRecords.length;
+
+document.getElementById("classMean").innerHTML=
+
+examRecords.length?
+
+(mean/examRecords.length).toFixed(2):0;
+
+document.getElementById("topStudent").innerHTML=
+
+examRecords.length?
+
+examRecords[0].name:"-";
+
+}
+
+function deleteResult(index){
+
+examRecords.splice(index,1);
+
+displayExam();
+
+}
+
+function searchExam(){
+
+let input=document.getElementById("examSearch").value.toUpperCase();
+
+let rows=document.querySelectorAll("#examTable tbody tr");
+
+rows.forEach(row=>{
+
+let txt=row.innerText.toUpperCase();
+
+row.style.display=
+
+txt.includes(input)?"":"none";
+
+});
+
+}
+
+</script>
+<div id="report-management" class="portal-page">
+
+<h2>Report Card Management</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Highest Score</h3>
+<h1 id="highestScore">0</h1>
+</div>
+
+<div class="card">
+<h3>Lowest Score</h3>
+<h1 id="lowestScore">0</h1>
+</div>
+
+<div class="card">
+<h3>Overall Mean</h3>
+<h1 id="overallMean">0</h1>
+</div>
+
+</div>
+
+<hr>
+
+<input
+type="text"
+id="reportSearch"
+placeholder="Search Student..."
+onkeyup="searchReport()">
+
+<table id="reportTable">
+
+<thead>
+
+<tr>
+
+<th>Adm No</th>
+<th>Name</th>
+<th>Class</th>
+<th>Total</th>
+<th>Grade</th>
+<th>Position</th>
+<th>Teacher Comment</th>
+<th>Principal Remark</th>
+<th>Print</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+function generateReports(){
+
+let tbody=document.querySelector("#reportTable tbody");
+
+tbody.innerHTML="";
+
+if(examRecords.length===0)return;
+
+let highest=examRecords[0].total;
+let lowest=examRecords[0].total;
+let mean=0;
+
+examRecords.forEach((student,index)=>{
+
+if(student.total>highest) highest=student.total;
+
+if(student.total<lowest) lowest=student.total;
+
+mean+=student.total;
+
+let teacherComment="";
+
+if(student.total>=80)
+teacherComment="Excellent Performance";
+
+else if(student.total>=65)
+teacherComment="Very Good";
+
+else if(student.total>=50)
+teacherComment="Good";
+
+else
+teacherComment="Needs Improvement";
+
+let principalRemark=
+
+student.grade=="A"||
+student.grade=="A-"?
+
+"Promoted":
+
+student.grade=="E"?
+
+"Repeat Class":
+
+"Proceed";
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${student.adm}</td>
+
+<td>${student.name}</td>
+
+<td>${student.className}</td>
+
+<td>${student.total}</td>
+
+<td>${student.grade}</td>
+
+<td>${index+1}</td>
+
+<td>${teacherComment}</td>
+
+<td>${principalRemark}</td>
+
+<td>
+
+<button onclick="printReport(${index})">
+
+Print
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("highestScore").innerHTML=highest;
+
+document.getElementById("lowestScore").innerHTML=lowest;
+
+document.getElementById("overallMean").innerHTML=
+
+(mean/examRecords.length).toFixed(2);
+
+}
+
+function printReport(index){
+
+let s=examRecords[index];
+
+let report=window.open("","_blank");
+
+report.document.write(`
+
+<h2 style="text-align:center">
+
+BLISS ACADEMIC MANAGEMENT SYSTEM
+
+</h2>
+
+<hr>
+
+<h3>Student Report Card</h3>
+
+<p><b>Admission No:</b> ${s.adm}</p>
+
+<p><b>Name:</b> ${s.name}</p>
+
+<p><b>Class:</b> ${s.className}</p>
+
+<p><b>CAT Marks:</b> ${s.cat}</p>
+
+<p><b>Exam Marks:</b> ${s.exam}</p>
+
+<p><b>Total:</b> ${s.total}</p>
+
+<p><b>Grade:</b> ${s.grade}</p>
+
+<p><b>Remarks:</b> ${s.remarks}</p>
+
+<br>
+
+<p>
+
+Teacher Signature _______________________
+
+</p>
+
+<br>
+
+<p>
+
+Principal Signature _____________________
+
+</p>
+
+`);
+
+report.print();
+
+}
+
+function searchReport(){
+
+let input=document.getElementById("reportSearch").value.toUpperCase();
+
+let rows=document.querySelectorAll("#reportTable tbody tr");
+
+rows.forEach(row=>{
+
+let txt=row.innerText.toUpperCase();
+
+row.style.display=
+
+txt.includes(input)?"":"none";
+
+});
+
+}
+
+setInterval(generateReports,1000);
+
+</script>
+<div id="teacher-upload-center" class="portal-page">
+
+<h2>Teacher Upload Centre</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Weekly CATs</h3>
+<h1 id="catCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Assignments</h3>
+<h1 id="assignmentCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Exams</h3>
+<h1 id="examFileCount">0</h1>
+</div>
+
+<div class="card">
+<h3>Notes</h3>
+<h1 id="notesCount">0</h1>
+</div>
+
+</div>
+
+<hr>
+
+<form id="teacherUploadForm">
+
+<label>Teacher Name</label>
+
+<input
+type="text"
+id="teacherName"
+required>
+
+<label>Subject</label>
+
+<select id="teacherSubject">
+
+<option>Mathematics</option>
+<option>English</option>
+<option>Kiswahili</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Biology</option>
+<option>History</option>
+<option>Geography</option>
+<option>CRE</option>
+<option>Business Studies</option>
+<option>Agriculture</option>
+<option>Computer Studies</option>
+
+</select>
+
+<label>Class</label>
+
+<select id="teacherClass">
+
+<option>Form 1</option>
+<option>Form 2</option>
+<option>Form 3</option>
+<option>Form 4</option>
+
+</select>
+
+<label>Upload Type</label>
+
+<select id="uploadType">
+
+<option>Weekly CAT</option>
+<option>Assignment</option>
+<option>Notes</option>
+<option>Exam</option>
+<option>Marking Scheme</option>
+
+</select>
+
+<label>Select File</label>
+
+<input
+type="file"
+id="teacherFile"
+required>
+
+<button type="submit">
+
+Upload File
+
+</button>
+
+</form>
+
+<hr>
+
+<input
+type="text"
+id="teacherSearch"
+placeholder="Search uploaded files..."
+onkeyup="searchTeacherFiles()">
+
+<table id="teacherUploadsTable">
+
+<thead>
+
+<tr>
+
+<th>Teacher</th>
+<th>Subject</th>
+<th>Class</th>
+<th>Type</th>
+<th>File</th>
+<th>Date</th>
+<th>Download</th>
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let uploadedFiles=[];
+
+document.getElementById("teacherUploadForm")
+
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const file=document.getElementById("teacherFile").files[0];
+
+uploadedFiles.push({
+
+teacher:teacherName.value,
+
+subject:teacherSubject.value,
+
+className:teacherClass.value,
+
+type:uploadType.value,
+
+file:file,
+
+date:new Date().toLocaleDateString()
+
+});
+
+displayTeacherFiles();
+
+this.reset();
+
+});
+
+function displayTeacherFiles(){
+
+const tbody=document.querySelector("#teacherUploadsTable tbody");
+
+tbody.innerHTML="";
+
+let cat=0;
+
+let assignment=0;
+
+let exam=0;
+
+let notes=0;
+
+uploadedFiles.forEach((f,index)=>{
+
+if(f.type==="Weekly CAT") cat++;
+
+if(f.type==="Assignment") assignment++;
+
+if(f.type==="Exam") exam++;
+
+if(f.type==="Notes") notes++;
+
+let url=URL.createObjectURL(f.file);
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${f.teacher}</td>
+
+<td>${f.subject}</td>
+
+<td>${f.className}</td>
+
+<td>${f.type}</td>
+
+<td>${f.file.name}</td>
+
+<td>${f.date}</td>
+
+<td>
+
+<a href="${url}" download="${f.file.name}">
+
+Download
+
+</a>
+
+</td>
+
+<td>
+
+<button onclick="deleteTeacherFile(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+catCount.innerHTML=cat;
+
+assignmentCount.innerHTML=assignment;
+
+examFileCount.innerHTML=exam;
+
+notesCount.innerHTML=notes;
+
+}
+
+function deleteTeacherFile(index){
+
+uploadedFiles.splice(index,1);
+
+displayTeacherFiles();
+
+}
+
+function searchTeacherFiles(){
+
+let input=teacherSearch.value.toUpperCase();
+
+let rows=document.querySelectorAll("#teacherUploadsTable tbody tr");
+
+rows.forEach(row=>{
+
+let text=row.innerText.toUpperCase();
+
+row.style.display=text.includes(input)?"":"none";
+
+});
+
+}
+
+</script>
+<div id="principal-dashboard" class="portal-page">
+
+<h2>Principal Dashboard</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Total Students</h3>
+<h1 id="pStudents">0</h1>
+</div>
+
+<div class="card">
+<h3>Total Teachers</h3>
+<h1 id="pTeachers">0</h1>
+</div>
+
+<div class="card">
+<h3>Attendance</h3>
+<h1 id="pAttendance">0%</h1>
+</div>
+
+<div class="card">
+<h3>Fees Collected</h3>
+<h1 id="pFees">KES 0</h1>
+</div>
+
+<div class="card">
+<h3>School Mean</h3>
+<h1 id="schoolMean">0</h1>
+</div>
+
+<div class="card">
+<h3>Announcements</h3>
+<h1 id="announcementCount">0</h1>
+</div>
+
+</div>
+
+<hr>
+
+<h3>Create Announcement</h3>
+
+<form id="announcementForm">
+
+<input
+type="text"
+id="announcementTitle"
+placeholder="Announcement Title"
+required>
+
+<textarea
+id="announcementBody"
+placeholder="Write announcement..."
+rows="5"
+required></textarea>
+
+<button type="submit">
+
+Publish Announcement
+
+</button>
+
+</form>
+
+<hr>
+
+<h3>School Announcements</h3>
+
+<table id="announcementTable">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>Title</th>
+
+<th>Announcement</th>
+
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<hr>
+
+<h3>Teacher Performance</h3>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Teacher</th>
+
+<th>Subject</th>
+
+<th>Class</th>
+
+<th>Lessons</th>
+
+<th>Attendance</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="teacherPerformanceBody">
+
+<tr>
+
+<td>John Mwangi</td>
+
+<td>Mathematics</td>
+
+<td>Form 4</td>
+
+<td>32</td>
+
+<td>98%</td>
+
+<td>Excellent</td>
+
+</tr>
+
+<tr>
+
+<td>Grace Achieng</td>
+
+<td>English</td>
+
+<td>Form 3</td>
+
+<td>30</td>
+
+<td>95%</td>
+
+<td>Very Good</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<hr>
+
+<h3>Quick Reports</h3>
+
+<button onclick="window.print()">
+
+Print School Report
+
+</button>
+
+<button onclick="exportDashboard()">
+
+Export Dashboard
+
+</button>
+
+</div>
+
+<script>
+
+let announcements=[];
+
+announcementForm.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+announcements.push({
+
+date:new Date().toLocaleDateString(),
+
+title:announcementTitle.value,
+
+body:announcementBody.value
+
+});
+
+displayAnnouncements();
+
+this.reset();
+
+});
+
+function displayAnnouncements(){
+
+const tbody=document.querySelector("#announcementTable tbody");
+
+tbody.innerHTML="";
+
+announcements.forEach((a,index)=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${a.date}</td>
+
+<td>${a.title}</td>
+
+<td>${a.body}</td>
+
+<td>
+
+<button onclick="deleteAnnouncement(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+announcementCount.innerHTML=announcements.length;
+
+}
+
+function deleteAnnouncement(index){
+
+announcements.splice(index,1);
+
+displayAnnouncements();
+
+}
+
+function exportDashboard(){
+
+let report="BLISS SCHOOL REPORT\n\n";
+
+report+="Generated: "+new Date().toLocaleString()+"\n\n";
+
+report+="Students: "+document.getElementById("pStudents").innerHTML+"\n";
+
+report+="Teachers: "+document.getElementById("pTeachers").innerHTML+"\n";
+
+report+="Attendance: "+document.getElementById("pAttendance").innerHTML+"\n";
+
+report+="Fees: "+document.getElementById("pFees").innerHTML+"\n";
+
+report+="School Mean: "+document.getElementById("schoolMean").innerHTML+"\n";
+
+const blob=new Blob([report],{type:"text/plain"});
+
+const link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+
+link.download="School_Report.txt";
+
+link.click();
+
+}
+
+setInterval(function(){
+
+if(typeof students!=="undefined")
+
+pStudents.innerHTML=students.length;
+
+if(typeof feeRecords!=="undefined"){
+
+let total=0;
+
+feeRecords.forEach(x=>total+=x.paid);
+
+pFees.innerHTML="KES "+total.toLocaleString();
+
+}
+
+if(typeof examRecords!=="undefined" && examRecords.length){
+
+let mean=0;
+
+examRecords.forEach(x=>mean+=x.total);
+
+schoolMean.innerHTML=(mean/examRecords.length).toFixed(2);
+
+}
+
+},1000);
+
+</script>
+<div id="administration-module" class="portal-page">
+
+<h2>System Administration</h2>
+
+<div class="dashboard-cards">
+
+<div class="card">
+<h3>Total Users</h3>
+<h1 id="totalUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>Administrators</h3>
+<h1 id="adminUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>Teachers</h3>
+<h1 id="teacherUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>Parents</h3>
+<h1 id="parentUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>Students</h3>
+<h1 id="studentUsers">0</h1>
+</div>
+
+</div>
+
+<hr>
+
+<h3>Create User Account</h3>
+
+<form id="userForm">
+
+<input type="text" id="fullName" placeholder="Full Name" required>
+
+<input type="text" id="username" placeholder="Username" required>
+
+<input type="password" id="password" placeholder="Password" required>
+
+<select id="role">
+
+<option>Administrator</option>
+<option>Teacher</option>
+<option>Bursar</option>
+<option>Principal</option>
+<option>Deputy Principal</option>
+<option>DOS</option>
+<option>Librarian</option>
+<option>Guidance & Counselling</option>
+<option>Parent</option>
+<option>Student</option>
+
+</select>
+
+<button type="submit">
+
+Create Account
+
+</button>
+
+</form>
+
+<hr>
+
+<input
+type="text"
+id="searchUser"
+placeholder="Search User..."
+onkeyup="searchUsers()">
+
+<table id="usersTable">
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Username</th>
+<th>Role</th>
+<th>Status</th>
+<th>Reset Password</th>
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+<hr>
+
+<h3>System Settings</h3>
+
+<div class="settings-panel">
+
+<label>School Name</label>
+
+<input type="text" value="BLISS ACADEMIC MANAGEMENT SYSTEM">
+
+<label>School Motto</label>
+
+<input type="text" value="Education for Excellence">
+
+<label>Academic Year</label>
+
+<input type="text" value="2026">
+
+<label>Current Term</label>
+
+<select>
+
+<option>Term 1</option>
+<option>Term 2</option>
+<option>Term 3</option>
+
+</select>
+
+<button>
+
+Save Settings
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let systemUsers=[];
+
+document.getElementById("userForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+systemUsers.push({
+
+name:fullName.value,
+
+username:username.value,
+
+password:password.value,
+
+role:role.value,
+
+status:"Active"
+
+});
+
+displayUsers();
+
+this.reset();
+
+});
+
+function displayUsers(){
+
+const tbody=document.querySelector("#usersTable tbody");
+
+tbody.innerHTML="";
+
+let admins=0;
+let teachers=0;
+let parents=0;
+let studentsCount=0;
+
+systemUsers.forEach((user,index)=>{
+
+if(user.role==="Administrator") admins++;
+if(user.role==="Teacher") teachers++;
+if(user.role==="Parent") parents++;
+if(user.role==="Student") studentsCount++;
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${user.name}</td>
+
+<td>${user.username}</td>
+
+<td>${user.role}</td>
+
+<td>${user.status}</td>
+
+<td>
+
+<button onclick="resetPassword(${index})">
+
+Reset
+
+</button>
+
+</td>
+
+<td>
+
+<button onclick="deleteUser(${index})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+totalUsers.innerHTML=systemUsers.length;
+adminUsers.innerHTML=admins;
+teacherUsers.innerHTML=teachers;
+parentUsers.innerHTML=parents;
+studentUsers.innerHTML=studentsCount;
+
+}
+
+function deleteUser(index){
+
+if(confirm("Delete this user?")){
+
+systemUsers.splice(index,1);
+
+displayUsers();
+
+}
+
+}
+
+function resetPassword(index){
+
+let newPassword=prompt("Enter New Password");
+
+if(newPassword){
+
+systemUsers[index].password=newPassword;
+
+alert("Password Reset Successfully");
+
+}
+
+}
+
+function searchUsers(){
+
+let input=document.getElementById("searchUser").value.toUpperCase();
+
+let rows=document.querySelectorAll("#usersTable tbody tr");
+
+rows.forEach(row=>{
+
+let text=row.innerText.toUpperCase();
+
+row.style.display=text.includes(input)?"":"none";
+
+});
+
+}
+
+</script>
