@@ -678,7 +678,7 @@
                 <label for="adminPassword">Enter Admin Security Password:</label>
                 <div class="input-group-container">
                     <div class="input-icon-box">&#128274;</div>
-                    <input type="password" id="adminPassword" placeholder="Password (dos123)">
+                    <input type="password" id="adminPassword" placeholder="Password (admin123)">
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
@@ -713,7 +713,7 @@
             <div class="topbar">
                 <div>BLISS teachers portal - ADMIN CONTROL PANEL</div>
                 <div class="topbar-right">
-                    <span>Logged in as: <strong>Administrator</strong></span>
+                    <span>Logged in as: <strong>admin</strong></span>
                 </div>
             </div>
 
@@ -1244,7 +1244,7 @@
 
     function loginAdmin() {
         const pass = document.getElementById('adminPassword').value;
-        if (pass !== 'dos123') {
+        if (pass !== 'admin123') {
             document.getElementById('adminError').textContent = 'Incorrect admin security password.';
             return;
         }
