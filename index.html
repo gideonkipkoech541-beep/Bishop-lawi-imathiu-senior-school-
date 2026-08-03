@@ -1,562 +1,519 @@
-<span>Meru, Kenya | Email: info@blissschool.ac.ke</span>
-                                </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLISS - Teacher Portal & Administration Dashboard</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --accent: #10b981;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        button, .btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        button.primary { background-color: var(--primary); }
+        button.success { background-color: var(--accent); }
+        button.danger { background-color: var(--danger); }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        label {
+            font-weight: 600;
+            color: #475569;
+            display: block;
+            margin-top: 10px;
+        }
+        .hidden { display: none !important; }
+        
+        /* Navigation tabs */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            border-radius: 0;
+        }
+        .nav-tab:hover { background: #f8fafc; color: var(--primary); }
+        .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: #f1f5f9; }
 
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 14px;">
-                                    <div>
-                                        <strong>TO:</strong> The School Bursar,<br>
-                                        BLISS Secondary School
-                                    </div>
-                                    <div>
-                                        <strong>DATE:</strong> <span id="letterDateDisplay">31/07/2026</span>
-                                    </div>
-                                </div>
+        /* Dashboard widgets */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .metric-card {
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .metric-card h3 { margin: 0; font-size: 14px; color: #64748b; }
+        .metric-card p { margin: 10px 0 0 0; font-size: 24px; font-weight: bold; color: var(--primary); }
 
-                                <div style="margin-bottom: 20px; font-size: 14px;">
-                                    <strong>FROM:</strong> <span id="letterTeacherNameDisplay">TEACHER BETT</span> (<span id="letterStaffIdDisplay">BLISS/TCH/2026/01</span>)<br>
-                                    <strong>DEPARTMENT:</strong> Science & Mathematics
-                                </div>
+        .day-row {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-ready { background: #d1fae5; color: #059669; }
+        .status-reviewed { background: #e0f2fe; color: #0284c7; }
+        
+        .alert-box {
+            background: #e0f2fe;
+            border-left: 4px solid #0284c7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
 
-                                <div style="text-align: center; margin-bottom: 25px;">
-                                    <h3 style="text-decoration: underline; font-size: 16px; margin: 0;">RE: CLAIM FOR REMEDIAL TEACHING SESSIONS CASH PAYOUT</h3>
-                                </div>
+    <header>
+        <h1>BLISS Academic Portal</h1>
+        <p>Remedial Claims, Lesson Tracking & Administrative Control System</p>
+    </header>
 
-                                <p style="font-size: 14px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
-                                    Dear Bursar,
-                                </p>
+    <div class="container">
 
-                                <p style="font-size: 14px; line-height: 1.6; text-align: justify; margin-bottom: 15px;">
-                                    I am writing to formally request the disbursement of cash funds corresponding to the remedial teaching sessions conducted and verified for the active academic term. Below is the summary of my verified attendance and lesson claims:
-                                </p>
-
-                                <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 13px;">
-                                    <thead>
-                                        <tr style="background: #f1f5f9; border-bottom: 2px solid #000;">
-                                            <th style="border: 1px solid #000; padding: 8px; text-align: left;">Category / Week Range</th>
-                                            <th style="border: 1px solid #000; padding: 8px; text-align: center;">Verified Sessions</th>
-                                            <th style="border: 1px solid #000; padding: 8px; text-align: right;">Rate / Session</th>
-                                            <th style="border: 1px solid #000; padding: 8px; text-align: right;">Subtotal (KES)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="letterTableBody">
-                                        <!-- Dynamically injected rows -->
-                                    </tbody>
-                                    <tfoot>
-                                        <tr style="font-weight: bold; background: #f8fafc;">
-                                            <td colspan="3" style="border: 1px solid #000; padding: 8px; text-align: right;">TOTAL CLAIM AMOUNT:</td>
-                                            <td id="letterTotalAmountDisplay" style="border: 1px solid #000; padding: 8px; text-align: right;">KES 0.00</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-
-                                <p style="font-size: 14px; line-height: 1.6; text-align: justify; margin-bottom: 30px;">
-                                    Kindly process the payment equivalent to the total amount indicated above upon verification of administrative approval stamps. Thank you for your continued cooperation and support of academic excellence.
-                                </p>
-
-                                <div style="display: flex; justify-content: space-between; margin-top: 50px; font-size: 14px;">
-                                    <div style="width: 45%;">
-                                        <p style="border-bottom: 1px solid #000; padding-bottom: 25px; margin: 0;">&nbsp;</p>
-                                        <p style="margin: 5px 0 0 0;"><strong>Teacher's Signature & Date</strong></p>
-                                    </div>
-                                    <div style="width: 45%;">
-                                        <p style="border-bottom: 1px solid #000; padding-bottom: 25px; margin: 0; text-align: center; color: var(--text-muted); font-size: 11px;">[ Official Stamp ]</p>
-                                        <p style="margin: 5px 0 0 0;"><strong>Admin / Principal Signature</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 4: SUPPORT -->
-                <div id="tab-support" class="tab-pane hidden">
-                    <div class="breadcrumb-row">
-                        <h2>Support & System Inquiries</h2>
-                        <div class="breadcrumb-path">Dashboard > Support</div>
-                    </div>
-
-                    <div class="panels-grid" style="grid-template-columns: 1fr 1fr;">
-                        <div class="content-card">
-                            <h3>Contact Administration</h3>
-                            <p style="font-size: 13px; color: var(--text-muted); margin-top: 0;">If you experience any discrepancies in your logged remedial sessions or require profile updates, please contact the administrative offices directly.</p>
-                            
-                            <table class="info-table" style="margin-top: 15px;">
-                                <tr>
-                                    <td class="label-col">Director of Studies (DOS):</td>
-                                    <td class="val-col">Office Room 12</td>
-                                </tr>
-                                <tr>
-                                    <td class="label-col">School Bursar:</td>
-                                    <td class="val-col">Finance Block B</td>
-                                </tr>
-                                <tr>
-                                    <td class="label-col">IT Support Desk:</td>
-                                    <td class="val-col">ext. 404 / admin@blissschool.ac.ke</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div class="content-card">
-                            <h3>System Guidelines & FAQs</h3>
-                            <ul style="font-size: 13px; color: var(--text-main); padding-left: 20px; line-height: 1.6; margin-top: 0;">
-                                <li><strong>Morning Remedials:</strong> Must be submitted weekly before the locking period expires.</li>
-                                <li><strong>Saturday Sessions:</strong> Capped strictly at a maximum of 4 lessons per week.</li>
-                                <li><strong>Cash Payout Letter:</strong> Ensure your document is fully generated, downloaded, and stamped by the administration before approaching the bursar.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- MAIN ENTRY PORTAL -->
+        <div id="mainMenuContainer" class="card">
+            <h2>Welcome to BLISS Portal</h2>
+            <p>Please select your portal to proceed:</p>
+            <div class="btn-grid">
+                <button class="primary" onclick="showPortalSelection('teacherLogin')">Teacher Portal (Remedial Claims)</button>
+                <button class="success" onclick="showPortalSelection('adminPortal')">Administrator Portal (DOS Dashboard)</button>
             </div>
         </div>
-    </div>
 
-    <!-- Admin Panel Modal / Overlay Window -->
-    <div id="adminModal" class="login-wrapper hidden" style="background: rgba(15, 23, 42, 0.85);">
-        <div class="portal-card" style="max-width: 650px;">
-            <div class="portal-header" style="background-color: #1e3d59; display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;">
-                <h2 style="margin: 0; font-size: 18px;">Admin Management Console</h2>
-                <button onclick="closeAdminModal()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">&times;</button>
+        <!-- TEACHER LOGIN PORTAL -->
+        <div id="teacherLoginPortal" class="card hidden">
+            <button class="primary" style="margin-bottom: 20px; width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">&larr; Back to Main Menu</button>
+            <h2>Teacher Authentication</h2>
+            
+            <label for="authTeacherName">Select Your Name:</label>
+            <select id="authTeacherName" onchange="checkTeacherExists()">
+                <!-- Populated dynamically -->
+            </select>
+
+            <div id="teacherAuthError" style="color: var(--danger); font-weight: bold; margin-bottom: 15px;"></div>
+
+            <!-- Login fields (if password exists) -->
+            <div id="loginFields" class="hidden">
+                <label for="authPassword">Enter Your Password:</label>
+                <input type="password" id="authPassword" placeholder="Enter password">
+                <button class="primary" onclick="handleTeacherLogin()">Log In to Portal</button>
+                <p style="margin-top: 15px;"><a href="#" onclick="showForgotPasswordSection()" style="color: var(--secondary); text-decoration: none; font-weight: 600;">Forgot Password?</a></p>
             </div>
-            <div class="portal-body" style="max-height: 75vh; overflow-y: auto;">
-                <h4 style="margin-top: 0; color: #1e3d59; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Registered Teachers Directory</h4>
-                <div id="adminTeachersListContainer" style="margin-bottom: 20px;">
-                    <!-- Dynamically populated teacher cards / rows -->
+
+            <!-- Register fields (if first time setup) -->
+            <div id="registerFields" class="hidden">
+                <div class="alert-box">
+                    <strong>First Time Setup:</strong> It looks like you haven't set up a password yet. Please register your phone number and create a secure password.
+                </div>
+                <label for="regPhone">Phone Number (for verification/SMS):</label>
+                <input type="text" id="regPhone" placeholder="e.g. 0712345678">
+                
+                <label for="regPassword">Create Password:</label>
+                <input type="password" id="regPassword" placeholder="At least 4 characters">
+                
+                <button class="success" onclick="requestRegistrationOTP()">Send Verification Code</button>
+
+                <!-- OTP Verification Box -->
+                <div id="otpVerificationSection" class="hidden" style="margin-top: 20px; border-top: 1px dashed #cbd5e1; padding-top: 15px;">
+                    <div id="otpSimulatedNotice" class="alert-box" style="background:#fef3c7; border-left-color:#d97706; color:#92400e;"></div>
+                    <label for="enteredOtp">Enter 4-Digit Verification Code:</label>
+                    <input type="text" id="enteredOtp" placeholder="Enter code here" maxlength="4">
+                    <button class="primary" onclick="verifyAndCompleteRegistration()">Verify & Complete Registration</button>
+                </div>
+            </div>
+
+            <!-- Forgot Password Section -->
+            <div id="forgotPasswordSection" class="hidden" style="margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+                <h3 style="color: var(--primary); margin-top:0;">Reset Password</h3>
+                <label for="resetPhone">Enter your registered Phone Number:</label>
+                <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
+                <button class="secondary" onclick="requestPasswordResetOTP()">Request Reset Code</button>
+
+                <div id="resetOtpBox" class="hidden" style="margin-top: 15px;">
+                    <div id="resetOtpNotice" class="alert-box" style="background:#fef3c7; border-left-color:#d97706; color:#92400e;"></div>
+                    <label for="enteredResetOtp">Enter Verification Code:</label>
+                    <input type="text" id="enteredResetOtp" placeholder="4-digit code" maxlength="4">
+                    
+                    <label for="newAccountPassword">New Password:</label>
+                    <input type="password" id="newAccountPassword" placeholder="New secure password">
+                    
+                    <button class="success" onclick="verifyAndResetPassword()">Verify & Reset Password</button>
+                </div>
+                <p style="margin-top:10px;"><a href="#" onclick="hideForgotPasswordSection()" style="color:#64748b; text-decoration:none;">&larr; Back to Login</a></p>
+            </div>
+        </div>
+
+        <!-- TEACHER DASHBOARD PORTAL -->
+        <div id="teacherPortalDashboard" class="card hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--light); padding-bottom: 10px;">
+                <h2 id="teacherDashboardTitle" style="margin:0; border:none; padding:0;">Teacher Portal</h2>
+                <button class="danger" style="width: auto; padding: 6px 14px; font-size: 14px;" onclick="logoutTeacher()">Log Out</button>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button id="menuLinkDashboard" class="nav-tab active" onclick="switchTeacherTab('dashboardHome')">Dashboard</button>
+                <button id="menuLinkClaim" class="nav-tab" onclick="switchTeacherTab('claimSection')">Submit Claim</button>
+                <button id="menuLinkStatus" class="nav-tab" onclick="switchTeacherTab('statusSection')">Claim Status</button>
+                <button id="menuLinkMissed" class="nav-tab" onclick="switchTeacherTab('missedPortal')">Missed Class</button>
+                <button id="menuLinkFeedback" class="nav-tab" onclick="switchTeacherTab('feedbackSection')">Feedback / Issues</button>
+                <button id="menuLinkSecurity" class="nav-tab" onclick="switchTeacherTab('securitySection')">Security / Password</button>
+            </div>
+
+            <!-- Tab 1: Dashboard Home -->
+            <div id="tabDashboardHome">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Total Claims Filed</h3>
+                        <p id="metricTotalClaims">0 KSH</p>
+                    </div>
+                    <div class="metric-card" style="border-left-color: var(--accent);">
+                        <h3>Approved / Ready</h3>
+                        <p id="metricApprovedClaims">0 KSH</p>
+                    </div>
+                    <div class="metric-card" style="border-left-color: var(--warning);">
+                        <h3>Pending Verification</h3>
+                        <p id="metricPendingClaims">0 KSH</p>
+                    </div>
+                </div>
+                <div class="alert-box">
+                    <strong>Notice:</strong> Use the "Submit Claim" tab to log your morning remedial and Saturday classes. Ensure subjects taught and lesson counts are accurate before submission.
+                </div>
+            </div>
+
+            <!-- Tab 2: Submit Claim -->
+            <div id="tabClaimSection" class="hidden">
+                <h3 style="color: var(--primary); margin-top:0;">Submit Remedial Claim</h3>
+                <label for="claimWeek">Select Week:</label>
+                <select id="claimWeek" onchange="loadWeekFields()">
+                    <!-- Populated dynamically based on open weeks config -->
+                </select>
+
+                <div id="daysContainer"></div>
+
+                <div id="teacherError" style="color: var(--danger); font-weight: bold; margin-bottom: 15px;"></div>
+                
+                <button id="submitClaimBtn" class="success hidden" onclick="submitClaim()">Submit Claim for Verification</button>
+
+                <div id="teacherResult" class="card hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; margin-top: 20px;"></div>
+            </div>
+
+            <!-- Tab 3: Claim Status -->
+            <div id="tabStatusSection" class="hidden">
+                <h3 style="color: var(--primary); margin-top:0;">Your Claim History & Status</h3>
+                <div id="teacherStatusListContainer"></div>
+            </div>
+
+            <!-- Tab 4: Missed Class / Substitute Portal -->
+            <div id="tabMissedPortal" class="hidden">
+                <h3 style="color: var(--primary); margin-top:0;">Report Missed Class / Arrange Substitute</h3>
+                <p style="color: #64748b; font-size:14px;">If you missed a scheduled class or arranged a colleague to substitute, record it here for administrative tracking.</p>
+                
+                <label for="missWeek">Week:</label>
+                <select id="missWeek"></select>
+
+                <label for="missDay">Day:</label>
+                <select id="missDay">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </select>
+
+                <label for="missType">Session Type:</label>
+                <select id="missType">
+                    <option value="Morning Remedial">Morning Remedial</option>
+                    <option value="Regular Class">Regular Class</option>
+                    <option value="Weekend Lesson">Weekend Lesson</option>
+                </select>
+
+                <label for="missLessonNo">Lesson Number / Time:</label>
+                <input type="text" id="missLessonNo" placeholder="e.g. Lesson 2 (9:20 AM)">
+
+                <label for="subName">Substitute Teacher Name (if applicable):</label>
+                <input type="text" id="subName" placeholder="Enter teacher name who took the class">
+
+                <button class="primary" onclick="saveMissedClass()">Submit Substitute / Absence Report</button>
+                <div id="missedResult" style="color: var(--accent); font-weight: bold; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Tab 5: Feedback / Issues -->
+            <div id="tabFeedbackSection" class="hidden">
+                <h3 style="color: var(--primary); margin-top:0;">Send Feedback or Report Issue to DOS</h3>
+                <label for="feedbackCategory">Category:</label>
+                <select id="feedbackCategory">
+                    <option value="Schedule Query">Schedule / Timetable Query</option>
+                    <option value="Payment Inquiry">Payment / Claim Inquiry</option>
+                    <option value="General Feedback">General Feedback</option>
+                    <option value="Technical Issue">Portal Technical Issue</option>
+                </select>
+
+                <label for="feedbackMessage">Your Message:</label>
+                <textarea id="feedbackMessage" rows="4" placeholder="Type your message or inquiry here..."></textarea>
+
+                <button class="primary" onclick="submitTeacherFeedback()">Send to Administration</button>
+                <div id="feedbackResult" style="color: var(--accent); font-weight: bold; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Tab 6: Security / Password Change -->
+            <div id="tabSecuritySection" class="hidden">
+                <h3 style="color: var(--primary); margin-top:0;">Change Portal Password</h3>
+                <label for="currentPortalPass">Current Password:</label>
+                <input type="password" id="currentPortalPass" placeholder="Enter current password">
+
+                <label for="newPortalPass">New Password:</label>
+                <input type="password" id="newPortalPass" placeholder="At least 4 characters">
+
+                <label for="confirmPortalPass">Confirm New Password:</label>
+                <input type="password" id="confirmPortalPass" placeholder="Re-enter new password">
+
+                <button class="primary" onclick="updatePortalPassword()">Update Password</button>
+                <div id="portalPassMsg" style="font-weight: bold; margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- ADMINISTRATOR PORTAL -->
+        <div id="adminPortal" class="card hidden">
+            <button class="primary" style="margin-bottom: 20px; width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">&larr; Back to Main Menu</button>
+            <h2>DOS / Administrator Portal</h2>
+
+            <!-- Admin Login View -->
+            <div id="adminLogin">
+                <label for="adminPassword">Enter Admin Password:</label>
+                <input type="password" id="adminPassword" placeholder="Default: dos123">
+                <button class="primary" onclick="loginAdmin()">Log In as Admin</button>
+                <div id="adminError" style="color: var(--danger); font-weight: bold; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Admin Dashboard View -->
+            <div id="adminDashboard" class="hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--light); padding-bottom: 10px;">
+                    <h3 style="margin:0; color: var(--primary);">Director of Studies Dashboard</h3>
+                    <button class="danger" style="width: auto; padding: 6px 14px; font-size: 14px;" onclick="goHome()">Log Out Admin</button>
                 </div>
 
-                <h4 style="color: #1e3d59; border-bottom: 1px solid var(--border); padding-bottom: 8px;">Add New Teacher Member</h4>
-                <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid var(--border);">
-                    <div class="form-group">
-                        <label for="newTeacherNameInput">Full Name:</label>
-                        <input type="text" id="newTeacherNameInput" placeholder="e.g. Teacher Jane">
+                <!-- Section A: Open Weeks Control -->
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h4 style="margin-top:0; color:var(--primary);">Control Open Weeks for Claims</h4>
+                    <div id="adminWeeksCheckboxes" style="margin-bottom: 15px;"></div>
+                    <button class="primary" style="width: auto; padding: 8px 16px;" onclick="saveOpenWeeks()">Save Open Weeks Config</button>
+                    <span id="adminSaveMsg" style="color: var(--accent); font-weight: bold; margin-left: 15px;"></span>
+                </div>
+
+                <!-- Section B: Teacher List Management -->
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h4 style="margin-top:0; color:var(--primary);">Manage Faculty Roster</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="margin-top:0; font-size:14px;">Add New Teacher:</label>
+                            <input type="text" id="newMemberName" placeholder="FULL NAME IN CAPS">
+                            <button class="success" style="padding: 8px 16px; margin-top:0;" onclick="addNewMember()">Add Teacher</button>
+                            <div id="memberAddMsg" style="color: var(--accent); font-weight: bold; margin-top: 5px; font-size:13px;"></div>
+                        </div>
+                        <div>
+                            <label style="margin-top:0; font-size:14px;">Remove Teacher:</label>
+                            <select id="removeMemberSelect"></select>
+                            <button class="danger" style="padding: 8px 16px; margin-top:0;" onclick="removeMember()">Remove Selected</button>
+                            <div id="memberRemoveMsg" style="color: var(--danger); font-weight: bold; margin-top: 5px; font-size:13px;"></div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="newTeacherPhoneInput">Phone Number (Password):</label>
-                        <input type="text" id="newTeacherPhoneInput" placeholder="e.g. 0712345678">
+                </div>
+
+                <!-- Section C: Feedback & Missed Class Reports -->
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h4 style="margin-top:0; color:var(--primary);">Teacher Feedback & Missed Class Reports</h4>
+                    <div id="adminFeedbackContent"></div>
+                </div>
+
+                <!-- Section D: Audit & Verify Claims -->
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin:0; color:var(--primary);">Audit & Approve Teacher Remedial Claims</h4>
+                        <button class="danger" style="padding: 6px 12px; font-size: 13px; width: auto;" onclick="clearAllRemedials()">Clear All Records</button>
                     </div>
-                    <div class="form-group">
-                        <label for="newTeacherStaffIdInput">Staff ID / Code:</label>
-                        <input type="text" id="newTeacherStaffIdInput" placeholder="e.g. BLISS/TCH/2026/02">
-                    </div>
-                    <button class="btn-success" onclick="addNewTeacherMember()" style="width: 100%;">Add Teacher Member</button>
+                    <div id="auditContent"></div>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- Application Core Script -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Default Teachers Database
-        let teachersData = [
-            {
-                name: "TEACHER BETT",
-                phone: "0792257668",
-                staffId: "BLISS/TCH/2026/01",
-                role: "Secondary School Instructor",
-                department: "Science & Mathematics"
-            }
+        // Database keys & initial mock states
+        let teacherList = [
+            "BETTING", "WANJIKU", "KIPRONO", "OTIENO", "MUTUA", 
+            "OMondi", "CHEPCHIRCHIR", "KARANGA", "BARASA", "NAMWAYA"
         ];
 
-        let currentActiveTeacher = null;
+        let teacherDatabase = {};
+        let openWeeksConfig = { 1: true, 2: true, 3: true, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false };
+        let globalFeedbackList = [];
+        
+        let currentLoggedInTeacher = null;
+        let generatedOtpStorage = '';
+        let resetOtpStorage = '';
+        let resetTargetName = '';
 
-        // Weeks Configuration
-        const weeksList = [
-            { id: "week1", title: "Term 2 - Week 1", locked: false },
-            { id: "week2", title: "Term 2 - Week 2", locked: false },
-            { id: "week3", title: "Term 2 - Week 3", locked: false },
-            { id: "week4", title: "Term 2 - Week 4", locked: false },
-            { id: "week5", title: "Term 2 - Week 5", locked: false }
-        ];
+        // LocalStorage loading / saving
+        function loadData() {
+            const savedList = localStorage.getItem('bliss_teacherList');
+            if (savedList) teacherList = JSON.parse(savedList);
 
-        // Store Remedial Claims Data
-        let remedialRecords = {};
+            const savedDb = localStorage.getItem('bliss_teacherDatabase');
+            if (savedDb) teacherDatabase = JSON.parse(savedDb);
 
-        // Initialization on Load
+            const savedWeeks = localStorage.getItem('bliss_openWeeksConfig');
+            if (savedWeeks) openWeeksConfig = JSON.parse(savedWeeks);
+
+            const savedFeedback = localStorage.getItem('bliss_feedbackList');
+            if (savedFeedback) globalFeedbackList = JSON.parse(savedFeedback);
+        }
+
+        function saveData() {
+            localStorage.setItem('bliss_teacherList', JSON.stringify(teacherList));
+            localStorage.setItem('bliss_teacherDatabase', JSON.stringify(teacherDatabase));
+            localStorage.setItem('bliss_openWeeksConfig', JSON.stringify(openWeeksConfig));
+            localStorage.setItem('bliss_feedbackList', JSON.stringify(globalFeedbackList));
+        }
+
+        // Initialize app on load
         window.onload = function() {
-            populateTeacherSelect();
-            initWeeksSelect();
+            loadData();
         };
 
-        function populateTeacherSelect() {
-            const selectEl = document.getElementById("teacherSelect");
-            selectEl.innerHTML = '<option value="">-- Choose Teacher --</option>';
-            teachersData.forEach(t => {
-                let opt = document.createElement("option");
-                opt.value = t.phone;
-                opt.textContent = `${t.name} (${t.staffId})`;
-                selectEl.appendChild(opt);
-            });
-        }
+        // Navigation helpers
+        function showPortalSelection(portalId) {
+            document.getElementById('mainMenuContainer').classList.add('hidden');
+            document.getElementById('teacherLoginPortal').classList.add('hidden');
+            document.getElementById('teacherPortalDashboard').classList.add('hidden');
+            document.getElementById('adminPortal').classList.add('hidden');
 
-        function teacherLogin() {
-            const phoneVal = document.getElementById("teacherPhone").value.trim();
-            const selectedPhone = document.getElementById("teacherSelect").value;
-
-            if(!selectedPhone) {
-                alert("Please select your teacher account name.");
-                return;
-            }
-
-            const foundTeacher = teachersData.find(t => t.phone === selectedPhone);
-            if(foundTeacher && foundTeacher.phone === phoneVal) {
-                currentActiveTeacher = foundTeacher;
-                loadDashboardSession();
-            } else {
-                alert("Incorrect password (Phone Number) for the selected teacher account.");
+            if (portalId === 'teacherLogin') {
+                document.getElementById('teacherLoginPortal').classList.remove('hidden');
+                populateTeacherDropdown();
+                document.getElementById('teacherAuthError').innerText = '';
+                document.getElementById('loginFields').classList.add('hidden');
+                document.getElementById('registerFields').classList.add('hidden');
+                document.getElementById('forgotPasswordSection').classList.add('hidden');
+            } else if (portalId === 'teacherDashboard') {
+                document.getElementById('teacherPortalDashboard').classList.remove('hidden');
+                document.getElementById('teacherDashboardTitle').innerText = `Teacher Portal — Welcome, ${currentLoggedInTeacher}`;
+                switchTeacherTab('dashboardHome');
+            } else if (portalId === 'adminPortal') {
+                document.getElementById('adminPortal').classList.remove('hidden');
+                document.getElementById('adminLogin').classList.remove('hidden');
+                document.getElementById('adminDashboard').classList.add('hidden');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminError').innerText = '';
             }
         }
-
-        function loginAdmin() {
-            const pass = document.getElementById("adminPassword").value;
-            if(pass === "admin123" || pass === "BLISSADMIN") {
-                document.getElementById("adminError").textContent = "";
-                document.getElementById("adminPassword").value = "";
-                openAdminModal();
-            } else {
-                document.getElementById("adminError").textContent = "Invalid administrative password.";
-            }
-        }
-
-        function openAdminModal() {
-            document.getElementById("adminModal").classList.remove("hidden");
-            renderAdminTeachersList();
-        }
-
-        function closeAdminModal() {
-            document.getElementById("adminModal").classList.add("hidden");
-        }
-
-        function renderAdminTeachersList() {
-            const container = document.getElementById("adminTeachersListContainer");
-            container.innerHTML = "";
-            teachersData.forEach((t, idx) => {
-                let row = document.createElement("div");
-                row.style.cssText = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: white; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 8px;";
-                row.innerHTML = `
-                    <div>
-                        <strong>${t.name}</strong><br>
-                        <span style="font-size: 12px; color: var(--text-muted);">ID: ${t.staffId} | Phone: ${t.phone}</span>
-                    </div>
-                    <button class="btn-danger-custom" style="padding: 4px 10px; font-size: 11px;" onclick="removeTeacherMember(${idx})">Remove</button>
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function addNewTeacherMember() {
-            const name = document.getElementById("newTeacherNameInput").value.trim().toUpperCase();
-            const phone = document.getElementById("newTeacherPhoneInput").value.trim();
-            const staffId = document.getElementById("newTeacherStaffIdInput").value.trim();
-
-            if(!name || !phone || !staffId) {
-                alert("Please fill in all teacher details.");
-                return;
-            }
-
-            teachersData.push({
-                name: name,
-                phone: phone,
-                staffId: staffId,
-                role: "Secondary School Instructor",
-                department: "Science & Mathematics"
-            });
-
-            document.getElementById("newTeacherNameInput").value = "";
-            document.getElementById("newTeacherPhoneInput").value = "";
-            document.getElementById("newTeacherStaffIdInput").value = "";
-
-            populateTeacherSelect();
-            renderAdminTeachersList();
-            alert("New teacher member successfully added.");
-        }
-
-        function removeTeacherMember(idx) {
-            if(teachersData.length <= 1) {
-                alert("Cannot remove the last remaining teacher account.");
-                return;
-            }
-            if(confirm("Are you sure you want to remove this teacher member?")) {
-                teachersData.splice(idx, 1);
-                populateTeacherSelect();
-                renderAdminTeachersList();
-            }
-        }
-
-        function loadDashboardSession() {
-            if(!currentActiveTeacher) return;
-
-            // Hide Login, Show App Container
-            document.getElementById("loginContainer").classList.add("hidden");
-            document.getElementById("appContainer").classList.remove("hidden");
-
-            // Update UI elements with active teacher details
-            let initials = currentActiveTeacher.name.split(" ").map(n => n[0]).join("").substring(0,2);
-            document.getElementById("sidebarInitials").textContent = initials;
-            document.getElementById("sidebarTeacherName").textContent = currentActiveTeacher.name;
-            document.getElementById("topbarWelcome").textContent = `Welcome: ${currentActiveTeacher.name}`;
-            
-            document.getElementById("profileInitialsDisplay").textContent = initials;
-            document.getElementById("profileNameDisplay").textContent = currentActiveTeacher.name;
-            document.getElementById("infoStaffId").textContent = currentActiveTeacher.staffId;
-            document.getElementById("infoPhone").textContent = currentActiveTeacher.phone;
-            document.getElementById("infoFullName").textContent = currentActiveTeacher.name;
-
-            document.getElementById("letterTeacherNameDisplay").textContent = currentActiveTeacher.name;
-            document.getElementById("letterStaffIdDisplay").textContent = currentActiveTeacher.staffId;
-
-            // Initialize records for teacher if not present
-            if(!remedialRecords[currentActiveTeacher.phone]) {
-                remedialRecords[currentActiveTeacher.phone] = {};
-                weeksList.forEach(w => {
-                    remedialRecords[currentActiveTeacher.phone][w.id] = {
-                        morning: { monday: false, tuesday: false, wednesday: false, thursday: false, friday: false },
-                        saturday: { claimed: false, lessons: 1, entries: [{ class: "Form 4 Science / Math Remedial" }] },
-                        status: "pending review"
-                    };
-                });
-            }
-
-            loadWeekData();
-            updateDashboardMetrics();
-        }
-
-        function switchTab(tabId, el) {
-            // Hide all tab panes
-            document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.add("hidden"));
-            // Show selected
-            document.getElementById(`tab-${tabId}`).classList.remove("hidden");
-
-            // Update sidebar active states if triggered from nav
-            if(el) {
-                document.querySelectorAll(".sidebar .nav-item").forEach(item => item.classList.remove("active"));
-                el.classList.add("active");
-            }
-
-            if(tabId === 'dashboard') {
-                updateDashboardMetrics();
-            } else if(tabId === 'bursarLetter') {
-                renderBursarLetterTable();
-            }
-        }
-
-        function initWeeksSelect() {
-            const weekSelect = document.getElementById("weekSelect");
-            weekSelect.innerHTML = "";
-            weeksList.forEach(w => {
-                let opt = document.createElement("option");
-                opt.value = w.id;
-                opt.textContent = w.title;
-                weekSelect.appendChild(opt);
-            });
-        }
-
-        function loadWeekData() {
-            if(!currentActiveTeacher) return;
-            const weekId = document.getElementById("weekSelect").value;
-            const weekData = remedialRecords[currentActiveTeacher.phone][weekId];
-
-            // Render Morning Sessions checkboxes
-            const morningContainer = document.getElementById("morningSessionsContainer");
-            morningContainer.innerHTML = "";
-            
-            const days = [
-                { key: "monday", label: "Monday Morning Remedial" },
-                { key: "tuesday", label: "Tuesday Morning Remedial" },
-                { key: "wednesday", label: "Wednesday Morning Remedial" },
-                { key: "thursday", label: "Thursday Morning Remedial" },
-                { key: "friday", label: "Friday Morning Remedial" }
-            ];
-
-            days.forEach(d => {
-                let checked = weekData.morning[d.key] ? "checked" : "";
-                let div = document.createElement("div");
-                div.style.cssText = "display: inline-block; margin-right: 20px; margin-bottom: 10px;";
-                div.innerHTML = `
-                    <label style="font-weight: normal; cursor: pointer; font-size: 14px;">
-                        <input type="checkbox" ${checked} onchange="updateMorningSession('${d.key}', this.checked)" style="width: auto; margin-right: 6px;"> ${d.label}
-                    </label>
-                `;
-                morningContainer.appendChild(div);
-            });
-
-            // Render Saturday Sessions
-            const satCheckbox = document.getElementById("satClaimed");
-            satCheckbox.checked = weekData.saturday.claimed;
-            
-            document.getElementById("satTotalLessonsInput").value = weekData.saturday.lessons;
-            
-            if(weekData.saturday.claimed) {
-                document.getElementById("saturdayEntriesWrapper").classList.remove("hidden");
-            } else {
-                document.getElementById("saturdayEntriesWrapper").classList.add("hidden");
-            }
-
-            renderSaturdayRows();
-
-            // Status Badge
-            document.getElementById("currentStatusBadge").textContent = weekData.status;
-        }
-
-        function updateMorningSession(dayKey, val) {
-            const weekId = document.getElementById("weekSelect").value;
-            remedialRecords[currentActiveTeacher.phone][weekId].morning[dayKey] = val;
-            updateDashboardMetrics();
-        }
-
-        function toggleSaturdayMain() {
-            const weekId = document.getElementById("weekSelect").value;
-            const claimed = document.getElementById("satClaimed").checked;
-            remedialRecords[currentActiveTeacher.phone][weekId].saturday.claimed = claimed;
-
-            if(claimed) {
-                document.getElementById("saturdayEntriesWrapper").classList.remove("hidden");
-            } else {
-                document.getElementById("saturdayEntriesWrapper").classList.add("hidden");
-            }
-            updateDashboardMetrics();
-            renderSaturdayRows();
-        }
-
-        function updateSaturdayCountSetting() {
-            const weekId = document.getElementById("weekSelect").value;
-            let val = parseInt(document.getElementById("satTotalLessonsInput").value) || 1;
-            if(val < 1) val = 1;
-            if(val > 4) val = 4;
-            document.getElementById("satTotalLessonsInput").value = val;
-
-            let satObj = remedialRecords[currentActiveTeacher.phone][weekId].saturday;
-            satObj.lessons = val;
-
-            // Adjust entries array length
-            while(satObj.entries.length < val) {
-                satObj.entries.push({ class: `Form ${satObj.entries.length + 1} Remedial Class` });
-            }
-            while(satObj.entries.length > val) {
-                satObj.entries.pop();
-            }
-
-            renderSaturdayRows();
-            updateDashboardMetrics();
-        }
-
-        function renderSaturdayRows() {
-            const weekId = document.getElementById("weekSelect").value;
-            const satObj = remedialRecords[currentActiveTeacher.phone][weekId].saturday;
-            
-            document.getElementById("satTotalCountDisplay").textContent = satObj.lessons;
-            document.getElementById("satMaxAllowedDisplay").textContent = "4";
-
-            const container = document.getElementById("saturdayRowsContainer");
-            container.innerHTML = "";
-
-            satObj.entries.forEach((entry, idx) => {
-                let row = document.createElement("div");
-                row.style.cssText = "display: flex; gap: 10px; margin-bottom: 10px; align-items: center;";
-                row.innerHTML = `
-                    <span style="font-size: 13px; font-weight: 600; width: 80px;">Lesson ${idx + 1}:</span>
-                    <input type="text" value="${entry.class}" onchange="updateSaturdayClassLabel(${idx}, this.value)" placeholder="Enter Class/Subject details">
-                `;
-                container.appendChild(row);
-            });
-        }
-
-        function updateSaturdayClassLabel(idx, val) {
-            const weekId = document.getElementById("weekSelect").value;
-            remedialRecords[currentActiveTeacher.phone][weekId].saturday.entries[idx].class = val;
-        }
-
-        function submitCurrentWeekRemedials() {
-            const weekId = document.getElementById("weekSelect").value;
-            remedialRecords[currentActiveTeacher.phone][weekId].status = "submitted / approved";
-            document.getElementById("currentStatusBadge").textContent = "submitted / approved";
-            alert("Week remedials successfully submitted and verified!");
-            updateDashboardMetrics();
-        }
-
-        function calculateTotalClaimedSessionsForTeacher(phone) {
-            let total = 0;
-            let teacherWeeks = remedialRecords[phone];
-            if(!teacherWeeks) return 0;
-
-            Object.keys(teacherWeeks).forEach(wId => {
-                let w = teacherWeeks[wId];
-                // Count morning sessions
-                Object.keys(w.morning).forEach(mKey => {
-                    if(w.morning[mKey]) total++;
-                });
-                // Count saturday sessions if claimed
-                if(w.saturday.claimed) {
-                    total += w.saturday.lessons;
-                }
-            });
-            return total;
-        }
-
-        function updateDashboardMetrics() {
-            if(!currentActiveTeacher) return;
-            let totalClaimed = calculateTotalClaimedSessionsForTeacher(currentActiveTeacher.phone);
-            document.getElementById("metricTotalClaimed").textContent = totalClaimed;
-            document.getElementById("metricApproved").textContent = totalClaimed; // All verified
-        }
-
-        function renderBursarLetterTable() {
-            if(!currentActiveTeacher) return;
-            const tbody = document.getElementById("letterTableBody");
-            tbody.innerHTML = "";
-
-            let teacherWeeks = remedialRecords[currentActiveTeacher.phone];
-            let grandTotalSessions = 0;
-            const ratePerSession = 500; // Standard KES 500 per remedial session
-
-            weeksList.forEach(w => {
-                let wData = teacherWeeks[w.id];
-                let weekSessions = 0;
-                Object.keys(wData.morning).forEach(mKey => {
-                    if(wData.morning[mKey]) weekSessions++;
-                });
-                if(wData.saturday.claimed) {
-                    weekSessions += wData.saturday.lessons;
-                }
-
-                if(weekSessions > 0) {
-                    grandTotalSessions += weekSessions;
-                    let subtotal = weekSessions * ratePerSession;
-                    let tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td style="border: 1px solid #000; padding: 6px;">${w.title} (Morning & Saturday Verified)</td>
-                        <td style="border: 1px solid #000; padding: 6px; text-align: center;">${weekSessions}</td>
-                        <td style="border: 1px solid #000; padding: 6px; text-align: right;">KES ${ratePerSession.toLocaleString()}</td>
-                        <td style="border: 1px solid #000; padding: 6px; text-align: right;">KES ${subtotal.toLocaleString()}</td>
-                    `;
-                    tbody.appendChild(tr);
-                }
-            });
-
-            if(grandTotalSessions === 0) {
-                let tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td colspan="4" style="border: 1px solid #000; padding: 10px; text-align: center; color: var(--text-muted);">No verified remedial sessions recorded yet. Please submit your week claims.</td>
-                `;
-                tbody.appendChild(tr);
-            }
-
-            let totalAmount = grandTotalSessions * ratePerSession;
-            document.getElementById("letterTotalAmountDisplay").textContent = `KES ${totalAmount.toLocaleString()}`;
-        }
-
-        function downloadBursarLetterPDF() {
-            renderBursarLetterTable();
-            const element = document.getElementById("printableLetterContainer");
-            const opt = {
-                margin:       10,
-                filename:     `BLISS_Bursar_Claim_Letter_${currentActiveTeacher.name.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().from(element).set(opt).save();
-        }
-    </script>
-</body>
-</html>
