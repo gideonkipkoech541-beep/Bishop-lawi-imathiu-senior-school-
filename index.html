@@ -3,1367 +3,513 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLISS teachers portal</title>
+    <title>Koitaleel Samoei University College</title>
     <style>
-        :root {
-            --sidebar-bg: #1e3d59;
-            --topbar-bg: #3b82f6;
-            --light-bg: #d9dce1;
-            --dark: #2b2d42;
-            --primary: #3b82f6;
-            --success: #009639;
-            --warning: #f39c12;
-            --danger: #ef4444;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-bg);
+        * {
             margin: 0;
             padding: 0;
-            color: var(--dark);
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
-        /* App Layout with Sidebar */
-        .app-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-bg);
+        /* Top Bar */
+        .top-bar {
+            background-color: #5c060c;
             color: white;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-        }
-        .sidebar-header {
-            padding: 20px;
-            background: #162c3d;
-            text-align: center;
-        }
-        .sidebar-header h3 {
-            margin: 0;
-            font-size: 15px;
-            color: #ffffff;
-            line-height: 1.4;
-        }
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-grow: 1;
-        }
-        .sidebar-menu li {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .sidebar-menu a {
-            display: block;
-            padding: 15px 20px;
-            color: #cbd5e1;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background-color: rgba(255,255,255,0.1);
-            color: #ffffff;
-            padding-left: 25px;
-        }
-        .main-content-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Top Bar Styling */
-        .topbar {
-            background-color: var(--sidebar-bg);
-            color: #ffffff;
-            padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-weight: bold;
-        }
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 14px;
-        }
-
-        /* Container Content Area */
-        .content-body {
-            padding: 30px;
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        h1, h2, h3 {
-            color: var(--dark);
-        }
-        .portal-section {
-            margin-top: 10px;
-        }
-        .hidden {
-            display: none !important;
-        }
-
-        /* Card Styling Matching Reference Design */
-        .portal-card {
-            max-width: 620px;
-            margin: 80px auto;
-            background: #ffffff;
-            border-radius: 4px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            overflow: hidden;
-            border: 1px solid #cbd5e1;
-        }
-        .portal-card-header {
-            background-color: #3b82f6;
-            color: #ffffff;
-            text-align: center;
-            padding: 30px 20px 20px 20px;
-        }
-        .portal-card-header h2 {
-            margin: 0;
-            font-size: 26px;
-            font-weight: 500;
-            color: #ffffff;
-        }
-        .portal-badge-logo {
-            width: 75px;
-            height: 75px;
-            background: #ffffff;
-            border-radius: 50%;
-            margin: 15px auto 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #3b82f6;
-            font-size: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-        .portal-card-body {
-            padding: 30px 40px;
-        }
-
-        /* Input Group with Icon prefix */
-        .input-group-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            background: #ebf3ff;
-            overflow: hidden;
-        }
-        .input-group-container:focus-within {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        .input-icon-box {
-            padding: 0 14px;
-            color: #64748b;
-            font-size: 16px;
-            background: #e2e8f0;
-            border-right: 1px solid #cbd5e1;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .input-group-container input, .input-group-container select {
-            border: none;
-            margin-top: 0;
-            background: transparent;
-            padding: 10px 15px;
-            font-size: 15px;
-            width: 100%;
-        }
-        .input-group-container input:focus, .input-group-container select:focus {
-            outline: none;
-            background: transparent;
-            border-color: transparent;
-        }
-
-        label {
-            font-weight: 600;
-            display: block;
-            margin-top: 15px;
-            color: var(--dark);
-            font-size: 14px;
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 15px;
-            background: #ebf3ff;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            background: #fff;
-        }
-        
-        .btn-green {
-            background-color: #009639;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 2px 4px rgba(0, 150, 57, 0.2);
-        }
-        .btn-green:hover { background-color: #007a2e; }
-
-        .btn-orange {
-            background-color: #f39c12;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s;
-            box-shadow: 0 2px 4px rgba(243, 156, 18, 0.2);
-        }
-        .btn-orange:hover { background-color: #d68910; }
-
-        .btn-secondary {
-            background-color: #64748b;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-        }
-        .btn-secondary:hover { background-color: #475569; }
-
-        .day-row {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 18px;
-            border-radius: 6px;
-            margin-top: 15px;
-        }
-        .summary-box {
-            background: #ecfdf5;
-            border: 1px solid #10b981;
-            padding: 20px;
-            border-radius: 6px;
-            margin-top: 20px;
-        }
-        .error {
-            color: #ef4444;
-            font-weight: 600;
-            margin-top: 12px;
-            font-size: 14px;
-            text-align: center;
-        }
-        .success {
-            color: #10b981;
-            font-weight: 600;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-        .otp-box {
-            background: #f0fdf4;
-            border: 2px dashed #10b981;
-            padding: 20px;
-            margin-top: 15px;
-            border-radius: 6px;
-        }
-
-        /* Dashboard Metric Cards */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        .metric-card {
-            color: white;
-            padding: 20px;
-            border-radius: 6px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .metric-card.orange { background: #d97706; }
-        .metric-card.green { background: #009639; }
-        .metric-card.blue { background: #3b82f6; }
-        .metric-card h4 { margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; }
-        .metric-card .metric-val { font-size: 22px; font-weight: bold; margin-bottom: 15px; }
-        .metric-card .metric-link { font-size: 13px; color: #fff; text-decoration: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-
-        /* Profile Grid Layout */
-        .profile-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 25px;
-        }
-        .card-box {
-            background: #ffffff;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #cbd5e1;
-            overflow: hidden;
-        }
-        .card-header {
-            background: #f8fafc;
-            padding: 15px 20px;
-            border-bottom: 1px solid #cbd5e1;
-            font-weight: bold;
-            color: var(--dark);
-        }
-        .card-body {
-            padding: 20px;
-        }
-        .profile-avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: #cbd5e1;
-            margin: 0 auto 15px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 45px;
-            color: #64748b;
-            border: 4px solid #f1f5f9;
-        }
-        .info-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 14px;
-        }
-        .info-row:last-child { border-bottom: none; }
-        .info-label { width: 40%; color: #64748b; font-weight: 600; }
-        .info-value { width: 60%; color: var(--dark); font-weight: 500; }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 6px 40px;
             font-size: 13px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #3b5998;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .social-icon.twitter { background-color: #1da1f2; }
+        .social-icon.youtube { background-color: #ff0000; }
+
+        .top-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .top-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .top-links a:hover {
+            text-decoration: underline;
+        }
+
+        .dropdown-arrow {
+            font-size: 10px;
+            margin-left: 3px;
+        }
+
+        /* Main Header */
+        .main-header {
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            color: #5c060c;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+        }
+
+        .nav-links a {
+            color: #5c060c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: #1b4d3e;
+        }
+
+        /* Hero Banner Section */
+        .hero-section {
+            position: relative;
+            background: #ffffff;
+            overflow: hidden;
+            display: flex;
+            height: 520px;
+        }
+
+        /* Left Red Diagonal Banner */
+        .hero-left {
+            width: 38%;
+            background: linear-gradient(135deg, #7a0910 0%, #5c060c 100%);
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 75% 100%, 0 100%);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .hero-left-bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.25;
+            z-index: -1;
+        }
+
+        .welcome-sub {
+            color: #ffffff;
+            font-family: "Brush Script MT", cursive, sans-serif;
+            font-size: 38px;
+            margin-bottom: -5px;
+        }
+
+        .welcome-title {
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+
+        .welcome-star {
+            color: #ffffff;
+            font-size: 16px;
+            vertical-align: super;
+        }
+
+        /* Right Content Area */
+        .hero-right {
+            width: 62%;
+            position: relative;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 25px;
+        }
+
+        /* Background diagonal stripes top right */
+        .diagonal-stripes {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 75%;
+            height: 160px;
+            background: linear-gradient(135deg, #1b4d3e 0%, #1b4d3e 60%, #7a0910 60%, #7a0910 100%);
+            clip-path: polygon(25% 0, 100% 0, 100% 100%, 0 0);
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        /* Center Content Box */
+        .center-brand {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+        }
+
+        .center-logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .center-crest {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+        }
+
+        .center-title-text {
+            text-align: left;
+        }
+
+        .center-title-text h1 {
+            font-size: 16px;
+            color: #111;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .center-subtitle {
+            font-size: 9px;
+            color: #1b4d3e;
+            font-weight: bold;
+            letter-spacing: 0.2px;
+            margin-top: 2px;
+            border-top: 1px solid #1b4d3e;
+            padding-top: 2px;
+        }
+
+        /* Main Callout Banner */
+        .admission-callout {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .step-guide-badge {
+            display: inline-block;
+            background-color: #5c060c;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 3px 14px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .admission-main-title {
+            color: #1b4d3e;
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .admission-sub-title {
+            color: #5c060c;
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            margin-top: -2px;
+        }
+
+        /* Right Side Congratulations Box */
+        .congrats-box {
+            position: absolute;
+            right: 25px;
+            bottom: 30px;
+            width: 210px;
+            background: #ffffff;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            z-index: 4;
+        }
+
+        .congrats-heading {
+            font-family: "Brush Script MT", cursive, sans-serif;
+            color: #7a0910;
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .congrats-star {
+            text-align: center;
+            color: #1b4d3e;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .congrats-text {
+            font-size: 11px;
+            color: #333;
+            line-height: 1.3;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .congrats-text-bold {
             font-weight: bold;
         }
-        .status-pending { background: #fef3c7; color: #d97706; }
-        .status-reviewed { background: #e0f2fe; color: #0284c7; }
-        .status-ready { background: #ecfdf5; color: #059669; }
-        .status-claimed { background: #f1f5f9; color: #475569; }
+
+        /* Step Indicators Bar at Bottom */
+        .steps-container {
+            position: absolute;
+            bottom: 25px;
+            left: 38%;
+            transform: translateX(-35%);
+            display: flex;
+            align-items: center;
+            z-index: 5;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            background-color: #1b4d3e;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .step-line {
+            width: 35px;
+            height: 3px;
+            background-color: #1b4d3e;
+            z-index: 1;
+            margin-top: -16px;
+        }
+
+        .step-card {
+            width: 50px;
+            height: 45px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: absolute;
+            top: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .step-card img, .step-card span {
+            font-size: 18px;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background-color: #7a0910;
+            color: white;
+            font-size: 9px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid white;
+        }
     </style>
 </head>
 <body>
 
-<div id="fullAppContainer">
-    <!-- Main Entry Menu -->
-    <div id="mainMenuContainer" class="portal-card">
-        <div class="portal-card-header">
-            <div class="portal-badge-logo">BLISS</div>
-            <h2>BLISS teachers portal</h2>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="social-icons">
+            <a href="#" class="social-icon">f</a>
+            <a href="#" class="social-icon twitter">t</a>
+            <a href="#" class="social-icon youtube">▶</a>
         </div>
-        <div class="portal-card-body" style="text-align: center; padding-top: 15px;">
-            <p style="color: #64748b; font-size: 15px; margin-bottom: 25px;">Please select your portal access level below:</p>
-            <button onclick="showPortalSelection('teacherLogin')" class="btn-green" style="width: 100%; margin-bottom: 15px; padding: 12px;">Teacher Portal (Login / Register)</button>
-            <button onclick="showPortalSelection('admin')" class="btn-secondary" style="background-color: #1e3d59; margin-top: 0; padding: 12px; font-size: 15px; width: 100%;">Admin Portal</button>
-        </div>
-    </div>
-
-    <!-- Teacher Auth / Login Portal -->
-    <div id="teacherLoginPortal" class="portal-card hidden">
-        <div class="portal-card-header">
-            <div class="portal-badge-logo">BLISS</div>
-            <h2>BLISS teachers portal</h2>
-        </div>
-        <div class="portal-card-body">
-            <div id="teacherAuthBox">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-                    <label for="authTeacherName" style="margin-top: 0;">Username:</label>
-                </div>
-
-                <div class="input-group-container">
-                    <div class="input-icon-box">&#128100;</div>
-                    <select id="authTeacherName" onchange="checkTeacherExists()" style="border: none; background: transparent; padding: 10px; font-size: 15px; width: 100%;">
-                        <option value="">-- Select Your Name or Phone No. --</option>
-                    </select>
-                </div>
-
-                <div id="loginFields" class="hidden" style="margin-top: 10px;">
-                    <label for="authPassword">Password:</label>
-                    <div class="input-group-container">
-                        <div class="input-icon-box">&#128274;</div>
-                        <input type="password" id="authPassword" placeholder="Enter your password">
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                        <button onclick="showForgotPasswordSection()" class="btn-orange" type="button">Reset password</button>
-                        <button onclick="handleTeacherLogin()" class="btn-green" type="button" style="margin-top: 0;">Sign In</button>
-                    </div>
-                </div>
-
-                <!-- Forgot Password Section -->
-                <div id="forgotPasswordSection" class="hidden" style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 4px; margin-top: 15px;">
-                    <h4 style="margin-top: 0; color: var(--dark);">Reset Account Password</h4>
-                    <label for="resetPhone">Enter Registered Phone Number:</label>
-                    <input type="text" id="resetPhone" placeholder="e.g. 0712345678">
-                    <button onclick="requestPasswordResetOTP()" class="btn-orange" style="margin-top: 10px; width:100%;">Send Reset Code</button>
-
-                    <div id="resetOtpBox" class="otp-box hidden">
-                        <p id="resetOtpNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
-                        <label for="enteredResetOtp">Enter 4-digit Code:</label>
-                        <input type="text" id="enteredResetOtp" placeholder="Enter Code" maxlength="4">
-                        <label for="newAccountPassword">Enter New Password:</label>
-                        <input type="password" id="newAccountPassword" placeholder="New secure password">
-                        <button onclick="verifyAndResetPassword()" class="btn-green" style="margin-top: 10px; width:100%;">Update Password</button>
-                    </div>
-                    <button class="btn-secondary" onclick="hideForgotPasswordSection()" style="width: 100%; margin-top: 10px;">Back to Login</button>
-                </div>
-
-                <div id="registerFields" class="hidden" style="margin-top: 15px;">
-                    <p style="color: #d97706; font-weight: bold; background: #fef3c7; padding: 12px; border-radius: 4px; font-size: 14px; text-align: center;">New member detected! Please register your account.</p>
-                    <label for="regPhone">Phone Number:</label>
-                    <input type="text" id="regPhone" placeholder="e.g. 0712345678">
-                    
-                    <label for="regPassword">Create Password:</label>
-                    <input type="password" id="regPassword" placeholder="Create a secure password">
-                    
-                    <button onclick="requestRegistrationOTP()" class="btn-orange" style="margin-top: 15px; width: 100%;">Generate Verification Code</button>
-
-                    <div id="otpVerificationSection" class="otp-box hidden">
-                        <p id="otpSimulatedNotice" class="success" style="margin-top:0; font-weight: bold;"></p>
-                        <label for="enteredOtp">Enter 4-digit Code Shown Above:</label>
-                        <input type="text" id="enteredOtp" placeholder="Enter Code here" maxlength="4">
-                        <button onclick="verifyAndCompleteRegistration()" class="btn-green" style="margin-top: 10px; width: 100%;">Verify & Complete Registration</button>
-                    </div>
-                </div>
-
-                <button class="btn-secondary" onclick="goHome()" style="width: 100%; margin-top: 20px;">Back to Main Menu</button>
-                <div id="teacherAuthError" class="error"></div>
-            </div>
+        <div class="top-links">
+            <a href="#">Staff <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Compliments/Complaints</a>
+            <a href="#">Tenders</a>
+            <a href="#">Jobs</a>
+            <a href="#">Contact</a>
+            <a href="#">Media</a>
         </div>
     </div>
 
-    <!-- Teacher Portal Dashboard Layout -->
-    <div id="teacherPortalDashboard" class="app-layout hidden">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h3>BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
-                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;" id="sidebarTeacherName">TEACHER PORTAL</div>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a id="menuLinkDashboard" class="active" onclick="switchTeacherTab('dashboardHome')">Dashboard</a></li>
-                <li><a id="menuLinkClaim" onclick="switchTeacherTab('claimSection')">Submit Session Claims</a></li>
-                <li><a id="menuLinkStatus" onclick="switchTeacherTab('statusSection')">Claim Status & Progress</a></li>
-                <li><a id="menuLinkMissed" onclick="switchTeacherTab('missedPortal')">Report Missed Class</a></li>
-                <li><a id="menuLinkFeedback" onclick="switchTeacherTab('feedbackSection')">Feedback to Admin</a></li>
-                <li><a id="menuLinkSecurity" onclick="switchTeacherTab('securitySection')">Reset Password / Security</a></li>
-                <li><a onclick="logoutTeacher()" style="color: #fca5a5;">Logout Portal</a></li>
-            </ul>
+    <!-- Main Navigation Header -->
+    <header class="main-header">
+        <div class="logo-section">
+            <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Logo" class="logo-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><rect width=\'100%\' height=\'100%\' fill=\'%231b4d3e\'/></svg>'">
+            <span class="logo-text">Koitaleel Samoei University College</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#">About Us <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Admissions</a>
+            <a href="#">Academics <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Library</a>
+            <a href="#">Students <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Research <span class="dropdown-arrow">▼</span></a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <!-- Left Banner -->
+        <div class="hero-left">
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus road" class="hero-left-bg-img">
+            <div class="welcome-sub">Welcome to the</div>
+            <div class="welcome-title">KSUC FAMILY!<span class="welcome-star">★</span></div>
         </div>
 
-        <!-- Main Content Wrapper -->
-        <div class="main-content-area">
-            <!-- Top Navigation Bar -->
-            <div class="topbar">
-                <div>BLISS teachers portal</div>
-                <div class="topbar-right">
-                    <span>Welcome, <strong id="topbarTeacherName">Teacher</strong></span>
+        <!-- Right Banner Area -->
+        <div class="hero-right">
+            <div class="diagonal-stripes"></div>
+
+            <!-- University Logo & Name Block -->
+            <div class="center-brand">
+                <div class="center-logo-row">
+                    <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Crest" class="center-crest" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'42\' height=\'42\'><rect width=\'100%\' height=\'100%\' fill=\'%231b4d3e\'/></svg>'">
+                    <div class="center-title-text">
+                        <h1>Koitaleel Samoei<br>University College</h1>
+                    </div>
                 </div>
+                <div class="center-subtitle">— NURTURING TALENT AND RESEARCH FOR GLOBAL IMPACT. —</div>
             </div>
 
-            <!-- Content Area Body -->
-            <div class="content-body">
-                
-                <!-- Tab 1: Dashboard Home -->
-                <div id="tabDashboardHome" class="portal-section">
-                    <h2 style="margin-top:0;">Dashboard</h2>
-                    
-                    <div class="metrics-grid">
-                        <div class="metric-card orange">
-                            <div>
-                                <h4>Total Submitted Claims</h4>
-                                <div class="metric-val" id="metricTotalClaims">0 KSH</div>
-                            </div>
-                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
-                        </div>
-                        <div class="metric-card green">
-                            <div>
-                                <h4>Reviewed & Approved</h4>
-                                <div class="metric-val" id="metricApprovedClaims">0 KSH</div>
-                            </div>
-                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
-                        </div>
-                        <div class="metric-card blue">
-                            <div>
-                                <h4>Pending Verification</h4>
-                                <div class="metric-val" id="metricPendingClaims">0 KSH</div>
-                            </div>
-                            <a class="metric-link" onclick="switchTeacherTab('statusSection')">View Details &rarr;</a>
-                        </div>
-                    </div>
+            <!-- Admission Callout Text -->
+            <div class="admission-callout">
+                <div class="step-guide-badge">A SIMPLE STEP-BY-STEP GUIDE</div>
+                <div class="admission-main-title">Access your</div>
+                <div class="admission-sub-title">KSUC Admission Letter</div>
+            </div>
 
-                    <div class="profile-container">
-                        <div class="card-box">
-                            <div class="card-header">User Profile</div>
-                            <div class="card-body" style="text-align: center;">
-                                <div class="profile-avatar">&#128100;</div>
-                                <h3 id="profileCardName" style="margin: 0 0 5px 0;">Teacher Name</h3>
-                                <p style="color: #64748b; font-size: 13px; margin: 0 0 20px 0;">Active Teaching Staff</p>
-                                <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 15px 0;">
-                                <div style="text-align: left; font-size: 13px; color: #475569;">
-                                    <p style="margin: 5px 0;"><strong>System Role:</strong> Instructor</p>
-                                    <p style="margin: 5px 0;"><strong>Account Status:</strong> Active</p>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Congratulations Side Box -->
+            <div class="congrats-box">
+                <div class="congrats-heading">Congratulations!</div>
+                <div class="congrats-star">★</div>
+                <div class="congrats-text">You are one step closer to your future!</div>
+                <div class="congrats-text congrats-text-bold">We can't wait to see you thrive at KSUC.</div>
+            </div>
 
-                        <div class="card-box">
-                            <div class="card-header">Personal Information</div>
-                            <div class="card-body">
-                                <div class="info-row">
-                                    <div class="info-label">Full Name:</div>
-                                    <div class="info-value" id="infoFullName">-</div>
-                                </div>
-                                <div class="info-row">
-                                    <div class="info-label">Phone Number:</div>
-                                    <div class="info-value" id="infoPhone">-</div>
-                                </div>
-                                <div class="info-row">
-                                    <div class="info-label">Access Portal:</div>
-                                    <div class="info-value">Teacher Portal</div>
-                                </div>
-                                <div class="info-row">
-                                    <div class="info-label">Institution:</div>
-                                    <div class="info-value">Bishop Lawi Imathiu Senior School</div>
-                                </div>
-                                <div class="info-row">
-                                    <div class="info-label">Current Term:</div>
-                                    <div class="info-value">2026 Academic Year</div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Interactive Step-by-Step Guide Indicators -->
+            <div class="steps-container">
+                <!-- Step 1 -->
+                <div class="step-item">
+                    <div class="step-circle">1</div>
+                    <div class="step-card">
+                        👤
+                        <div class="notification-dot">1</div>
                     </div>
                 </div>
-
-                <!-- Tab 2: Submit Claims Section -->
-                <div id="tabClaimSection" class="portal-section hidden">
-                    <h3>Submit Session Claim</h3>
-                    <label for="claimWeek">Select Week to Claim:</label>
-                    <select id="claimWeek" onchange="loadWeekFields()">
-                        <option value="">-- Select Week --</option>
-                    </select>
-
-                    <div id="daysContainer"></div>
-
-                    <button id="submitClaimBtn" onclick="submitClaim()" class="btn-green hidden" style="margin-top: 20px; width: 100%; cursor: pointer; position: relative; z-index: 10;">Submit and Calculate Claim</button>
-                    <div id="teacherError" class="error"></div>
-                    <div id="teacherResult" class="summary-box hidden"></div>
+                <div class="step-line"></div>
+                <!-- Step 2 -->
+                <div class="step-item">
+                    <div class="step-circle">2</div>
+                    <div class="step-card">🌐</div>
                 </div>
-
-                <!-- Tab 3: Status & Progress Section -->
-                <div id="tabStatusSection" class="portal-section hidden">
-                    <h3>Claim Status & Reflection Progress</h3>
-                    <p style="color: #64748b; font-size: 14px;">Track the verification progress of your submitted session claims across weeks.</p>
-                    <div id="teacherStatusListContainer"></div>
+                <div class="step-line"></div>
+                <!-- Step 3 -->
+                <div class="step-item">
+                    <div class="step-circle">3</div>
+                    <div class="step-card">📄</div>
                 </div>
-
-                <!-- Tab 4: Report Missed Class Section -->
-                <div id="tabMissedPortal" class="portal-section hidden">
-                    <h3>Report Missed Class to Admin</h3>
-                    <label for="missWeek">Select Week:</label>
-                    <select id="missWeek">
-                        <option value="">-- Select Week --</option>
-                    </select>
-
-                    <label for="missDay">Select Day:</label>
-                    <select id="missDay">
-                        <option value="Mon">Monday (Morning)</option>
-                        <option value="Tue">Tuesday (Morning)</option>
-                        <option value="Wed">Wednesday (Morning)</option>
-                        <option value="Thu">Thursday (Morning)</option>
-                        <option value="Fri">Friday (Morning)</option>
-                        <option value="Sat">Saturday (Weekend Lessons)</option>
-                    </select>
-
-                    <label for="missType">Session Type:</label>
-                    <select id="missType">
-                        <option value="morning">Morning Session</option>
-                        <option value="weekend">Saturday Weekend Lesson</option>
-                    </select>
-
-                    <label for="missLessonNo">Lesson Number (Saturday 1 to 4 if applicable):</label>
-                    <input type="number" id="missLessonNo" min="1" max="4" value="1">
-
-                    <label for="subName">Substitute Teacher Name:</label>
-                    <input type="text" id="subName" placeholder="Enter substitute teacher name">
-
-                    <button onclick="saveMissedClass()" class="btn-green" style="margin-top: 20px; width: 100%;">Submit Report</button>
-                    <div id="missedResult" class="success"></div>
+                <div class="step-line"></div>
+                <!-- Step 4 -->
+                <div class="step-item">
+                    <div class="step-circle">4</div>
+                    <div class="step-card">🔒</div>
                 </div>
-
-                <!-- Tab 5: Feedback Section -->
-                <div id="tabFeedbackSection" class="portal-section hidden">
-                    <h3>Teacher Feedback & Administrative Queries</h3>
-                    <label for="feedbackCategory">Feedback Category:</label>
-                    <select id="feedbackCategory">
-                        <option value="Dispute Claim">Claim Discrepancy / Payment Issue</option>
-                        <option value="Timetable Suggestion">Timetable Modification Request</option>
-                        <option value="General Query">General Inquiry or Comment</option>
-                    </select>
-
-                    <label for="feedbackMessage">Your Message / Details:</label>
-                    <textarea id="feedbackMessage" rows="5" placeholder="Type your feedback here..."></textarea>
-
-                    <button onclick="submitTeacherFeedback()" class="btn-green" style="margin-top: 20px; width: 100%; background-color: #0d9488;">Send Feedback to Admin</button>
-                    <div id="feedbackResult" class="success"></div>
+                <div class="step-line"></div>
+                <!-- Step 5 -->
+                <div class="step-item">
+                    <div class="step-circle">5</div>
+                    <div class="step-card">⬇️</div>
                 </div>
-
-                <!-- Tab 6: Reset Password / Security Section -->
-                <div id="tabSecuritySection" class="portal-section hidden">
-                    <h3>Security Settings & Password Reset</h3>
-                    <p style="color: #64748b; font-size: 14px;">Update your account password while securely logged into your portal.</p>
-                    
-                    <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; max-width: 500px;">
-                        <label for="currentPortalPass">Current Password:</label>
-                        <input type="password" id="currentPortalPass" placeholder="Enter current password">
-
-                        <label for="newPortalPass">New Password:</label>
-                        <input type="password" id="newPortalPass" placeholder="Enter new secure password">
-
-                        <label for="confirmPortalPass">Confirm New Password:</label>
-                        <input type="password" id="confirmPortalPass" placeholder="Confirm new password">
-
-                        <button onclick="updatePortalPassword()" class="btn-green" style="margin-top: 20px; width: 100%;">Change Password</button>
-                        <div id="portalPassMsg" class="success"></div>
-                    </div>
+                <div class="step-line"></div>
+                <!-- Step 6 -->
+                <div class="step-item">
+                    <div class="step-circle">6</div>
+                    <div class="step-card">📑</div>
                 </div>
-
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Admin Portal View -->
-    <div id="adminPortal" class="portal-card hidden">
-        <div class="portal-card-header" style="background-color: #1e3d59;">
-            <div class="portal-badge-logo" style="color: #1e3d59;">BLISS</div>
-            <h2>Admin Portal Access</h2>
-        </div>
-        <div class="portal-card-body">
-            <div id="adminLogin">
-                <label for="adminPassword">Enter Admin Security Password:</label>
-                <div class="input-group-container">
-                    <div class="input-icon-box">&#128274;</div>
-                    <input type="password" id="adminPassword" placeholder="Password (admin123)">
-                </div>
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                    <button class="btn-secondary" onclick="goHome()" type="button" style="margin-top: 0; width: 48%;">Back</button>
-                    <button onclick="loginAdmin()" class="btn-green" type="button" style="background-color: #1e3d59; width: 48%;">Continue</button>
-                </div>
-                <div id="adminError" class="error"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Portal Dashboard Layout -->
-    <div id="adminDashboard" class="app-layout hidden">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h3>BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
-                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">ADMIN PORTAL</div>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a id="adminMenuLinkMembers" class="active" onclick="switchAdminTab('membersSection')">Manage Teachers</a></li>
-                <li><a id="adminMenuLinkWeeks" onclick="switchAdminTab('weeksSection')">Open Weeks Config</a></li>
-                <li><a id="adminMenuLinkFeedback" onclick="switchAdminTab('feedbackSection')">Teacher Feedback Log</a></li>
-                <li><a id="adminMenuLinkAudit" onclick="switchAdminTab('auditSection')">Master Claims Clearance</a></li>
-                <li><a onclick="goHome()" style="color: #fca5a5;">Logout Portal</a></li>
-            </ul>
-        </div>
-
-        <!-- Main Content Wrapper -->
-        <div class="main-content-area">
-            <!-- Top Navigation Bar -->
-            <div class="topbar">
-                <div>BLISS teachers portal - ADMIN CONTROL PANEL</div>
-                <div class="topbar-right">
-                    <span>Logged in as: <strong>admin</strong></span>
-                </div>
-            </div>
-
-            <!-- Content Area Body -->
-            <div class="content-body">
-                
-                <!-- Admin Tab 1: Manage Teachers -->
-                <div id="adminTabMembers" class="portal-section">
-                    <h2 style="margin-top:0;">Manage Teacher Members</h2>
-                    <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; max-width: 600px;">
-                        <label for="newMemberName">Add New Teacher Name:</label>
-                        <input type="text" id="newMemberName" placeholder="e.g. JOHN DOE">
-                        <button onclick="addNewMember()" class="btn-green" style="margin-top: 15px; width:100%;">Add Member to System</button>
-                        <div id="memberAddMsg" class="success"></div>
-
-                        <label for="removeMemberSelect" style="margin-top: 30px;">Remove Teacher Member:</label>
-                        <select id="removeMemberSelect">
-                            <option value="">-- Select Member to Remove --</option>
-                        </select>
-                        <button onclick="removeMember()" class="btn-secondary" style="margin-top: 15px; width:100%; background-color: #ef4444;">Remove Selected Member</button>
-                        <div id="memberRemoveMsg" class="error" style="color: #ef4444;"></div>
-                    </div>
-                </div>
-
-                <!-- Admin Tab 2: Open Weeks Config -->
-                <div id="adminTabWeeks" class="portal-section hidden">
-                    <h2 style="margin-top:0;">Open Weeks for Claiming</h2>
-                    <div style="background: #ffffff; border: 1px solid #cbd5e1; padding: 25px; border-radius: 6px; max-width: 600px;">
-                        <p style="color: #64748b; font-size: 14px; margin-top:0;">Select which academic weeks are currently active for teachers to submit session claims.</p>
-                        <div id="adminWeeksCheckboxes" style="margin-top: 15px;"></div>
-                        <button onclick="saveOpenWeeks()" class="btn-green" style="margin-top: 20px; width:100%;">Save Open Weeks Configuration</button>
-                        <div id="adminSaveMsg" class="success"></div>
-                    </div>
-                </div>
-
-                <!-- Admin Tab 3: Teacher Feedback Log -->
-                <div id="adminTabFeedback" class="portal-section hidden">
-                    <h2 style="margin-top:0;">Teacher Feedback & Inquiries Log</h2>
-                    <p style="color: #64748b; font-size: 14px;">Review messages, claim discrepancies, and timetable suggestions submitted by teaching staff.</p>
-                    <div id="adminFeedbackContent"></div>
-                </div>
-
-                <!-- Admin Tab 4: Master Claims Clearance -->
-                <div id="adminTabAudit" class="portal-section hidden">
-                    <h2 style="margin-top:0;">Master Clearance, Verification & Summary</h2>
-                    <p style="color: #64748b; font-size: 14px;">Verify claims, review exact lesson sequences and subjects taught per week, and approve payouts.</p>
-                    <div style="margin-bottom: 20px;">
-                        <button onclick="clearAllRemedials()" class="btn-secondary" style="background-color: #ef4444; width: auto; padding: 10px 20px;">Clear All System Records</button>
-                    </div>
-                    <div id="auditContent"></div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    let openWeeksConfig = JSON.parse(localStorage.getItem('openWeeksConfig_bliss')) || {
-        1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true
-    };
-
-    let teacherList = JSON.parse(localStorage.getItem('teacherList_bliss')) || [
-        "MARY M", "MR KIMATHI", "JOSYLN", "FRIDA", "COLLINS M.", "IBAYA", "MERCY", "JOY M.", "SHELDON", "ALIAS", "ROSEMARY K.", "CAROL G.", "EDWIN M.", "WINNIE", "JANE M.", "TIMOTHY", "PAULINE", "EMMANUEL N.", "ANNJOY", "STEPHEN M.", "TONNY M.", "WILSON", "PRISCILA", "BETT K.", "GITONGA N.", "CAROL N.", "CYNTHIA C.", "MUHINDI M.", "ELISHA BETT", "MURANGIRI R.", "MWANGI"
-    ];
-
-    let teacherDatabase = JSON.parse(localStorage.getItem('teacherDatabase_bliss')) || {};
-    let globalFeedbackList = JSON.parse(localStorage.getItem('globalFeedbackList_bliss')) || [];
-    let currentLoggedInTeacher = null;
-    let generatedOtpStorage = null;
-    let pendingRegData = null;
-    let resetOtpStorage = null;
-    let resetTargetName = null;
-
-    function saveData() {
-        localStorage.setItem('openWeeksConfig_bliss', JSON.stringify(openWeeksConfig));
-        localStorage.setItem('teacherList_bliss', JSON.stringify(teacherList));
-        localStorage.setItem('teacherDatabase_bliss', JSON.stringify(teacherDatabase));
-        localStorage.setItem('globalFeedbackList_bliss', JSON.stringify(globalFeedbackList));
-    }
-
-    function showPortalSelection(portal) {
-        document.getElementById('mainMenuContainer').classList.add('hidden');
-        if (portal === 'teacherLogin') {
-            document.getElementById('teacherLoginPortal').classList.remove('hidden');
-            populateTeacherDropdowns();
-        } else if (portal === 'admin') {
-            document.getElementById('adminPortal').classList.remove('hidden');
-        }
-    }
-
-    function goHome() {
-        document.getElementById('mainMenuContainer').classList.remove('hidden');
-        document.getElementById('teacherLoginPortal').classList.add('hidden');
-        document.getElementById('teacherPortalDashboard').classList.add('hidden');
-        document.getElementById('adminPortal').classList.add('hidden');
-        document.getElementById('adminDashboard').classList.add('hidden');
-        document.getElementById('adminPassword').value = '';
-        currentLoggedInTeacher = null;
-    }
-
-    function populateTeacherDropdowns() {
-        const select = document.getElementById('authTeacherName');
-        select.innerHTML = '<option value="">-- Select Your Name or Phone No. --</option>';
-        teacherList.sort().forEach(name => {
-            const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
-            select.appendChild(opt);
-        });
-    }
-
-    function checkTeacherExists() {
-        const name = document.getElementById('authTeacherName').value;
-        const loginFields = document.getElementById('loginFields');
-        const registerFields = document.getElementById('registerFields');
-        const forgotSection = document.getElementById('forgotPasswordSection');
-
-        forgotSection.classList.add('hidden');
-        document.getElementById('teacherAuthError').textContent = '';
-
-        if (!name) {
-            loginFields.classList.add('hidden');
-            registerFields.classList.add('hidden');
-            return;
-        }
-
-        if (teacherDatabase[name]) {
-            loginFields.classList.remove('hidden');
-            registerFields.classList.add('hidden');
-        } else {
-            loginFields.classList.add('hidden');
-            registerFields.classList.remove('hidden');
-        }
-    }
-
-    function requestRegistrationOTP() {
-        const name = document.getElementById('authTeacherName').value;
-        const phone = document.getElementById('regPhone').value.trim();
-        const pass = document.getElementById('regPassword').value;
-
-        if (!phone || !pass) {
-            document.getElementById('teacherAuthError').textContent = 'Please fill in all registration fields.';
-            return;
-        }
-
-        document.getElementById('teacherAuthError').textContent = '';
-        generatedOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
-        pendingRegData = { phone, pass };
-
-        document.getElementById('otpSimulatedNotice').textContent = `[SIMULATED SMS to ${phone}]: Your BLISS Portal Verification Code is ${generatedOtpStorage}`;
-        document.getElementById('otpVerificationSection').classList.remove('hidden');
-    }
-
-    function verifyAndCompleteRegistration() {
-        const entered = document.getElementById('enteredOtp').value.trim();
-        if (entered !== generatedOtpStorage) {
-            document.getElementById('teacherAuthError').textContent = 'Invalid OTP verification code. Try again.';
-            return;
-        }
-
-        const name = document.getElementById('authTeacherName').value;
-        teacherDatabase[name] = {
-            phone: pendingRegData.phone,
-            password: pendingRegData.pass,
-            claims: {},
-            missedClasses: []
-        };
-        saveData();
-        alert('Registration successful! You can now log in.');
-        checkTeacherExists();
-        document.getElementById('regPhone').value = '';
-        document.getElementById('regPassword').value = '';
-        document.getElementById('enteredOtp').value = '';
-        document.getElementById('otpVerificationSection').classList.add('hidden');
-    }
-
-    function handleTeacherLogin() {
-        const name = document.getElementById('authTeacherName').value;
-        const pass = document.getElementById('authPassword').value;
-
-        if (!teacherDatabase[name] || teacherDatabase[name].password !== pass) {
-            document.getElementById('teacherAuthError').textContent = 'Incorrect password. Please try again.';
-            return;
-        }
-
-        currentLoggedInTeacher = name;
-        document.getElementById('teacherLoginPortal').classList.add('hidden');
-        document.getElementById('teacherPortalDashboard').classList.remove('hidden');
-        loadDashboardData();
-        switchTeacherTab('dashboardHome');
-    }
-
-    function logoutTeacher() {
-        currentLoggedInTeacher = null;
-        goHome();
-    }
-
-    function switchTeacherTab(tabId) {
-        document.querySelectorAll('#teacherPortalDashboard .portal-section').forEach(sec => sec.classList.add('hidden'));
-        document.querySelectorAll('#teacherPortalDashboard .sidebar-menu a').forEach(a => a.classList.remove('active'));
-
-        if (tabId === 'dashboardHome') {
-            document.getElementById('tabDashboardHome').classList.remove('hidden');
-            document.getElementById('menuLinkDashboard').classList.add('active');
-            loadDashboardData();
-        } else if (tabId === 'claimSection') {
-            document.getElementById('tabClaimSection').classList.remove('hidden');
-            document.getElementById('menuLinkClaim').classList.add('active');
-            populateClaimWeeks();
-        } else if (tabId === 'statusSection') {
-            document.getElementById('tabStatusSection').classList.remove('hidden');
-            document.getElementById('menuLinkStatus').classList.add('active');
-            loadStatusSection();
-        } else if (tabId === 'missedPortal') {
-            document.getElementById('tabMissedPortal').classList.remove('hidden');
-            document.getElementById('menuLinkMissed').classList.add('active');
-            populateMissedWeeks();
-        } else if (tabId === 'feedbackSection') {
-            document.getElementById('tabFeedbackSection').classList.remove('hidden');
-            document.getElementById('menuLinkFeedback').classList.add('active');
-        } else if (tabId === 'securitySection') {
-            document.getElementById('tabSecuritySection').classList.remove('hidden');
-            document.getElementById('menuLinkSecurity').classList.add('active');
-        }
-    }
-
-    function switchAdminTab(tabId) {
-        document.querySelectorAll('#adminDashboard .portal-section').forEach(sec => sec.classList.add('hidden'));
-        document.querySelectorAll('#adminDashboard .sidebar-menu a').forEach(a => a.classList.remove('active'));
-
-        if (tabId === 'membersSection') {
-            document.getElementById('adminTabMembers').classList.remove('hidden');
-            document.getElementById('adminMenuLinkMembers').classList.add('active');
-        } else if (tabId === 'weeksSection') {
-            document.getElementById('adminTabWeeks').classList.remove('hidden');
-            document.getElementById('adminMenuLinkWeeks').classList.add('active');
-        } else if (tabId === 'feedbackSection') {
-            document.getElementById('adminTabFeedback').classList.remove('hidden');
-            document.getElementById('adminMenuLinkFeedback').classList.add('active');
-        } else if (tabId === 'auditSection') {
-            document.getElementById('adminTabAudit').classList.remove('hidden');
-            document.getElementById('adminMenuLinkAudit').classList.add('active');
-        }
-        loadAdminDashboard();
-    }
-
-    function loadDashboardData() {
-        if (!currentLoggedInTeacher) return;
-        const data = teacherDatabase[currentLoggedInTeacher];
-
-        document.getElementById('sidebarTeacherName').textContent = currentLoggedInTeacher;
-        document.getElementById('topbarTeacherName').textContent = currentLoggedInTeacher;
-        document.getElementById('profileCardName').textContent = currentLoggedInTeacher;
-        document.getElementById('infoFullName').textContent = currentLoggedInTeacher;
-        document.getElementById('infoPhone').textContent = data.phone || '-';
-
-        let total = 0;
-        let approved = 0;
-        let pending = 0;
-
-        Object.values(data.claims || {}).forEach(c => {
-            const amount = c.amount || 0;
-            total += amount;
-            if (c.status === 'Approved') approved += amount;
-            else pending += amount;
-        });
-
-        document.getElementById('metricTotalClaims').textContent = `${total} KSH`;
-        document.getElementById('metricApprovedClaims').textContent = `${approved} KSH`;
-        document.getElementById('metricPendingClaims').textContent = `${pending} KSH`;
-    }
-
-    function populateClaimWeeks() {
-        const select = document.getElementById('claimWeek');
-        select.innerHTML = '<option value="">-- Select Week --</option>';
-        for (let i = 1; i <= 9; i++) {
-            if (openWeeksConfig[i]) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = `Week ${i}`;
-                select.appendChild(opt);
-            }
-        }
-    }
-
-    function loadWeekFields() {
-        const week = document.getElementById('claimWeek').value;
-        const container = document.getElementById('daysContainer');
-        const submitBtn = document.getElementById('submitClaimBtn');
-        container.innerHTML = '';
-
-        if (!week) {
-            submitBtn.classList.add('hidden');
-            return;
-        }
-
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        days.forEach(day => {
-            const div = document.createElement('div');
-            div.className = 'day-row';
-            div.innerHTML = `
-                <h4 style="margin: 0 0 10px 0;">${day}</h4>
-                <label>Number of Sessions / Lessons Taught:</label>
-                <input type="number" min="0" max="6" value="0" id="sessions_${day}">
-                <label>Subject / Topic Details:</label>
-                <input type="text" placeholder="e.g. Physics - Mechanics" id="details_${day}">
-            `;
-            container.appendChild(div);
-        });
-        submitBtn.classList.remove('hidden');
-    }
-
-    function submitClaim() {
-        const week = document.getElementById('claimWeek').value;
-        const errorDiv = document.getElementById('teacherError');
-        const resultDiv = document.getElementById('teacherResult');
-        
-        errorDiv.textContent = '';
-        resultDiv.classList.add('hidden');
-
-        if (!week) {
-            errorDiv.textContent = 'Please select an academic week first from the dropdown above.';
-            return;
-        }
-
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        let totalSessions = 0;
-        let summaryDetails = {};
-
-        days.forEach(day => {
-            const sessionInput = document.getElementById(`sessions_${day}`);
-            const detailsInput = document.getElementById(`details_${day}`);
-            
-            const count = sessionInput ? (parseInt(sessionInput.value) || 0) : 0;
-            const details = detailsInput ? detailsInput.value.trim() : '';
-            
-            totalSessions += count;
-            summaryDetails[day] = { count, details };
-        });
-
-        if (totalSessions === 0) {
-            errorDiv.textContent = 'Please enter at least one session/lesson taught before submitting.';
-            return;
-        }
-
-        const ratePerSession = 500;
-        const amount = totalSessions * ratePerSession;
-
-        if (!teacherDatabase[currentLoggedInTeacher].claims) {
-            teacherDatabase[currentLoggedInTeacher].claims = {};
-        }
-
-        teacherDatabase[currentLoggedInTeacher].claims[week] = {
-            week: week,
-            totalSessions: totalSessions,
-            amount: amount,
-            details: summaryDetails,
-            status: 'Pending Verification',
-            dateSubmitted: new Date().toLocaleDateString()
-        };
-        
-        saveData();
-
-        resultDiv.classList.remove('hidden');
-        resultDiv.innerHTML = `
-            <strong>Claim Submitted Successfully!</strong><br>
-            Week: ${week}<br>
-            Total Sessions: ${totalSessions}<br>
-            Calculated Payout: ${amount} KSH<br>
-            Status: Pending Verification
-        `;
-        
-        loadDashboardData();
-    }
-
-    function loadStatusSection() {
-        const container = document.getElementById('teacherStatusListContainer');
-        const claims = teacherDatabase[currentLoggedInTeacher]?.claims || {};
-
-        if (Object.keys(claims).length === 0) {
-            container.innerHTML = '<p style="color: #64748b;">No claims submitted yet.</p>';
-            return;
-        }
-
-        let html = '';
-        Object.values(claims).forEach(c => {
-            html += `
-                <div style="background: white; border: 1px solid #cbd5e1; padding: 20px; border-radius: 6px; margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h4 style="margin: 0;">Week ${c.week} Claim</h4>
-                        <span class="status-badge status-pending">${c.status}</span>
-                    </div>
-                    <p style="margin: 8px 0 0 0; font-size: 14px; color: #64748b;">Submitted on: ${c.dateSubmitted} | Total Payout: <strong>${c.amount} KSH</strong></p>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
-    }
-
-    function populateMissedWeeks() {
-        const select = document.getElementById('missWeek');
-        select.innerHTML = '<option value="">-- Select Week --</option>';
-        for (let i = 1; i <= 9; i++) {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.textContent = `Week ${i}`;
-            select.appendChild(opt);
-        }
-    }
-
-    function saveMissedClass() {
-        const week = document.getElementById('missWeek').value;
-        const day = document.getElementById('missDay').value;
-        const type = document.getElementById('missType').value;
-        const lessonNo = document.getElementById('missLessonNo').value;
-        const sub = document.getElementById('subName').value;
-
-        if (!week || !sub) {
-            alert('Please select a week and provide the substitute teacher name.');
-            return;
-        }
-
-        if (!teacherDatabase[currentLoggedInTeacher].missedClasses) {
-            teacherDatabase[currentLoggedInTeacher].missedClasses = [];
-        }
-
-        teacherDatabase[currentLoggedInTeacher].missedClasses.push({
-            week, day, type, lessonNo, sub, date: new Date().toLocaleDateString()
-        });
-        saveData();
-
-        document.getElementById('missedResult').textContent = 'Missed class report successfully submitted to Admin!';
-        document.getElementById('subName').value = '';
-    }
-
-    function submitTeacherFeedback() {
-        const category = document.getElementById('feedbackCategory').value;
-        const message = document.getElementById('feedbackMessage').value.trim();
-
-        if (!message) {
-            alert('Please enter your feedback message.');
-            return;
-        }
-
-        globalFeedbackList.push({
-            teacher: currentLoggedInTeacher,
-            category,
-            message,
-            date: new Date().toLocaleDateString()
-        });
-        saveData();
-
-        document.getElementById('feedbackResult').textContent = 'Feedback successfully sent to Admin!';
-        document.getElementById('feedbackMessage').value = '';
-    }
-
-    function updatePortalPassword() {
-        const current = document.getElementById('currentPortalPass').value;
-        const newPass = document.getElementById('newPortalPass').value;
-        const confirmPass = document.getElementById('confirmPortalPass').value;
-        const msg = document.getElementById('portalPassMsg');
-
-        if (current !== teacherDatabase[currentLoggedInTeacher].password) {
-            msg.className = 'error';
-            msg.textContent = 'Current password is incorrect.';
-            return;
-        }
-
-        if (!newPass || newPass !== confirmPass) {
-            msg.className = 'error';
-            msg.textContent = 'New passwords do not match or are empty.';
-            return;
-        }
-
-        teacherDatabase[currentLoggedInTeacher].password = newPass;
-        saveData();
-        msg.className = 'success';
-        msg.textContent = 'Password successfully updated!';
-        document.getElementById('currentPortalPass').value = '';
-        document.getElementById('newPortalPass').value = '';
-        document.getElementById('confirmPortalPass').value = '';
-    }
-
-    function showForgotPasswordSection() {
-        document.getElementById('loginFields').classList.add('hidden');
-        document.getElementById('forgotPasswordSection').classList.remove('hidden');
-    }
-
-    function hideForgotPasswordSection() {
-        document.getElementById('forgotPasswordSection').classList.add('hidden');
-        document.getElementById('loginFields').classList.remove('hidden');
-    }
-
-    function requestPasswordResetOTP() {
-        const name = document.getElementById('authTeacherName').value;
-        const phone = document.getElementById('resetPhone').value.trim();
-
-        if (!teacherDatabase[name] || teacherDatabase[name].phone !== phone) {
-            document.getElementById('teacherAuthError').textContent = 'Phone number does not match registered records.';
-            return;
-        }
-
-        resetTargetName = name;
-        resetOtpStorage = Math.floor(1000 + Math.random() * 9000).toString();
-        document.getElementById('resetOtpNotice').textContent = `[SIMULATED SMS]: Reset Code is ${resetOtpStorage}`;
-        document.getElementById('resetOtpBox').classList.remove('hidden');
-    }
-
-    function verifyAndResetPassword() {
-        const entered = document.getElementById('enteredResetOtp').value.trim();
-        const newPass = document.getElementById('newAccountPassword').value;
-
-        if (entered !== resetOtpStorage || !newPass) {
-            alert('Invalid verification code or empty password.');
-            return;
-        }
-
-        teacherDatabase[resetTargetName].password = newPass;
-        saveData();
-        alert('Password reset successfully! Please log in.');
-        hideForgotPasswordSection();
-        document.getElementById('resetOtpBox').classList.add('hidden');
-        document.getElementById('resetPhone').value = '';
-        document.getElementById('newAccountPassword').value = '';
-        document.getElementById('enteredResetOtp').value = '';
-    }
-
-    function loginAdmin() {
-        const pass = document.getElementById('adminPassword').value;
-        if (pass !== 'admin123') {
-            document.getElementById('adminError').textContent = 'Incorrect admin security password.';
-            return;
-        }
-
-        document.getElementById('adminPortal').classList.add('hidden');
-        document.getElementById('adminDashboard').classList.remove('hidden');
-        loadAdminDashboard();
-        switchAdminTab('membersSection');
-    }
-
-    function loadAdminDashboard() {
-        const removeSelect = document.getElementById('removeMemberSelect');
-        removeSelect.innerHTML = '<option value="">-- Select Member to Remove --</option>';
-        teacherList.sort().forEach(name => {
-            const opt = document.createElement('option');
-            opt.value = name;
-            opt.textContent = name;
-            removeSelect.appendChild(opt);
-        });
-
-        const weeksBox = document.getElementById('adminWeeksCheckboxes');
-        weeksBox.innerHTML = '';
-        for (let i = 1; i <= 9; i++) {
-            const checked = openWeeksConfig[i] ? 'checked' : '';
-            weeksBox.innerHTML += `
-                <label style="display: block; align-items: center; gap: 8px; margin-bottom: 12px; font-weight: normal;">
-                    <input type="checkbox" id="adminWeek_${i}" ${checked} style="width: auto; margin-right: 8px;"> Week ${i} Active for Claiming
-                </label>
-            `;
-        }
-
-        const feedbackContainer = document.getElementById('adminFeedbackContent');
-        if (globalFeedbackList.length === 0) {
-            feedbackContainer.innerHTML = '<p style="color: #64748b;">No feedback messages recorded.</p>';
-        } else {
-            let fbHtml = '';
-            globalFeedbackList.forEach(fb => {
-                fbHtml += `
-                    <div style="background: white; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px;">
-                        <strong>${fb.teacher}</strong> (${fb.category}) - <span style="color: #64748b; font-size: 12px;">${fb.date}</span>
-                        <p style="margin: 5px 0 0 0; font-size: 14px;">${fb.message}</p>
-                    </div>
-                `;
-            });
-            feedbackContainer.innerHTML = fbHtml;
-        }
-
-        const auditContainer = document.getElementById('auditContent');
-        let auditHtml = '';
-        let hasClaims = false;
-
-        Object.keys(teacherDatabase).forEach(tName => {
-            const claims = teacherDatabase[tName].claims || {};
-            Object.values(claims).forEach(c => {
-                hasClaims = true;
-                auditHtml += `
-                    <div style="background: white; border: 1px solid #cbd5e1; padding: 15px; border-radius: 6px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>${tName}</strong> - Week ${c.week} (${c.amount} KSH)<br>
-                            <span style="font-size: 13px; color: #64748b;">Status: ${c.status}</span>
-                        </div>
-                        <button onclick="approveClaim('${tName}', '${c.week}')" class="btn-green" style="padding: 6px 15px; font-size: 13px; width: auto; margin-top: 0;">Approve Claim</button>
-                    </div>
-                `;
-            });
-        });
-
-        auditContainer.innerHTML = hasClaims ? auditHtml : '<p style="color: #64748b;">No active claims submitted for audit.</p>';
-    }
-
-    function approveClaim(teacherName, weekNum) {
-        if (teacherDatabase[teacherName] && teacherDatabase[teacherName].claims[weekNum]) {
-            teacherDatabase[teacherName].claims[weekNum].status = 'Approved';
-            saveData();
-            loadAdminDashboard();
-        }
-    }
-
-    function addNewMember() {
-        const name = document.getElementById('newMemberName').value.trim().toUpperCase();
-        if (!name) return;
-
-        if (!teacherList.includes(name)) {
-            teacherList.push(name);
-            saveData();
-            document.getElementById('memberAddMsg').textContent = `Successfully added ${name} to system list!`;
-            document.getElementById('newMemberName').value = '';
-            loadAdminDashboard();
-        } else {
-            document.getElementById('memberAddMsg').textContent = 'Teacher member already exists.';
-        }
-    }
-
-    function removeMember() {
-        const name = document.getElementById('removeMemberSelect').value;
-        if (!name) return;
-
-        teacherList = teacherList.filter(t => t !== name);
-        delete teacherDatabase[name];
-        saveData();
-        document.getElementById('memberRemoveMsg').textContent = `Successfully removed ${name}.`;
-        loadAdminDashboard();
-    }
-
-    function saveOpenWeeks() {
-        for (let i = 1; i <= 9; i++) {
-            const chk = document.getElementById(`adminWeek_${i}`);
-            if (chk) openWeeksConfig[i] = chk.checked;
-        }
-        saveData();
-        document.getElementById('adminSaveMsg').textContent = 'Open weeks configuration successfully saved!';
-    }
-
-    function clearAllRemedials() {
-        if (confirm('Are you sure you want to clear all system records and databases?')) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
-</script>
 </body>
 </html>
