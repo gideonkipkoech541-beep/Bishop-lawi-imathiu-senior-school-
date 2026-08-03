@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koitaleel Samoei University College - Portal</title>
+    <title>School Portal - Claims & Admin</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Top Bar */
+        /* Top Bar styling matching the visual motif */
         .top-bar {
             background-color: #5c060c;
             color: white;
@@ -61,7 +61,7 @@
             margin-left: 3px;
         }
 
-        /* Main Header */
+        /* Main Header matching your custom system style */
         .main-header {
             background-color: white;
             display: flex;
@@ -77,10 +77,17 @@
             gap: 12px;
         }
 
-        .logo-img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
+        .logo-box {
+            width: 42px;
+            height: 42px;
+            background-color: #1b4d3e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 18px;
         }
 
         .logo-text {
@@ -103,6 +110,10 @@
             text-transform: uppercase;
         }
 
+        .nav-links a:hover {
+            color: #1b4d3e;
+        }
+
         /* Hero / Portal Section Container */
         .portal-hero-section {
             position: relative;
@@ -112,7 +123,7 @@
             flex-direction: column;
         }
 
-        /* Top Banner Replica matching exact design */
+        /* Top Banner Replica matching the exact split design */
         .banner-row {
             position: relative;
             background: #ffffff;
@@ -205,9 +216,16 @@
         }
 
         .center-crest {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
+            width: 36px;
+            height: 36px;
+            background-color: #1b4d3e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 16px;
         }
 
         .center-title-text h1 {
@@ -308,7 +326,7 @@
             font-weight: bold;
         }
 
-        /* Integrated Login Container Section */
+        /* Integrated Custom Login Section */
         .portal-content-row {
             background-color: #f7f9fa;
             border-top: 2px solid #1b4d3e;
@@ -428,16 +446,16 @@
     <!-- Main Navigation Header -->
     <header class="main-header">
         <div class="logo-section">
-            <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Logo" class="logo-img">
-            <span class="logo-text">Koitaleel Samoei University College</span>
+            <div class="logo-box">SP</div>
+            <span class="logo-text">School Portal System</span>
         </div>
         <nav class="nav-links">
-            <a href="#">About Us <span class="dropdown-arrow">▼</span></a>
-            <a href="#">Admissions</a>
-            <a href="#">Academics <span class="dropdown-arrow">▼</span></a>
-            <a href="#">Library</a>
-            <a href="#">Students <span class="dropdown-arrow">▼</span></a>
-            <a href="#">Research <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Dashboard <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Teacher Accounts</a>
+            <a href="#">School Claims <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Directory</a>
+            <a href="#">Reports <span class="dropdown-arrow">▼</span></a>
+            <a href="#">Settings <span class="dropdown-arrow">▼</span></a>
         </nav>
     </header>
 
@@ -446,39 +464,39 @@
         <div class="banner-row">
             <!-- Left Banner -->
             <div class="hero-left">
-                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus road" class="hero-left-bg-img">
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Administration background" class="hero-left-bg-img">
                 <div class="welcome-sub">Welcome to the</div>
-                <div class="welcome-title">KSUC FAMILY!<span class="welcome-star">★</span></div>
+                <div class="welcome-title">PORTAL FAMILY!<span class="welcome-star">★</span></div>
             </div>
 
             <!-- Right Banner Area -->
             <div class="hero-right">
                 <div class="diagonal-stripes"></div>
 
-                <!-- University Logo & Name Block -->
+                <!-- Brand & Name Block -->
                 <div class="center-brand">
                     <div class="center-logo-row">
-                        <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Crest" class="center-crest">
+                        <div class="center-crest">SP</div>
                         <div class="center-title-text">
-                            <h1>Koitaleel Samoei<br>University College</h1>
+                            <h1>School Administration<br>& Claims Portal</h1>
                         </div>
                     </div>
-                    <div class="center-subtitle">— NURTURING TALENT AND RESEARCH FOR GLOBAL IMPACT. —</div>
+                    <div class="center-subtitle">— SECURE MANAGEMENT & TEACHER SERVICES —</div>
                 </div>
 
-                <!-- Admission Callout Text -->
+                <!-- Callout Text -->
                 <div class="admission-callout">
-                    <div class="step-guide-badge">A SIMPLE STEP-BY-STEP GUIDE</div>
-                    <div class="admission-main-title">Access your</div>
-                    <div class="admission-sub-title">KSUC Admission Letter</div>
+                    <div class="step-guide-badge">SECURE ADMINISTRATIVE ACCESS</div>
+                    <div class="admission-main-title">Manage your</div>
+                    <div class="admission-sub-title">Claims & Portal Accounts</div>
                 </div>
 
-                <!-- Congratulations Side Box -->
+                <!-- Side Box -->
                 <div class="congrats-box">
-                    <div class="congrats-heading">Congratulations!</div>
+                    <div class="congrats-heading">Welcome Back!</div>
                     <div class="congrats-star">★</div>
-                    <div class="congrats-text">You are one step closer to your future!</div>
-                    <div class="congrats-text congrats-text-bold">We can't wait to see you thrive at KSUC.</div>
+                    <div class="congrats-text">Access administrative records and update staff claims seamlessly.</div>
+                    <div class="congrats-text congrats-text-bold">System Status: Active</div>
                 </div>
             </div>
         </div>
@@ -486,13 +504,13 @@
         <!-- Integrated Login Section -->
         <div class="portal-content-row">
             <div class="login-card">
-                <div class="login-title">Student Portal Login</div>
-                <div class="login-subtitle">Enter your credentials to access your admission and portal services</div>
+                <div class="login-title">Administrator & Staff Login</div>
+                <div class="login-subtitle">Enter your credentials to manage teacher accounts and school claims</div>
                 
                 <form>
                     <div class="form-group">
-                        <label for="username">Registration Number / Email</label>
-                        <input type="text" id="username" placeholder="e.g., KSUC/001/2026" required>
+                        <label for="username">Staff ID / Username</label>
+                        <input type="text" id="username" placeholder="e.g., ADMIN/2026/001" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -503,7 +521,7 @@
 
                 <div class="login-footer-links">
                     <a href="#">Forgot Password?</a>
-                    <a href="#">Need Help?</a>
+                    <a href="#">Admin Assistance</a>
                 </div>
             </div>
         </div>
