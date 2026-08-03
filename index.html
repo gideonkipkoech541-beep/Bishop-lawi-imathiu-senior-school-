@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koitaleel Samoei University College</title>
+    <title>Koitaleel Samoei University College - Portal</title>
     <style>
         * {
             margin: 0;
@@ -56,10 +56,6 @@
             text-decoration: none;
         }
 
-        .top-links a:hover {
-            text-decoration: underline;
-        }
-
         .dropdown-arrow {
             font-size: 10px;
             margin-left: 3px;
@@ -107,20 +103,24 @@
             text-transform: uppercase;
         }
 
-        .nav-links a:hover {
-            color: #1b4d3e;
-        }
-
-        /* Hero Banner Section */
-        .hero-section {
+        /* Hero / Portal Section Container */
+        .portal-hero-section {
             position: relative;
             background: #ffffff;
-            overflow: hidden;
+            min-height: 560px;
             display: flex;
-            height: 520px;
+            flex-direction: column;
         }
 
-        /* Left Red Diagonal Banner */
+        /* Top Banner Replica matching exact design */
+        .banner-row {
+            position: relative;
+            background: #ffffff;
+            display: flex;
+            height: 380px;
+            overflow: hidden;
+        }
+
         .hero-left {
             width: 38%;
             background: linear-gradient(135deg, #7a0910 0%, #5c060c 100%);
@@ -166,7 +166,6 @@
             vertical-align: super;
         }
 
-        /* Right Content Area */
         .hero-right {
             width: 62%;
             position: relative;
@@ -177,7 +176,6 @@
             padding-top: 25px;
         }
 
-        /* Background diagonal stripes top right */
         .diagonal-stripes {
             position: absolute;
             top: 0;
@@ -190,7 +188,6 @@
             opacity: 0.9;
         }
 
-        /* Center Content Box */
         .center-brand {
             position: relative;
             z-index: 3;
@@ -213,10 +210,6 @@
             object-fit: contain;
         }
 
-        .center-title-text {
-            text-align: left;
-        }
-
         .center-title-text h1 {
             font-size: 16px;
             color: #111;
@@ -224,6 +217,7 @@
             letter-spacing: 0.5px;
             line-height: 1.1;
             text-transform: uppercase;
+            text-align: left;
         }
 
         .center-subtitle {
@@ -236,7 +230,6 @@
             padding-top: 2px;
         }
 
-        /* Main Callout Banner */
         .admission-callout {
             position: relative;
             z-index: 3;
@@ -275,7 +268,6 @@
             margin-top: -2px;
         }
 
-        /* Right Side Congratulations Box */
         .congrats-box {
             position: absolute;
             right: 25px;
@@ -316,80 +308,101 @@
             font-weight: bold;
         }
 
-        /* Step Indicators Bar at Bottom */
-        .steps-container {
-            position: absolute;
-            bottom: 25px;
-            left: 38%;
-            transform: translateX(-35%);
+        /* Integrated Login Container Section */
+        .portal-content-row {
+            background-color: #f7f9fa;
+            border-top: 2px solid #1b4d3e;
+            padding: 40px 20px;
             display: flex;
-            align-items: center;
-            z-index: 5;
-        }
-
-        .step-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
-        .step-circle {
-            width: 32px;
-            height: 32px;
-            background-color: #1b4d3e;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 2;
+            align-items: center;
         }
 
-        .step-line {
-            width: 35px;
-            height: 3px;
-            background-color: #1b4d3e;
-            z-index: 1;
-            margin-top: -16px;
-        }
-
-        .step-card {
-            width: 50px;
-            height: 45px;
+        .login-card {
             background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 5px solid #5c060c;
+        }
+
+        .login-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #5c060c;
+            margin-bottom: 8px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            position: absolute;
-            top: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-size: 14px;
         }
 
-        .step-card img, .step-card span {
-            font-size: 18px;
+        .form-group input:focus {
+            outline: none;
+            border-color: #1b4d3e;
+            box-shadow: 0 0 5px rgba(27, 77, 62, 0.2);
         }
 
-        .notification-dot {
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            background-color: #7a0910;
+        .login-btn {
+            width: 100%;
+            background-color: #1b4d3e;
             color: white;
-            font-size: 9px;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #14382d;
+        }
+
+        .login-footer-links {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid white;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .login-footer-links a {
+            color: #5c060c;
+            text-decoration: none;
+        }
+
+        .login-footer-links a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -415,7 +428,7 @@
     <!-- Main Navigation Header -->
     <header class="main-header">
         <div class="logo-section">
-            <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Logo" class="logo-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'45\' height=\'45\'><rect width=\'100%\' height=\'100%\' fill=\'%231b4d3e\'/></svg>'">
+            <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Logo" class="logo-img">
             <span class="logo-text">Koitaleel Samoei University College</span>
         </div>
         <nav class="nav-links">
@@ -428,84 +441,69 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <!-- Left Banner -->
-        <div class="hero-left">
-            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus road" class="hero-left-bg-img">
-            <div class="welcome-sub">Welcome to the</div>
-            <div class="welcome-title">KSUC FAMILY!<span class="welcome-star">★</span></div>
+    <!-- Hero & Portal Section -->
+    <section class="portal-hero-section">
+        <div class="banner-row">
+            <!-- Left Banner -->
+            <div class="hero-left">
+                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=600&q=80" alt="Campus road" class="hero-left-bg-img">
+                <div class="welcome-sub">Welcome to the</div>
+                <div class="welcome-title">KSUC FAMILY!<span class="welcome-star">★</span></div>
+            </div>
+
+            <!-- Right Banner Area -->
+            <div class="hero-right">
+                <div class="diagonal-stripes"></div>
+
+                <!-- University Logo & Name Block -->
+                <div class="center-brand">
+                    <div class="center-logo-row">
+                        <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Crest" class="center-crest">
+                        <div class="center-title-text">
+                            <h1>Koitaleel Samoei<br>University College</h1>
+                        </div>
+                    </div>
+                    <div class="center-subtitle">— NURTURING TALENT AND RESEARCH FOR GLOBAL IMPACT. —</div>
+                </div>
+
+                <!-- Admission Callout Text -->
+                <div class="admission-callout">
+                    <div class="step-guide-badge">A SIMPLE STEP-BY-STEP GUIDE</div>
+                    <div class="admission-main-title">Access your</div>
+                    <div class="admission-sub-title">KSUC Admission Letter</div>
+                </div>
+
+                <!-- Congratulations Side Box -->
+                <div class="congrats-box">
+                    <div class="congrats-heading">Congratulations!</div>
+                    <div class="congrats-star">★</div>
+                    <div class="congrats-text">You are one step closer to your future!</div>
+                    <div class="congrats-text congrats-text-bold">We can't wait to see you thrive at KSUC.</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Right Banner Area -->
-        <div class="hero-right">
-            <div class="diagonal-stripes"></div>
-
-            <!-- University Logo & Name Block -->
-            <div class="center-brand">
-                <div class="center-logo-row">
-                    <img src="https://ksuc.ac.ke/wp-content/uploads/2021/03/cropped-ksuc-logo-1-32x32.png" alt="Crest" class="center-crest" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'42\' height=\'42\'><rect width=\'100%\' height=\'100%\' fill=\'%231b4d3e\'/></svg>'">
-                    <div class="center-title-text">
-                        <h1>Koitaleel Samoei<br>University College</h1>
+        <!-- Integrated Login Section -->
+        <div class="portal-content-row">
+            <div class="login-card">
+                <div class="login-title">Student Portal Login</div>
+                <div class="login-subtitle">Enter your credentials to access your admission and portal services</div>
+                
+                <form>
+                    <div class="form-group">
+                        <label for="username">Registration Number / Email</label>
+                        <input type="text" id="username" placeholder="e.g., KSUC/001/2026" required>
                     </div>
-                </div>
-                <div class="center-subtitle">— NURTURING TALENT AND RESEARCH FOR GLOBAL IMPACT. —</div>
-            </div>
-
-            <!-- Admission Callout Text -->
-            <div class="admission-callout">
-                <div class="step-guide-badge">A SIMPLE STEP-BY-STEP GUIDE</div>
-                <div class="admission-main-title">Access your</div>
-                <div class="admission-sub-title">KSUC Admission Letter</div>
-            </div>
-
-            <!-- Congratulations Side Box -->
-            <div class="congrats-box">
-                <div class="congrats-heading">Congratulations!</div>
-                <div class="congrats-star">★</div>
-                <div class="congrats-text">You are one step closer to your future!</div>
-                <div class="congrats-text congrats-text-bold">We can't wait to see you thrive at KSUC.</div>
-            </div>
-
-            <!-- Interactive Step-by-Step Guide Indicators -->
-            <div class="steps-container">
-                <!-- Step 1 -->
-                <div class="step-item">
-                    <div class="step-circle">1</div>
-                    <div class="step-card">
-                        👤
-                        <div class="notification-dot">1</div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
                     </div>
-                </div>
-                <div class="step-line"></div>
-                <!-- Step 2 -->
-                <div class="step-item">
-                    <div class="step-circle">2</div>
-                    <div class="step-card">🌐</div>
-                </div>
-                <div class="step-line"></div>
-                <!-- Step 3 -->
-                <div class="step-item">
-                    <div class="step-circle">3</div>
-                    <div class="step-card">📄</div>
-                </div>
-                <div class="step-line"></div>
-                <!-- Step 4 -->
-                <div class="step-item">
-                    <div class="step-circle">4</div>
-                    <div class="step-card">🔒</div>
-                </div>
-                <div class="step-line"></div>
-                <!-- Step 5 -->
-                <div class="step-item">
-                    <div class="step-circle">5</div>
-                    <div class="step-card">⬇️</div>
-                </div>
-                <div class="step-line"></div>
-                <!-- Step 6 -->
-                <div class="step-item">
-                    <div class="step-circle">6</div>
-                    <div class="step-card">📑</div>
+                    <button type="submit" class="login-btn">Log In</button>
+                </form>
+
+                <div class="login-footer-links">
+                    <a href="#">Forgot Password?</a>
+                    <a href="#">Need Help?</a>
                 </div>
             </div>
         </div>
