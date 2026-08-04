@@ -307,6 +307,26 @@
       box-shadow: 0 0 0 2px rgba(27, 77, 62, 0.15);
     }
 
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .checkbox-item input {
+      width: auto;
+      cursor: pointer;
+    }
+
     .badge {
       padding: 0.25rem 0.6rem;
       border-radius: 50px;
@@ -395,7 +415,7 @@
         <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">📊 Dashboard</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Remedial Claims</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">📚 Weekly C.A.T. Uploads</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">💰 Bursar Module</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">💰 Bursar Module & Letter</a>
       </aside>
       <main class="main-content">
         <!-- Staff Dashboard Tab -->
@@ -421,7 +441,7 @@
         <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
           <div class="card">
             <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Remedial Claim Form</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Submit weekday or weekend remedial session details.</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Specify attendance details, subject, class occurrence, and precise lessons attended.</p>
             <form id="remedialForm">
               <input type="hidden" id="editClaimId">
               <div class="form-grid">
@@ -435,25 +455,34 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Day Type</label>
+                  <label>Subject</label>
+                  <input type="text" id="remSubject" required placeholder="e.g., Physics / Mathematics">
+                </div>
+                <div class="form-group">
+                  <label>Day Type / Schedule Occurrence</label>
                   <select id="remDayType" onchange="toggleDayTypeFields()" required>
-                    <option value="Weekday">Weekday (Morning/Evening)</option>
-                    <option value="Weekend">Weekend (Max 4 Lessons)</option>
+                    <option value="Weekday">Weekday (Morning / Evening)</option>
+                    <option value="Weekend">Weekend Sessions (Multiple Lessons)</option>
                   </select>
                 </div>
                 <div class="form-group" id="weekdaySessionGroup">
-                  <label>Weekday Session</label>
+                  <label>Weekday Session Occurrence</label>
                   <select id="remWeekdaySession">
-                    <option value="Morning">Morning Class</option>
-                    <option value="Evening">Evening Class</option>
+                    <option value="Morning Remedial">Morning Remedial</option>
+                    <option value="Evening Remedial">Evening Remedial</option>
                   </select>
                 </div>
                 <div class="form-group" id="weekendSessionGroup" style="display: none;">
-                  <label>Weekend Lessons (1-4)</label>
-                  <input type="number" id="remWeekendCount" min="1" max="4" value="1">
+                  <label>Select Lessons Attended (Weekend)</label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 1"> Lesson 1</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 2"> Lesson 2</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 3"> Lesson 3</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 4"> Lesson 4</label>
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label>Date of Remedial</label>
+                  <label>Date of Attendance</label>
                   <input type="date" id="remDate" required>
                 </div>
               </div>
@@ -472,8 +501,8 @@
                   <tr>
                     <th>Date</th>
                     <th>Class</th>
-                    <th>Type</th>
-                    <th>Details</th>
+                    <th>Subject</th>
+                    <th>Lessons / Occurrence Details</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -525,16 +554,17 @@
         <!-- Bursar Module Tab -->
         <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
           <div class="card">
-            <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Bursar Payment Summary & Claim Letter</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Automatic claim letter generation for approved remedial sessions.</p>
+            <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Bursar Payment Summary & Official Letter</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Generate, print, or download your official claim letter and breakdown for bursar processing.</p>
             
-            <div style="margin-bottom: 1.25rem;">
-              <button class="btn" onclick="window.print()">🖨️ Print Claim Letter & Summary</button>
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1.25rem;">
+              <button class="btn" onclick="window.print()">🖨️ Print Letter & Summary</button>
+              <button class="btn btn-outline" onclick="downloadBursarLetter()">📥 Download Letter (TXT)</button>
             </div>
 
             <div id="printArea" style="border: 1px dashed var(--border); padding: 1.5rem; border-radius: var(--radius); background: var(--card-bg);">
               <h3 style="text-align: center; color: var(--primary); font-size: 1.1rem;">BISHOP LAWI IMATHIU SCHOOL</h3>
-              <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Official Remedial Claim Letter & Summary</p>
+              <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Official Remedial Claim Letter & Summary Ledger</p>
               
               <div style="margin-bottom: 1rem; font-size: 0.9rem;" id="bursarLetterBody"></div>
 
@@ -544,7 +574,8 @@
                     <tr>
                       <th>Date</th>
                       <th>Class</th>
-                      <th>Session Details</th>
+                      <th>Subject</th>
+                      <th>Lessons & Occurrence Details</th>
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -626,7 +657,8 @@
                     <th>Teacher</th>
                     <th>Date</th>
                     <th>Class</th>
-                    <th>Details</th>
+                    <th>Subject</th>
+                    <th>Lessons & Details</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -746,17 +778,30 @@
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const claimId = document.getElementById('editClaimId').value;
       const className = document.getElementById('remClass').value;
+      const subject = document.getElementById('remSubject').value.trim();
       const dayType = document.getElementById('remDayType').value;
       const date = document.getElementById('remDate').value;
-      let details = dayType === 'Weekday' ? document.getElementById('remWeekdaySession').value + ' Class' : document.getElementById('remWeekendCount').value + ' Weekend Lesson(s)';
+      
+      let details = '';
+      if (dayType === 'Weekday') {
+        details = document.getElementById('remWeekdaySession').value;
+      } else {
+        const checkedLessons = Array.from(document.querySelectorAll('input[name="weekendLesson"]:checked'))
+          .map(cb => cb.value);
+        if (checkedLessons.length === 0) {
+          alert('Please select at least one lesson attended for weekend classes.');
+          return;
+        }
+        details = checkedLessons.join(', ');
+      }
 
       let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
 
       if (claimId) {
-        claims = claims.map(c => c.id == claimId ? { ...c, className, dayType, details, date } : c);
+        claims = claims.map(c => c.id == claimId ? { ...c, className, subject, dayType, details, date } : c);
         document.getElementById('editClaimId').value = '';
       } else {
-        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, dayType, details, date, status: 'Pending Verification' });
+        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, subject, dayType, details, date, status: 'Pending Verification' });
       }
 
       localStorage.setItem('remedial_claims', JSON.stringify(claims));
@@ -768,10 +813,11 @@
 
     function saveDraftClaim() {
       const className = document.getElementById('remClass').value;
+      const subject = document.getElementById('remSubject').value;
       const dayType = document.getElementById('remDayType').value;
       const date = document.getElementById('remDate').value;
       let drafts = JSON.parse(localStorage.getItem('claim_drafts')) || [];
-      drafts.push({ className, dayType, date });
+      drafts.push({ className, subject, dayType, date });
       localStorage.setItem('claim_drafts', JSON.stringify(drafts));
       alert('Draft saved successfully.');
     }
@@ -791,7 +837,7 @@
       claimTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims found.</td></tr>';
       userClaims.forEach(c => {
         const badge = c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning';
-        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.dayType}</td><td>${c.details}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
+        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
       });
 
       const catTbody = document.getElementById('staffCatTableBody');
@@ -802,9 +848,9 @@
 
       document.getElementById('bursarLetterBody').innerHTML = `<p>Dear Bursar,</p><p style="margin-top:0.35rem;">I, <strong>${user.name}</strong>, am requesting payment disbursement for the verified remedial sessions attended during the current term.</p>`;
       const bursarTbody = document.getElementById('bursarSummaryTableBody');
-      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
+      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
       userClaims.forEach(c => {
-        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.details}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
+        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
       });
     }
 
@@ -814,9 +860,17 @@
       if (claim) {
         document.getElementById('editClaimId').value = claim.id;
         document.getElementById('remClass').value = claim.className;
+        document.getElementById('remSubject').value = claim.subject;
         document.getElementById('remDayType').value = claim.dayType;
         document.getElementById('remDate').value = claim.date;
         toggleDayTypeFields();
+        if (claim.dayType === 'Weekday') {
+          document.getElementById('remWeekdaySession').value = claim.details;
+        } else {
+          document.querySelectorAll('input[name="weekendLesson"]').forEach(cb => {
+            cb.checked = claim.details.includes(cb.value);
+          });
+        }
         switchStaffTab('staffRemedialTab', document.querySelectorAll('#staffPortalView aside .sidebar-link')[1]);
       }
     }
@@ -826,6 +880,30 @@
       claims = claims.filter(c => c.id !== id);
       localStorage.setItem('remedial_claims', JSON.stringify(claims));
       refreshStaffData();
+    }
+
+    function downloadBursarLetter() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.teacherEmail === user.email);
+      
+      let textContent = "BISHOP LAWI IMATHIU SCHOOL\n";
+      textContent += "OFFICIAL REMEDIAL CLAIM LETTER & SUMMARY\n\n";
+      textContent += `Teacher Name: ${user.name}\n`;
+      textContent += `Email: ${user.email}\n\n`;
+      textContent += "Dear Bursar,\n";
+      textContent += `I am requesting payment disbursement for the verified remedial sessions attended during the current term.\n\n`;
+      textContent += "--- CLAIM RECORDS ---\n";
+      claims.forEach((c, idx) => {
+        textContent += `${idx + 1}. Date: ${c.date} | Class: ${c.className} | Subject: ${c.subject} | Occurrence: ${c.dayType} (${c.details}) | Status: ${c.status}\n`;
+      });
+      textContent += "\nAuthorized Signature: _______________________\n";
+
+      const blob = new Blob([textContent], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'Bursar_Remedial_Claim_Letter.txt');
+      a.click();
     }
 
     document.getElementById('catUploadForm').addEventListener('submit', (e) => {
@@ -866,11 +944,11 @@
       });
 
       const claimsTbody = document.getElementById('adminClaimsTableBody');
-      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
+      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
       claims.forEach(c => {
         const isVerified = c.status === 'Verified & Approved';
         const actionBtn = isVerified ? `<span style="color: var(--primary); font-weight: 600;">Approved</span>` : `<button class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="verifyClaim(${c.id})">Approve</button>`;
-        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.details}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
+        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
       });
     }
 
@@ -915,9 +993,9 @@
         alert('No data available to export.');
         return;
       }
-      let csv = 'Teacher,Date,Class,Type,Details,Status\n';
+      let csv = 'Teacher,Date,Class,Subject,Occurrence,Details,Status\n';
       claims.forEach(c => {
-        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.dayType}","${c.details}","${c.status}"\n`;
+        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.subject}","${c.dayType}","${c.details}","${c.status}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
