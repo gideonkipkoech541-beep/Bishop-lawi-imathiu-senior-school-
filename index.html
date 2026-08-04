@@ -1,175 +1,347 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bishop Lawi Imathiu School Portal System</title>
+  <title>Bishop Lawi Imathiu School - Modern Portal</title>
   <style>
     :root {
       --primary: #1e3a8a;
+      --primary-light: #3b82f6;
       --primary-dark: #1e293b;
       --accent: #d97706;
-      --bg-color: #f8fafc;
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
       --text-main: #334155;
-      --white: #ffffff;
-      --radius: 8px;
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+      --radius: 12px;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-light: #60a5fa;
+      --primary-dark: #0f172a;
+      --accent: #f59e0b;
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
+    /* Navbar */
     header {
-      background: var(--primary);
-      color: var(--white);
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     header h1 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
+      color: var(--primary);
+      font-weight: 700;
     }
 
-    nav a {
-      color: var(--white);
-      text-decoration: none;
-      margin-left: 1.5rem;
-      font-weight: 500;
-      transition: color 0.2s;
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
-    nav a:hover {
-      color: var(--accent);
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .card {
-      background: var(--white);
-      padding: 2rem;
+    .theme-toggle, .btn {
+      cursor: pointer;
+      border: none;
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      margin-bottom: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
     }
 
     .btn {
-      display: inline-block;
       background: var(--accent);
-      color: var(--white);
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: var(--radius);
-      font-weight: 600;
-      cursor: pointer;
+      color: #ffffff;
       text-decoration: none;
-      transition: background 0.2s;
+      box-shadow: 0 4px 6px rgba(217, 119, 6, 0.2);
     }
 
     .btn:hover {
-      background: #b45309;
+      transform: translateY(-2px);
+      filter: brightness(1.1);
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
     }
 
-    th, td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
+    .btn-outline:hover {
+      background: var(--border);
     }
 
-    th {
-      background-color: #f1f5f9;
-      color: var(--primary-dark);
+    .theme-toggle {
+      background: var(--bg-color);
+      color: var(--text-main);
+      border: 1px solid var(--border);
     }
 
+    /* Layout Structure */
     .view-section {
       display: none;
+      animation: fadeIn 0.4s ease-in-out forwards;
+      flex: 1;
     }
 
     .view-section.active {
       display: block;
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .portal-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 73px);
+    }
+
+    @media (max-width: 768px) {
+      .portal-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-link {
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius);
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    /* Main Container & Cards */
+    .main-content {
+      padding: 2rem;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--primary);
+    }
+
+    .stat-card h3 {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 0.5rem;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Forms */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
     }
 
     .form-group label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
+      font-size: 0.9rem;
     }
 
     .form-group input, .form-group select {
       width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #cbd5e1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
       border-radius: var(--radius);
+      background: var(--bg-color);
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .badge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-success { background: rgba(22, 163, 74, 0.15); color: #16a34a; }
+    .badge-warning { background: rgba(202, 138, 4, 0.15); color: #ca8a04; }
+
+    /* Print styles */
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; padding: 2rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- GLOBAL HEADER -->
+  <header>
+    <h1>Bishop Lawi Imathiu School</h1>
+    <div class="nav-actions">
+      <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+      <div id="authNavArea"></div>
+    </div>
+  </header>
+
   <!-- PUBLIC HOME VIEW -->
   <div id="homeView" class="view-section active">
-    <header>
-      <h1>Bishop Lawi Imathiu School</h1>
-      <nav>
-        <a href="#" onclick="switchView('homeView')">Home</a>
-        <a href="#" class="btn" onclick="switchView('loginView')" style="padding: 0.4rem 1rem; margin-left: 2rem;">Portal Login</a>
-      </nav>
-    </header>
-
-    <div class="container">
-      <div class="card" style="text-align: center; padding: 4rem 2rem;">
-        <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Welcome to Bishop Lawi Imathiu School</h2>
-        <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem;">Fostering academic excellence, moral integrity, and holistic development for every student.</p>
-        <button class="btn" onclick="switchView('loginView')">Access Portal Login</button>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-        <div class="card">
-          <h3>Academic Excellence</h3>
-          <p style="margin-top: 0.5rem;">Rigorous programs spanning sciences, humanities, and technical fields designed to challenge and inspire learners.</p>
-        </div>
-        <div class="card">
-          <h3>Staff Portal Access</h3>
-          <p style="margin-top: 0.5rem;">Teachers can securely submit remedial attendance records and track teaching schedules.</p>
-        </div>
-        <div class="card">
-          <h3>Administrative Control</h3>
-          <p style="margin-top: 0.5rem;">Comprehensive oversight tools allowing administrators to review claims, verify teacher classes, and approve payments.</p>
-        </div>
+    <div class="main-content" style="text-align: center; padding-top: 5rem;">
+      <div class="card" style="padding: 4rem 2rem; max-width: 800px; margin: 0 auto;">
+        <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Excellence & Integrity</h2>
+        <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 2rem;">Welcome to the official portal management system for Bishop Lawi Imathiu School. Access academic oversight, remedial tracking, and administrative controls seamlessly.</p>
+        <button class="btn" style="font-size: 1.1rem; padding: 0.9rem 2rem;" onclick="switchView('loginView')">Access Portal Login</button>
       </div>
     </div>
   </div>
 
   <!-- LOGIN VIEW -->
   <div id="loginView" class="view-section">
-    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
-      <div class="card" style="width: 100%; max-width: 400px;">
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">Portal Login</h2>
-        
+    <div class="main-content" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 150px);">
+      <div class="card" style="width: 100%; max-width: 420px;">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">Secure Portal Login</h2>
         <form id="loginForm">
           <div class="form-group">
             <label>Select Role</label>
@@ -178,25 +350,20 @@
               <option value="admin">Administrator</option>
             </select>
           </div>
-
           <div class="form-group">
             <label>Email Address</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" required placeholder="name@bishoplawi.ac.ke">
           </div>
-
-          <div class="form-group" style="margin-bottom: 1.5rem;">
+          <div class="form-group">
             <label>Password</label>
-            <input type="password" id="password" required>
+            <input type="password" id="password" required placeholder="••••••••">
           </div>
-
-          <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+          <button type="submit" class="btn" style="width: 100%; justify-content: center; margin-top: 0.5rem;">Sign In</button>
         </form>
-        
-        <div style="margin-top: 1rem; font-size: 0.85rem; color: #64748b; text-align: center;">
-          <p>Default Admin: <strong>admin@bishoplawi.ac.ke</strong> / <strong>admin123</strong></p>
-          <p>Default Staff: <strong>staff@bishoplawi.ac.ke</strong> / <strong>staff123</strong></p>
+        <div style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); padding-top: 1rem;">
+          <p>Admin: <strong>admin@bishoplawi.ac.ke</strong> / <strong>admin123</strong></p>
+          <p style="margin-top: 0.25rem;">Staff: <strong>staff@bishoplawi.ac.ke</strong> / <strong>staff123</strong></p>
         </div>
-
         <div style="text-align: center; margin-top: 1rem;">
           <a href="#" onclick="switchView('homeView')" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">&larr; Back to Home</a>
         </div>
@@ -204,185 +371,307 @@
     </div>
   </div>
 
-  <!-- STAFF DASHBOARD VIEW -->
-  <div id="staffDashboardView" class="view-section">
-    <header>
-      <h1>Staff Portal | Bishop Lawi Imathiu</h1>
-      <nav>
-        <span id="staffUserDisplay" style="margin-right: 1rem; font-size: 0.9rem;">Welcome</span>
-        <a href="#" onclick="handleLogout()" style="color: #fca5a5;">Logout</a>
-      </nav>
-    </header>
-
-    <div class="container">
-      <!-- Remedial Submission Card -->
-      <div class="card">
-        <h2>Submit Attended Remedial Class</h2>
-        <p style="color: #64748b; margin-top: 0.25rem;">Log your attended weekday or weekend remedial lessons for verification and payment processing.</p>
-        
-        <form id="remedialForm" style="margin-top: 1.5rem;">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-            <div class="form-group">
-              <label>Class / Form</label>
-              <select id="remClass" required>
-                <option value="Form 1">Form 1</option>
-                <option value="Form 2">Form 2</option>
-                <option value="Form 3">Form 3</option>
-                <option value="Form 4">Form 4</option>
-              </select>
+  <!-- STAFF PORTAL -->
+  <div id="staffPortalView" class="view-section">
+    <div class="portal-layout">
+      <aside>
+        <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">📊 Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Remedial Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">📚 Weekly C.A.T. Uploads</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">💰 Bursar Module</a>
+      </aside>
+      <main class="main-content">
+        <!-- Staff Dashboard Tab -->
+        <div id="staffDashboardTab" class="staff-tab-content">
+          <h2 style="margin-bottom: 1.5rem;">Staff Dashboard Overview</h2>
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <h3>Total Claims Submitted</h3>
+              <div class="value" id="statStaffClaimsCount">0</div>
             </div>
-
-            <div class="form-group">
-              <label>Day Type</label>
-              <select id="remDayType" onchange="toggleDayTypeFields()" required>
-                <option value="weekday">Weekday (Morning / Evening)</option>
-                <option value="weekend">Weekend (Max 4 Sessions)</option>
-              </select>
+            <div class="stat-card">
+              <h3>Approved Payments</h3>
+              <div class="value" id="statStaffApprovedCount">0</div>
             </div>
-
-            <div class="form-group" id="weekdaySessionGroup">
-              <label>Weekday Session</label>
-              <select id="remWeekdaySession">
-                <option value="Morning">Morning Class</option>
-                <option value="Evening">Evening Class</option>
-              </select>
-            </div>
-
-            <div class="form-group" id="weekendSessionGroup" style="display: none;">
-              <label>Weekend Lessons Attended (1 - 4)</label>
-              <input type="number" id="remWeekendCount" min="1" max="4" value="1">
-            </div>
-
-            <div class="form-group">
-              <label>Date of Remedial</label>
-              <input type="date" id="remDate" required>
+            <div class="stat-card">
+              <h3>Uploaded C.A.T. Papers</h3>
+              <div class="value" id="statStaffCatsCount">0</div>
             </div>
           </div>
+        </div>
 
-          <button type="submit" class="btn" style="margin-top: 0.5rem;">Submit Remedial Claim</button>
-        </form>
-      </div>
+        <!-- Remedial Claims Tab -->
+        <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2>Remedial Claim Form</h2>
+            <form id="remedialForm" style="margin-top: 1.5rem;">
+              <input type="hidden" id="editClaimId">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Class / Form</label>
+                  <select id="remClass" required>
+                    <option value="Form 1">Form 1</option>
+                    <option value="Form 2">Form 2</option>
+                    <option value="Form 3">Form 3</option>
+                    <option value="Form 4">Form 4</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Day Type</label>
+                  <select id="remDayType" onchange="toggleDayTypeFields()" required>
+                    <option value="Weekday">Weekday (Morning/Evening)</option>
+                    <option value="Weekend">Weekend (Max 4 Lessons)</option>
+                  </select>
+                </div>
+                <div class="form-group" id="weekdaySessionGroup">
+                  <label>Weekday Session</label>
+                  <select id="remWeekdaySession">
+                    <option value="Morning">Morning Class</option>
+                    <option value="Evening">Evening Class</option>
+                  </select>
+                </div>
+                <div class="form-group" id="weekendSessionGroup" style="display: none;">
+                  <label>Weekend Lessons Attended (1-4)</label>
+                  <input type="number" id="remWeekendCount" min="1" max="4" value="1">
+                </div>
+                <div class="form-group">
+                  <label>Date of Remedial</label>
+                  <input type="date" id="remDate" required>
+                </div>
+              </div>
+              <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" class="btn">Submit Claim</button>
+                <button type="button" class="btn btn-outline" onclick="saveDraftClaim()">Save Draft</button>
+              </div>
+            </form>
+          </div>
 
-      <!-- Staff Submission History -->
-      <div class="card">
-        <h2>My Submitted Remedial Claims</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Class</th>
-              <th>Session Type</th>
-              <th>Details / Count</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="staffRemedialTableBody">
-            <!-- Populated dynamically -->
-          </tbody>
-        </table>
-      </div>
+          <div class="card">
+            <h2>Claim History & Management</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Class</th>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="staffClaimTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly C.A.T Upload Tab -->
+        <div id="staffCatTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2>Weekly C.A.T. Assessment Upload</h2>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">Upload PDF, DOCX, or Image assessments for administrative review.</p>
+            <form id="catUploadForm" style="margin-top: 1.5rem;">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Subject & Form</label>
+                  <input type="text" id="catTitle" required placeholder="e.g., Form 3 Physics CAT 1">
+                </div>
+                <div class="form-group">
+                  <label>Select Assessment File (PDF, DOCX, Image)</label>
+                  <input type="file" id="catFile" accept=".pdf,.docx,image/*" required>
+                </div>
+              </div>
+              <button type="submit" class="btn" style="margin-top: 1rem;">Upload Paper</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2>Uploaded Assessment Papers</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Upload Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staffCatTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bursar Module Tab -->
+        <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2>Bursar Payment Summary & Claim Letter</h2>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">Automatic claim letter generation and payment status tracking for verified remedial sessions.</p>
+            
+            <div style="margin: 1.5rem 0; display: flex; gap: 1rem;">
+              <button class="btn" onclick="window.print()">🖨️ Print Claim Letter & Summary</button>
+            </div>
+
+            <div id="printArea" style="border: 1px dashed var(--border); padding: 2rem; border-radius: var(--radius); background: var(--card-bg);">
+              <h3 style="text-align: center; color: var(--primary);">BISHOP LAWI IMATHIU SCHOOL</h3>
+              <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted);">P.O. Box Private Bag, Meru, Kenya | Official Remedial Claim Summary</p>
+              
+              <div style="margin: 1.5rem 0;" id="bursarLetterBody"></div>
+
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Class</th>
+                      <th>Session Details</th>
+                      <th>Approval Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bursarSummaryTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 
-  <!-- ADMIN DASHBOARD VIEW -->
-  <div id="adminDashboardView" class="view-section">
-    <header style="background: var(--primary-dark);">
-      <h1>Admin Control Panel | Bishop Lawi Imathiu</h1>
-      <nav>
-        <span id="adminUserDisplay" style="margin-right: 1rem; font-size: 0.9rem;">Administrator</span>
-        <a href="#" onclick="handleLogout()" style="color: #fca5a5;">Logout</a>
-      </nav>
-    </header>
-
-    <div class="container">
-      <!-- Staff Account Management -->
-      <div class="card">
-        <h2>System Overview & User Accounts</h2>
-        <p style="color: #64748b; margin-top: 0.25rem;">Manage staff accounts and permissions.</p>
-        
-        <div style="margin-top: 1rem;">
-          <button class="btn" onclick="addNewStaffPrompt()">+ Add New Staff Account</button>
+  <!-- ADMIN PORTAL -->
+  <div id="adminPortalView" class="view-section">
+    <div class="portal-layout">
+      <aside>
+        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">📊 Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">👥 Teacher Management</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">📈 Reports & CSV</a>
+      </aside>
+      <main class="main-content">
+        <!-- Admin Dashboard Tab -->
+        <div id="adminDashboardTab" class="admin-tab-content">
+          <h2 style="margin-bottom: 1.5rem;">Admin Control Center</h2>
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <h3>Total Staff Members</h3>
+              <div class="value" id="statAdminStaffCount">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Pending Claims</h3>
+              <div class="value" id="statAdminPendingCount">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Submitted C.A.T Papers</h3>
+              <div class="value" id="statAdminCatsCount">0</div>
+            </div>
+          </div>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Email</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="userTableBody">
-            <!-- Dynamic Users -->
-          </tbody>
-        </table>
-      </div>
+        <!-- Teacher Management Tab -->
+        <div id="adminTeachersTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2>Staff Teacher Management</h2>
+            <div style="margin: 1.5rem 0;">
+              <button class="btn" onclick="addNewStaffPrompt()">+ Register New Teacher</button>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUserTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
-      <!-- Admin Verification for Payment -->
-      <div class="card">
-        <h2>Remedial Classes Verification & Payment Approval</h2>
-        <p style="color: #64748b; margin-top: 0.25rem;">Review teacher remedial submissions and verify them for payment release.</p>
-        
-        <table>
-          <thead>
-            <tr>
-              <th>Teacher Name</th>
-              <th>Date</th>
-              <th>Class</th>
-              <th>Session Type</th>
-              <th>Details</th>
-              <th>Payment Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="adminVerificationTableBody">
-            <!-- Populated dynamically -->
-          </tbody>
-        </table>
-      </div>
+        <!-- Approve Claims Tab -->
+        <div id="adminClaimsTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2>Remedial Claims Verification for Payment</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Teacher</th>
+                    <th>Date</th>
+                    <th>Class</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminClaimsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reports & CSV Tab -->
+        <div id="adminReportsTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2>System Reports & Data Export</h2>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">Export complete remedial and verification logs as comma-separated values.</p>
+            <button class="btn" style="margin-top: 1.5rem;" onclick="exportClaimsCSV()">📥 Export Claims CSV</button>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Initialize default storage on load
-      if (!localStorage.getItem('school_users')) {
-        const defaultUsers = [
-          { name: 'System Administrator', email: 'admin@bishoplawi.ac.ke', password: 'admin123', role: 'admin', status: 'Active' },
-          { name: 'Jane Mwangi', email: 'staff@bishoplawi.ac.ke', password: 'staff123', role: 'staff', status: 'Active' }
-        ];
-        localStorage.setItem('school_users', JSON.stringify(defaultUsers));
-      }
-
-      if (!localStorage.getItem('remedial_claims')) {
-        localStorage.setItem('remedial_claims', JSON.stringify([]));
-      }
-
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          document.getElementById('adminUserDisplay').textContent = `Welcome, ${currentUser.name}`;
-          renderUserTable();
-          renderAdminVerificationTable();
-          switchView('adminDashboardView');
-        } else {
-          document.getElementById('staffUserDisplay').textContent = `Welcome, ${currentUser.name}`;
-          renderStaffRemedialTable();
-          switchView('staffDashboardView');
-        }
-      }
+      initStorage();
+      checkSession();
     });
 
+    function initStorage() {
+      if (!localStorage.getItem('school_users')) {
+        localStorage.setItem('school_users', JSON.stringify([
+          { name: 'System Administrator', email: 'admin@bishoplawi.ac.ke', password: 'admin123', role: 'admin', status: 'Active' },
+          { name: 'Jane Mwangi', email: 'staff@bishoplawi.ac.ke', password: 'staff123', role: 'staff', status: 'Active' }
+        ]));
+      }
+      if (!localStorage.getItem('remedial_claims')) localStorage.setItem('remedial_claims', JSON.stringify([]));
+      if (!localStorage.getItem('cat_papers')) localStorage.setItem('cat_papers', JSON.stringify([]));
+      if (!localStorage.getItem('claim_drafts')) localStorage.setItem('claim_drafts', JSON.stringify([]));
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
     function switchView(viewId) {
-      document.querySelectorAll('.view-section').forEach(section => {
-        section.classList.remove('active');
-      });
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
       window.scrollTo(0, 0);
     }
 
-    // Handle Login
+    function switchStaffTab(tabId, el) {
+      document.querySelectorAll('.staff-tab-content').forEach(t => t.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('#staffPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function switchAdminTab(tabId, el) {
+      document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
+      document.getElementById(tabId).style.display = 'block';
+      document.querySelectorAll('#adminPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    // Authentication & Session
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const role = document.getElementById('roleSelect').value;
@@ -390,169 +679,203 @@
       const password = document.getElementById('password').value;
 
       const users = JSON.parse(localStorage.getItem('school_users')) || [];
-      const foundUser = users.find(u => u.email === email && u.password === password && u.role === role);
+      const user = users.find(u => u.email === email && u.password === password && u.role === role);
 
-      if (foundUser) {
-        localStorage.setItem('currentUser', JSON.stringify(foundUser));
-        if (role === 'admin') {
-          document.getElementById('adminUserDisplay').textContent = `Welcome, ${foundUser.name}`;
-          renderUserTable();
-          renderAdminVerificationTable();
-          switchView('adminDashboardView');
-        } else {
-          document.getElementById('staffUserDisplay').textContent = `Welcome, ${foundUser.name}`;
-          renderStaffRemedialTable();
-          switchView('staffDashboardView');
-        }
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        checkSession();
       } else {
-        alert('Invalid email, password, or role selection.');
+        alert('Invalid credentials or role selection.');
       }
     });
 
-    function handleLogout() {
-      localStorage.removeItem('currentUser');
-      document.getElementById('email').value = '';
-      document.getElementById('password').value = '';
-      switchView('homeView');
-    }
-
-    // Toggle Weekday vs Weekend fields
-    function toggleDayTypeFields() {
-      const dayType = document.getElementById('remDayType').value;
-      const weekdayGroup = document.getElementById('weekdaySessionGroup');
-      const weekendGroup = document.getElementById('weekendSessionGroup');
-
-      if (dayType === 'weekday') {
-        weekdayGroup.style.display = 'block';
-        weekendGroup.style.display = 'none';
+    function checkSession() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const authNav = document.getElementById('authNavArea');
+      
+      if (user) {
+        authNav.innerHTML = `<span style="font-weight: 500; font-size: 0.9rem;">${user.name}</span> <button class="btn btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="logout()">Logout</button>`;
+        if (user.role === 'admin') {
+          refreshAdminData();
+          switchView('adminPortalView');
+        } else {
+          refreshStaffData();
+          switchView('staffPortalView');
+        }
       } else {
-        weekdayGroup.style.display = 'none';
-        weekendGroup.style.display = 'block';
+        authNav.innerHTML = `<button class="btn" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="switchView('loginView')">Login</button>`;
+        switchView('homeView');
       }
     }
 
-    // Handle Remedial Form Submission by Teacher
+    function logout() {
+      localStorage.removeItem('currentUser');
+      checkSession();
+    }
+
+    // Toggle Day Type for Remedial
+    function toggleDayTypeFields() {
+      const type = document.getElementById('remDayType').value;
+      document.getElementById('weekdaySessionGroup').style.display = type === 'Weekday' ? 'block' : 'none';
+      document.getElementById('weekendSessionGroup').style.display = type === 'Weekend' ? 'block' : 'none';
+    }
+
+    // Staff Remedial Management
     document.getElementById('remedialForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const claimId = document.getElementById('editClaimId').value;
       const className = document.getElementById('remClass').value;
       const dayType = document.getElementById('remDayType').value;
       const date = document.getElementById('remDate').value;
+      let details = dayType === 'Weekday' ? document.getElementById('remWeekdaySession').value + ' Class' : document.getElementById('remWeekendCount').value + ' Weekend Lesson(s)';
 
-      let details = '';
-      if (dayType === 'weekday') {
-        details = document.getElementById('remWeekdaySession').value + ' Class';
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+
+      if (claimId) {
+        claims = claims.map(c => c.id == claimId ? { ...c, className, dayType, details, date } : c);
+        document.getElementById('editClaimId').value = '';
       } else {
-        const count = parseInt(document.getElementById('remWeekendCount').value);
-        if (count < 1 || count > 4) {
-          alert('Weekend remedial lessons must be between 1 and 4.');
-          return;
-        }
-        details = `${count} Weekend Lesson(s)`;
+        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, dayType, details, date, status: 'Pending Verification' });
       }
-
-      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
-      claims.push({
-        id: Date.now(),
-        teacherEmail: currentUser.email,
-        teacherName: currentUser.name,
-        className,
-        dayType: dayType.charAt(0).toUpperCase() + dayType.slice(1),
-        details,
-        date,
-        status: 'Pending Verification'
-      });
 
       localStorage.setItem('remedial_claims', JSON.stringify(claims));
       document.getElementById('remedialForm').reset();
       toggleDayTypeFields();
-      renderStaffRemedialTable();
-      alert('Remedial attendance submitted successfully!');
+      refreshStaffData();
+      alert('Remedial claim successfully saved and submitted.');
     });
 
-    function renderStaffRemedialTable() {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      const tbody = document.getElementById('staffRemedialTableBody');
+    function saveDraftClaim() {
+      const className = document.getElementById('remClass').value;
+      const dayType = document.getElementById('remDayType').value;
+      const date = document.getElementById('remDate').value;
+      let drafts = JSON.parse(localStorage.getItem('claim_drafts')) || [];
+      drafts.push({ className, dayType, date });
+      localStorage.setItem('claim_drafts', JSON.stringify(drafts));
+      alert('Claim saved as draft successfully.');
+    }
+
+    function refreshStaffData() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
       const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
-      const userClaims = claims.filter(c => c.teacherEmail === currentUser.email);
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      const userClaims = claims.filter(c => c.teacherEmail === user.email);
+      const userCats = cats.filter(cat => cat.teacherEmail === user.email);
 
-      tbody.innerHTML = '';
-      if (userClaims.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748b;">No remedial records submitted yet.</td></tr>';
-        return;
-      }
+      document.getElementById('statStaffClaimsCount').textContent = userClaims.length;
+      document.getElementById('statStaffApprovedCount').textContent = userClaims.filter(c => c.status === 'Verified & Approved').length;
+      document.getElementById('statStaffCatsCount').textContent = userCats.length;
 
+      // Claims Table
+      const claimTbody = document.getElementById('staffClaimTableBody');
+      claimTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims found.</td></tr>';
       userClaims.forEach(c => {
-        const statusColor = c.status === 'Verified & Approved' ? '#16a34a' : '#ca8a04';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${c.date}</td>
-          <td>${c.className}</td>
-          <td>${c.dayType}</td>
-          <td>${c.details}</td>
-          <td><span style="color: ${statusColor}; font-weight: 600;">${c.status}</span></td>
-        `;
-        tbody.appendChild(row);
+        const badge = c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning';
+        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.dayType}</td><td>${c.details}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
+      });
+
+      // CAT Table
+      const catTbody = document.getElementById('staffCatTableBody');
+      catTbody.innerHTML = userCats.length ? '' : '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No C.A.T papers uploaded.</td></tr>';
+      userCats.forEach(cat => {
+        catTbody.innerHTML += `<tr><td>${cat.title}</td><td>${cat.fileName}</td><td>${cat.date}</td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteCat(${cat.id})">Delete</button></td></tr>`;
+      });
+
+      // Bursar Module
+      document.getElementById('bursarLetterBody').innerHTML = `<p>Dear Bursar,</p><p>I, <strong>${user.name}</strong>, am writing to request disbursement for verified remedial lessons attended during the current academic term as outlined below.</p>`;
+      const bursarTbody = document.getElementById('bursarSummaryTableBody');
+      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
+      userClaims.forEach(c => {
+        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.details}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
       });
     }
 
-    function renderAdminVerificationTable() {
-      const tbody = document.getElementById('adminVerificationTableBody');
+    function editClaim(id) {
       const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
-
-      tbody.innerHTML = '';
-      if (claims.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b;">No pending remedial claims to verify.</td></tr>';
-        return;
+      const claim = claims.find(c => c.id === id);
+      if (claim) {
+        document.getElementById('editClaimId').value = claim.id;
+        document.getElementById('remClass').value = claim.className;
+        document.getElementById('remDayType').value = claim.dayType;
+        document.getElementById('remDate').value = claim.date;
+        toggleDayTypeFields();
+        switchStaffTab('staffRemedialTab', document.querySelectorAll('#staffPortalView aside .sidebar-link')[1]);
       }
+    }
 
-      claims.forEach((c, index) => {
+    function deleteClaim(id) {
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      claims = claims.filter(c => c.id !== id);
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      refreshStaffData();
+    }
+
+    // Weekly C.A.T Upload
+    document.getElementById('catUploadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const title = document.getElementById('catTitle').value;
+      const fileInput = document.getElementById('catFile');
+      const fileName = fileInput.files[0] ? fileInput.files[0].name : 'Document.pdf';
+
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      cats.push({ id: Date.now(), teacherEmail: user.email, title, fileName, date: new Date().toISOString().split('T')[0] });
+      localStorage.setItem('cat_papers', JSON.stringify(cats));
+      document.getElementById('catUploadForm').reset();
+      refreshStaffData();
+      alert('C.A.T paper uploaded successfully.');
+    });
+
+    function deleteCat(id) {
+      let cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      cats = cats.filter(c => c.id !== id);
+      localStorage.setItem('cat_papers', JSON.stringify(cats));
+      refreshStaffData();
+    }
+
+    // Admin Dashboard Functions
+    function refreshAdminData() {
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+
+      document.getElementById('statAdminStaffCount').textContent = users.filter(u => u.role === 'staff').length;
+      document.getElementById('statAdminPendingCount').textContent = claims.filter(c => c.status === 'Pending Verification').length;
+      document.getElementById('statAdminCatsCount').textContent = cats.length;
+
+      // Users Table
+      const userTbody = document.getElementById('adminUserTableBody');
+      userTbody.innerHTML = '';
+      users.forEach(u => {
+        userTbody.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td><span style="text-transform: capitalize;">${u.role}</span></td><td><span class="badge badge-success">${u.status}</span></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="resetPasswordPrompt('${u.email}')">Reset Password</button></td></tr>`;
+      });
+
+      // Claims Verification Table
+      const claimsTbody = document.getElementById('adminClaimsTableBody');
+      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
+      claims.forEach(c => {
         const isVerified = c.status === 'Verified & Approved';
-        const statusColor = isVerified ? '#16a34a' : '#ca8a04';
-        const actionBtn = isVerified 
-          ? `<span style="color: #16a34a; font-weight: 600;">Approved</span>` 
-          : `<button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="verifyClaim(${c.id})">Verify & Approve</button>`;
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${c.teacherName}</td>
-          <td>${c.date}</td>
-          <td>${c.className}</td>
-          <td>${c.dayType}</td>
-          <td>${c.details}</td>
-          <td><span style="color: ${statusColor}; font-weight: 600;">${c.status}</span></td>
-          <td>${actionBtn}</td>
-        `;
-        tbody.appendChild(row);
+        const actionBtn = isVerified ? `<span style="color: #16a34a; font-weight: 600;">Approved</span>` : `<button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="verifyClaim(${c.id})">Approve Payment</button>`;
+        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.details}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
       });
     }
 
     function verifyClaim(id) {
-      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
-      const claim = claims.find(c => c.id === id);
-      if (claim) {
-        claim.status = 'Verified & Approved';
-        localStorage.setItem('remedial_claims', JSON.stringify(claims));
-        renderAdminVerificationTable();
-        alert('Remedial claim verified successfully for payment processing.');
-      }
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      claims = claims.map(c => c.id === id ? { ...c, status: 'Verified & Approved' } : c);
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      refreshAdminData();
+      alert('Claim verified and approved for payment processing.');
     }
 
-    function renderUserTable() {
-      const userTableBody = document.getElementById('userTableBody');
-      const users = JSON.parse(localStorage.getItem('school_users')) || [];
-      
-      userTableBody.innerHTML = '';
-      users.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${user.name}</td>
-          <td><span style="text-transform: capitalize;">${user.role}</span></td>
-          <td>${user.email}</td>
-          <td><span style="color: #16a34a; font-weight: 600;">${user.status}</span></td>
-        `;
-        userTableBody.appendChild(row);
-      });
+    function resetPasswordPrompt(email) {
+      const newPass = prompt("Enter new password for " + email + ":", "password123");
+      if (!newPass) return;
+      let users = JSON.parse(localStorage.getItem('school_users')) || [];
+      users = users.map(u => u.email === email ? { ...u, password: newPass } : u);
+      localStorage.setItem('school_users', JSON.stringify(users));
+      alert('Password updated successfully.');
     }
 
     function addNewStaffPrompt() {
@@ -562,17 +885,33 @@
       if (!email) return;
       const password = prompt("Enter temporary password:", "password123");
 
-      const users = JSON.parse(localStorage.getItem('school_users')) || [];
-      
+      let users = JSON.parse(localStorage.getItem('school_users')) || [];
       if (users.some(u => u.email === email)) {
-        alert('A user with this email already exists.');
+        alert('User email already exists.');
         return;
       }
-
-      users.push({ name, email, password: password || 'password123', role: 'staff', status: 'Active' });
+      users.push({ name, email, password, role: 'staff', status: 'Active' });
       localStorage.setItem('school_users', JSON.stringify(users));
-      renderUserTable();
-      alert('Staff account created successfully!');
+      refreshAdminData();
+      alert('Staff registered successfully.');
+    }
+
+    function exportClaimsCSV() {
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      if (!claims.length) {
+        alert('No data available to export.');
+        return;
+      }
+      let csv = 'Teacher,Date,Class,Type,Details,Status\n';
+      claims.forEach(c => {
+        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.dayType}","${c.details}","${c.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'remedial_claims_report.csv');
+      a.click();
     }
   </script>
 </body>
