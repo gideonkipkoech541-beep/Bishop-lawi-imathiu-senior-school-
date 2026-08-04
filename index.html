@@ -154,11 +154,11 @@
         </div>
         <div class="card">
           <h3>Staff Portal Access</h3>
-          <p style="margin-top: 0.5rem;">Teachers can securely input grades, manage course materials, and track attendance through our online system.</p>
+          <p style="margin-top: 0.5rem;">Teachers can securely submit remedial attendance records and track teaching schedules.</p>
         </div>
         <div class="card">
           <h3>Administrative Control</h3>
-          <p style="margin-top: 0.5rem;">Comprehensive oversight tools allowing administrators to review records, manage accounts, and configure school parameters.</p>
+          <p style="margin-top: 0.5rem;">Comprehensive oversight tools allowing administrators to review claims, verify teacher classes, and approve payments.</p>
         </div>
       </div>
     </div>
@@ -215,45 +215,69 @@
     </header>
 
     <div class="container">
-      <!-- Remedial Schedule Information Card -->
-      <div class="card" style="background: #f1f5f9; border-left: 4px solid var(--accent);">
-        <h3>Remedial Lesson Schedule Guidelines</h3>
-        <p style="margin-top: 0.5rem; font-size: 0.95rem;">Please review the official school remedial structure for tracking and claims:</p>
-        <ul style="margin-top: 0.5rem; margin-left: 1.5rem; font-size: 0.95rem;">
-          <li><strong>Weekdays:</strong> Morning and evening remedial classes are conducted.</li>
-          <li><strong>Weekends:</strong> Exactly four remedial sessions are conducted for each class.</li>
-        </ul>
+      <!-- Remedial Submission Card -->
+      <div class="card">
+        <h2>Submit Attended Remedial Class</h2>
+        <p style="color: #64748b; margin-top: 0.25rem;">Log your attended weekday or weekend remedial lessons for verification and payment processing.</p>
+        
+        <form id="remedialForm" style="margin-top: 1.5rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+            <div class="form-group">
+              <label>Class / Form</label>
+              <select id="remClass" required>
+                <option value="Form 1">Form 1</option>
+                <option value="Form 2">Form 2</option>
+                <option value="Form 3">Form 3</option>
+                <option value="Form 4">Form 4</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Day Type</label>
+              <select id="remDayType" onchange="toggleDayTypeFields()" required>
+                <option value="weekday">Weekday (Morning / Evening)</option>
+                <option value="weekend">Weekend (Max 4 Sessions)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="weekdaySessionGroup">
+              <label>Weekday Session</label>
+              <select id="remWeekdaySession">
+                <option value="Morning">Morning Class</option>
+                <option value="Evening">Evening Class</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="weekendSessionGroup" style="display: none;">
+              <label>Weekend Lessons Attended (1 - 4)</label>
+              <input type="number" id="remWeekendCount" min="1" max="4" value="1">
+            </div>
+
+            <div class="form-group">
+              <label>Date of Remedial</label>
+              <input type="date" id="remDate" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn" style="margin-top: 0.5rem;">Submit Remedial Claim</button>
+        </form>
       </div>
 
+      <!-- Staff Submission History -->
       <div class="card">
-        <h2>Class Grade Entry & Remedial Attendance</h2>
-        <p style="color: #64748b; margin-top: 0.25rem;">Select a class to update student marks or track attended remedial sessions.</p>
-        
+        <h2>My Submitted Remedial Claims</h2>
         <table>
           <thead>
             <tr>
-              <th>Class / Subject</th>
-              <th>Term</th>
-              <th>Enrolled Students</th>
+              <th>Date</th>
+              <th>Class</th>
+              <th>Session Type</th>
+              <th>Details / Count</th>
               <th>Status</th>
-              <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Form 3 Physics</td>
-              <td>Term 2, 2026</td>
-              <td>42</td>
-              <td><span style="color: #16a34a; font-weight: 600;">Active</span></td>
-              <td><button class="btn" onclick="alert('Grade and remedial tracking interface opened.')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Manage Records</button></td>
-            </tr>
-            <tr>
-              <td>Form 4 Technical Drawing</td>
-              <td>Term 2, 2026</td>
-              <td>35</td>
-              <td><span style="color: #ca8a04; font-weight: 600;">Pending Review</span></td>
-              <td><button class="btn" onclick="alert('Grade and remedial tracking interface opened.')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Manage Records</button></td>
-            </tr>
+          <tbody id="staffRemedialTableBody">
+            <!-- Populated dynamically -->
           </tbody>
         </table>
       </div>
@@ -271,11 +295,12 @@
     </header>
 
     <div class="container">
+      <!-- Staff Account Management -->
       <div class="card">
         <h2>System Overview & User Accounts</h2>
-        <p style="color: #64748b; margin-top: 0.25rem;">Manage staff accounts, permissions, and administrative records.</p>
+        <p style="color: #64748b; margin-top: 0.25rem;">Manage staff accounts and permissions.</p>
         
-        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div style="margin-top: 1rem;">
           <button class="btn" onclick="addNewStaffPrompt()">+ Add New Staff Account</button>
         </div>
 
@@ -293,11 +318,35 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Admin Verification for Payment -->
+      <div class="card">
+        <h2>Remedial Classes Verification & Payment Approval</h2>
+        <p style="color: #64748b; margin-top: 0.25rem;">Review teacher remedial submissions and verify them for payment release.</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Teacher Name</th>
+              <th>Date</th>
+              <th>Class</th>
+              <th>Session Type</th>
+              <th>Details</th>
+              <th>Payment Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="adminVerificationTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Initialize default storage on load
       if (!localStorage.getItem('school_users')) {
         const defaultUsers = [
           { name: 'System Administrator', email: 'admin@bishoplawi.ac.ke', password: 'admin123', role: 'admin', status: 'Active' },
@@ -306,14 +355,20 @@
         localStorage.setItem('school_users', JSON.stringify(defaultUsers));
       }
 
+      if (!localStorage.getItem('remedial_claims')) {
+        localStorage.setItem('remedial_claims', JSON.stringify([]));
+      }
+
       const currentUser = JSON.parse(localStorage.getItem('currentUser'));
       if (currentUser) {
         if (currentUser.role === 'admin') {
           document.getElementById('adminUserDisplay').textContent = `Welcome, ${currentUser.name}`;
           renderUserTable();
+          renderAdminVerificationTable();
           switchView('adminDashboardView');
         } else {
           document.getElementById('staffUserDisplay').textContent = `Welcome, ${currentUser.name}`;
+          renderStaffRemedialTable();
           switchView('staffDashboardView');
         }
       }
@@ -327,6 +382,7 @@
       window.scrollTo(0, 0);
     }
 
+    // Handle Login
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const role = document.getElementById('roleSelect').value;
@@ -341,9 +397,11 @@
         if (role === 'admin') {
           document.getElementById('adminUserDisplay').textContent = `Welcome, ${foundUser.name}`;
           renderUserTable();
+          renderAdminVerificationTable();
           switchView('adminDashboardView');
         } else {
           document.getElementById('staffUserDisplay').textContent = `Welcome, ${foundUser.name}`;
+          renderStaffRemedialTable();
           switchView('staffDashboardView');
         }
       } else {
@@ -356,6 +414,128 @@
       document.getElementById('email').value = '';
       document.getElementById('password').value = '';
       switchView('homeView');
+    }
+
+    // Toggle Weekday vs Weekend fields
+    function toggleDayTypeFields() {
+      const dayType = document.getElementById('remDayType').value;
+      const weekdayGroup = document.getElementById('weekdaySessionGroup');
+      const weekendGroup = document.getElementById('weekendSessionGroup');
+
+      if (dayType === 'weekday') {
+        weekdayGroup.style.display = 'block';
+        weekendGroup.style.display = 'none';
+      } else {
+        weekdayGroup.style.display = 'none';
+        weekendGroup.style.display = 'block';
+      }
+    }
+
+    // Handle Remedial Form Submission by Teacher
+    document.getElementById('remedialForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const className = document.getElementById('remClass').value;
+      const dayType = document.getElementById('remDayType').value;
+      const date = document.getElementById('remDate').value;
+
+      let details = '';
+      if (dayType === 'weekday') {
+        details = document.getElementById('remWeekdaySession').value + ' Class';
+      } else {
+        const count = parseInt(document.getElementById('remWeekendCount').value);
+        if (count < 1 || count > 4) {
+          alert('Weekend remedial lessons must be between 1 and 4.');
+          return;
+        }
+        details = `${count} Weekend Lesson(s)`;
+      }
+
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      claims.push({
+        id: Date.now(),
+        teacherEmail: currentUser.email,
+        teacherName: currentUser.name,
+        className,
+        dayType: dayType.charAt(0).toUpperCase() + dayType.slice(1),
+        details,
+        date,
+        status: 'Pending Verification'
+      });
+
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      document.getElementById('remedialForm').reset();
+      toggleDayTypeFields();
+      renderStaffRemedialTable();
+      alert('Remedial attendance submitted successfully!');
+    });
+
+    function renderStaffRemedialTable() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const tbody = document.getElementById('staffRemedialTableBody');
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const userClaims = claims.filter(c => c.teacherEmail === currentUser.email);
+
+      tbody.innerHTML = '';
+      if (userClaims.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #64748b;">No remedial records submitted yet.</td></tr>';
+        return;
+      }
+
+      userClaims.forEach(c => {
+        const statusColor = c.status === 'Verified & Approved' ? '#16a34a' : '#ca8a04';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${c.date}</td>
+          <td>${c.className}</td>
+          <td>${c.dayType}</td>
+          <td>${c.details}</td>
+          <td><span style="color: ${statusColor}; font-weight: 600;">${c.status}</span></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderAdminVerificationTable() {
+      const tbody = document.getElementById('adminVerificationTableBody');
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+
+      tbody.innerHTML = '';
+      if (claims.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #64748b;">No pending remedial claims to verify.</td></tr>';
+        return;
+      }
+
+      claims.forEach((c, index) => {
+        const isVerified = c.status === 'Verified & Approved';
+        const statusColor = isVerified ? '#16a34a' : '#ca8a04';
+        const actionBtn = isVerified 
+          ? `<span style="color: #16a34a; font-weight: 600;">Approved</span>` 
+          : `<button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="verifyClaim(${c.id})">Verify & Approve</button>`;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${c.teacherName}</td>
+          <td>${c.date}</td>
+          <td>${c.className}</td>
+          <td>${c.dayType}</td>
+          <td>${c.details}</td>
+          <td><span style="color: ${statusColor}; font-weight: 600;">${c.status}</span></td>
+          <td>${actionBtn}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function verifyClaim(id) {
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const claim = claims.find(c => c.id === id);
+      if (claim) {
+        claim.status = 'Verified & Approved';
+        localStorage.setItem('remedial_claims', JSON.stringify(claims));
+        renderAdminVerificationTable();
+        alert('Remedial claim verified successfully for payment processing.');
+      }
     }
 
     function renderUserTable() {
