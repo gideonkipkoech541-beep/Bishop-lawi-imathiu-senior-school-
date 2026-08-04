@@ -3,41 +3,387 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bishop Lawi Imathiu School</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Bishop Lawi Imathiu School Portal System</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #1e293b;
+      --accent: #d97706;
+      --bg-color: #f8fafc;
+      --text-main: #334155;
+      --white: #ffffff;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #b45309;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: var(--primary-dark);
+    }
+
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #cbd5e1;
+      border-radius: var(--radius);
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <h1>Bishop Lawi Imathiu School</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="login.html" class="btn" style="padding: 0.4rem 1rem; margin-left: 2rem;">Portal Login</a>
-    </nav>
-  </header>
+  <!-- PUBLIC HOME VIEW -->
+  <div id="homeView" class="view-section active">
+    <header>
+      <h1>Bishop Lawi Imathiu School</h1>
+      <nav>
+        <a href="#" onclick="switchView('homeView')">Home</a>
+        <a href="#" class="btn" onclick="switchView('loginView')" style="padding: 0.4rem 1rem; margin-left: 2rem;">Portal Login</a>
+      </nav>
+    </header>
 
-  <div class="container">
-    <div class="card" style="text-align: center; padding: 4rem 2rem;">
-      <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Welcome to Bishop Lawi Imathiu School</h2>
-      <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem;">Fostering academic excellence, moral integrity, and holistic development for every student.</p>
-      <a href="login.html" class="btn">Access Portal Login</a>
-    </div>
+    <div class="container">
+      <div class="card" style="text-align: center; padding: 4rem 2rem;">
+        <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Welcome to Bishop Lawi Imathiu School</h2>
+        <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem;">Fostering academic excellence, moral integrity, and holistic development for every student.</p>
+        <button class="btn" onclick="switchView('loginView')">Access Portal Login</button>
+      </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-      <div class="card">
-        <h3>Academic Excellence</h3>
-        <p style="margin-top: 0.5rem;">Rigorous programs spanning sciences, humanities, and technical fields designed to challenge and inspire learners.</p>
-      </div>
-      <div class="card">
-        <h3>Staff Portal Access</h3>
-        <p style="margin-top: 0.5rem;">Teachers can securely input grades, manage course materials, and track attendance through our online system.</p>
-      </div>
-      <div class="card">
-        <h3>Administrative Control</h3>
-        <p style="margin-top: 0.5rem;">Comprehensive oversight tools allowing administrators to review claims, manage accounts, and configure school parameters.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="card">
+          <h3>Academic Excellence</h3>
+          <p style="margin-top: 0.5rem;">Rigorous programs spanning sciences, humanities, and technical fields designed to challenge and inspire learners.</p>
+        </div>
+        <div class="card">
+          <h3>Staff Portal Access</h3>
+          <p style="margin-top: 0.5rem;">Teachers can securely input grades, manage course materials, and track attendance through our online system.</p>
+        </div>
+        <div class="card">
+          <h3>Administrative Control</h3>
+          <p style="margin-top: 0.5rem;">Comprehensive oversight tools allowing administrators to review records, manage accounts, and configure school parameters.</p>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- LOGIN VIEW -->
+  <div id="loginView" class="view-section">
+    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
+      <div class="card" style="width: 100%; max-width: 400px;">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">Portal Login</h2>
+        
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Select Role</label>
+            <select id="roleSelect">
+              <option value="staff">Staff / Teacher</option>
+              <option value="admin">Administrator</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Password</label>
+            <input type="password" id="password" required>
+          </div>
+
+          <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+        </form>
+        
+        <div style="margin-top: 1rem; font-size: 0.85rem; color: #64748b; text-align: center;">
+          <p>Default Admin: <strong>admin@bishoplawi.ac.ke</strong> / <strong>admin123</strong></p>
+          <p>Default Staff: <strong>staff@bishoplawi.ac.ke</strong> / <strong>staff123</strong></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 1rem;">
+          <a href="#" onclick="switchView('homeView')" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">&larr; Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAFF DASHBOARD VIEW -->
+  <div id="staffDashboardView" class="view-section">
+    <header>
+      <h1>Staff Portal | Bishop Lawi Imathiu</h1>
+      <nav>
+        <span id="staffUserDisplay" style="margin-right: 1rem; font-size: 0.9rem;">Welcome</span>
+        <a href="#" onclick="handleLogout()" style="color: #fca5a5;">Logout</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="card">
+        <h2>Class Grade Entry & Management</h2>
+        <p style="color: #64748b; margin-top: 0.25rem;">Select a class to update student marks or view attendance logs.</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Class / Subject</th>
+              <th>Term</th>
+              <th>Enrolled Students</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Form 3 Physics</td>
+              <td>Term 2, 2026</td>
+              <td>42</td>
+              <td><span style="color: #16a34a; font-weight: 600;">Active</span></td>
+              <td><button class="btn" onclick="alert('Grade management interface opened.')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Manage Grades</button></td>
+            </tr>
+            <tr>
+              <td>Form 4 Technical Drawing</td>
+              <td>Term 2, 2026</td>
+              <td>35</td>
+              <td><span style="color: #ca8a04; font-weight: 600;">Pending Review</span></td>
+              <td><button class="btn" onclick="alert('Grade management interface opened.')" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Manage Grades</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD VIEW -->
+  <div id="adminDashboardView" class="view-section">
+    <header style="background: var(--primary-dark);">
+      <h1>Admin Control Panel | Bishop Lawi Imathiu</h1>
+      <nav>
+        <span id="adminUserDisplay" style="margin-right: 1rem; font-size: 0.9rem;">Administrator</span>
+        <a href="#" onclick="handleLogout()" style="color: #fca5a5;">Logout</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="card">
+        <h2>System Overview & User Accounts</h2>
+        <p style="color: #64748b; margin-top: 0.25rem;">Manage staff accounts, permissions, and administrative records.</p>
+        
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn" onclick="addNewStaffPrompt()">+ Add New Staff Account</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Email</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <!-- Dynamic Users -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('school_users')) {
+        const defaultUsers = [
+          { name: 'System Administrator', email: 'admin@bishoplawi.ac.ke', password: 'admin123', role: 'admin', status: 'Active' },
+          { name: 'Jane Mwangi', email: 'staff@bishoplawi.ac.ke', password: 'staff123', role: 'staff', status: 'Active' }
+        ];
+        localStorage.setItem('school_users', JSON.stringify(defaultUsers));
+      }
+
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          document.getElementById('adminUserDisplay').textContent = `Welcome, ${currentUser.name}`;
+          renderUserTable();
+          switchView('adminDashboardView');
+        } else {
+          document.getElementById('staffUserDisplay').textContent = `Welcome, ${currentUser.name}`;
+          switchView('staffDashboardView');
+        }
+      }
+    });
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const role = document.getElementById('roleSelect').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      const foundUser = users.find(u => u.email === email && u.password === password && u.role === role);
+
+      if (foundUser) {
+        localStorage.setItem('currentUser', JSON.stringify(foundUser));
+        if (role === 'admin') {
+          document.getElementById('adminUserDisplay').textContent = `Welcome, ${foundUser.name}`;
+          renderUserTable();
+          switchView('adminDashboardView');
+        } else {
+          document.getElementById('staffUserDisplay').textContent = `Welcome, ${foundUser.name}`;
+          switchView('staffDashboardView');
+        }
+      } else {
+        alert('Invalid email, password, or role selection.');
+      }
+    });
+
+    function handleLogout() {
+      localStorage.removeItem('currentUser');
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+      switchView('homeView');
+    }
+
+    function renderUserTable() {
+      const userTableBody = document.getElementById('userTableBody');
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      
+      userTableBody.innerHTML = '';
+      users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${user.name}</td>
+          <td><span style="text-transform: capitalize;">${user.role}</span></td>
+          <td>${user.email}</td>
+          <td><span style="color: #16a34a; font-weight: 600;">${user.status}</span></td>
+        `;
+        userTableBody.appendChild(row);
+      });
+    }
+
+    function addNewStaffPrompt() {
+      const name = prompt("Enter staff full name:");
+      if (!name) return;
+      const email = prompt("Enter staff email address:");
+      if (!email) return;
+      const password = prompt("Enter temporary password:", "password123");
+
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      
+      if (users.some(u => u.email === email)) {
+        alert('A user with this email already exists.');
+        return;
+      }
+
+      users.push({ name, email, password: password || 'password123', role: 'staff', status: 'Active' });
+      localStorage.setItem('school_users', JSON.stringify(users));
+      renderUserTable();
+      alert('Staff account created successfully!');
+    }
+  </script>
 </body>
 </html>
