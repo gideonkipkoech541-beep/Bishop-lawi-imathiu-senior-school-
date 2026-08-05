@@ -503,7 +503,7 @@
   <header>
     <h1>Bishop Lawi Imathiu Senior School Portal</h1>
     <div class="nav-actions">
-      <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
+      <button class="theme-toggle" onclick="toggleTheme()">?? Theme</button>
       <div id="authNavArea"></div>
     </div>
   </header>
@@ -574,11 +574,11 @@
           <span id="staffSidebarName">Teacher Name</span>
           <span style="color: var(--primary-light);">Staff Portal</span>
         </div>
-        <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">📊 Dashboard</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffLiveClassesTab', this)">🔴 Live Classes & Schedule</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Remedial Claims</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">📚 Weekly C.A.T. Uploads</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">💰 Bursar Module & Letter</a>
+        <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">?? Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffLiveClassesTab', this)">?? Live Classes & Schedule</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">?? Remedial Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">?? Weekly C.A.T. Uploads</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">?? Bursar Module & Letter</a>
       </aside>
       <main class="main-content">
         <!-- Staff Dashboard Tab -->
@@ -588,11 +588,11 @@
           <!-- Noticeboard for Weekly Event & Teacher on Duty -->
           <div class="notice-grid">
             <div class="notice-card">
-              <h4>📅 This Week's Event</h4>
+              <h4>?? This Week's Event</h4>
               <p id="dashWeeklyEventDisplay">Loading current school event...</p>
             </div>
             <div class="notice-card" style="border-top-color: var(--primary);">
-              <h4 style="color: var(--primary);">🛡️ Teacher On Duty (TOD)</h4>
+              <h4 style="color: var(--primary);">??? Teacher On Duty (TOD)</h4>
               <p id="dashTodDisplay">Loading duty teacher...</p>
             </div>
           </div>
@@ -645,37 +645,6 @@
             <form id="remedialForm">
               <input type="hidden" id="editClaimId">
               <div class="form-grid">
-                <!-- Remedial Claims Tab -->
-    
-    <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
-    <div class="card">
-    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
-    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Specify attendance details</p>
-    <form id="remedialForm">
-    <input type="hidden" id="editClaimId">
-    
-    <!-- ADD THE WEEKLY SELECTOR HERE -->
-    <div class="form-group">
-        <label>Remedial Week</label>
-        <select id="claimWeek" required>
-            <option value="">-- Choose Week --</option>
-            <option value="Week 1">Week 1</option>
-            <option value="Week 2">Week 2</option>
-            <option value="Week 3">Week 3</option>
-            <option value="Week 4">Week 4</option>
-            <option value="Week 5">Week 5</option>
-            <option value="Week 6">Week 6</option>
-            <option value="Week 7">Week 7</option>
-            <option value="Week 8">Week 8</option>
-            <option value="Week 9">Week 9</option>
-        </select>
-    </div>
-    <!-- END OF ADDITION -->
-    <div class="form-grid">
-    <div class="form-group">
-    <label>Class Stream</label>
-    <select id="remClass" required>
-...
                 <div class="form-group">
                   <label>Class Stream</label>
                   <select id="remClass" required>
@@ -803,8 +772,8 @@
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Generate, print, or download your official claim letter and breakdown as a PDF for bursar processing.</p>
             
             <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
-              <button class="btn" onclick="window.print()">🖨️ Print Letter & Summary</button>
-              <button class="btn btn-outline" onclick="downloadBursarLetterPDF()">📥 Download Letter & Summary (PDF)</button>
+              <button class="btn" onclick="window.print()">??? Print Letter & Summary</button>
+              <button class="btn btn-outline" onclick="downloadBursarLetterPDF()">?? Download Letter & Summary (PDF)</button>
             </div>
 
             <div id="printArea" style="border: 1px dashed var(--border); padding: 2rem; border-radius: var(--radius); background: var(--card-bg);">
@@ -851,13 +820,13 @@
           <strong>Administrator</strong>
           <span style="color: var(--primary-light);">Admin Control Panel</span>
         </div>
-        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">📊 Dashboard</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminNoticeTab', this)">📢 Edit Noticeboard & Duties</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminLiveTab', this)">🔴 Manage Live Classes</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">👥 Teacher Management</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Claims</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">📥 Teacher Payment Sheet</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">📈 Reports & CSV</a>
+        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">?? Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminNoticeTab', this)">?? Edit Noticeboard & Duties</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminLiveTab', this)">?? Manage Live Classes</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">?? Teacher Management</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">? Approve Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">?? Teacher Payment Sheet</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">?? Reports & CSV</a>
       </aside>
       <main class="main-content">
         <!-- Admin Dashboard Tab -->
@@ -1034,7 +1003,7 @@
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Review accumulated payment totals for all teachers based on verified claims and download the official payment sheet as a PDF.</p>
             
             <div style="margin-bottom: 1.25rem;">
-              <button class="btn" onclick="downloadMasterPaymentSheetPDF()">📥 Download Master Payment Sheet (PDF)</button>
+              <button class="btn" onclick="downloadMasterPaymentSheetPDF()">?? Download Master Payment Sheet (PDF)</button>
             </div>
 
             <div class="table-container">
@@ -1058,7 +1027,7 @@
           <div class="card">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Reports & Data Export</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Export complete remedial claims ledger as a CSV file.</p>
-            <button class="btn" onclick="exportClaimsCSV()">📥 Export Claims CSV</button>
+            <button class="btn" onclick="exportClaimsCSV()">?? Export Claims CSV</button>
           </div>
         </div>
       </main>
