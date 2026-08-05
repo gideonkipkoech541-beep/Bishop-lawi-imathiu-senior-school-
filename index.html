@@ -262,6 +262,39 @@
       margin-top: 0.4rem;
     }
 
+    /* Announcements & Noticeboard Grid */
+    .notice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .notice-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--accent);
+    }
+
+    .notice-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notice-card p {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
     /* Tables */
     .table-container {
       overflow-x: auto;
@@ -319,7 +352,7 @@
       color: var(--text-main);
     }
 
-    .form-group input, .form-group select {
+    .form-group input, .form-group select, .form-group textarea {
       width: 100%;
       padding: 0.75rem 1rem;
       border: 1px solid var(--border);
@@ -331,7 +364,7 @@
       transition: var(--transition);
     }
 
-    .form-group input:focus, .form-group select:focus {
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.12);
       background: var(--card-bg);
@@ -367,8 +400,16 @@
 
     .badge-success { background: rgba(27, 77, 62, 0.12); color: #1b4d3e; }
     .badge-warning { background: rgba(92, 64, 51, 0.12); color: #5c4033; }
+    .badge-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; animation: pulse 2s infinite; }
     [data-theme="dark"] .badge-success { background: rgba(46, 111, 92, 0.25); color: #4ade80; }
     [data-theme="dark"] .badge-warning { background: rgba(107, 77, 63, 0.25); color: #fbbf24; }
+    [data-theme="dark"] .badge-live { background: rgba(239, 68, 68, 0.25); color: #f87171; }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
 
     /* Modern Login Styling */
     .login-wrapper {
@@ -473,7 +514,7 @@
       <div class="card" style="padding: 4rem 2.5rem; max-width: 800px; margin: 0 auto; border-radius: 16px;">
         <span class="badge badge-success" style="margin-bottom: 1rem; font-size: 0.8rem; padding: 0.4rem 1rem;">Official Academic Management Platform</span>
         <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; font-weight: 800; letter-spacing: -0.02em;">Staff & Admin Portal System</h2>
-        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6;">Manage remedial claims, teacher verifications, assessment uploads, and administrative approvals seamlessly in an optimized digital ecosystem.</p>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6;">Manage remedial claims, teacher verifications, assessment uploads, live timetable schedules, and administrative approvals seamlessly in an optimized digital ecosystem.</p>
         <button class="btn btn-accent" style="font-size: 1rem; padding: 0.85rem 2rem; border-radius: 50px;" onclick="switchView('loginView')">Access Portal Login &rarr;</button>
       </div>
     </div>
@@ -534,6 +575,7 @@
           <span style="color: var(--primary-light);">Staff Portal</span>
         </div>
         <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">📊 Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffLiveClassesTab', this)">🔴 Live Classes & Schedule</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Remedial Claims</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">📚 Weekly C.A.T. Uploads</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">💰 Bursar Module & Letter</a>
@@ -542,6 +584,19 @@
         <!-- Staff Dashboard Tab -->
         <div id="staffDashboardTab" class="staff-tab-content">
           <h2 style="margin-bottom: 1.25rem; font-size: 1.35rem; font-weight: 700;">Staff Dashboard</h2>
+          
+          <!-- Noticeboard for Weekly Event & Teacher on Duty -->
+          <div class="notice-grid">
+            <div class="notice-card">
+              <h4>📅 This Week's Event</h4>
+              <p id="dashWeeklyEventDisplay">Loading current school event...</p>
+            </div>
+            <div class="notice-card" style="border-top-color: var(--primary);">
+              <h4 style="color: var(--primary);">🛡️ Teacher On Duty (TOD)</h4>
+              <p id="dashTodDisplay">Loading duty teacher...</p>
+            </div>
+          </div>
+
           <div class="dashboard-grid">
             <div class="stat-card">
               <h3>Total Claims</h3>
@@ -554,6 +609,30 @@
             <div class="stat-card">
               <h3>C.A.T. Papers Uploaded</h3>
               <div class="value" id="statStaffCatsCount">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Classes & Timetable Schedule Tab -->
+        <div id="staffLiveClassesTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Live Classes & Timetable Sessions</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">View currently active or scheduled timetable live sessions across streams.</p>
+            
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Time Slot</th>
+                    <th>Class Stream</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Action / Room Link</th>
+                  </tr>
+                </thead>
+                <tbody id="liveClassesTableBody"></tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -579,6 +658,12 @@
                       <option value="Form 3 West">Form 3 West</option>
                       <option value="Form 3 East">Form 3 East</option>
                       <option value="Form 3 South">Form 3 South</option>
+                    </optgroup>
+                    <optgroup label="Form 4">
+                      <option value="Form 4 North">Form 4 North</option>
+                      <option value="Form 4 South">Form 4 South</option>
+                      <option value="Form 4 West">Form 4 West</option>
+                      <option value="Form 4 East">Form 4 East</option>
                     </optgroup>
                   </select>
                 </div>
@@ -733,6 +818,8 @@
           <span style="color: var(--primary-light);">Admin Control Panel</span>
         </div>
         <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">📊 Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminNoticeTab', this)">📢 Edit Noticeboard & Duties</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminLiveTab', this)">🔴 Manage Live Classes</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">👥 Teacher Management</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Claims</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">📥 Teacher Payment Sheet</a>
@@ -754,6 +841,106 @@
             <div class="stat-card">
               <h3>C.A.T Papers</h3>
               <div class="value" id="statAdminCatsCount">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Noticeboard Tab (Weekly Event & TOD) -->
+        <div id="adminNoticeTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Manage Weekly Event & Teacher On Duty</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Update the current school weekly event and assigned duty teacher displayed on dashboards.</p>
+            
+            <form id="noticeUpdateForm">
+              <div class="form-group">
+                <label>Current Week's Event / Announcements</label>
+                <textarea id="adminWeeklyEventInput" rows="3" required placeholder="e.g., Mid-Term Examinations & Science Fair preparations"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Teacher On Duty (TOD) Details</label>
+                <input type="text" id="adminTodInput" required placeholder="e.g., Mr. Kipkorir & Madam Auma">
+              </div>
+              <button type="submit" class="btn">Update Noticeboard</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Manage Live Classes Tab -->
+        <div id="adminLiveTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Timetable & Live Class Scheduler</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Publish live timetable sessions and virtual room links for classes.</p>
+            
+            <form id="liveClassForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Time Slot</label>
+                  <input type="text" id="liveTimeSlot" required placeholder="e.g., 08:00 AM - 09:15 AM">
+                </div>
+                <div class="form-group">
+                  <label>Class Stream</label>
+                  <select id="liveClassStream" required>
+                    <optgroup label="Grade 10">
+                      <option value="Grade 10 East">Grade 10 East</option>
+                      <option value="Grade 10 West">Grade 10 West</option>
+                      <option value="Grade 10 North">Grade 10 North</option>
+                    </optgroup>
+                    <optgroup label="Form 3">
+                      <option value="Form 3 North">Form 3 North</option>
+                      <option value="Form 3 West">Form 3 West</option>
+                      <option value="Form 3 East">Form 3 East</option>
+                      <option value="Form 3 South">Form 3 South</option>
+                    </optgroup>
+                    <optgroup label="Form 4">
+                      <option value="Form 4 North">Form 4 North</option>
+                      <option value="Form 4 South">Form 4 South</option>
+                      <option value="Form 4 West">Form 4 West</option>
+                      <option value="Form 4 East">Form 4 East</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Subject</label>
+                  <input type="text" id="liveSubject" required placeholder="e.g., Physics">
+                </div>
+                <div class="form-group">
+                  <label>Teacher In Charge</label>
+                  <input type="text" id="liveTeacher" required placeholder="e.g., Teacher Bett">
+                </div>
+                <div class="form-group">
+                  <label>Meeting / Virtual Room URL</label>
+                  <input type="url" id="liveUrl" required placeholder="https://meet.google.com/abc-xyz">
+                </div>
+                <div class="form-group">
+                  <label>Session Status</label>
+                  <select id="liveStatus" required>
+                    <option value="Live Now">Live Now</option>
+                    <option value="Scheduled">Scheduled Later</option>
+                    <option value="Concluded">Concluded</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn" style="margin-top: 1rem;">Publish Live Timetable Session</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Active Timetable Feed</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Link</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminLiveTableBody"></tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -860,13 +1047,24 @@
       if (!localStorage.getItem('remedial_claims')) localStorage.setItem('remedial_claims', JSON.stringify([]));
       if (!localStorage.getItem('cat_papers')) localStorage.setItem('cat_papers', JSON.stringify([]));
       if (!localStorage.getItem('claim_drafts')) localStorage.setItem('claim_drafts', JSON.stringify([]));
+      if (!localStorage.getItem('school_noticeboard')) {
+        localStorage.setItem('school_noticeboard', JSON.stringify({
+          weeklyEvent: 'Term 2 Ongoing Assessment Week & Inter-Class Debates',
+          tod: 'Mr. Kipkorir & Madam Auma'
+        }));
+      }
+      if (!localStorage.getItem('live_classes')) {
+        localStorage.setItem('live_classes', JSON.stringify([
+          { id: 1, timeSlot: '08:00 AM - 09:00 AM', className: 'Form 4 North', subject: 'Physics (Quantum Mechanics)', teacher: 'Teacher Bett', url: 'https://meet.google.com/sample-meet', status: 'Live Now' },
+          { id: 2, timeSlot: '09:15 AM - 10:15 AM', className: 'Form 3 East', subject: 'Mathematics', teacher: 'Jane Mwangi', url: 'https://meet.google.com/sample-meet-2', status: 'Scheduled' }
+        ]));
+      }
     }
 
     function calculateClaimAmount(dayType, details) {
       if (dayType === 'Weekday') {
         return 500; // Morning or Evening remedial is 500
       } else {
-        // Weekend: count number of comma-separated lessons
         const lessons = details.split(',').filter(l => l.trim().length > 0);
         return lessons.length * 700; // 700 per lesson
       }
@@ -895,6 +1093,9 @@
       document.getElementById(tabId).style.display = 'block';
       document.querySelectorAll('#staffPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
       el.classList.add('active');
+      if (tabId === 'staffLiveClassesTab') {
+        refreshLiveClassesView();
+      }
     }
 
     function switchAdminTab(tabId, el) {
@@ -904,6 +1105,12 @@
       el.classList.add('active');
       if (tabId === 'adminSheetTab') {
         refreshAdminMasterSheet();
+      } else if (tabId === 'adminLiveTab') {
+        refreshAdminLiveClasses();
+      } else if (tabId === 'adminNoticeTab') {
+        const notice = JSON.parse(localStorage.getItem('school_noticeboard'));
+        document.getElementById('adminWeeklyEventInput').value = notice.weeklyEvent;
+        document.getElementById('adminTodInput').value = notice.tod;
       }
     }
 
@@ -1009,6 +1216,11 @@
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
       const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      const notice = JSON.parse(localStorage.getItem('school_noticeboard')) || { weeklyEvent: 'No event posted', tod: 'Not assigned' };
+
+      document.getElementById('dashWeeklyEventDisplay').textContent = notice.weeklyEvent;
+      document.getElementById('dashTodDisplay').textContent = notice.tod;
+
       const userClaims = claims.filter(c => c.teacherEmail === user.email);
       const userCats = cats.filter(cat => cat.teacherEmail === user.email);
 
@@ -1045,6 +1257,20 @@
 
       const downloadTimestamp = new Date().toLocaleString();
       document.getElementById('printFooterDate').textContent = `Downloaded on: ${downloadTimestamp}`;
+      refreshLiveClassesView();
+    }
+
+    function refreshLiveClassesView() {
+      const classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      const tbody = document.getElementById('liveClassesTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = classes.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No active or scheduled timetable live sessions.</td></tr>';
+      classes.forEach(cls => {
+        const isLive = cls.status === 'Live Now';
+        const badgeClass = isLive ? 'badge-live' : 'badge-warning';
+        tbody.innerHTML += `<tr><td><span class="badge ${badgeClass}">${cls.status}</span></td><td>${cls.timeSlot}</td><td><strong>${cls.className}</strong></td><td>${cls.subject}</td><td>${cls.teacher}</td><td><a href="${cls.url}" target="_blank" class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Join Room &rarr;</a></td></tr>`;
+      });
     }
 
     function editClaim(id) {
@@ -1064,7 +1290,7 @@
             cb.checked = claim.details.includes(cb.value);
           });
         }
-        switchStaffTab('staffRemedialTab', document.querySelectorAll('#staffPortalView aside .sidebar-link')[1]);
+        switchStaffTab('staffRemedialTab', document.querySelectorAll('#staffPortalView aside .sidebar-link')[2]);
       }
     }
 
@@ -1171,6 +1397,50 @@
       cats = cats.filter(c => c.id !== id);
       localStorage.setItem('cat_papers', JSON.stringify(cats));
       refreshStaffData();
+    }
+
+    document.getElementById('noticeUpdateForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const weeklyEvent = document.getElementById('adminWeeklyEventInput').value.trim();
+      const tod = document.getElementById('adminTodInput').value.trim();
+      localStorage.setItem('school_noticeboard', JSON.stringify({ weeklyEvent, tod }));
+      alert('Noticeboard and Teacher on Duty updated successfully.');
+    });
+
+    document.getElementById('liveClassForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const timeSlot = document.getElementById('liveTimeSlot').value.trim();
+      const className = document.getElementById('liveClassStream').value;
+      const subject = document.getElementById('liveSubject').value.trim();
+      const teacher = document.getElementById('liveTeacher').value.trim();
+      const url = document.getElementById('liveUrl').value.trim();
+      const status = document.getElementById('liveStatus').value;
+
+      let classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      classes.push({ id: Date.now(), timeSlot, className, subject, teacher, url, status });
+      localStorage.setItem('live_classes', JSON.stringify(classes));
+      document.getElementById('liveClassForm').reset();
+      refreshAdminLiveClasses();
+      alert('Live class session published successfully.');
+    });
+
+    function refreshAdminLiveClasses() {
+      const classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      const tbody = document.getElementById('adminLiveTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = classes.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No live timetable sessions published.</td></tr>';
+      classes.forEach(cls => {
+        const isLive = cls.status === 'Live Now';
+        tbody.innerHTML += `<tr><td><span class="badge ${isLive ? 'badge-live' : 'badge-warning'}">${cls.status}</span></td><td>${cls.timeSlot}</td><td>${cls.className}</td><td>${cls.subject}</td><td>${cls.teacher}</td><td><a href="${cls.url}" target="_blank" style="color: var(--primary);">Link</a></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteLiveClass(${cls.id})">Delete</button></td></tr>`;
+      });
+    }
+
+    function deleteLiveClass(id) {
+      let classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      classes = classes.filter(c => c.id !== id);
+      localStorage.setItem('live_classes', JSON.stringify(classes));
+      refreshAdminLiveClasses();
     }
 
     function refreshAdminData() {
