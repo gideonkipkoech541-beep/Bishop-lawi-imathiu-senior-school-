@@ -470,12 +470,12 @@
                 <div class="form-group" id="weekdaySessionGroup">
                   <label>Weekday Session Occurrence</label>
                   <select id="remWeekdaySession">
-                    <option value="Morning Remedial">Morning Remedial</option>
-                    <option value="Evening Remedial">Evening Remedial</option>
+                    <option value="Morning Remedial">Morning Remedial (KES 500)</option>
+                    <option value="Evening Remedial">Evening Remedial (KES 500)</option>
                   </select>
                 </div>
                 <div class="form-group" id="weekendSessionGroup" style="display: none;">
-                  <label>Select Lessons Attended (Weekend)</label>
+                  <label>Select Lessons Attended (Weekend - KES 700 per lesson)</label>
                   <div class="checkbox-group">
                     <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 1"> Lesson 1</label>
                     <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 2"> Lesson 2</label>
@@ -505,6 +505,7 @@
                     <th>Class</th>
                     <th>Subject</th>
                     <th>Lessons / Occurrence Details</th>
+                    <th>Calculated Amount</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -578,12 +579,14 @@
                       <th>Class</th>
                       <th>Subject</th>
                       <th>Lessons & Occurrence Details</th>
+                      <th>Amount (KES)</th>
                       <th>Status</th>
                     </tr>
                   </thead>
                   <tbody id="bursarSummaryTableBody"></tbody>
                 </table>
               </div>
+              <div style="margin-top: 1rem; font-weight: bold; text-align: right; font-size: 0.95rem;" id="bursarTotalContainer"></div>
               <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 0.5rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
                 <span id="printFooterWatermark">KNOWLEDGE SHOWERS BLISS</span>
                 <span id="printFooterDate"></span>
@@ -606,6 +609,7 @@
         <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">📊 Dashboard</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">👥 Teacher Management</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">📥 Teacher Payment Sheet</a>
         <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">📈 Reports & CSV</a>
       </aside>
       <main class="main-content">
@@ -665,11 +669,38 @@
                     <th>Class</th>
                     <th>Subject</th>
                     <th>Lessons & Details</th>
+                    <th>Amount</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody id="adminClaimsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Teacher Payment Sheet Tab -->
+        <div id="adminSheetTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Master Teacher Remedial Payment Sheet</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Review accumulated payment totals for all teachers based on verified claims and download the official payment sheet as a PDF.</p>
+            
+            <div style="margin-bottom: 1.25rem;">
+              <button class="btn" onclick="downloadMasterPaymentSheetPDF()">📥 Download Master Payment Sheet (PDF)</button>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Teacher Name</th>
+                    <th>Email</th>
+                    <th>Total Verified Sessions / Lessons</th>
+                    <th>Total Remedial Amount (KES)</th>
+                  </tr>
+                </thead>
+                <tbody id="adminMasterSheetTableBody"></tbody>
               </table>
             </div>
           </div>
@@ -705,6 +736,16 @@
       if (!localStorage.getItem('claim_drafts')) localStorage.setItem('claim_drafts', JSON.stringify([]));
     }
 
+    function calculateClaimAmount(dayType, details) {
+      if (dayType === 'Weekday') {
+        return 500; // Morning or Evening remedial is 500
+      } else {
+        // Weekend: count number of comma-separated lessons
+        const lessons = details.split(',').filter(l => l.trim().length > 0);
+        return lessons.length * 700; // 700 per lesson
+      }
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute('data-theme');
@@ -729,6 +770,9 @@
       document.getElementById(tabId).style.display = 'block';
       document.querySelectorAll('#adminPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
       el.classList.add('active');
+      if (tabId === 'adminSheetTab') {
+        refreshAdminMasterSheet();
+      }
     }
 
     document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -801,13 +845,14 @@
         details = checkedLessons.join(', ');
       }
 
+      const amount = calculateClaimAmount(dayType, details);
       let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
 
       if (claimId) {
-        claims = claims.map(c => c.id == claimId ? { ...c, className, subject, dayType, details, date } : c);
+        claims = claims.map(c => c.id == claimId ? { ...c, className, subject, dayType, details, date, amount } : c);
         document.getElementById('editClaimId').value = '';
       } else {
-        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, subject, dayType, details, date, status: 'Pending Verification' });
+        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, subject, dayType, details, date, amount, status: 'Pending Verification' });
       }
 
       localStorage.setItem('remedial_claims', JSON.stringify(claims));
@@ -840,10 +885,14 @@
       document.getElementById('statStaffCatsCount').textContent = userCats.length;
 
       const claimTbody = document.getElementById('staffClaimTableBody');
-      claimTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims found.</td></tr>';
+      claimTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No claims found.</td></tr>';
+      
+      let totalClaimSum = 0;
       userClaims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        totalClaimSum += amt;
         const badge = c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning';
-        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
+        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.15rem 0.4rem; font-size: 0.7rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
       });
 
       const catTbody = document.getElementById('staffCatTableBody');
@@ -854,10 +903,13 @@
 
       document.getElementById('bursarLetterBody').innerHTML = `<p>Dear Bursar,</p><p style="margin-top:0.35rem;">I, <strong>${user.name}</strong>, am requesting payment disbursement for the verified remedial sessions attended during the current term.</p>`;
       const bursarTbody = document.getElementById('bursarSummaryTableBody');
-      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
+      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
       userClaims.forEach(c => {
-        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
       });
+
+      document.getElementById('bursarTotalContainer').textContent = `Total Claim Amount: KES ${totalClaimSum.toLocaleString()}`;
 
       const downloadTimestamp = new Date().toLocaleString();
       document.getElementById('printFooterDate').textContent = `Downloaded on: ${downloadTimestamp}`;
@@ -898,7 +950,6 @@
       const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.teacherEmail === user.email);
       const downloadTimestamp = new Date().toLocaleString();
 
-      // Header styling
       doc.setFont("helvetica", "bold");
       doc.setFontSize(14);
       doc.setTextColor(27, 77, 62);
@@ -909,7 +960,6 @@
       doc.setTextColor(85, 96, 89);
       doc.text("Official Remedial Claim Letter & Summary Ledger", 105, 26, { align: "center" });
 
-      // Letter Body
       doc.setFontSize(10);
       doc.setTextColor(28, 34, 30);
       doc.text("Dear Bursar,", 20, 38);
@@ -918,13 +968,13 @@
       const splitIntro = doc.splitTextToSize(introText, 170);
       doc.text(splitIntro, 20, 45);
 
-      // Table mapping for jsPDF auto-table style rendering manually or via simple rows
       let startY = 58;
       doc.setFont("helvetica", "bold");
       doc.text("Date", 20, startY);
-      doc.text("Class", 55, startY);
-      doc.text("Subject", 85, startY);
-      doc.text("Occurrence & Details", 125, startY);
+      doc.text("Class", 50, startY);
+      doc.text("Subject", 75, startY);
+      doc.text("Occurrence & Details", 110, startY);
+      doc.text("Amount", 170, startY);
       
       doc.setLineWidth(0.2);
       doc.line(20, startY + 2, 190, startY + 2);
@@ -933,26 +983,34 @@
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
 
+      let totalSum = 0;
       if (claims.length === 0) {
         doc.text("No remedial claims recorded.", 20, startY);
         startY += 10;
       } else {
         claims.forEach((c) => {
-          if (startY > 270) {
+          if (startY > 265) {
             doc.addPage();
             startY = 20;
           }
+          const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+          totalSum += amt;
           doc.text(String(c.date), 20, startY);
-          doc.text(String(c.className), 55, startY);
-          doc.text(String(c.subject), 85, startY);
-          doc.text(String(`${c.dayType}: ${c.details}`), 125, startY);
+          doc.text(String(c.className), 50, startY);
+          doc.text(String(c.subject), 75, startY);
+          doc.text(String(`${c.dayType}: ${c.details}`), 110, startY);
+          doc.text(`KES ${amt.toLocaleString()}`, 170, startY);
           startY += 7;
         });
       }
 
-      // Footer disclaimer & metadata
+      startY += 4;
+      doc.setFont("helvetica", "bold");
+      doc.text(`Total Claim Amount: KES ${totalSum.toLocaleString()}`, 190, startY, { align: "right" });
+
       const pageHeight = doc.internal.pageSize.height;
       doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
       doc.setTextColor(100, 100, 100);
       doc.line(20, pageHeight - 18, 190, pageHeight - 18);
       doc.text("KNOWLEDGE SHOWERS BLISS", 20, pageHeight - 12);
@@ -999,12 +1057,105 @@
       });
 
       const claimsTbody = document.getElementById('adminClaimsTableBody');
-      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
+      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
       claims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
         const isVerified = c.status === 'Verified & Approved';
         const actionBtn = isVerified ? `<span style="color: var(--primary); font-weight: 600;">Approved</span>` : `<button class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="verifyClaim(${c.id})">Approve</button>`;
-        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
+        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
       });
+    }
+
+    function refreshAdminMasterSheet() {
+      const users = (JSON.parse(localStorage.getItem('school_users')) || []).filter(u => u.role === 'staff');
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.status === 'Verified & Approved');
+      const tableBody = document.getElementById('adminMasterSheetTableBody');
+      tableBody.innerHTML = '';
+
+      if (users.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No staff members found.</td></tr>';
+        return;
+      }
+
+      users.forEach(u => {
+        const teacherClaims = claims.filter(c => c.teacherEmail === u.email);
+        let totalAmount = 0;
+        let totalSessions = teacherClaims.length;
+        teacherClaims.forEach(c => {
+          totalAmount += (c.amount || calculateClaimAmount(c.dayType, c.details));
+        });
+
+        tableBody.innerHTML += `<tr><td><strong>${u.name}</strong></td><td>${u.email}</td><td>${totalSessions} Verified Session(s)</td><td><strong>KES ${totalAmount.toLocaleString()}</strong></td></tr>`;
+      });
+    }
+
+    function downloadMasterPaymentSheetPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const users = (JSON.parse(localStorage.getItem('school_users')) || []).filter(u => u.role === 'staff');
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.status === 'Verified & Approved');
+      const downloadTimestamp = new Date().toLocaleString();
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(27, 77, 62);
+      doc.text("BISHOP LAWI IMATHIU SCHOOL", 105, 20, { align: "center" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(85, 96, 89);
+      doc.text("Master Teacher Remedial Payment Sheet (Verified Claims)", 105, 26, { align: "center" });
+
+      let startY = 40;
+      doc.setFont("helvetica", "bold");
+      doc.text("Teacher Name", 20, startY);
+      doc.text("Email", 80, startY);
+      doc.text("Verified Sessions", 135, startY);
+      doc.text("Total Amount (KES)", 165, startY);
+
+      doc.setLineWidth(0.2);
+      doc.line(20, startY + 2, 190, startY + 2);
+
+      startY += 8;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+
+      let grandTotal = 0;
+      users.forEach(u => {
+        const teacherClaims = claims.filter(c => c.teacherEmail === u.email);
+        let totalAmount = 0;
+        teacherClaims.forEach(c => {
+          totalAmount += (c.amount || calculateClaimAmount(c.dayType, c.details));
+        });
+        grandTotal += totalAmount;
+
+        if (startY > 265) {
+          doc.addPage();
+          startY = 20;
+        }
+
+        doc.text(String(u.name), 20, startY);
+        doc.text(String(u.email), 80, startY);
+        doc.text(String(`${teacherClaims.length} Session(s)`), 135, startY);
+        doc.text(`KES ${totalAmount.toLocaleString()}`, 165, startY);
+        startY += 8;
+      });
+
+      startY += 4;
+      doc.line(20, startY, 190, startY);
+      startY += 6;
+      doc.setFont("helvetica", "bold");
+      doc.text(`Grand Total Remedial Disbursement: KES ${grandTotal.toLocaleString()}`, 190, startY, { align: "right" });
+
+      const pageHeight = doc.internal.pageSize.height;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 100, 100);
+      doc.line(20, pageHeight - 18, 190, pageHeight - 18);
+      doc.text("KNOWLEDGE SHOWERS BLISS", 20, pageHeight - 12);
+      doc.text(`Downloaded on: ${downloadTimestamp}`, 190, pageHeight - 12, { align: "right" });
+
+      doc.save("Master_Teacher_Remedial_Payment_Sheet.pdf");
     }
 
     function verifyClaim(id) {
@@ -1048,9 +1199,10 @@
         alert('No data available to export.');
         return;
       }
-      let csv = 'Teacher,Date,Class,Subject,Occurrence,Details,Status\n';
+      let csv = 'Teacher,Date,Class,Subject,Occurrence,Details,Amount,Status\n';
       claims.forEach(c => {
-        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.subject}","${c.dayType}","${c.details}","${c.status}"\n`;
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.subject}","${c.dayType}","${c.details}","${amt}","${c.status}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
