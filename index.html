@@ -645,6 +645,37 @@
             <form id="remedialForm">
               <input type="hidden" id="editClaimId">
               <div class="form-grid">
+                <!-- Remedial Claims Tab -->
+    
+    <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
+    <div class="card">
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Specify attendance details</p>
+    <form id="remedialForm">
+    <input type="hidden" id="editClaimId">
+    
+    <!-- ADD THE WEEKLY SELECTOR HERE -->
+    <div class="form-group">
+        <label>Remedial Week</label>
+        <select id="claimWeek" required>
+            <option value="">-- Choose Week --</option>
+            <option value="Week 1">Week 1</option>
+            <option value="Week 2">Week 2</option>
+            <option value="Week 3">Week 3</option>
+            <option value="Week 4">Week 4</option>
+            <option value="Week 5">Week 5</option>
+            <option value="Week 6">Week 6</option>
+            <option value="Week 7">Week 7</option>
+            <option value="Week 8">Week 8</option>
+            <option value="Week 9">Week 9</option>
+        </select>
+    </div>
+    <!-- END OF ADDITION -->
+    <div class="form-grid">
+    <div class="form-group">
+    <label>Class Stream</label>
+    <select id="remClass" required>
+...
                 <div class="form-group">
                   <label>Class Stream</label>
                   <select id="remClass" required>
