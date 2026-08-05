@@ -365,9 +365,15 @@
 
     .checkbox-group {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.25rem;
+      flex-direction: column;
+      gap: 0.5rem;
       margin-top: 0.5rem;
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      background: var(--bg-color);
     }
 
     .checkbox-item {
@@ -393,16 +399,8 @@
 
     .badge-success { background: rgba(27, 77, 62, 0.12); color: #1b4d3e; }
     .badge-warning { background: rgba(92, 64, 51, 0.12); color: #5c4033; }
-    .badge-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; animation: pulse 2s infinite; }
     [data-theme="dark"] .badge-success { background: rgba(46, 111, 92, 0.25); color: #4ade80; }
     [data-theme="dark"] .badge-warning { background: rgba(107, 77, 63, 0.25); color: #fbbf24; }
-    [data-theme="dark"] .badge-live { background: rgba(239, 68, 68, 0.25); color: #f87171; }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
 
     .login-wrapper {
       display: flex;
@@ -485,7 +483,6 @@
       #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff; color: #000000; padding: 2rem; }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -504,13 +501,13 @@
       <div class="card" style="padding: 4rem 2.5rem; max-width: 800px; margin: 0 auto; border-radius: 16px;">
         <span class="badge badge-success" style="margin-bottom: 1rem; font-size: 0.8rem; padding: 0.4rem 1rem;">Official Academic Management Platform</span>
         <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; font-weight: 800; letter-spacing: -0.02em;">Staff & Admin Portal System</h2>
-        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6;">Manage remedial claims, teacher verifications, assessment uploads, live timetable schedules, and administrative approvals seamlessly in an optimized digital ecosystem.</p>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6;">Manage monthly remedial claims aggregating weekly breakdowns, teacher verifications, assessment uploads, and administrative approvals seamlessly.</p>
         <button class="btn btn-accent" style="font-size: 1rem; padding: 0.85rem 2rem; border-radius: 50px;" onclick="switchView('loginView')">Access Portal Login &rarr;</button>
       </div>
     </div>
   </div>
 
-  <!-- REFINED LOGIN VIEW -->
+  <!-- LOGIN VIEW -->
   <div id="loginView" class="view-section">
     <div class="login-wrapper">
       <div class="login-card">
@@ -564,8 +561,7 @@
           <span style="color: var(--primary-light);">Staff Portal</span>
         </div>
         <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">📊 Dashboard</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffLiveClassesTab', this)">📅 Live Classes & Schedule</a>
-        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Remedial Claims (Weekly)</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">📝 Monthly Remedial Claims</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">📁 Weekly C.A.T. Uploads</a>
         <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">🖨️ Bursar Module & Letter</a>
       </aside>
@@ -576,7 +572,7 @@
           
           <div class="notice-grid">
             <div class="notice-card">
-              <h4>📢 This Week's Event</h4>
+              <h4>📢 This Month's Focus</h4>
               <p id="dashWeeklyEventDisplay">Loading current school event...</p>
             </div>
             <div class="notice-card" style="border-top-color: var(--primary);">
@@ -587,11 +583,11 @@
 
           <div class="dashboard-grid">
             <div class="stat-card">
-              <h3>Total Claims</h3>
+              <h3>Monthly Claims Submitted</h3>
               <div class="value" id="statStaffClaimsCount">0</div>
             </div>
             <div class="stat-card">
-              <h3>Approved Claims</h3>
+              <h3>Approved Monthly Claims</h3>
               <div class="value" id="statStaffApprovedCount">0</div>
             </div>
             <div class="stat-card">
@@ -601,56 +597,33 @@
           </div>
         </div>
 
-        <!-- Live Classes Tab -->
-        <div id="staffLiveClassesTab" class="staff-tab-content" style="display: none;">
-          <div class="card">
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Live Classes & Timetable Sessions</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">View currently active or scheduled timetable live sessions across streams.</p>
-            
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Status</th>
-                    <th>Time Slot</th>
-                    <th>Class Stream</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
-                    <th>Action / Room Link</th>
-                  </tr>
-                </thead>
-                <tbody id="liveClassesTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Remedial Claims Tab (Updated with Weekly Selection) -->
+        <!-- Monthly Remedial Claims Tab -->
         <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
           <div class="card">
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Specify weekly schedule occurrence, attendance details, and subject stream.</p>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Monthly Remedial Claim Form</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Select the target month, check the weeks included, and specify lessons conducted during those weeks to compile the claim.</p>
+            
             <form id="remedialForm">
               <input type="hidden" id="editClaimId">
               <div class="form-grid">
-                
-                <!-- NEW: Weekly Selection Dropdown Added -->
                 <div class="form-group">
-                  <label>Remedial Week</label>
-                  <select id="claimWeek" required>
-                    <option value="">-- Choose Week --</option>
-                    <option value="Week 1">Week 1</option>
-                    <option value="Week 2">Week 2</option>
-                    <option value="Week 3">Week 3</option>
-                    <option value="Week 4">Week 4</option>
-                    <option value="Week 5">Week 5</option>
-                    <option value="Week 6">Week 6</option>
-                    <option value="Week 7">Week 7</option>
-                    <option value="Week 8">Week 8</option>
-                    <option value="Week 9">Week 9</option>
+                  <label>Claim Month</label>
+                  <select id="claimMonth" required>
+                    <option value="">-- Choose Month --</option>
+                    <option value="January 2026">January 2026</option>
+                    <option value="February 2026">February 2026</option>
+                    <option value="March 2026">March 2026</option>
+                    <option value="April 2026">April 2026</option>
+                    <option value="May 2026">May 2026</option>
+                    <option value="June 2026">June 2026</option>
+                    <option value="July 2026">July 2026</option>
+                    <option value="August 2026">August 2026</option>
+                    <option value="September 2026">September 2026</option>
+                    <option value="October 2026">October 2026</option>
+                    <option value="November 2026">November 2026</option>
+                    <option value="December 2026">December 2026</option>
                   </select>
                 </div>
-
                 <div class="form-group">
                   <label>Class Stream</label>
                   <select id="remClass" required>
@@ -677,53 +650,105 @@
                   <label>Subject</label>
                   <input type="text" id="remSubject" required placeholder="e.g., Physics / Mathematics">
                 </div>
-                <div class="form-group">
-                  <label>Day Type / Schedule Occurrence</label>
-                  <select id="remDayType" onchange="toggleDayTypeFields()" required>
-                    <option value="Weekday">Weekday (Morning / Evening)</option>
-                    <option value="Weekend">Weekend Sessions (Multiple Lessons)</option>
-                  </select>
-                </div>
-                <div class="form-group" id="weekdaySessionGroup">
-                  <label>Weekday Session Occurrence</label>
-                  <select id="remWeekdaySession">
-                    <option value="Morning Remedial">Morning Remedial (KES 500)</option>
-                    <option value="Evening Remedial">Evening Remedial (KES 500)</option>
-                  </select>
-                </div>
-                <div class="form-group" id="weekendSessionGroup" style="display: none;">
-                  <label>Select Lessons Attended (Weekend - KES 700 per lesson)</label>
-                  <div class="checkbox-group">
-                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 1"> Lesson 1</label>
-                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 2"> Lesson 2</label>
-                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 3"> Lesson 3</label>
-                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 4"> Lesson 4</label>
+              </div>
+
+              <!-- Weeks & Lessons builder section -->
+              <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem;">
+                <label style="font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">Select Weeks & Specify Lessons Conducted Within Each Week</label>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Check the weeks included in this monthly claim and select the specific lessons taught (Weekday morning/evening or Weekend lessons).</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="weeksContainer">
+                  <!-- Week 1 -->
+                  <div class="card" style="padding: 1rem; margin-bottom: 0; background: var(--bg-color);">
+                    <label class="checkbox-item" style="font-weight: bold; margin-bottom: 0.5rem;">
+                      <input type="checkbox" name="claimWeeks" value="Week 1" onchange="toggleWeekBuilder(this, 'w1Details')"> Week 1
+                    </label>
+                    <div id="w1Details" style="display: none; margin-top: 0.5rem; padding-left: 1.25rem;">
+                      <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.75rem;">Lessons / Sessions (Week 1)</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-item"><input type="checkbox" name="w1_lessons" value="Morning Remedial (KES 500)"> Morning Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w1_lessons" value="Evening Remedial (KES 500)"> Evening Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w1_lessons" value="Weekend Lesson 1 (KES 700)"> Weekend Lesson 1 (KES 700)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w1_lessons" value="Weekend Lesson 2 (KES 700)"> Weekend Lesson 2 (KES 700)</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Week 2 -->
+                  <div class="card" style="padding: 1rem; margin-bottom: 0; background: var(--bg-color);">
+                    <label class="checkbox-item" style="font-weight: bold; margin-bottom: 0.5rem;">
+                      <input type="checkbox" name="claimWeeks" value="Week 2" onchange="toggleWeekBuilder(this, 'w2Details')"> Week 2
+                    </label>
+                    <div id="w2Details" style="display: none; margin-top: 0.5rem; padding-left: 1.25rem;">
+                      <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.75rem;">Lessons / Sessions (Week 2)</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-item"><input type="checkbox" name="w2_lessons" value="Morning Remedial (KES 500)"> Morning Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w2_lessons" value="Evening Remedial (KES 500)"> Evening Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w2_lessons" value="Weekend Lesson 1 (KES 700)"> Weekend Lesson 1 (KES 700)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w2_lessons" value="Weekend Lesson 2 (KES 700)"> Weekend Lesson 2 (KES 700)</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Week 3 -->
+                  <div class="card" style="padding: 1rem; margin-bottom: 0; background: var(--bg-color);">
+                    <label class="checkbox-item" style="font-weight: bold; margin-bottom: 0.5rem;">
+                      <input type="checkbox" name="claimWeeks" value="Week 3" onchange="toggleWeekBuilder(this, 'w3Details')"> Week 3
+                    </label>
+                    <div id="w3Details" style="display: none; margin-top: 0.5rem; padding-left: 1.25rem;">
+                      <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.75rem;">Lessons / Sessions (Week 3)</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-item"><input type="checkbox" name="w3_lessons" value="Morning Remedial (KES 500)"> Morning Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w3_lessons" value="Evening Remedial (KES 500)"> Evening Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w3_lessons" value="Weekend Lesson 1 (KES 700)"> Weekend Lesson 1 (KES 700)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w3_lessons" value="Weekend Lesson 2 (KES 700)"> Weekend Lesson 2 (KES 700)</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Week 4 -->
+                  <div class="card" style="padding: 1rem; margin-bottom: 0; background: var(--bg-color);">
+                    <label class="checkbox-item" style="font-weight: bold; margin-bottom: 0.5rem;">
+                      <input type="checkbox" name="claimWeeks" value="Week 4" onchange="toggleWeekBuilder(this, 'w4Details')"> Week 4
+                    </label>
+                    <div id="w4Details" style="display: none; margin-top: 0.5rem; padding-left: 1.25rem;">
+                      <div class="form-group" style="margin-bottom: 0.5rem;">
+                        <label style="font-size: 0.75rem;">Lessons / Sessions (Week 4)</label>
+                        <div class="checkbox-group">
+                          <label class="checkbox-item"><input type="checkbox" name="w4_lessons" value="Morning Remedial (KES 500)"> Morning Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w4_lessons" value="Evening Remedial (KES 500)"> Evening Remedial (KES 500)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w4_lessons" value="Weekend Lesson 1 (KES 700)"> Weekend Lesson 1 (KES 700)</label>
+                          <label class="checkbox-item"><input type="checkbox" name="w4_lessons" value="Weekend Lesson 2 (KES 700)"> Weekend Lesson 2 (KES 700)</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label>Date of Attendance</label>
-                  <input type="date" id="remDate" required>
-                </div>
               </div>
-              <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
-                <button type="submit" class="btn">Submit Claim</button>
-                <button type="button" class="btn btn-outline" onclick="saveDraftClaim()">Save Draft</button>
+
+              <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn">Submit Monthly Claim</button>
               </div>
             </form>
           </div>
 
           <div class="card">
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Claim History & Management</h2>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Submitted Monthly Claims History</h2>
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
-                    <th>Week</th>
-                    <th>Date</th>
+                    <th>Month</th>
                     <th>Class Stream</th>
                     <th>Subject</th>
-                    <th>Lessons / Details</th>
-                    <th>Amount</th>
+                    <th>Weeks & Breakdown Details</th>
+                    <th>Total Amount</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -776,18 +801,17 @@
         <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
           <div class="card">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Bursar Payment Summary & Official Letter</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Generate, print, or download your official claim letter and breakdown as a PDF for bursar processing.</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Generate, print, or download your official monthly claim letter and breakdown for bursar processing.</p>
             
             <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
               <button class="btn" onclick="window.print()">🖨️ Print Letter & Summary</button>
-              <button class="btn btn-outline" onclick="downloadBursarLetterPDF()">📥 Download Letter & Summary (PDF)</button>
             </div>
 
             <div id="printArea" style="border: 1px dashed var(--border); padding: 2rem; border-radius: var(--radius); background: var(--card-bg);">
               <div style="text-align: center; margin-bottom: 1.25rem; border-bottom: 2px solid var(--primary); padding-bottom: 1rem;">
                 <h3 style="color: var(--primary); font-size: 1.35rem; font-weight: 800; letter-spacing: 0.03em;">BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
                 <p style="font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-top: 0.25rem;">P.O. Box 1459 – 60200 Meru, Kenya</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Official Remedial Claim Letter & Summary Ledger</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Official Monthly Remedial Claim Summary Ledger</p>
               </div>
               
               <div style="margin-bottom: 1.25rem; font-size: 0.9rem;" id="bursarLetterBody"></div>
@@ -796,11 +820,10 @@
                 <table>
                   <thead>
                     <tr>
-                      <th>Week</th>
-                      <th>Date</th>
+                      <th>Month</th>
                       <th>Class Stream</th>
                       <th>Subject</th>
-                      <th>Lessons & Details</th>
+                      <th>Weeks & Breakdown Details</th>
                       <th>Amount (KES)</th>
                       <th>Status</th>
                     </tr>
@@ -810,7 +833,7 @@
               </div>
               <div style="margin-top: 1.25rem; font-weight: bold; text-align: right; font-size: 1rem;" id="bursarTotalContainer"></div>
               <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 0.75rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
-                <span id="printFooterWatermark">KNOWLEDGE SHOWERS BLISS</span>
+                <span>KNOWLEDGE SHOWERS BLISS</span>
                 <span id="printFooterDate"></span>
               </div>
             </div>
@@ -828,48 +851,22 @@
           <strong>Administrator</strong>
           <span style="color: var(--primary-light);">Admin Control Panel</span>
         </div>
-        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">📊 Dashboard</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminNoticeTab', this)">📢 Edit Noticeboard & Duties</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminLiveTab', this)">📅 Manage Live Classes</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">👥 Teacher Management</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Claims</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">📋 Teacher Payment Sheet</a>
-        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">📈 Reports & CSV</a>
+        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminClaimsTab', this)">✅ Approve Monthly Claims</a>
       </aside>
       <main class="main-content">
-        <!-- Admin Dashboard Tab -->
-        <div id="adminDashboardTab" class="admin-tab-content">
-          <h2 style="margin-bottom: 1.25rem; font-size: 1.35rem; font-weight: 700;">Admin Overview</h2>
-          <div class="dashboard-grid">
-            <div class="stat-card">
-              <h3>Registered Staff</h3>
-              <div class="value" id="statAdminStaffCount">0</div>
-            </div>
-            <div class="stat-card">
-              <h3>Pending Claims</h3>
-              <div class="value" id="statAdminPendingCount">0</div>
-            </div>
-            <div class="stat-card">
-              <h3>C.A.T Papers</h3>
-              <div class="value" id="statAdminCatsCount">0</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Approve Claims Tab (Includes Week display) -->
-        <div id="adminClaimsTab" class="admin-tab-content" style="display: none;">
+        <!-- Approve Claims Tab -->
+        <div id="adminClaimsTab" class="admin-tab-content">
           <div class="card">
-            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Teacher Remedial Claims Review</h2>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Teacher Monthly Remedial Claims Review</h2>
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
                     <th>Teacher</th>
-                    <th>Week</th>
-                    <th>Date</th>
+                    <th>Month</th>
                     <th>Class Stream</th>
                     <th>Subject</th>
-                    <th>Details</th>
+                    <th>Weeks & Breakdown Details</th>
                     <th>Amount</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -885,9 +882,8 @@
   </div>
 
   <script>
-    // Portal Engine with Weekly Tracking Logic
     let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-    let claims = JSON.parse(localStorage.getItem('remedialClaims')) || [];
+    let claims = JSON.parse(localStorage.getItem('remedialClaimsMonthly')) || [];
 
     function toggleTheme() {
       const html = document.documentElement;
@@ -906,64 +902,70 @@
       document.getElementById('roleSelect').value = role;
     }
 
-    // Form submission handler capturing weekly entries
+    function toggleWeekBuilder(checkbox, detailId) {
+      const detailDiv = document.getElementById(detailId);
+      detailDiv.style.display = checkbox.checked ? 'block' : 'none';
+      if (!checkbox.checked) {
+        detailDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      }
+    }
+
+    // Monthly claim submission handler aggregating weeks and lessons
     document.getElementById('remedialForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const editId = document.getElementById('editClaimId').value;
-      const week = document.getElementById('claimWeek').value;
+      const month = document.getElementById('claimMonth').value;
       const remClass = document.getElementById('remClass').value;
       const subject = document.getElementById('remSubject').value;
-      const dayType = document.getElementById('remDayType').value;
-      const date = document.getElementById('remDate').value;
 
-      let details = "";
-      let amount = 0;
+      const selectedWeeks = Array.from(document.querySelectorAll('input[name="claimWeeks"]:checked')).map(el => el.value);
+      if (selectedWeeks.length === 0) {
+        alert('Please select at least one week for this monthly claim.');
+        return;
+      }
 
-      if (dayType === 'Weekday') {
-        const session = document.getElementById('remWeekdaySession').value;
-        details = session;
-        amount = 500;
-      } else {
-        const selectedLessons = Array.from(document.querySelectorAll('input[name="weekendLesson"]:checked')).map(el => el.value);
-        if (selectedLessons.length === 0) {
-          alert('Please select at least one weekend lesson.');
-          return;
+      let weekBreakdowns = [];
+      let totalAmount = 0;
+
+      selectedWeeks.forEach(week => {
+        let prefix = week.toLowerCase().replace(' ', ''); // e.g. w1, w2
+        let lessons = Array.from(document.querySelectorAll(`input[name="${prefix}_lessons"]:checked`)).map(cb => cb.value);
+        
+        let weekTotal = 0;
+        lessons.forEach(l => {
+          if (l.includes('KES 500')) weekTotal += 500;
+          if (l.includes('KES 700')) weekTotal += 700;
+        });
+
+        if (lessons.length > 0) {
+          weekBreakdowns.push({ week, lessons: lessons.join(', '), weekTotal });
+          totalAmount += weekTotal;
         }
-        details = selectedLessons.join(', ');
-        amount = selectedLessons.length * 700;
+      });
+
+      if (weekBreakdowns.length === 0) {
+        alert('Please select at least one lesson under the chosen weeks.');
+        return;
       }
 
-      if (editId) {
-        claims = claims.map(c => c.id == editId ? { ...c, week, remClass, subject, dayType, details, amount, date } : c);
-        document.getElementById('editClaimId').value = '';
-      } else {
-        const newClaim = {
-          id: Date.now(),
-          teacher: currentUser ? currentUser.email : 'staff@bishoplawi.ac.ke',
-          teacherName: currentUser ? currentUser.name : 'Teacher Bett',
-          week,
-          remClass,
-          subject,
-          dayType,
-          details,
-          amount,
-          date,
-          status: 'Pending'
-        };
-        claims.push(newClaim);
-      }
+      const newClaim = {
+        id: Date.now(),
+        teacher: currentUser ? currentUser.email : 'staff@bishoplawi.ac.ke',
+        teacherName: currentUser ? currentUser.name : 'Teacher Bett',
+        month,
+        remClass,
+        subject,
+        weekBreakdowns,
+        amount: totalAmount,
+        status: 'Pending'
+      };
 
-      localStorage.setItem('remedialClaims', JSON.stringify(claims));
+      claims.push(newClaim);
+      localStorage.setItem('remedialClaimsMonthly', JSON.stringify(claims));
       this.reset();
+      document.querySelectorAll('[id$="Details"]').forEach(d => d.style.display = 'none');
       loadStaffPortals();
-      alert('Remedial claim successfully saved for ' + week + '!');
+      alert('Monthly remedial claim successfully submitted for ' + month + '!');
     });
-
-    function toggleDayTypeFields() {
-      const dayType = document.getElementById('remDayType').value;
-      document.getElementById('weekdaySessionGroup').style.display = dayType === 'Weekday' ? 'block' : 'none';
-      document.getElementById('weekendSessionGroup').style.display = dayType === 'Weekend' ? 'block' : 'none';
-    }
 
     function loadStaffPortals() {
       const tbody = document.getElementById('staffClaimTableBody');
@@ -975,14 +977,16 @@
       let approvedCount = 0;
       userClaims.forEach(c => {
         if (c.status === 'Approved') approvedCount++;
+        
+        let detailsHtml = c.weekBreakdowns.map(wb => `<strong>${wb.week}:</strong> ${wb.lessons} (KES ${wb.weekTotal})`).join('<br>');
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${c.week || 'Week 1'}</strong></td>
-          <td>${c.date}</td>
+          <td><strong>${c.month}</strong></td>
           <td>${c.remClass}</td>
           <td>${c.subject}</td>
-          <td>${c.details}</td>
-          <td>KES ${c.amount}</td>
+          <td><div style="font-size:0.8rem; line-height:1.4;">${detailsHtml}</div></td>
+          <td><strong>KES ${c.amount}</strong></td>
           <td><span class="badge ${c.status === 'Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td>
           <td><button class="btn btn-outline" style="padding:0.25rem 0.5rem; font-size:0.75rem;" onclick="deleteClaim(${c.id})">Delete</button></td>
         `;
@@ -997,7 +1001,7 @@
 
     function deleteClaim(id) {
       claims = claims.filter(c => c.id !== id);
-      localStorage.setItem('remedialClaims', JSON.stringify(claims));
+      localStorage.setItem('remedialClaimsMonthly', JSON.stringify(claims));
       loadStaffPortals();
     }
 
@@ -1009,27 +1013,27 @@
 
       userClaims.forEach(c => {
         total += c.amount;
+        let detailsHtml = c.weekBreakdowns.map(wb => `<strong>${wb.week}:</strong> ${wb.lessons}`).join('<br>');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><strong>${c.week || 'Week 1'}</strong></td>
-          <td>${c.date}</td>
+          <td><strong>${c.month}</strong></td>
           <td>${c.remClass}</td>
           <td>${c.subject}</td>
-          <td>${c.details}</td>
+          <td><div style="font-size:0.8rem;">${detailsHtml}</div></td>
           <td>${c.amount}</td>
           <td><span class="badge ${c.status === 'Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
-      document.getElementById('bursarTotalContainer').innerText = `Total Claim Amount: KES ${total.toLocaleString()}`;
+      document.getElementById('bursarTotalContainer').innerText = `Total Monthly Claim Amount: KES ${total.toLocaleString()}`;
       document.getElementById('bursarLetterBody').innerHTML = `
         <p><strong>To: The Bursar,</strong></p>
         <p>Bishop Lawi Imathiu Senior School,</p>
         <p>Meru, Kenya.</p><br>
-        <p><strong>RE: REIMBURSEMENT CLAIM FOR WEEKLY REMEDIAL SESSIONS</strong></p><br>
+        <p><strong>RE: REIMBURSEMENT CLAIM FOR MONTHLY REMEDIAL SESSIONS</strong></p><br>
         <p>Dear Sir/Madam,</p>
-        <p>Please find the weekly breakdown summary and ledger of conducted remedial sessions. Kindly process the total approved sum of <strong>KES ${total.toLocaleString()}</strong>.</p>
+        <p>Please find the monthly summary and week-by-week lesson breakdown of conducted remedial sessions. Kindly process the total approved sum of <strong>KES ${total.toLocaleString()}</strong>.</p>
       `;
       document.getElementById('printFooterDate').innerText = 'Date Generated: ' + new Date().toLocaleDateString();
     }
@@ -1055,14 +1059,14 @@
       tbody.innerHTML = '';
       
       claims.forEach(c => {
+        let detailsHtml = c.weekBreakdowns.map(wb => `<strong>${wb.week}:</strong> ${wb.lessons}`).join('<br>');
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${c.teacherName || c.teacher}</td>
-          <td><strong>${c.week || 'Week 1'}</strong></td>
-          <td>${c.date}</td>
+          <td><strong>${c.month}</strong></td>
           <td>${c.remClass}</td>
           <td>${c.subject}</td>
-          <td>${c.details}</td>
+          <td><div style="font-size:0.8rem;">${detailsHtml}</div></td>
           <td>KES ${c.amount}</td>
           <td><span class="badge ${c.status === 'Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td>
           <td>
@@ -1071,12 +1075,11 @@
         `;
         tbody.appendChild(tr);
       });
-      document.getElementById('statAdminPendingCount').innerText = claims.filter(c => c.status === 'Pending').length;
     }
 
     function approveClaim(id) {
       claims = claims.map(c => c.id === id ? { ...c, status: 'Approved' } : c);
-      localStorage.setItem('remedialClaims', JSON.stringify(claims));
+      localStorage.setItem('remedialClaimsMonthly', JSON.stringify(claims));
       loadAdminClaims();
     }
 
@@ -1099,7 +1102,7 @@
     });
 
     window.onload = function() {
-      document.getElementById('dashWeeklyEventDisplay').innerText = 'Mid-Term Examinations & Remedial Tracking';
+      document.getElementById('dashWeeklyEventDisplay').innerText = 'Monthly Academic Progress & Remedial Review';
       document.getElementById('dashTodDisplay').innerText = 'Mr. Kipkorir & Madam Auma';
       loadStaffPortals();
     };
