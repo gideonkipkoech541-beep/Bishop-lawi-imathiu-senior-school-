@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bishop Lawi Imathiu Senior School - Portal System</title>
+  <title>Bishop Lawi Imathiu School - Portal System</title>
   <style>
     :root {
       --primary: #1b4d3e;          /* Dark Green */
@@ -501,7 +501,7 @@
 
   <!-- TOP HEADER -->
   <header>
-    <h1>Bishop Lawi Imathiu Senior School Portal</h1>
+    <h1>Bishop Lawi Imathiu School Portal</h1>
     <div class="nav-actions">
       <button class="theme-toggle" onclick="toggleTheme()">🌓 Theme</button>
       <div id="authNavArea"></div>
@@ -777,11 +777,8 @@
             </div>
 
             <div id="printArea" style="border: 1px dashed var(--border); padding: 2rem; border-radius: var(--radius); background: var(--card-bg);">
-              <div style="text-align: center; margin-bottom: 1.25rem; border-bottom: 2px solid var(--primary); padding-bottom: 1rem;">
-                <h3 style="color: var(--primary); font-size: 1.35rem; font-weight: 800; letter-spacing: 0.03em;">BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
-                <p style="font-size: 0.85rem; color: var(--text-main); font-weight: 600; margin-top: 0.25rem;">P.O. Box 1459 – 60200 Meru, Kenya</p>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">Official Remedial Claim Letter & Summary Ledger</p>
-              </div>
+              <h3 style="text-align: center; color: var(--primary); font-size: 1.2rem; font-weight: 700;">BISHOP LAWI IMATHIU SCHOOL</h3>
+              <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Official Remedial Claim Letter & Summary Ledger</p>
               
               <div style="margin-bottom: 1.25rem; font-size: 0.9rem;" id="bursarLetterBody"></div>
 
@@ -1312,33 +1309,24 @@
       const downloadTimestamp = new Date().toLocaleString();
 
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
+      doc.setFontSize(14);
       doc.setTextColor(27, 77, 62);
-      doc.text("BISHOP LAWI IMATHIU SENIOR SCHOOL", 105, 18, { align: "center" });
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.setTextColor(28, 34, 30);
-      doc.text("P.O. Box 1459 – 60200 Meru, Kenya", 105, 24, { align: "center" });
+      doc.text("BISHOP LAWI IMATHIU SCHOOL", 105, 20, { align: "center" });
 
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.5);
+      doc.setFontSize(9);
       doc.setTextColor(85, 96, 89);
-      doc.text("Official Remedial Claim Letter & Summary Ledger", 105, 29, { align: "center" });
-
-      doc.setLineWidth(0.3);
-      doc.setDrawColor(27, 77, 62);
-      doc.line(20, 33, 190, 33);
+      doc.text("Official Remedial Claim Letter & Summary Ledger", 105, 26, { align: "center" });
 
       doc.setFontSize(10);
       doc.setTextColor(28, 34, 30);
-      doc.text("Dear Bursar,", 20, 42);
+      doc.text("Dear Bursar,", 20, 38);
       
       const introText = `I, ${user.name}, am requesting payment disbursement for the verified remedial sessions attended during the current term.`;
       const splitIntro = doc.splitTextToSize(introText, 170);
-      doc.text(splitIntro, 20, 49);
+      doc.text(splitIntro, 20, 45);
 
-      let startY = 62;
+      let startY = 58;
       doc.setFont("helvetica", "bold");
       doc.text("Date", 20, startY);
       doc.text("Class Stream", 50, startY);
@@ -1347,7 +1335,6 @@
       doc.text("Amount", 170, startY);
       
       doc.setLineWidth(0.2);
-      doc.setDrawColor(200, 200, 200);
       doc.line(20, startY + 2, 190, startY + 2);
 
       startY += 8;
@@ -1512,25 +1499,16 @@
       const downloadTimestamp = new Date().toLocaleString();
 
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
+      doc.setFontSize(14);
       doc.setTextColor(27, 77, 62);
-      doc.text("BISHOP LAWI IMATHIU SENIOR SCHOOL", 105, 18, { align: "center" });
-
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.setTextColor(28, 34, 30);
-      doc.text("P.O. Box 1459 – 60200 Meru, Kenya", 105, 24, { align: "center" });
+      doc.text("BISHOP LAWI IMATHIU SCHOOL", 105, 20, { align: "center" });
 
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(8.5);
+      doc.setFontSize(9);
       doc.setTextColor(85, 96, 89);
-      doc.text("Master Teacher Remedial Payment Sheet (Verified Claims)", 105, 29, { align: "center" });
+      doc.text("Master Teacher Remedial Payment Sheet (Verified Claims)", 105, 26, { align: "center" });
 
-      doc.setLineWidth(0.3);
-      doc.setDrawColor(27, 77, 62);
-      doc.line(20, 33, 190, 33);
-
-      let startY = 44;
+      let startY = 40;
       doc.setFont("helvetica", "bold");
       doc.text("Teacher Name", 20, startY);
       doc.text("Email", 80, startY);
@@ -1538,7 +1516,6 @@
       doc.text("Total Amount (KES)", 165, startY);
 
       doc.setLineWidth(0.2);
-      doc.setDrawColor(200, 200, 200);
       doc.line(20, startY + 2, 190, startY + 2);
 
       startY += 8;
