@@ -641,31 +641,31 @@
         <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
           <div class="card">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Specify attendance details, subject, precise class stream occurrence, and lessons attended.</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Select multiple streams, specify subject, date, and attendance details to submit your claims.</p>
             <form id="remedialForm">
               <input type="hidden" id="editClaimId">
               <div class="form-grid">
-                <div class="form-group">
-                  <label>Class Stream</label>
-                  <select id="remClass" required>
-                    <optgroup label="Grade 10">
-                      <option value="Grade 10 East">Grade 10 East</option>
-                      <option value="Grade 10 West">Grade 10 West</option>
-                      <option value="Grade 10 North">Grade 10 North</option>
-                    </optgroup>
-                    <optgroup label="Form 3">
-                      <option value="Form 3 North">Form 3 North</option>
-                      <option value="Form 3 West">Form 3 West</option>
-                      <option value="Form 3 East">Form 3 East</option>
-                      <option value="Form 3 South">Form 3 South</option>
-                    </optgroup>
-                    <optgroup label="Form 4">
-                      <option value="Form 4 North">Form 4 North</option>
-                      <option value="Form 4 South">Form 4 South</option>
-                      <option value="Form 4 West">Form 4 West</option>
-                      <option value="Form 4 East">Form 4 East</option>
-                    </optgroup>
-                  </select>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label>Select Class Streams (Multi-select / Check all that apply)</label>
+                  <div class="checkbox-group" style="background: var(--bg-color); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius);">
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-bottom: 0.25rem;">Grade 10</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 North"> Grade 10 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 South"> Grade 10 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 West"> Grade 10 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 East"> Grade 10 East</label>
+                    
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-top: 0.5rem; margin-bottom: 0.25rem;">Form 3</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 North"> Form 3 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 South"> Form 3 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 West"> Form 3 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 East"> Form 3 East</label>
+
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-top: 0.5rem; margin-bottom: 0.25rem;">Form 4</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 North"> Form 4 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 South"> Form 4 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 West"> Form 4 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 East"> Form 4 East</label>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label>Subject</label>
@@ -713,7 +713,7 @@
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Class Stream</th>
+                    <th>Class Streams</th>
                     <th>Subject</th>
                     <th>Lessons / Occurrence Details</th>
                     <th>Calculated Amount</th>
@@ -736,7 +736,7 @@
               <div class="form-grid">
                 <div class="form-group">
                   <label>Subject & Title</label>
-                  <input type="text" id="catTitle" required placeholder="e.g., Grade 10 Physics CAT 1">
+                  <input type="text" id="catTitle" required placeholder="e.g., Form 4 North Physics CAT 1">
                 </div>
                 <div class="form-group">
                   <label>Assessment File</label>
@@ -787,7 +787,7 @@
                   <thead>
                     <tr>
                       <th>Date</th>
-                      <th>Class Stream</th>
+                      <th>Class Streams</th>
                       <th>Subject</th>
                       <th>Lessons & Occurrence Details</th>
                       <th>Amount (KES)</th>
@@ -881,15 +881,16 @@
                   <label>Class Stream</label>
                   <select id="liveClassStream" required>
                     <optgroup label="Grade 10">
-                      <option value="Grade 10 East">Grade 10 East</option>
-                      <option value="Grade 10 West">Grade 10 West</option>
                       <option value="Grade 10 North">Grade 10 North</option>
+                      <option value="Grade 10 South">Grade 10 South</option>
+                      <option value="Grade 10 West">Grade 10 West</option>
+                      <option value="Grade 10 East">Grade 10 East</option>
                     </optgroup>
                     <optgroup label="Form 3">
                       <option value="Form 3 North">Form 3 North</option>
+                      <option value="Form 3 South">Form 3 South</option>
                       <option value="Form 3 West">Form 3 West</option>
                       <option value="Form 3 East">Form 3 East</option>
-                      <option value="Form 3 South">Form 3 South</option>
                     </optgroup>
                     <optgroup label="Form 4">
                       <option value="Form 4 North">Form 4 North</option>
@@ -979,7 +980,7 @@
                   <tr>
                     <th>Teacher</th>
                     <th>Date</th>
-                    <th>Class Stream</th>
+                    <th>Class Streams</th>
                     <th>Subject</th>
                     <th>Lessons & Details</th>
                     <th>Amount</th>
@@ -1166,7 +1167,15 @@
       e.preventDefault();
       const user = JSON.parse(localStorage.getItem('currentUser'));
       const claimId = document.getElementById('editClaimId').value;
-      const className = document.getElementById('remClass').value;
+      
+      const selectedStreams = Array.from(document.querySelectorAll('input[name="remClassStream"]:checked'))
+        .map(cb => cb.value);
+      if (selectedStreams.length === 0) {
+        alert('Please select at least one class stream.');
+        return;
+      }
+      const className = selectedStreams.join(', ');
+
       const subject = document.getElementById('remSubject').value.trim();
       const dayType = document.getElementById('remDayType').value;
       const date = document.getElementById('remDate').value;
@@ -1202,12 +1211,13 @@
     });
 
     function saveDraftClaim() {
-      const className = document.getElementById('remClass').value;
+      const selectedStreams = Array.from(document.querySelectorAll('input[name="remClassStream"]:checked'))
+        .map(cb => cb.value).join(', ');
       const subject = document.getElementById('remSubject').value;
       const dayType = document.getElementById('remDayType').value;
       const date = document.getElementById('remDate').value;
       let drafts = JSON.parse(localStorage.getItem('claim_drafts')) || [];
-      drafts.push({ className, subject, dayType, date });
+      drafts.push({ className: selectedStreams, subject, dayType, date });
       localStorage.setItem('claim_drafts', JSON.stringify(drafts));
       alert('Draft saved successfully.');
     }
@@ -1278,7 +1288,12 @@
       const claim = claims.find(c => c.id === id);
       if (claim) {
         document.getElementById('editClaimId').value = claim.id;
-        document.getElementById('remClass').value = claim.className;
+        
+        // Check matching stream checkboxes
+        document.querySelectorAll('input[name="remClassStream"]').forEach(cb => {
+          cb.checked = claim.className.includes(cb.value);
+        });
+
         document.getElementById('remSubject').value = claim.subject;
         document.getElementById('remDayType').value = claim.dayType;
         document.getElementById('remDate').value = claim.date;
@@ -1329,7 +1344,7 @@
       let startY = 58;
       doc.setFont("helvetica", "bold");
       doc.text("Date", 20, startY);
-      doc.text("Class Stream", 50, startY);
+      doc.text("Class Streams", 50, startY);
       doc.text("Subject", 85, startY);
       doc.text("Occurrence & Details", 115, startY);
       doc.text("Amount", 170, startY);
@@ -1596,12 +1611,12 @@
     }
 
     function exportClaimsCSV() {
-      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const claims = JSON.parse(localStorage.getItem('remedial claims')) || [];
       if (!claims.length) {
         alert('No data available to export.');
         return;
       }
-      let csv = 'Teacher,Date,Class Stream,Subject,Occurrence,Details,Amount,Status\n';
+      let csv = 'Teacher,Date,Class Streams,Subject,Occurrence,Details,Amount,Status\n';
       claims.forEach(c => {
         const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
         csv += `"${c.teacherName}","${c.date}","${c.className}","${c.subject}","${c.dayType}","${c.details}","${amt}","${c.status}"\n`;
