@@ -3,15 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bishop Lawi Imathiu School Portal</title>
+    <title>Bishop Lawi Imathiu School - Integrated Digital Portal</title>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF Library for PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase SDKs (Compat Version for Quick Web Integration) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --primary: #1b4332;
             --primary-dark: #081c15;
             --accent: #2d6a4f;
+            --light-green: #52b788;
             --bg-color: #d8f3dc;
             --card-bg: #ffffff;
             --text-main: #1b1b1b;
@@ -26,6 +36,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
+        /* HEADER & NAVBAR */
         header {
             height: var(--header-height);
             background-color: var(--primary);
@@ -41,17 +52,15 @@
         }
 
         .logo-area { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-area i { font-size: 1.75rem; color: #95d5b2; }
-        .logo-area h1 { font-size: 1.25rem; font-weight: 700; }
+        .logo-area i { font-size: 1.8rem; color: #95d5b2; }
+        .logo-area h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; }
 
-        .header-controls { display: flex; align-items: center; gap: 1rem; }
-        
-        .nav-links { display: flex; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .nav-link-btn {
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             color: white;
-            padding: 0.4rem 0.8rem;
+            padding: 0.45rem 0.85rem;
             border-radius: var(--radius);
             cursor: pointer;
             font-size: 0.85rem;
@@ -64,29 +73,64 @@
         }
         .nav-link-btn:hover, .nav-link-btn.active { background-color: var(--accent); border-color: var(--accent); }
 
-        .view-section { display: none; flex: 1; }
-        .view-section.active { display: flex; flex: 1; }
+        /* VIEW SECTIONS */
+        .view-section { display: none; flex: 1; width: 100%; }
+        .view-section.active { display: flex; flex-direction: column; flex: 1; }
 
-        /* Home View */
-        #homeView { flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1rem; text-align: center; }
-        .hero-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 3rem;
+        /* PUBLIC LANDING VIEW */
+        #publicView { padding: 2rem 1rem; align-items: center; text-align: center; }
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 3.5rem 2rem;
             border-radius: var(--radius);
-            max-width: 700px;
+            max-width: 1000px;
             width: 100%;
-            box-shadow: 0 10px 25px -5px rgba(27, 67, 50, 0.15);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-        .hero-card h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: var(--primary); }
-        .hero-card p { color: #4b5563; margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; }
+        .hero-banner h2 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .hero-banner p { font-size: 1.05rem; opacity: 0.9; max-width: 750px; margin: 0 auto 2rem; line-height: 1.6; }
 
-        /* Buttons & Forms */
+        .public-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; width: 100%; }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius); text-align: left; }
+        .info-card h3 { color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        /* PORTAL SIDEBAR & LAYOUT */
+        .portal-layout { display: flex; flex: 1; width: 100%; min-height: calc(100vh - var(--header-height)); }
+        aside {
+            width: var(--sidebar-width);
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            gap: 0.4rem;
+        }
+        .sidebar-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 1.2rem 0 0.4rem 0.5rem; font-weight: 700; }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 0.9rem;
+            border-radius: var(--radius);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .sidebar-link:hover, .sidebar-link.active { background-color: var(--primary); color: white; }
+
+        main { flex: 1; padding: 2rem; overflow-y: auto; background: #eef9f0; }
+
+        /* BUTTONS & FORMS */
         .btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.7rem 1.4rem;
             border-radius: var(--radius);
             font-weight: 600;
             cursor: pointer;
@@ -96,19 +140,18 @@
             justify-content: center;
             gap: 0.5rem;
             text-decoration: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .btn:hover { background-color: var(--primary-dark); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
         .btn-outline:hover { background-color: var(--primary); color: white; }
-        .btn-danger { background-color: #dc3545; }
-        .btn-danger:hover { background-color: #bd2130; }
+        .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
 
-        .form-group { margin-bottom: 1.25rem; text-align: left; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--primary); }
+        .form-group { margin-bottom: 1.1rem; text-align: left; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--primary); }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 0.9rem;
             border: 1px solid var(--border);
             border-radius: var(--radius);
             background: #ffffff;
@@ -116,54 +159,38 @@
             font-size: 0.9rem;
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
 
-        /* Portal Layouts */
-        .portal-layout { display: flex; flex: 1; width: 100%; }
-        aside {
-            width: var(--sidebar-width);
-            background-color: var(--card-bg);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-            gap: 0.5rem;
-        }
-        .sidebar-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 1rem 0 0.5rem 0.75rem; font-weight: 700; }
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius);
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .sidebar-link:hover, .sidebar-link.active { background-color: var(--primary); color: white; }
+        /* CARDS & STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03); }
+        .stat-card h3 { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 0.4rem; }
+        .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
 
-        main { flex: 1; padding: 2rem; overflow-y: auto; max-height: calc(100vh - var(--header-height)); }
-        
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius); box-shadow: 0 4px 6px -1px rgba(27,67,50,0.05); }
-        .stat-card h3 { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.5rem; }
-        .stat-card .value { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03); }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(27,67,50,0.05); }
-        h2 { color: var(--primary); }
-
-        /* Tables */
+        /* TABLES */
         .table-container { width: 100%; overflow-x: auto; margin-top: 1rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th, td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+        th, td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--border); }
         th { font-weight: 600; color: var(--text-muted); background-color: #f1fbe9; }
 
-        .badge { padding: 0.25rem 0.65rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .badge { padding: 0.25rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .badge-success { background: #d8f3dc; color: #1b4332; border: 1px solid #52b788; }
         .badge-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+        .firebase-status-bar {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 0.4rem 2rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-muted);
+        }
+        .status-dot { height: 9px; width: 9px; background-color: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .status-dot.offline { background-color: #ffc107; }
     </style>
 </head>
 <body>
@@ -171,26 +198,49 @@
   <!-- Top Navigation Header -->
   <header>
     <div class="logo-area">
-      <i class="fas fa-graduation-cap"></i>
-      <h1>Bishop Lawi Imathiu School Portal</h1>
+      <i class="fas fa-school"></i>
+      <h1>Bishop Lawi Imathiu School</h1>
     </div>
-    <div class="header-controls">
-      <div class="nav-links">
-        <button class="nav-link-btn active" id="navHome" onclick="switchMainView('homeView', this)"><i class="fas fa-home"></i> Home</button>
-        <button class="nav-link-btn" id="navStaff" onclick="switchMainView('staffPortalView', this)"><i class="fas fa-chalkboard-teacher"></i> Staff Portal</button>
-        <button class="nav-link-btn" id="navAdmin" onclick="switchMainView('adminPortalView', this)"><i class="fas fa-user-shield"></i> Admin Portal</button>
-      </div>
+    <div class="nav-links">
+      <button class="nav-link-btn active" id="navPublic" onclick="switchMainView('publicView', this)"><i class="fas fa-globe"></i> Website</button>
+      <button class="nav-link-btn" id="navStaff" onclick="switchMainView('staffPortalView', this)"><i class="fas fa-chalkboard-teacher"></i> Staff Portal</button>
+      <button class="nav-link-btn" id="navStudent" onclick="switchMainView('studentPortalView', this)"><i class="fas fa-user-graduate"></i> Student Portal</button>
+      <button class="nav-link-btn" id="navAdmin" onclick="switchMainView('adminPortalView', this)"><i class="fas fa-user-shield"></i> Admin Portal</button>
     </div>
   </header>
 
-  <!-- HOME LANDING VIEW -->
-  <div id="homeView" class="view-section active">
-    <div class="hero-card">
-      <h2>Excellence, Integrity & Service</h2>
-      <p>Welcome to the unified digital portal for Bishop Lawi Imathiu School. Seamlessly navigate between the Staff workspace to manage remedial claims and CAT uploads, or access the Administrator dashboard for institutional approvals and reporting.</p>
-      <div style="display: flex; gap: 1rem; justify-content: center;">
-        <button class="btn" onclick="switchMainView('staffPortalView', document.getElementById('navStaff'))"><i class="fas fa-chalkboard-teacher"></i> Open Staff Portal</button>
-        <button class="btn btn-outline" onclick="switchMainView('adminPortalView', document.getElementById('navAdmin'))"><i class="fas fa-user-shield"></i> Open Admin Portal</button>
+  <!-- Database Connection Indicator -->
+  <div class="firebase-status-bar">
+    <div>
+      <span class="status-dot" id="dbDot"></span>
+      <span id="dbStatusText">Database Engine: Ready (Local In-Memory Mode / Firebase Sync Configured)</span>
+    </div>
+    <span id="liveClock"></span>
+  </div>
+
+  <!-- PUBLIC WEBSITE LANDING VIEW -->
+  <div id="publicView" class="view-section active">
+    <div class="hero-banner">
+      <h2>Excellence, Integrity & Innovation</h2>
+      <p>Welcome to the official digital portal of Bishop Lawi Imathiu School. Empowering students and faculty with modern learning tools, streamlined administration, and transparent academic tracking.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" onclick="switchMainView('staffPortalView', document.getElementById('navStaff'))"><i class="fas fa-chalkboard-teacher"></i> Access Staff Workspace</button>
+        <button class="btn btn-outline" style="color: white; border-color: white;" onclick="switchMainView('studentPortalView', document.getElementById('navStudent'))"><i class="fas fa-user-graduate"></i> Student Portal</button>
+      </div>
+    </div>
+
+    <div class="public-grid">
+      <div class="info-card">
+        <h3><i class="fas fa-bullhorn"></i> Latest Notice</h3>
+        <p id="publicLatestNotice">Loading latest school updates...</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-calendar-alt"></i> Upcoming Calendar</h3>
+        <p>Mid-Term Examinations and Assessment Submissions scheduled for this term.</p>
+      </div>
+      <div class="info-card">
+        <h3><i class="fas fa-graduation-cap"></i> Academics</h3>
+        <p>Providing high-quality STEM education, technical courses, and CBC curriculum resources.</p>
       </div>
     </div>
   </div>
@@ -198,48 +248,48 @@
   <!-- STAFF PORTAL VIEW -->
   <div id="staffPortalView" class="view-section portal-layout">
     <aside>
-      <div style="padding: 0.5rem 0.75rem; margin-bottom: 1rem;">
-        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Logged in as:</span>
+      <div style="padding: 0.5rem 0.5rem 1rem;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Active Mode:</span>
         <strong style="font-size: 0.95rem;">Teacher Workspace</strong>
       </div>
       
-      <span class="sidebar-heading">Teaching Workspace</span>
-      <a class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)"><i class="fas fa-home"></i> Overview Dashboard</a>
-      <a class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)"><i class="fas fa-file-invoice-dollar"></i> Submit Remedial Claim</a>
-      <a class="sidebar-link" onclick="switchStaffTab('staffCatsTab', this)"><i class="fas fa-file-upload"></i> Upload C.A.T Papers</a>
+      <span class="sidebar-heading">Academic Operations</span>
+      <a class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)"><i class="fas fa-chart-line"></i> Dashboard Overview</a>
+      <a class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)"><i class="fas fa-file-invoice-dollar"></i> Remedial Claims</a>
+      <a class="sidebar-link" onclick="switchStaffTab('staffCatsTab', this)"><i class="fas fa-upload"></i> Upload C.A.T Papers</a>
       <a class="sidebar-link" onclick="switchStaffTab('staffScheduleTab', this)"><i class="fas fa-video"></i> Live Classes & Schedule</a>
       
-      <span class="sidebar-heading">Finance & Letters</span>
-      <a class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)"><i class="fas fa-file-pdf"></i> Bursar Summary & Letter</a>
+      <span class="sidebar-heading">Reports & Financials</span>
+      <a class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)"><i class="fas fa-file-pdf"></i> Bursar Summary Letter</a>
     </aside>
 
     <main>
-      <!-- Staff Dashboard Tab -->
+      <!-- Staff Dashboard -->
       <div id="staffDashboardTab" class="staff-tab-content">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Staff Member Dashboard</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Real-time overview of your submitted remedial claims and uploaded assessments.</p>
+        <h2 style="margin-bottom: 0.4rem;">Staff Member Dashboard</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Track your remedial claim approvals, uploaded continuous assessment tests, and active broadcasts.</p>
         
         <div class="stats-grid">
           <div class="stat-card">
-            <h3>Total Claims Submitted</h3>
+            <h3>Total Claims Filed</h3>
             <div class="value" id="statStaffClaimsCount">0</div>
           </div>
           <div class="stat-card">
-            <h3>Approved Payout Claims</h3>
+            <h3>Approved Claims</h3>
             <div class="value" id="statStaffApprovedCount">0</div>
           </div>
           <div class="stat-card">
-            <h3>Uploaded C.A.T Papers</h3>
+            <h3>CAT Papers Published</h3>
             <div class="value" id="statStaffCatsCount">0</div>
           </div>
         </div>
       </div>
 
-      <!-- Submit Remedial Claim Tab -->
+      <!-- Remedial Claim Form & Table -->
       <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Teaching Claim Form</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">File weekday morning/evening or weekend remedial sessions for administrative review.</p>
+          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem;">Remedial Session Claim Form</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Record early morning, evening, or weekend extra teaching hours for payroll verification.</p>
           
           <form id="remedialForm" onsubmit="handleRemedialSubmit(event)">
             <div class="form-grid">
@@ -252,11 +302,11 @@
                 <input type="date" id="remDate" required>
               </div>
               <div class="form-group">
-                <label>Subject</label>
+                <label>Subject taught</label>
                 <input type="text" id="remSubject" required placeholder="e.g., Physics / Mathematics">
               </div>
               <div class="form-group">
-                <label>Session Type</label>
+                <label>Session Category</label>
                 <select id="remType">
                   <option value="Morning Remedial">Morning Remedial</option>
                   <option value="Evening Remedial">Evening Remedial</option>
@@ -265,15 +315,15 @@
               </div>
               <div class="form-group">
                 <label>Hours Taught</label>
-                <input type="number" id="remHours" min="1" max="6" value="2" required>
+                <input type="number" id="remHours" min="1" max="8" value="2" required>
               </div>
             </div>
-            <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-paper-plane"></i> Submit Claim for Approval</button>
+            <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Submit Claim to Database</button>
           </form>
         </div>
 
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Your Submitted Claims History</h2>
+          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem;">Submitted Claims History</h2>
           <div class="table-container">
             <table>
               <thead>
@@ -287,129 +337,127 @@
                 </tr>
               </thead>
               <tbody id="staffClaimTableBody">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims submitted yet.</td></tr>
+                <tr><td colspan="6" style="text-align: center;">No claims records found.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Upload C.A.T Papers Tab -->
+      <!-- CAT Upload Tab -->
       <div id="staffCatsTab" class="staff-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Upload C.A.T Assessment Papers</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Share test documents or marking schemes with students and administration.</p>
+          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem;">Upload C.A.T Assessment Papers</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Publish revision materials, test papers, or marking guides for students.</p>
           
           <form id="catUploadForm" onsubmit="handleCatSubmit(event)">
             <div class="form-grid">
               <div class="form-group">
                 <label>Assessment Title</label>
-                <input type="text" id="catTitle" required placeholder="e.g., Form 4 Physics CAT 1">
+                <input type="text" id="catTitle" required placeholder="e.g., Form 4 Physics Paper 1 CAT">
               </div>
               <div class="form-group">
-                <label>Target Class</label>
-                <input type="text" id="catClass" required placeholder="e.g., Form 4 Science">
+                <label>Target Class / Grade</label>
+                <input type="text" id="catClass" required placeholder="e.g., Form 4 Science / Grade 10">
               </div>
               <div class="form-group" style="grid-column: span 2;">
-                <label>Document File/Link Reference</label>
-                <input type="text" id="catFile" required placeholder="Paste file name or link resource...">
+                <label>Resource / Document Link</label>
+                <input type="text" id="catFile" required placeholder="Paste Google Drive or Cloud Resource URL...">
               </div>
             </div>
-            <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-upload"></i> Upload Paper</button>
+            <button type="submit" class="btn"><i class="fas fa-cloud-upload-alt"></i> Publish CAT Paper</button>
           </form>
         </div>
 
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Uploaded Assessments Registry</h2>
+          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem;">Assessment Repository</h2>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
                   <th>Title</th>
                   <th>Class</th>
-                  <th>Reference</th>
+                  <th>Resource Reference</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody id="staffCatTableBody">
-                <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No assessment papers uploaded yet.</td></tr>
+                <tr><td colspan="4" style="text-align: center;">No papers uploaded yet.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Live Classes & Schedule Tab -->
+      <!-- Live Classes & Timetable -->
       <div id="staffScheduleTab" class="staff-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Live Classes & Timetable Coordination</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Broadcast daily lesson links or review the school master schedule.</p>
+          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem;">Publish Broadcast Schedule</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Provide online Google Meet or virtual class links for remote sessions.</p>
           
           <form id="scheduleForm" onsubmit="handleScheduleSubmit(event)">
             <div class="form-grid">
               <div class="form-group">
-                <label>Day / Time Slot</label>
-                <input type="text" id="schTime" required placeholder="e.g., Monday 08:00 AM">
+                <label>Time & Day Slot</label>
+                <input type="text" id="schTime" required placeholder="e.g., Mon 08:00 AM - 09:20 AM">
               </div>
               <div class="form-group">
-                <label>Session / Topic</label>
-                <input type="text" id="schTopic" required placeholder="e.g., Quantum Mechanics & Perovskites">
+                <label>Topic / Unit Title</label>
+                <input type="text" id="schTopic" required placeholder="e.g., Solid State Physics & Semiconductors">
               </div>
               <div class="form-group" style="grid-column: span 2;">
-                <label>Broadcast / Meeting Link</label>
-                <input type="text" id="schLink" required placeholder="https://meet.google.com/...">
+                <label>Virtual Room URL</label>
+                <input type="text" id="schLink" required placeholder="https://meet.google.com/xyz-abc-def">
               </div>
             </div>
-            <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-video"></i> Publish Live Session</button>
+            <button type="submit" class="btn"><i class="fas fa-video"></i> Broadcast Schedule</button>
           </form>
         </div>
 
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Active Broadcast Schedule</h2>
+          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem;">Scheduled Virtual Classes</h2>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
                   <th>Time Slot</th>
                   <th>Topic</th>
-                  <th>Link</th>
+                  <th>Broadcast Link</th>
                 </tr>
               </thead>
               <tbody id="scheduleTableBody">
-                <tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No sessions scheduled.</td></tr>
+                <tr><td colspan="3" style="text-align: center;">No active live sessions.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Bursar Summary & Letter Tab -->
+      <!-- Bursar PDF Letter Generator -->
       <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Bursar Claim Summary & Formal Letter</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Generate an official institutional payment requisition statement for approved claims.</p>
+          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem;">Bursar Requisition Statement</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Generate a formatted, print-ready PDF document for verified remedial claims.</p>
           
-          <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-            <button class="btn" onclick="generatePDFLetter()"><i class="fas fa-file-pdf"></i> Download Official Letter (PDF)</button>
-          </div>
+          <button class="btn" onclick="generatePDFLetter()" style="margin-bottom: 1.5rem;"><i class="fas fa-file-pdf"></i> Download Official Statement (PDF)</button>
 
-          <div id="bursarLetterPreview" style="background: #f9f9f9; border: 1px solid var(--border); padding: 2rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.6;">
+          <div id="bursarLetterPreview" style="background: #ffffff; border: 1px solid var(--border); padding: 2rem; border-radius: var(--radius); font-size: 0.9rem; line-height: 1.6;">
             <div style="text-align: center; margin-bottom: 1.5rem;">
-              <h3 style="color: var(--primary);">BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
-              <p style="font-size: 0.8rem; color: #666;">P.O. Box Private Bag, Meru | Office of the Bursar</p>
-              <hr style="border: 0; border-top: 1px solid var(--border); margin: 1rem 0;">
+              <h3 style="color: var(--primary); font-size: 1.3rem;">BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
+              <p style="font-size: 0.8rem; color: #555;">P.O. Box Private Bag, Meru, Kenya | Finance & Payroll Dept</p>
+              <hr style="border: 0; border-top: 2px solid var(--primary); margin: 1rem 0;">
             </div>
             <p><strong>Date:</strong> <span id="letterDate"></span></p>
-            <p><strong>To:</strong> The Bursar / Finance Department</p>
-            <p style="margin-top: 1rem;"><strong>RE: REQUISITION FOR APPROVED REMEDIAL TEACHING PAYOUT</strong></p>
-            <p style="margin-top: 1rem;">This is to officially request disbursement for verified remedial sessions conducted and approved by administration. Below is the summary of approved hours:</p>
+            <p><strong>To:</strong> Office of the School Bursar</p>
+            <p style="margin-top: 1rem;"><strong>SUBJECT: REQUISITION STATEMENT FOR APPROVED REMEDIAL COMPENSATION</strong></p>
+            <p style="margin-top: 1rem;">Please find attached the schedule of verified remedial and extra teaching sessions conducted and approved by school administration:</p>
             
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Subject</th>
+                    <th>Subject & Session</th>
                     <th>Hours</th>
                     <th>Status</th>
                   </tr>
@@ -420,9 +468,42 @@
               </table>
             </div>
             
-            <p style="margin-top: 1.5rem;">Kindly process payment accordingly.</p>
-            <p style="margin-top: 2rem;">Authorized Signature: ___________________________</p>
+            <p style="margin-top: 1.5rem;">Verified by Administration: ___________________________</p>
           </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- STUDENT PORTAL VIEW -->
+  <div id="studentPortalView" class="view-section portal-layout">
+    <aside>
+      <div style="padding: 0.5rem 0.5rem 1rem;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Active Mode:</span>
+        <strong style="font-size: 0.95rem;">Student Learning Zone</strong>
+      </div>
+      <a class="sidebar-link active"><i class="fas fa-book-open"></i> Published CAT Papers</a>
+      <a class="sidebar-link"><i class="fas fa-calendar-check"></i> Class Timetable</a>
+    </aside>
+
+    <main>
+      <div class="card">
+        <h2>Available Learning Resources & CATs</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Access papers and live class broadcasts uploaded by your teachers.</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Class / Target Grade</th>
+                <th>Resource Link</th>
+              </tr>
+            </thead>
+            <tbody id="studentCatTableBody">
+              <tr><td colspan="3" style="text-align: center;">No materials published yet.</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </main>
@@ -431,42 +512,42 @@
   <!-- ADMIN PORTAL VIEW -->
   <div id="adminPortalView" class="view-section portal-layout">
     <aside>
-      <div style="padding: 0.5rem 0.75rem; margin-bottom: 1rem;">
-        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Portal Role:</span>
-        <strong style="font-size: 0.95rem;">Administrator</strong>
+      <div style="padding: 0.5rem 0.5rem 1rem;">
+        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Active Role:</span>
+        <strong style="font-size: 0.95rem;">School Administrator</strong>
       </div>
       
-      <span class="sidebar-heading">Admin Controls</span>
-      <a class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)"><i class="fas fa-home"></i> Admin Dashboard</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)"><i class="fas fa-check-circle"></i> Approve Claims</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)"><i class="fas fa-file-excel"></i> Teacher Payment Sheet</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminEventsTab', this)"><i class="fas fa-calendar-alt"></i> Weekly Event Updates</a>
+      <span class="sidebar-heading">Management Tools</span>
+      <a class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)"><i class="fas fa-chart-pie"></i> Executive Overview</a>
+      <a class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)"><i class="fas fa-check-double"></i> Verify & Approve Claims</a>
+      <a class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)"><i class="fas fa-calculator"></i> Teacher Payroll Ledger</a>
+      <a class="sidebar-link" onclick="switchAdminTab('adminEventsTab', this)"><i class="fas fa-bullhorn"></i> Noticeboard Manager</a>
     </aside>
 
     <main>
-      <!-- Admin Dashboard Tab -->
+      <!-- Admin Dashboard -->
       <div id="adminDashboardTab" class="admin-tab-content">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Administrator Control Dashboard</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Overview of pending teacher claims, payroll summaries, and school calendars.</p>
+        <h2>Administrator Overview</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Review pending teacher requisitions, verify payroll totals, and broadcast announcements.</p>
         
         <div class="stats-grid">
           <div class="stat-card">
-            <h3>Pending Claim Requests</h3>
+            <h3>Pending Claim Verifications</h3>
             <div class="value" id="statAdminPendingCount">0</div>
           </div>
           <div class="stat-card">
-            <h3>Total Verified Payouts</h3>
+            <h3>Total Approved Claims</h3>
             <div class="value" id="statAdminApprovedCount">0</div>
           </div>
         </div>
       </div>
 
-      <!-- Approve Claims Tab -->
+      <!-- Approve Claims -->
       <div id="adminClaimsTab" class="admin-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claims Verification & Approval</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Review submissions and toggle approval status for teacher payroll.</p>
-          
+          <h2>Remedial Requisition Approvals</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Verify submitted hours and approve payout authorizations for staff.</p>
+
           <div class="table-container">
             <table>
               <thead>
@@ -480,70 +561,68 @@
                 </tr>
               </thead>
               <tbody id="adminClaimTableBody">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims pending verification.</td></tr>
+                <tr><td colspan="6" style="text-align: center;">No pending claims available.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Teacher Payment Sheet Tab -->
+      <!-- Payroll Ledger -->
       <div id="adminSheetTab" class="admin-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Teacher Payment Sheet Master Ledger</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Comprehensive summary of all approved hours and financial calculations.</p>
-          
+          <h2>Teacher Remedial Payroll Ledger</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Calculated total compensations based on standard rate (Ksh 500/hr).</p>
+
           <div class="table-container">
             <table>
               <thead>
                 <tr>
-                  <th>Teacher</th>
+                  <th>Teacher Name</th>
                   <th>Total Approved Hours</th>
-                  <th>Rate / Hour</th>
-                  <th>Total Payout (Ksh)</th>
+                  <th>Standard Rate</th>
+                  <th>Calculated Payout (Ksh)</th>
                 </tr>
               </thead>
               <tbody id="adminSheetTableBody">
-                <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No approved payroll data available.</td></tr>
+                <tr><td colspan="4" style="text-align: center;">No data available.</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Weekly Event Updates Tab -->
+      <!-- Noticeboard Manager -->
       <div id="adminEventsTab" class="admin-tab-content" style="display: none;">
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">School Noticeboard & Weekly Events</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Post urgent updates or schedules for staff visibility.</p>
-          
+          <h2>Post School Announcement</h2>
           <form id="eventForm" onsubmit="handleEventSubmit(event)">
             <div class="form-grid">
               <div class="form-group">
-                <label>Event Title</label>
-                <input type="text" id="evTitle" required placeholder="e.g., Form 4 Parent-Teacher Meeting">
+                <label>Announcement Headline</label>
+                <input type="text" id="evTitle" required placeholder="e.g., Staff Meeting & CBC Review Session">
               </div>
               <div class="form-group">
-                <label>Date</label>
+                <label>Effective Date</label>
                 <input type="date" id="evDate" required>
               </div>
             </div>
-            <button type="submit" class="btn" style="margin-top: 1rem;"><i class="fas fa-bullhorn"></i> Broadcast Event</button>
+            <button type="submit" class="btn"><i class="fas fa-bullhorn"></i> Broadcast Notice</button>
           </form>
         </div>
 
         <div class="card">
-          <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Active Noticeboard Announcements</h2>
+          <h2>Active Announcements</h2>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
-                  <th>Event Title</th>
+                  <th>Headline</th>
                   <th>Date</th>
                 </tr>
               </thead>
               <tbody id="eventTableBody">
-                <tr><td colspan="2" style="text-align: center; color: var(--text-muted);">No events posted.</td></tr>
+                <tr><td colspan="2" style="text-align: center;">No active notices.</td></tr>
               </tbody>
             </table>
           </div>
@@ -552,54 +631,85 @@
     </main>
   </div>
 
+  <!-- JavaScript Logic & Firebase Integration Engine -->
   <script>
-    // In-memory data store for the unified portal
+    // -------------------------------------------------------------
+    // OPTIONAL: FIREBASE CONFIGURATION REPOSITORY
+    // Replace the keys below with your exact Firebase Web Console keys!
+    // -------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY_HERE",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    let db = null;
+    let isFirebaseActive = false;
+
+    // Initialize Firebase if keys are configured
+    try {
+      if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        isFirebaseActive = true;
+        document.getElementById('dbDot').classList.remove('offline');
+        document.getElementById('dbStatusText').innerText = "Database Engine: Connected to Firebase Firestore Live Cloud";
+      } else {
+        document.getElementById('dbDot').classList.add('offline');
+        document.getElementById('dbStatusText').innerText = "Database Engine: Running in Local Browser Mode (Connect Firebase config to enable sync)";
+      }
+    } catch (err) {
+      console.warn("Firebase initialization skipped or failed, using local fallback state.", err);
+    }
+
+    // Default In-Memory Application State Data
     let appData = {
       claims: [
         { id: 1, teacher: "Teacher Bett", date: "2026-08-05", subject: "Physics", type: "Morning Remedial", hours: 2, status: "Pending" },
         { id: 2, teacher: "Teacher Bett", date: "2026-08-06", subject: "Mathematics", type: "Evening Remedial", hours: 3, status: "Approved" }
       ],
       cats: [
-        { id: 1, title: "Form 3 Physics CAT 1", class: "Form 3 Science", file: "Phy_CAT1.pdf" }
+        { id: 1, title: "Form 4 Physics CAT 1", class: "Form 4 Science", file: "https://drive.google.com/sample_paper.pdf" }
       ],
       schedule: [
-        { id: 1, time: "Monday 08:00 AM", topic: "Quantum Mechanics", link: "https://meet.google.com/abc-xyz" }
+        { id: 1, time: "Monday 08:00 AM - 09:00 AM", topic: "Perovskite Oxide Structures & Physics", link: "https://meet.google.com/abc-defg-hij" }
       ],
       events: [
-        { id: 1, title: "Mid-Term Staff Briefing", date: "2026-08-10" }
+        { id: 1, title: "Mid-Term Staff Briefing & Academic Review", date: "2026-08-10" }
       ]
     };
 
-    // Main View Controller Switcher
-    function switchMainView(viewId, element) {
+    // Navigation Switcher Functions
+    function switchMainView(viewId, btnEl) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
 
       document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.remove('active'));
-      if (element) element.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
     }
 
-    // Staff Sidebar Tab Switcher
-    function switchStaffTab(tabId, element) {
+    function switchStaffTab(tabId, linkEl) {
       document.querySelectorAll('.staff-tab-content').forEach(el => el.style.display = 'none');
       document.getElementById(tabId).style.display = 'block';
 
       document.querySelectorAll('#staffPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
-      if (element) element.classList.add('active');
+      if (linkEl) linkEl.classList.add('active');
       renderAll();
     }
 
-    // Admin Sidebar Tab Switcher
-    function switchAdminTab(tabId, element) {
+    function switchAdminTab(tabId, linkEl) {
       document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
       document.getElementById(tabId).style.display = 'block';
 
       document.querySelectorAll('#adminPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
-      if (element) element.classList.add('active');
+      if (linkEl) linkEl.classList.add('active');
       renderAll();
     }
 
-    // Form Handlers
+    // Action Handlers for Submission Forms
     function handleRemedialSubmit(e) {
       e.preventDefault();
       const newClaim = {
@@ -611,10 +721,13 @@
         hours: parseInt(document.getElementById('remHours').value),
         status: "Pending"
       };
+
       appData.claims.push(newClaim);
+      if (isFirebaseActive) db.collection('claims').add(newClaim);
+
       document.getElementById('remedialForm').reset();
       document.getElementById('remDate').value = new Date().toISOString().split('T')[0];
-      alert('Remedial claim successfully filed for approval.');
+      alert('Remedial teaching claim filed successfully.');
       renderAll();
     }
 
@@ -626,9 +739,12 @@
         class: document.getElementById('catClass').value,
         file: document.getElementById('catFile').value
       };
+
       appData.cats.push(newCat);
+      if (isFirebaseActive) db.collection('cats').add(newCat);
+
       document.getElementById('catUploadForm').reset();
-      alert('C.A.T paper uploaded successfully.');
+      alert('C.A.T assessment paper published successfully.');
       renderAll();
     }
 
@@ -640,9 +756,12 @@
         topic: document.getElementById('schTopic').value,
         link: document.getElementById('schLink').value
       };
+
       appData.schedule.push(newSch);
+      if (isFirebaseActive) db.collection('schedule').add(newSch);
+
       document.getElementById('scheduleForm').reset();
-      alert('Live session broadcast link published.');
+      alert('Virtual class schedule broadcasted.');
       renderAll();
     }
 
@@ -653,9 +772,12 @@
         title: document.getElementById('evTitle').value,
         date: document.getElementById('evDate').value
       };
+
       appData.events.push(newEv);
+      if (isFirebaseActive) db.collection('events').add(newEv);
+
       document.getElementById('eventForm').reset();
-      alert('Noticeboard event broadcasted successfully.');
+      alert('Notice posted to school announcements.');
       renderAll();
     }
 
@@ -667,45 +789,42 @@
       }
     }
 
-    // Render Data across Tables and Stats
+    // UI Rendering & Synchronization Engine
     function renderAll() {
-      // Staff Claims Table & Stats
+      // 1. Render Claims
       const staffClaimBody = document.getElementById('staffClaimTableBody');
       const adminClaimBody = document.getElementById('adminClaimTableBody');
       const letterTableBody = document.getElementById('letterTableBody');
       
-      let staffClaimsHTML = '';
-      let adminClaimsHTML = '';
-      let letterHTML = '';
-
-      let staffTotal = appData.claims.length;
-      let staffApproved = appData.claims.filter(c => c.status === 'Approved').length;
-      let adminPending = appData.claims.filter(c => c.status === 'Pending').length;
+      let staffHTML = '', adminHTML = '', letterHTML = '';
+      let pendingCount = 0, approvedCount = 0;
 
       if (appData.claims.length === 0) {
-        staffClaimBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims submitted yet.</td></tr>`;
-        adminClaimBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No claims pending verification.</td></tr>`;
+        staffClaimBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No claims records found.</td></tr>`;
+        adminClaimBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">No pending claims available.</td></tr>`;
         letterTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No approved claims available.</td></tr>`;
       } else {
         appData.claims.forEach(c => {
-          const badgeClass = c.status === 'Approved' ? 'badge-success' : 'badge-warning';
-          
-          staffClaimsHTML += `<tr>
+          const badge = c.status === 'Approved' ? 'badge-success' : 'badge-warning';
+          if (c.status === 'Pending') pendingCount++;
+          if (c.status === 'Approved') approvedCount++;
+
+          staffHTML += `<tr>
             <td>${c.date}</td>
             <td>${c.teacher}</td>
             <td>${c.subject}</td>
             <td>${c.type}</td>
             <td>${c.hours} hrs</td>
-            <td><span class="badge ${badgeClass}">${c.status}</span></td>
+            <td><span class="badge ${badge}">${c.status}</span></td>
           </tr>`;
 
-          adminClaimsHTML += `<tr>
+          adminHTML += `<tr>
             <td>${c.date}</td>
             <td>${c.teacher}</td>
             <td>${c.subject}</td>
             <td>${c.hours} hrs</td>
-            <td><span class="badge ${badgeClass}">${c.status}</span></td>
-            <td><button class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="toggleClaimStatus(${c.id})">Toggle Status</button></td>
+            <td><span class="badge ${badge}">${c.status}</span></td>
+            <td><button class="btn btn-outline btn-sm" onclick="toggleClaimStatus(${c.id})">Toggle Approval Status</button></td>
           </tr>`;
 
           if (c.status === 'Approved') {
@@ -718,41 +837,54 @@
           }
         });
 
-        staffClaimBody.innerHTML = staffClaimsHTML;
-        adminClaimBody.innerHTML = adminClaimsHTML;
+        staffClaimBody.innerHTML = staffHTML;
+        adminClaimBody.innerHTML = adminHTML;
         letterTableBody.innerHTML = letterHTML || `<tr><td colspan="4" style="text-align: center;">No approved claims available.</td></tr>`;
       }
 
-      // CAT Papers Render
+      // 2. Render CAT Papers (Staff & Student View)
       const staffCatBody = document.getElementById('staffCatTableBody');
+      const studentCatBody = document.getElementById('studentCatTableBody');
       let catHTML = '';
+
       if (appData.cats.length === 0) {
-        staffCatBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No assessment papers uploaded yet.</td></tr>`;
+        staffCatBody.innerHTML = `<tr><td colspan="4" style="text-align: center;">No papers uploaded yet.</td></tr>`;
+        studentCatBody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No materials published yet.</td></tr>`;
       } else {
         appData.cats.forEach(cat => {
           catHTML += `<tr>
             <td>${cat.title}</td>
             <td>${cat.class}</td>
-            <td>${cat.file}</td>
-            <td><a href="#" class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">View</a></td>
+            <td><a href="${cat.file}" target="_blank" style="color: var(--primary); font-weight:600;"><i class="fas fa-external-link-alt"></i> Open File</a></td>
+            <td><a href="${cat.file}" target="_blank" class="btn btn-sm">View Resource</a></td>
           </tr>`;
         });
         staffCatBody.innerHTML = catHTML;
+        
+        let studentHTML = '';
+        appData.cats.forEach(cat => {
+          studentHTML += `<tr>
+            <td>${cat.title}</td>
+            <td>${cat.class}</td>
+            <td><a href="${cat.file}" target="_blank" class="btn btn-sm"><i class="fas fa-download"></i> Download CAT Resource</a></td>
+          </tr>`;
+        });
+        studentCatBody.innerHTML = studentHTML;
       }
 
-      // Schedule Render
+      // 3. Render Schedules
       const schBody = document.getElementById('scheduleTableBody');
       let schHTML = '';
       appData.schedule.forEach(s => {
         schHTML += `<tr>
           <td>${s.time}</td>
           <td>${s.topic}</td>
-          <td><a href="${s.link}" target="_blank" style="color: var(--primary); font-weight: 600;"><i class="fas fa-video"></i> Join Link</a></td>
+          <td><a href="${s.link}" target="_blank" style="color: var(--primary); font-weight:600;"><i class="fas fa-video"></i> Join Broadcast</a></td>
         </tr>`;
       });
-      schBody.innerHTML = schHTML || `<tr><td colspan="3" style="text-align: center;">No sessions scheduled.</td></tr>`;
+      schBody.innerHTML = schHTML || `<tr><td colspan="3" style="text-align: center;">No active live sessions.</td></tr>`;
 
-      // Events Render
+      // 4. Render Announcements
       const evBody = document.getElementById('eventTableBody');
       let evHTML = '';
       appData.events.forEach(ev => {
@@ -761,39 +893,41 @@
           <td>${ev.date}</td>
         </tr>`;
       });
-      evBody.innerHTML = evHTML || `<tr><td colspan="2" style="text-align: center;">No events posted.</td></tr>`;
+      evBody.innerHTML = evHTML || `<tr><td colspan="2" style="text-align: center;">No active notices.</td></tr>`;
+      if (appData.events.length > 0) {
+        document.getElementById('publicLatestNotice').innerText = `${appData.events[appData.events.length - 1].title} (${appData.events[appData.events.length - 1].date})`;
+      }
 
-      // Admin Payment Sheet Ledger Calculation
+      // 5. Admin Ledger Calculations
       const sheetBody = document.getElementById('adminSheetTableBody');
-      let teacherSummary = {};
+      let teacherTotals = {};
       appData.claims.filter(c => c.status === 'Approved').forEach(c => {
-        if (!teacherSummary[c.teacher]) teacherSummary[c.teacher] = 0;
-        teacherSummary[c.teacher] += c.hours;
+        teacherTotals[c.teacher] = (teacherTotals[c.teacher] || 0) + c.hours;
       });
 
       let sheetHTML = '';
-      const hourlyRate = 500; // Ksh 500 per remedial hour standard
-      for (let t in teacherSummary) {
-        let totalHrs = teacherSummary[t];
-        let payout = totalHrs * hourlyRate;
+      const ratePerHour = 500;
+      for (let teacher in teacherTotals) {
+        let hrs = teacherTotals[teacher];
+        let payout = hrs * ratePerHour;
         sheetHTML += `<tr>
-          <td>${t}</td>
-          <td>${totalHrs} hrs</td>
-          <td>Ksh ${hourlyRate}</td>
+          <td>${teacher}</td>
+          <td>${hrs} hrs</td>
+          <td>Ksh ${ratePerHour}/hr</td>
           <td><strong>Ksh ${payout.toLocaleString()}</strong></td>
         </tr>`;
       }
-      sheetBody.innerHTML = sheetHTML || `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No approved payroll data available.</td></tr>`;
+      sheetBody.innerHTML = sheetHTML || `<tr><td colspan="4" style="text-align: center;">No verified payroll records available.</td></tr>`;
 
       // Update Dashboard Counters
-      document.getElementById('statStaffClaimsCount').innerText = staffTotal;
-      document.getElementById('statStaffApprovedCount').innerText = staffApproved;
+      document.getElementById('statStaffClaimsCount').innerText = appData.claims.length;
+      document.getElementById('statStaffApprovedCount').innerText = approvedCount;
       document.getElementById('statStaffCatsCount').innerText = appData.cats.length;
-      document.getElementById('statAdminPendingCount').innerText = adminPending;
-      document.getElementById('statAdminApprovedCount').innerText = staffApproved;
+      document.getElementById('statAdminPendingCount').innerText = pendingCount;
+      document.getElementById('statAdminApprovedCount').innerText = approvedCount;
     }
 
-    // PDF Generator using jsPDF
+    // jsPDF Requisition Letter Exporter
     function generatePDFLetter() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
@@ -804,23 +938,23 @@
       
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
-      doc.text("P.O. Box Private Bag, Meru | Office of Scholarships & Finance", 105, 26, { align: "center" });
+      doc.text("P.O. Box Private Bag, Meru, Kenya | Office of the Bursar & Payroll", 105, 26, { align: "center" });
       
       doc.line(20, 32, 190, 32);
 
       doc.text(`Date: ${document.getElementById('letterDate').innerText}`, 20, 42);
-      doc.text("To: The Bursar / Finance Department", 20, 50);
+      doc.text("To: The School Bursar / Finance Department", 20, 50);
       
       doc.setFont("helvetica", "bold");
-      doc.text("RE: REQUISITION FOR APPROVED REMEDIAL TEACHING PAYOUT", 20, 60);
+      doc.text("SUBJECT: REQUISITION STATEMENT FOR APPROVED REMEDIAL COMPENSATION", 20, 60);
       
       doc.setFont("helvetica", "normal");
-      doc.text("This document serves as the official approved requisition summary for remedial hours conducted.", 20, 70);
+      doc.text("This official document confirms verified remedial and extra teaching sessions conducted:", 20, 70);
 
-      let startY = 85;
+      let startY = 82;
       doc.setFont("helvetica", "bold");
       doc.text("Date", 20, startY);
-      doc.text("Subject & Type", 60, startY);
+      doc.text("Subject / Category", 60, startY);
       doc.text("Hours", 140, startY);
       doc.text("Status", 170, startY);
       doc.line(20, startY + 2, 190, startY + 2);
@@ -830,7 +964,7 @@
       
       let approvedList = appData.claims.filter(c => c.status === 'Approved');
       if(approvedList.length === 0) {
-        doc.text("No approved claims listed.", 20, startY);
+        doc.text("No approved claim records available.", 20, startY);
       } else {
         approvedList.forEach(c => {
           doc.text(c.date, 20, startY);
@@ -841,18 +975,23 @@
         });
       }
 
-      startY += 15;
-      doc.text("Authorized Signature: ___________________________", 20, startY);
+      startY += 20;
+      doc.text("Authorized Administrative Signature: ___________________________", 20, startY);
 
-      doc.save("Bursar_Remedial_Payout_Letter.pdf");
+      doc.save("Bursar_Remedial_Payout_Statement.pdf");
     }
 
-    // Initialize date fields on load
+    // Initialize Page & Clock
     window.addEventListener('DOMContentLoaded', () => {
       const today = new Date().toISOString().split('T')[0];
       if (document.getElementById('remDate')) document.getElementById('remDate').value = today;
       if (document.getElementById('evDate')) document.getElementById('evDate').value = today;
       if (document.getElementById('letterDate')) document.getElementById('letterDate').innerText = today;
+      
+      setInterval(() => {
+        document.getElementById('liveClock').innerText = new Date().toLocaleTimeString();
+      }, 1000);
+
       renderAll();
     });
   </script>
