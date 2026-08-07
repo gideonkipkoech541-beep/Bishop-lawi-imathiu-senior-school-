@@ -96,17 +96,29 @@
         .gateway-card i { font-size: 2.2rem; color: var(--primary); margin-bottom: 0.75rem; }
         .gateway-card h3 { margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--primary); }
 
-        /* PORTAL LAYOUT */
-        .portal-layout { display: flex; flex: 1; width: 100%; min-height: calc(100vh - var(--header-height)); }
+        /* PORTAL LAYOUT - SIDEBAR & RIGHT CONTENT AREA */
+        .portal-layout { 
+            display: flex; 
+            flex-direction: row; 
+            flex: 1; 
+            width: 100%; 
+            min-height: calc(100vh - var(--header-height)); 
+        }
+        
         aside {
             width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
             background-color: var(--card-bg);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
             padding: 1.5rem 1rem;
             gap: 0.4rem;
+            height: calc(100vh - var(--header-height) - 30px); /* Adjusts nicely against top bars */
+            position: sticky;
+            top: var(--header-height);
         }
+        
         .sidebar-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 1.2rem 0 0.4rem 0.5rem; font-weight: 700; }
         .sidebar-link {
             display: flex;
@@ -123,7 +135,14 @@
         }
         .sidebar-link:hover, .sidebar-link.active { background-color: var(--primary); color: white; }
 
-        main { flex: 1; padding: 2rem; overflow-y: auto; background: #eef9f0; }
+        /* MAIN CONTENT DISPLAY AREA (Positioned strictly to the right of sidebar) */
+        main { 
+            flex: 1; 
+            padding: 2rem; 
+            overflow-y: auto; 
+            background: #eef9f0; 
+            min-width: 0; /* Prevents flex items from overflowing horizontally */
+        }
 
         /* BUTTONS & FORMS */
         .btn {
@@ -189,7 +208,6 @@
             color: var(--text-muted);
         }
         .status-dot { height: 9px; width: 9px; background-color: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        .status-dot.offline { background-color: #ffc107; }
     </style>
 </head>
 <body>
@@ -246,7 +264,7 @@
     </div>
   </div>
 
-  <!-- STRICTLY ISOLATED STAFF PORTAL -->
+  <!-- STAFF PORTAL (Sidebar Left, Content Right) -->
   <div id="staffPortalView" class="view-section portal-layout">
     <aside>
       <div style="padding: 0.5rem 0.5rem 1rem;">
@@ -444,7 +462,7 @@
     </main>
   </div>
 
-  <!-- STUDENT PORTAL VIEW -->
+  <!-- STUDENT PORTAL (Sidebar Left, Content Right) -->
   <div id="studentPortalView" class="view-section portal-layout">
     <aside>
       <div style="padding: 0.5rem 0.5rem 1rem;">
@@ -475,7 +493,7 @@
     </main>
   </div>
 
-  <!-- STRICTLY ISOLATED ADMIN PORTAL -->
+  <!-- ADMIN PORTAL (Sidebar Left, Content Right) -->
   <div id="adminPortalView" class="view-section portal-layout">
     <aside>
       <div style="padding: 0.5rem 0.5rem 1rem;">
@@ -578,10 +596,6 @@
 
   <!-- JavaScript Engine -->
   <script>
-    const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "YOUR_PROJECT.firebaseapp.com", projectId: "YOUR_PROJECT" };
-    let db = null;
-    let isFirebaseActive = false;
-
     let appData = {
       claims: [
         { id: 1, teacher: "Teacher Bett", date: "2026-08-05", subject: "Physics", type: "Morning Remedial", hours: 2, status: "Pending" },
@@ -651,15 +665,8 @@
       renderAll();
     }
 
-    function handleScheduleSubmit(e) {
-      e.preventDefault();
-      alert('Schedule broadcasted.');
-    }
-
-    function handleEventSubmit(e) {
-      e.preventDefault();
-      alert('Notice broadcasted.');
-    }
+    function handleScheduleSubmit(e) { e.preventDefault(); alert('Schedule broadcasted.'); }
+    function handleEventSubmit(e) { e.preventDefault(); alert('Notice broadcasted.'); }
 
     function toggleClaimStatus(id) {
       const claim = appData.claims.find(c => c.id === id);
@@ -670,7 +677,6 @@
     }
 
     function renderAll() {
-      // Staff Tables
       let staffHTML = '', adminHTML = '', letterHTML = '', studentHTML = '';
       let pendingCount = 0, approvedCount = 0;
 
@@ -680,8 +686,7 @@
         if (c.status === 'Approved') approvedCount++;
 
         staffHTML += `<tr><td>${c.date}</td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.type}</td><td>${c.hours} hrs</td><td><span class="badge ${badge}">${c.status}</span></td></tr>`;
-        
-        adminHTML += `<tr><td>${c.date}</td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.hours} hrs</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline btn-sm" onclick="toggleClaimStatus(${c.id})">Toggle Status</button></td></tr>`;
+        adminHTML += `<tr><td>${c.date}</td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.hours} hrs</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline btn-sm" onclick="toggleClaimStatus(${c.id})">Toggle</button></td></tr>`;
 
         if (c.status === 'Approved') {
           letterHTML += `<tr><td>${c.date}</td><td>${c.subject} (${c.type})</td><td>${c.hours} hrs</td><td>Approved</td></tr>`;
@@ -692,14 +697,12 @@
       document.getElementById('adminClaimTableBody').innerHTML = adminHTML || `<tr><td colspan="6" style="text-align: center;">No claims.</td></tr>`;
       document.getElementById('letterTableBody').innerHTML = letterHTML || `<tr><td colspan="4" style="text-align: center;">No approved claims.</td></tr>`;
 
-      // CAT Tables
       appData.cats.forEach(cat => {
         document.getElementById('staffCatTableBody').innerHTML = `<tr><td>${cat.title}</td><td>${cat.class}</td><td>${cat.file}</td></tr>`;
         studentHTML += `<tr><td>${cat.title}</td><td>${cat.class}</td><td><a href="${cat.file}" class="btn btn-sm">Download</a></td></tr>`;
       });
       if(appData.cats.length > 0) document.getElementById('studentCatTableBody').innerHTML = studentHTML;
 
-      // Payroll Ledger
       let teacherTotals = {};
       appData.claims.filter(c => c.status === 'Approved').forEach(c => {
         teacherTotals[c.teacher] = (teacherTotals[c.teacher] || 0) + c.hours;
@@ -711,7 +714,6 @@
       }
       document.getElementById('adminSheetTableBody').innerHTML = sheetHTML || `<tr><td colspan="4" style="text-align: center;">No payroll records.</td></tr>`;
 
-      // Counters
       document.getElementById('statStaffClaimsCount').innerText = appData.claims.length;
       document.getElementById('statStaffApprovedCount').innerText = approvedCount;
       document.getElementById('statStaffCatsCount').innerText = appData.cats.length;
