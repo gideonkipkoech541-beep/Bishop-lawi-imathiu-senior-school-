@@ -1,859 +1,1633 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bishop Lawi Imathiu School - Secure Portal</title>
-    
-    <!-- Google Fonts & Font Awesome Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- jsPDF Library for PDF Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bishop Lawi Imathiu School - Portal System</title>
+  <style>
+    :root {
+      --primary: #1b4d3e;          /* Dark Green */
+      --primary-light: #2e6f5c;
+      --primary-dark: #113025;
+      --accent: #5c4033;           /* Dark Brown */
+      --accent-hover: #463126;
+      --bg-color: #f4f6f4;
+      --card-bg: #ffffff;
+      --text-main: #1c221e;
+      --text-muted: #556059;
+      --border: #d3dad5;
+      --sidebar-bg: #113025;
+      --sidebar-text: #ffffff;
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    [data-theme="dark"] {
+      --primary: #235c4a;
+      --primary-light: #2e6f5c;
+      --primary-dark: #0a1f18;
+      --accent: #6b4d3f;
+      --accent-hover: #5c4033;
+      --bg-color: #121714;
+      --card-bg: #1b221e;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #2d3832;
+      --sidebar-bg: #0a1f18;
+      --sidebar-text: #e2e8f0;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
 
-    <style>
-        :root {
-            --primary: #1b4332;       /* Dark Green */
-            --primary-dark: #081c15;  /* Deep Dark Green */
-            --accent: #3a5a40;        /* Muted Green */
-            --brown-dark: #3b2f2f;    /* Dark Brown */
-            --brown-accent: #7f5539;  /* Warm Brown */
-            --bg-color: #f4f6f4;
-            --card-bg: #ffffff;
-            --text-main: #1b1b1b;
-            --text-muted: #588157;
-            --border: #dad7cd;
-            --sidebar-width: 260px;
-            --header-height: 70px;
-            --radius: 10px;
-            --transition: all 0.3s ease;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+    }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* HEADER & NAVBAR */
-        header {
-            height: var(--header-height);
-            background-color: var(--primary);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    /* Top Navigation Bar */
+    header {
+      background: var(--primary-dark);
+      color: #ffffff;
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .logo-area { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-area i { font-size: 1.8rem; color: #d8f3dc; }
-        .logo-area h1 { font-size: 1.15rem; font-weight: 700; }
+    header h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
 
-        .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .nav-link-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            color: white;
-            padding: 0.45rem 0.85rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: var(--transition);
-        }
-        .nav-link-btn:hover, .nav-link-btn.active { background-color: var(--brown-accent); border-color: var(--brown-accent); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
 
-        /* VIEW SECTIONS */
-        .view-section { display: none; flex: 1; width: 100%; }
-        .view-section.active { display: flex; flex-direction: column; flex: 1; }
+    .theme-toggle, .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: var(--radius);
+      padding: 0.55rem 1.15rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
 
-        /* LOGIN GATEWAY VIEW (Matching reference design layout with Dark Green & Dark Brown) */
-        #publicView { 
-            padding: 3rem 1rem; 
-            align-items: center; 
-            justify-content: center; 
-            background: #e9ecef;
-            flex: 1;
-            display: none;
-        }
-        #publicView.active { display: flex; }
+    .btn {
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(27, 77, 62, 0.2);
+    }
 
-        .login-box {
-            width: 100%;
-            max-width: 540px;
-            background: var(--card-bg);
-            border: 1px solid #ced4da;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
+    .btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
 
-        .login-header-banner {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem 1.5rem 1rem;
-            position: relative;
-        }
+    .btn-accent {
+      background: var(--accent);
+      box-shadow: 0 4px 12px rgba(92, 64, 51, 0.2);
+    }
 
-        .login-header-banner h2 {
-            font-size: 1.4rem;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-        }
+    .btn-accent:hover {
+      background: var(--accent-hover);
+    }
 
-        .portal-emblem {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            color: var(--primary);
-            font-size: 2rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            border: 3px solid #d8f3dc;
-        }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      box-shadow: none;
+    }
 
-        .login-form-body {
-            padding: 2.5rem 2rem;
-        }
+    .btn-outline:hover {
+      background: var(--border);
+      transform: translateY(-1px);
+    }
 
-        .login-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
 
-        .login-row label {
-            width: 130px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #212529;
-            text-align: right;
-            padding-right: 1.5rem;
-        }
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
 
-        .login-row input, .login-row select {
-            flex: 1;
-            padding: 0.65rem 0.9rem;
-            border: 1px solid #b6ccb6;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            background-color: #f4f9f4;
-            color: #212529;
-            outline: none;
-            transition: var(--transition);
-        }
+    /* View Controller */
+    .view-section {
+      display: none;
+      flex: 1;
+    }
 
-        .login-row input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.15);
-            background-color: #ffffff;
-        }
+    .view-section.active {
+      display: block;
+    }
 
-        .login-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-            padding-left: 130px;
-        }
+    /* Portal Sidebar & Main Layout */
+    .portal-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 65px);
+    }
 
-        .btn-brown {
-            background-color: var(--brown-dark);
-            color: white;
-            border: none;
-            padding: 0.65rem 1.25rem;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-        .btn-brown:hover { background-color: var(--brown-accent); }
+    @media (max-width: 768px) {
+      .portal-layout {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        .btn-green {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.65rem 1.75rem;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-        }
-        .btn-green:hover { background-color: var(--accent); }
+    aside {
+      background: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      border-right: 1px solid var(--border);
+    }
 
-        /* PORTAL LAYOUT */
-        .portal-layout { 
-            display: flex; 
-            flex-direction: row; 
-            flex: 1; 
-            width: 100%; 
-            min-height: calc(100vh - var(--header-height)); 
-        }
-        
-        aside {
-            width: var(--sidebar-width);
-            min-width: var(--sidebar-width);
-            background-color: var(--card-bg);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-            gap: 0.4rem;
-            height: calc(100vh - var(--header-height) - 31px);
-            position: sticky;
-            top: var(--header-height);
-        }
-        
-        .sidebar-heading { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 1.2rem 0 0.4rem 0.5rem; font-weight: 700; }
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.7rem 0.9rem;
-            border-radius: var(--radius);
-            color: var(--text-main);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .sidebar-link:hover, .sidebar-link.active { background-color: var(--primary); color: white; }
+    .sidebar-profile {
+      padding: 0.85rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.9rem;
+    }
 
-        main { 
-            flex: 1; 
-            padding: 2rem; 
-            overflow-y: auto; 
-            background: #f4f6f4; 
-            min-width: 0; 
-        }
+    .sidebar-profile strong {
+      display: block;
+      color: #ffffff;
+      font-size: 1rem;
+    }
 
-        /* BUTTONS & FORMS */
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.4rem;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        .btn:hover { background-color: var(--primary-dark); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background-color: var(--primary); color: white; }
-        .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+    .sidebar-profile span {
+      font-size: 0.75rem;
+      color: #a3b8af;
+    }
 
-        .form-group { margin-bottom: 1.1rem; text-align: left; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--primary); }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 0.7rem 0.9rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: #ffffff;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .sidebar-link {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      opacity: 0.8;
+      transition: var(--transition);
+    }
 
-        /* CARDS & STATS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 1.25rem; border-radius: var(--radius); }
-        .stat-card h3 { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 0.4rem; }
-        .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+    .sidebar-link:hover, .sidebar-link.active {
+      opacity: 1;
+      background: var(--primary);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .main-content {
+      padding: 2rem 2.5rem;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
 
-        /* TABLES */
-        .table-container { width: 100%; overflow-x: auto; margin-top: 1rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
-        th, td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--border); }
-        th { font-weight: 600; color: var(--text-muted); background-color: #e9f5ed; }
+    /* Cards & Dashboard Widgets */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
 
-        .badge { padding: 0.25rem 0.6rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
-        .badge-success { background: #d8f3dc; color: #1b4332; border: 1px solid #52b788; }
-        .badge-warning { background: #fefae0; color: #6f4e37; border: 1px solid #dda15e; }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
 
-        .firebase-status-bar {
-            background-color: #ffffff;
-            border-bottom: 1px solid var(--border);
-            padding: 0.4rem 2rem;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--text-muted);
-        }
-        .status-dot { height: 9px; width: 9px; background-color: #28a745; border-radius: 50%; display: inline-block; margin-right: 5px; }
-    </style>
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:nth-child(1) { border-left: 4px solid var(--primary); }
+    .stat-card:nth-child(2) { border-left: 4px solid var(--accent); }
+    .stat-card:nth-child(3) { border-left: 4px solid #1e3a8a; }
+
+    .stat-card h3 {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 0.4rem;
+    }
+
+    /* Announcements & Noticeboard Grid */
+    .notice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .notice-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--accent);
+    }
+
+    .notice-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .notice-card p {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 0.85rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(0, 0, 0, 0.01);
+    }
+
+    [data-theme="dark"] tr:hover td {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Forms */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-color);
+      color: var(--text-main);
+      outline: none;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.12);
+      background: var(--card-bg);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .checkbox-item input {
+      width: auto;
+      cursor: pointer;
+    }
+
+    .badge {
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-success { background: rgba(27, 77, 62, 0.12); color: #1b4d3e; }
+    .badge-warning { background: rgba(92, 64, 51, 0.12); color: #5c4033; }
+    .badge-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; animation: pulse 2s infinite; }
+    [data-theme="dark"] .badge-success { background: rgba(46, 111, 92, 0.25); color: #4ade80; }
+    [data-theme="dark"] .badge-warning { background: rgba(107, 77, 63, 0.25); color: #fbbf24; }
+    [data-theme="dark"] .badge-live { background: rgba(239, 68, 68, 0.25); color: #f87171; }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Modern Login Styling */
+    .login-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 65px);
+      background: linear-gradient(135deg, rgba(27, 77, 62, 0.05) 0%, rgba(92, 64, 51, 0.05) 100%);
+      padding: 1.5rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h2 {
+      color: var(--primary);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .role-selector-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .role-pill {
+      border: 1px solid var(--border);
+      background: var(--bg-color);
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .role-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(27, 77, 62, 0.2);
+    }
+
+    /* Print styling */
+    @media print {
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width: 100%; background: #ffffff; color: #000000; padding: 2rem; }
+    }
+  </style>
+  <!-- Include jsPDF for real client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-  <!-- Top Header Navigation -->
+  <!-- TOP HEADER -->
   <header>
-    <div class="logo-area">
-      <i class="fas fa-school"></i>
-      <h1>Bishop Lawi Imathiu School</h1>
-    </div>
-    <div class="nav-links">
-      <button class="nav-link-btn active" id="navPublic" onclick="switchMainView('publicView', this)"><i class="fas5 fa-home"></i> Login Portal</button>
-      <button class="nav-link-btn" id="navStaff" onclick="switchMainView('staffPortalView', this)"><i class="fas fa-chalkboard-teacher"></i> Staff Portal</button>
-      <button class="nav-link-btn" id="navStudent" onclick="switchMainView('studentPortalView', this)"><i class="fas fa-user-graduate"></i> Student Portal</button>
-      <button class="nav-link-btn" id="navAdmin" onclick="switchMainView('adminPortalView', this)"><i class="fas fa-user-shield"></i> Admin Portal</button>
+    <h1>Bishop Lawi Imathiu School Portal</h1>
+    <div class="nav-actions">
+      <button class="theme-toggle" onclick="toggleTheme()">?? Theme</button>
+      <div id="authNavArea"></div>
     </div>
   </header>
 
-  <!-- Database Connection Bar -->
-  <div class="firebase-status-bar">
-    <div>
-      <span class="status-dot" id="dbDot"></span>
-      <span id="dbStatusText">System Database: Active (Secure Dark Green & Brown Theme)</span>
+  <!-- PUBLIC HOME VIEW -->
+  <div id="homeView" class="view-section active">
+    <div class="main-content" style="text-align: center; padding-top: 5rem;">
+      <div class="card" style="padding: 4rem 2.5rem; max-width: 800px; margin: 0 auto; border-radius: 16px;">
+        <span class="badge badge-success" style="margin-bottom: 1rem; font-size: 0.8rem; padding: 0.4rem 1rem;">Official Academic Management Platform</span>
+        <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; font-weight: 800; letter-spacing: -0.02em;">Staff & Admin Portal System</h2>
+        <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.25rem; line-height: 1.6;">Manage remedial claims, teacher verifications, assessment uploads, live timetable schedules, and administrative approvals seamlessly in an optimized digital ecosystem.</p>
+        <button class="btn btn-accent" style="font-size: 1rem; padding: 0.85rem 2rem; border-radius: 50px;" onclick="switchView('loginView')">Access Portal Login &rarr;</button>
+      </div>
     </div>
-    <span id="liveClock"></span>
   </div>
 
-  <!-- LOGIN GATEWAY VIEW -->
-  <div id="publicView" class="view-section active">
-    <div class="login-box">
-      <div class="login-header-banner">
-        <h2>Bishop Lawi Imathiu Portal</h2>
-        <div class="portal-emblem">
-          <i class="fas fa-graduation-cap"></i>
+  <!-- REFINED LOGIN VIEW -->
+  <div id="loginView" class="view-section">
+    <div class="login-wrapper">
+      <div class="login-card">
+        <div class="login-header">
+          <h2>Welcome Back</h2>
+          <p>Sign in securely to your portal account</p>
         </div>
-      </div>
-      <div class="login-form-body">
-        <form onsubmit="handleLoginSubmit(event)">
-          <div class="login-row">
-            <label>Select Portal:</label>
-            <select id="loginPortalSelect">
-              <option value="staffPortalView">Staff / Teacher Workspace</option>
-              <option value="studentPortalView">Student Learning Zone</option>
-              <option value="adminPortalView">School Administrator</option>
-            </select>
+
+        <form id="loginForm">
+          <!-- Hidden select to retain role handling logic -->
+          <select id="roleSelect" style="display: none;">
+            <option value="staff" selected>Staff / Teacher</option>
+            <option value="admin">Administrator</option>
+          </select>
+
+          <div class="role-selector-pills">
+            <div class="role-pill active" id="pillStaff" onclick="setLoginRole('staff', this)">Staff / Teacher</div>
+            <div class="role-pill" id="pillAdmin" onclick="setLoginRole('admin', this)">Administrator</div>
           </div>
-          <div class="login-row">
-            <label>Username:</label>
-            <input type="text" id="loginUser" required placeholder="Enter ID or Username">
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="email" required placeholder="name@bishoplawi.ac.ke">
           </div>
-          <div class="login-row">
-            <label>Password:</label>
-            <input type="password" id="loginPass" required value="••••••••">
+          
+          <div class="form-group" style="margin-bottom: 1.75rem;">
+            <label>Password</label>
+            <input type="password" id="password" required placeholder="••••••••">
           </div>
-          <div class="login-actions">
-            <button type="button" class="btn-brown" onclick="alert('Password reset link sent to your registered email.')">Reset password</button>
-            <button type="submit" class="btn-green">Sign In</button>
-          </div>
+
+          <button type="submit" class="btn" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 0.95rem;">Sign In to Dashboard</button>
         </form>
+
+        <div style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-muted); text-align: center; border-top: 1px solid var(--border); padding-top: 1rem;">
+          <p>Admin Demo: <strong>admin@bishoplawi.ac.ke</strong> / <strong>admin123</strong></p>
+          <p style="margin-top: 0.25rem;">Staff Demo: <strong>staff@bishoplawi.ac.ke</strong> / <strong>staff123</strong></p>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.25rem;">
+          <a href="#" onclick="switchView('homeView')" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: 500;">&larr; Return to Home</a>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- STAFF PORTAL -->
-  <div id="staffPortalView" class="view-section portal-layout">
-    <aside>
-      <div style="padding: 0.5rem 0.5rem 1rem;">
-        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Role Active:</span>
-        <strong style="font-size: 0.95rem;">Teacher Workspace</strong>
-      </div>
-      
-      <span class="sidebar-heading">Teaching Operations</span>
-      <a class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)"><i class="fas fa-chart-line"></i> Dashboard Overview</a>
-      <a class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)"><i class="fas fa-file-invoice-dollar"></i> Remedial Claims</a>
-      <a class="sidebar-link" onclick="switchStaffTab('staffCatsTab', this)"><i class="fas fa-upload"></i> Upload C.A.T Papers</a>
-      <a class="sidebar-link" onclick="switchStaffTab('staffScheduleTab', this)"><i class="fas fa-video"></i> Live Classes & Schedule</a>
-      
-      <span class="sidebar-heading">Financials</span>
-      <a class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)"><i class="fas fa-file-pdf"></i> Bursar Summary Letter</a>
-      <div style="margin-top: auto; padding-top: 1rem;">
-        <button class="btn btn-sm" style="width: 100%; background: var(--brown-dark);" onclick="switchMainView('publicView', document.getElementById('navPublic'))"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
-    </aside>
-
-    <main>
-      <div id="staffDashboardTab" class="staff-tab-content">
-        <h2 style="margin-bottom: 0.4rem; color: var(--primary);">Staff Member Dashboard</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Review your submitted claims and published assessment documents.</p>
-        
-        <div class="stats-grid">
-          <div class="stat-card">
-            <h3>Total Claims Filed</h3>
-            <div class="value" id="statStaffClaimsCount">0</div>
-          </div>
-          <div class="stat-card">
-            <h3>Approved Claims</h3>
-            <div class="value" id="statStaffApprovedCount">0</div>
-          </div>
-          <div class="stat-card">
-            <h3>CAT Papers Published</h3>
-            <div class="value" id="statStaffCatsCount">0</div>
-          </div>
+  <div id="staffPortalView" class="view-section">
+    <div class="portal-layout">
+      <aside>
+        <div class="sidebar-profile">
+          <span id="staffSidebarName">Teacher Name</span>
+          <span style="color: var(--primary-light);">Staff Portal</span>
         </div>
-      </div>
-
-      <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--primary);">Remedial Teaching Claim Form</h2>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem;">Record remedial hours for administrative verification.</p>
+        <a href="#" class="sidebar-link active" onclick="switchStaffTab('staffDashboardTab', this)">?? Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffLiveClassesTab', this)">?? Live Classes & Schedule</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffRemedialTab', this)">?? Remedial Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffCatTab', this)">?? Weekly C.A.T. Uploads</a>
+        <a href="#" class="sidebar-link" onclick="switchStaffTab('staffBursarTab', this)">?? Bursar Module & Letter</a>
+      </aside>
+      <main class="main-content">
+        <!-- Staff Dashboard Tab -->
+        <div id="staffDashboardTab" class="staff-tab-content">
+          <h2 style="margin-bottom: 1.25rem; font-size: 1.35rem; font-weight: 700;">Staff Dashboard</h2>
           
-          <form id="remedialForm" onsubmit="handleRemedialSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Teacher Name</label>
-                <input type="text" id="remTeacher" required placeholder="e.g., Teacher Bett">
-              </div>
-              <div class="form-group">
-                <label>Date Conducted</label>
-                <input type="date" id="remDate" required>
-              </div>
-              <div class="form-group">
-                <label>Subject</label>
-                <input type="text" id="remSubject" required placeholder="e.g., Physics">
-              </div>
-              <div class="form-group">
-                <label>Session Category</label>
-                <select id="remType">
-                  <option value="Morning Remedial">Morning Remedial</option>
-                  <option value="Evening Remedial">Evening Remedial</option>
-                  <option value="Weekend Coaching">Weekend Coaching</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Hours Taught</label>
-                <input type="number" id="remHours" min="1" max="6" value="2" required>
-              </div>
+          <!-- Noticeboard for Weekly Event & Teacher on Duty -->
+          <div class="notice-grid">
+            <div class="notice-card">
+              <h4>?? This Week's Event</h4>
+              <p id="dashWeeklyEventDisplay">Loading current school event...</p>
             </div>
-            <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Submit Claim</button>
-          </form>
-        </div>
+            <div class="notice-card" style="border-top-color: var(--primary);">
+              <h4 style="color: var(--primary);">??? Teacher On Duty (TOD)</h4>
+              <p id="dashTodDisplay">Loading duty teacher...</p>
+            </div>
+          </div>
 
-        <div class="card">
-          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--primary);">Your Claim Records</h2>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Teacher</th>
-                  <th>Subject</th>
-                  <th>Type</th>
-                  <th>Hours</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="staffClaimTableBody">
-                <tr><td colspan="6" style="text-align: center;">No claims records found.</td></tr>
-              </tbody>
-            </table>
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <h3>Total Claims</h3>
+              <div class="value" id="statStaffClaimsCount">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>Approved Claims</h3>
+              <div class="value" id="statStaffApprovedCount">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>C.A.T. Papers Uploaded</h3>
+              <div class="value" id="statStaffCatsCount">0</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="staffCatsTab" class="staff-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--primary);">Upload C.A.T Assessment Papers</h2>
-          <form id="catUploadForm" onsubmit="handleCatSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Assessment Title</label>
-                <input type="text" id="catTitle" required placeholder="e.g., Physics CAT 1">
-              </div>
-              <div class="form-group">
-                <label>Target Class</label>
-                <input type="text" id="catClass" required placeholder="e.g., Form 4 Science">
-              </div>
-              <div class="form-group" style="grid-column: span 2;">
-                <label>Resource Link</label>
-                <input type="text" id="catFile" required placeholder="Paste resource link...">
-              </div>
+        <!-- Live Classes & Timetable Schedule Tab -->
+        <div id="staffLiveClassesTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Live Classes & Timetable Sessions</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">View currently active or scheduled timetable live sessions across streams.</p>
+            
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Time Slot</th>
+                    <th>Class Stream</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Action / Room Link</th>
+                  </tr>
+                </thead>
+                <tbody id="liveClassesTableBody"></tbody>
+              </table>
             </div>
-            <button type="submit" class="btn"><i class="fas fa-upload"></i> Publish CAT</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--primary);">Your Uploaded Papers</h2>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Class</th>
-                  <th>Reference</th>
-                </tr>
-              </thead>
-              <tbody id="staffCatTableBody">
-                <tr><td colspan="3" style="text-align: center;">No papers uploaded.</td></tr>
-              </tbody>
-            </table>
           </div>
         </div>
-      </div>
 
-      <div id="staffScheduleTab" class="staff-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--primary);">Publish Broadcast Schedule</h2>
-          <form id="scheduleForm" onsubmit="handleScheduleSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Time Slot</label>
-                <input type="text" id="schTime" required placeholder="e.g., Monday 08:00 AM">
-              </div>
-              <div class="form-group">
-                <label>Topic</label>
-                <input type="text" id="schTopic" required placeholder="e.g., Quantum Physics">
-              </div>
-              <div class="form-group" style="grid-column: span 2;">
-                <label>Meeting Link</label>
-                <input type="text" id="schLink" required placeholder="https://meet.google.com/...">
-              </div>
-            </div>
-            <button type="submit" class="btn"><i class="fas fa-video"></i> Broadcast Schedule</button>
-          </form>
-        </div>
-      </div>
+        <!-- Remedial Claims Tab -->
+        <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Select multiple streams, specify subject, date, and attendance details to submit your claims.</p>
+            <form id="remedialForm">
+              <input type="hidden" id="editClaimId">
+              <div class="form-grid">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label>Select Class Streams (Multi-select / Check all that apply)</label>
+                  <div class="checkbox-group" style="background: var(--bg-color); padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius);">
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-bottom: 0.25rem;">Grade 10</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 North"> Grade 10 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 South"> Grade 10 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 West"> Grade 10 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Grade 10 East"> Grade 10 East</label>
+                    
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-top: 0.5rem; margin-bottom: 0.25rem;">Form 3</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 North"> Form 3 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 South"> Form 3 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 West"> Form 3 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 3 East"> Form 3 East</label>
 
-      <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem; color: var(--primary);">Bursar Requisition Statement</h2>
-          <button class="btn" onclick="generatePDFLetter()" style="margin-bottom: 1.5rem;"><i class="fas fa-file-pdf"></i> Download Official Statement (PDF)</button>
+                    <div style="width: 100%; font-weight: 600; font-size: 0.8rem; color: var(--primary); margin-top: 0.5rem; margin-bottom: 0.25rem;">Form 4</div>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 North"> Form 4 North</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 South"> Form 4 South</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 West"> Form 4 West</label>
+                    <label class="checkbox-item"><input type="checkbox" name="remClassStream" value="Form 4 East"> Form 4 East</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Subject</label>
+                  <input type="text" id="remSubject" required placeholder="e.g., Physics / Mathematics">
+                </div>
+                <div class="form-group">
+                  <label>Day Type / Schedule Occurrence</label>
+                  <select id="remDayType" onchange="toggleDayTypeFields()" required>
+                    <option value="Weekday">Weekday (Morning / Evening)</option>
+                    <option value="Weekend">Weekend Sessions (Multiple Lessons)</option>
+                  </select>
+                </div>
+                <div class="form-group" id="weekdaySessionGroup">
+                  <label>Weekday Session Occurrence</label>
+                  <select id="remWeekdaySession">
+                    <option value="Morning Remedial">Morning Remedial (KES 500)</option>
+                    <option value="Evening Remedial">Evening Remedial (KES 500)</option>
+                  </select>
+                </div>
+                <div class="form-group" id="weekendSessionGroup" style="display: none;">
+                  <label>Select Lessons Attended (Weekend - KES 700 per lesson)</label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 1"> Lesson 1</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 2"> Lesson 2</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 3"> Lesson 3</label>
+                    <label class="checkbox-item"><input type="checkbox" name="weekendLesson" value="Lesson 4"> Lesson 4</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Date of Attendance</label>
+                  <input type="date" id="remDate" required>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                <button type="submit" class="btn">Submit Claim</button>
+                <button type="button" class="btn btn-outline" onclick="saveDraftClaim()">Save Draft</button>
+              </div>
+            </form>
+          </div>
 
-          <div id="bursarLetterPreview" style="background: #ffffff; border: 1px solid var(--border); padding: 2rem; border-radius: var(--radius); font-size: 0.9rem;">
-            <div style="text-align: center; margin-bottom: 1rem;">
-              <h3 style="color: var(--primary);">BISHOP LAWI IMATHIU SENIOR SCHOOL</h3>
-              <p style="font-size: 0.8rem; color: #555;">Office of the Bursar & Payroll</p>
-            </div>
-            <p><strong>Date:</strong> <span id="letterDate"></span></p>
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Claim History & Management</h2>
             <div class="table-container">
               <table>
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Subject & Session</th>
-                    <th>Hours</th>
+                    <th>Class Streams</th>
+                    <th>Subject</th>
+                    <th>Lessons / Occurrence Details</th>
+                    <th>Calculated Amount</th>
                     <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody id="letterTableBody">
-                  <tr><td colspan="4" style="text-align: center;">No approved claims available.</td></tr>
-                </tbody>
+                <tbody id="staffClaimTableBody"></tbody>
               </table>
             </div>
           </div>
         </div>
-      </div>
-    </main>
-  </div>
 
-  <!-- STUDENT PORTAL -->
-  <div id="studentPortalView" class="view-section portal-layout">
-    <aside>
-      <div style="padding: 0.5rem 0.5rem 1rem;">
-        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Role Active:</span>
-        <strong style="font-size: 0.95rem;">Student Learning Zone</strong>
-      </div>
-      <a class="sidebar-link active"><i class="fas fa-book-open"></i> Published CAT Papers</a>
-      <div style="margin-top: auto; padding-top: 1rem;">
-        <button class="btn btn-sm" style="width: 100%; background: var(--brown-dark);" onclick="switchMainView('publicView', document.getElementById('navPublic'))"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
-    </aside>
+        <!-- Weekly C.A.T Upload Tab -->
+        <div id="staffCatTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Weekly C.A.T. Assessment Upload</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Upload PDF, DOCX, or Image assessments.</p>
+            <form id="catUploadForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Subject & Title</label>
+                  <input type="text" id="catTitle" required placeholder="e.g., Form 4 North Physics CAT 1">
+                </div>
+                <div class="form-group">
+                  <label>Assessment File</label>
+                  <input type="file" id="catFile" accept=".pdf,.docx,image/*" required>
+                </div>
+              </div>
+              <button type="submit" class="btn" style="margin-top: 1rem;">Upload Paper</button>
+            </form>
+          </div>
 
-    <main>
-      <div class="card">
-        <h2 style="color: var(--primary);">Available Learning Resources & Assessments</h2>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Target Grade</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="studentCatTableBody">
-              <tr><td colspan="3" style="text-align: center;">No materials published yet.</td></tr>
-            </tbody>
-          </table>
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Uploaded Papers</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>File Name</th>
+                    <th>Upload Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staffCatTableBody"></tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-    </main>
+
+        <!-- Bursar Module Tab -->
+        <div id="staffBursarTab" class="staff-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Bursar Payment Summary & Official Letter</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Generate, print, or download your official claim letter and breakdown as a PDF for bursar processing.</p>
+            
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem;">
+              <button class="btn" onclick="window.print()">??? Print Letter & Summary</button>
+              <button class="btn btn-outline" onclick="downloadBursarLetterPDF()">?? Download Letter & Summary (PDF)</button>
+            </div>
+
+            <div id="printArea" style="border: 1px dashed var(--border); padding: 2rem; border-radius: var(--radius); background: var(--card-bg);">
+              <h3 style="text-align: center; color: var(--primary); font-size: 1.2rem; font-weight: 700;">BISHOP LAWI IMATHIU SCHOOL</h3>
+              <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">Official Remedial Claim Letter & Summary Ledger</p>
+              
+              <div style="margin-bottom: 1.25rem; font-size: 0.9rem;" id="bursarLetterBody"></div>
+
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Class Streams</th>
+                      <th>Subject</th>
+                      <th>Lessons & Occurrence Details</th>
+                      <th>Amount (KES)</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bursarSummaryTableBody"></tbody>
+                </table>
+              </div>
+              <div style="margin-top: 1.25rem; font-weight: bold; text-align: right; font-size: 1rem;" id="bursarTotalContainer"></div>
+              <div style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 0.75rem; display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                <span id="printFooterWatermark">KNOWLEDGE SHOWERS BLISS</span>
+                <span id="printFooterDate"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   </div>
 
   <!-- ADMIN PORTAL -->
-  <div id="adminPortalView" class="view-section portal-layout">
-    <aside>
-      <div style="padding: 0.5rem 0.5rem 1rem;">
-        <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Role Active:</span>
-        <strong style="font-size: 0.95rem;">School Administrator</strong>
-      </div>
-      
-      <span class="sidebar-heading">Management Tools</span>
-      <a class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)"><i class="fas fa-chart-pie"></i> Executive Overview</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)"><i class="fas fa-check-double"></i> Verify & Approve Claims</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)"><i class="fas fa-calculator"></i> Teacher Payroll Ledger</a>
-      <a class="sidebar-link" onclick="switchAdminTab('adminEventsTab', this)"><i class="fas fa-bullhorn"></i> Noticeboard Manager</a>
-      <div style="margin-top: auto; padding-top: 1rem;">
-        <button class="btn btn-sm" style="width: 100%; background: var(--brown-dark);" onclick="switchMainView('publicView', document.getElementById('navPublic'))"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
-    </aside>
-
-    <main>
-      <div id="adminDashboardTab" class="admin-tab-content">
-        <h2 style="color: var(--primary);">Administrator Overview Control Panel</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Manage faculty claims and institutional payroll ledgers.</p>
-        
-        <div class="stats-grid">
-          <div class="stat-card">
-            <h3>Pending Claim Verifications</h3>
-            <div class="value" id="statAdminPendingCount">0</div>
-          </div>
-          <div class="stat-card">
-            <h3>Total Approved Claims</h3>
-            <div class="value" id="statAdminApprovedCount">0</div>
-          </div>
+  <div id="adminPortalView" class="view-section">
+    <div class="portal-layout">
+      <aside>
+        <div class="sidebar-profile">
+          <strong>Administrator</strong>
+          <span style="color: var(--primary-light);">Admin Control Panel</span>
         </div>
-      </div>
-
-      <div id="adminClaimsTab" class="admin-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="color: var(--primary);">Remedial Requisition Approvals</h2>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Teacher</th>
-                  <th>Subject</th>
-                  <th>Hours</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="adminClaimTableBody">
-                <tr><td colspan="6" style="text-align: center;">No pending claims available.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div id="adminSheetTab" class="admin-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="color: var(--primary);">Teacher Remedial Payroll Ledger</h2>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Teacher Name</th>
-                  <th>Total Approved Hours</th>
-                  <th>Rate</th>
-                  <th>Calculated Payout (Ksh)</th>
-                </tr>
-              </thead>
-              <tbody id="adminSheetTableBody">
-                <tr><td colspan="4" style="text-align: center;">No payroll records available.</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div id="adminEventsTab" class="admin-tab-content" style="display: none;">
-        <div class="card">
-          <h2 style="color: var(--primary);">Post School Announcement</h2>
-          <form id="eventForm" onsubmit="handleEventSubmit(event)">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Announcement Headline</label>
-                <input type="text" id="evTitle" required placeholder="e.g., Staff Briefing">
-              </div>
-              <div class="form-group">
-                <label>Effective Date</label>
-                <input type="date" id="evDate" required>
-              </div>
+        <a href="#" class="sidebar-link active" onclick="switchAdminTab('adminDashboardTab', this)">?? Dashboard</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminNoticeTab', this)">?? Edit Noticeboard & Duties</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminLiveTab', this)">?? Manage Live Classes</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminTeachersTab', this)">?? Teacher Management</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminClaimsTab', this)">? Approve Claims</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminSheetTab', this)">?? Teacher Payment Sheet</a>
+        <a href="#" class="sidebar-link" onclick="switchAdminTab('adminReportsTab', this)">?? Reports & CSV</a>
+      </aside>
+      <main class="main-content">
+        <!-- Admin Dashboard Tab -->
+        <div id="adminDashboardTab" class="admin-tab-content">
+          <h2 style="margin-bottom: 1.25rem; font-size: 1.35rem; font-weight: 700;">Admin Overview</h2>
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <h3>Registered Staff</h3>
+              <div class="value" id="statAdminStaffCount">0</div>
             </div>
-            <button type="submit" class="btn"><i class="fas fa-bullhorn"></i> Broadcast Notice</button>
-          </form>
+            <div class="stat-card">
+              <h3>Pending Claims</h3>
+              <div class="value" id="statAdminPendingCount">0</div>
+            </div>
+            <div class="stat-card">
+              <h3>C.A.T Papers</h3>
+              <div class="value" id="statAdminCatsCount">0</div>
+            </div>
+          </div>
         </div>
-      </div>
-    </main>
+
+        <!-- Edit Noticeboard Tab (Weekly Event & TOD) -->
+        <div id="adminNoticeTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Manage Weekly Event & Teacher On Duty</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Update the current school weekly event and assigned duty teacher displayed on dashboards.</p>
+            
+            <form id="noticeUpdateForm">
+              <div class="form-group">
+                <label>Current Week's Event / Announcements</label>
+                <textarea id="adminWeeklyEventInput" rows="3" required placeholder="e.g., Mid-Term Examinations & Science Fair preparations"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Teacher On Duty (TOD) Details</label>
+                <input type="text" id="adminTodInput" required placeholder="e.g., Mr. Kipkorir & Madam Auma">
+              </div>
+              <button type="submit" class="btn">Update Noticeboard</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Manage Live Classes Tab -->
+        <div id="adminLiveTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Timetable & Live Class Scheduler</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Publish live timetable sessions and virtual room links for classes.</p>
+            
+            <form id="liveClassForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Time Slot</label>
+                  <input type="text" id="liveTimeSlot" required placeholder="e.g., 08:00 AM - 09:15 AM">
+                </div>
+                <div class="form-group">
+                  <label>Class Stream</label>
+                  <select id="liveClassStream" required>
+                    <optgroup label="Grade 10">
+                      <option value="Grade 10 North">Grade 10 North</option>
+                      <option value="Grade 10 South">Grade 10 South</option>
+                      <option value="Grade 10 West">Grade 10 West</option>
+                      <option value="Grade 10 East">Grade 10 East</option>
+                    </optgroup>
+                    <optgroup label="Form 3">
+                      <option value="Form 3 North">Form 3 North</option>
+                      <option value="Form 3 South">Form 3 South</option>
+                      <option value="Form 3 West">Form 3 West</option>
+                      <option value="Form 3 East">Form 3 East</option>
+                    </optgroup>
+                    <optgroup label="Form 4">
+                      <option value="Form 4 North">Form 4 North</option>
+                      <option value="Form 4 South">Form 4 South</option>
+                      <option value="Form 4 West">Form 4 West</option>
+                      <option value="Form 4 East">Form 4 East</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Subject</label>
+                  <input type="text" id="liveSubject" required placeholder="e.g., Physics">
+                </div>
+                <div class="form-group">
+                  <label>Teacher In Charge</label>
+                  <input type="text" id="liveTeacher" required placeholder="e.g., Teacher Bett">
+                </div>
+                <div class="form-group">
+                  <label>Meeting / Virtual Room URL</label>
+                  <input type="url" id="liveUrl" required placeholder="https://meet.google.com/abc-xyz">
+                </div>
+                <div class="form-group">
+                  <label>Session Status</label>
+                  <select id="liveStatus" required>
+                    <option value="Live Now">Live Now</option>
+                    <option value="Scheduled">Scheduled Later</option>
+                    <option value="Concluded">Concluded</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn" style="margin-top: 1rem;">Publish Live Timetable Session</button>
+            </form>
+          </div>
+
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Active Timetable Feed</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Link</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminLiveTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher Management Tab -->
+        <div id="adminTeachersTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Teacher Management</h2>
+            <div style="margin-bottom: 1.25rem;">
+              <button class="btn" onclick="addNewStaffPrompt()">+ Register New Teacher</button>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUserTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approve Claims Tab -->
+        <div id="adminClaimsTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">Remedial Claims Verification</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Teacher</th>
+                    <th>Date</th>
+                    <th>Class Streams</th>
+                    <th>Subject</th>
+                    <th>Lessons & Details</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminClaimsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Teacher Payment Sheet Tab -->
+        <div id="adminSheetTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Master Teacher Remedial Payment Sheet</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Review accumulated payment totals for all teachers based on verified claims and download the official payment sheet as a PDF.</p>
+            
+            <div style="margin-bottom: 1.25rem;">
+              <button class="btn" onclick="downloadMasterPaymentSheetPDF()">?? Download Master Payment Sheet (PDF)</button>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Teacher Name</th>
+                    <th>Email</th>
+                    <th>Total Verified Sessions / Lessons</th>
+                    <th>Total Remedial Amount (KES)</th>
+                  </tr>
+                </thead>
+                <tbody id="adminMasterSheetTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reports & CSV Tab -->
+        <div id="adminReportsTab" class="admin-tab-content" style="display: none;">
+          <div class="card">
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Reports & Data Export</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Export complete remedial claims ledger as a CSV file.</p>
+            <button class="btn" onclick="exportClaimsCSV()">?? Export Claims CSV</button>
+          </div>
+        </div>
+      </main>
+    </div>
   </div>
 
-  <!-- JavaScript Engine -->
   <script>
-    let appData = {
-      claims: [
-        { id: 1, teacher: "Teacher Bett", date: "2026-08-05", subject: "Physics", type: "Morning Remedial", hours: 2, status: "Pending" },
-        { id: 2, teacher: "Teacher Bett", date: "2026-08-06", subject: "Mathematics", type: "Evening Remedial", hours: 3, status: "Approved" }
-      ],
-      cats: [
-        { id: 1, title: "Form 4 Physics CAT 1", class: "Form 4 Science", file: "#" }
-      ],
-      schedule: [],
-      events: []
-    };
+    document.addEventListener('DOMContentLoaded', () => {
+      initStorage();
+      checkSession();
+    });
 
-    function switchMainView(viewId, btnEl) {
-      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    function initStorage() {
+      if (!localStorage.getItem('school_users')) {
+        localStorage.setItem('school_users', JSON.stringify([
+          { name: 'System Administrator', email: 'admin@bishoplawi.ac.ke', password: 'admin123', role: 'admin', status: 'Active' },
+          { name: 'Jane Mwangi', email: 'staff@bishoplawi.ac.ke', password: 'staff123', role: 'staff', status: 'Active' }
+        ]));
+      }
+      if (!localStorage.getItem('remedial_claims')) localStorage.setItem('remedial_claims', JSON.stringify([]));
+      if (!localStorage.getItem('cat_papers')) localStorage.setItem('cat_papers', JSON.stringify([]));
+      if (!localStorage.getItem('claim_drafts')) localStorage.setItem('claim_drafts', JSON.stringify([]));
+      if (!localStorage.getItem('school_noticeboard')) {
+        localStorage.setItem('school_noticeboard', JSON.stringify({
+          weeklyEvent: 'Term 2 Ongoing Assessment Week & Inter-Class Debates',
+          tod: 'Mr. Kipkorir & Madam Auma'
+        }));
+      }
+      if (!localStorage.getItem('live_classes')) {
+        localStorage.setItem('live_classes', JSON.stringify([
+          { id: 1, timeSlot: '08:00 AM - 09:00 AM', className: 'Form 4 North', subject: 'Physics (Quantum Mechanics)', teacher: 'Teacher Bett', url: 'https://meet.google.com/sample-meet', status: 'Live Now' },
+          { id: 2, timeSlot: '09:15 AM - 10:15 AM', className: 'Form 3 East', subject: 'Mathematics', teacher: 'Jane Mwangi', url: 'https://meet.google.com/sample-meet-2', status: 'Scheduled' }
+        ]));
+      }
+    }
+
+    function calculateClaimAmount(dayType, details) {
+      if (dayType === 'Weekday') {
+        return 500; // Morning or Evening remedial is 500
+      } else {
+        const lessons = details.split(',').filter(l => l.trim().length > 0);
+        return lessons.length * 700; // 700 per lesson
+      }
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
-
-      document.querySelectorAll('.nav-link-btn').forEach(btn => btn.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      window.scrollTo(0, 0);
     }
 
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const targetPortal = document.getElementById('loginPortalSelect').value;
-      const navBtnMap = {
-        'staffPortalView': document.getElementById('navStaff'),
-        'studentPortalView': document.getElementById('navStudent'),
-        'adminPortalView': document.getElementById('navAdmin')
-      };
-      switchMainView(targetPortal, navBtnMap[targetPortal]);
+    function setLoginRole(role, pillEl) {
+      document.getElementById('roleSelect').value = role;
+      document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
+      pillEl.classList.add('active');
     }
 
-    function switchStaffTab(tabId, linkEl) {
-      document.querySelectorAll('.staff-tab-content').forEach(el => el.style.display = 'none');
+    function switchStaffTab(tabId, el) {
+      document.querySelectorAll('.staff-tab-content').forEach(t => t.style.display = 'none');
       document.getElementById(tabId).style.display = 'block';
-
       document.querySelectorAll('#staffPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
-      if (linkEl) linkEl.classList.add('active');
-      renderAll();
+      el.classList.add('active');
+      if (tabId === 'staffLiveClassesTab') {
+        refreshLiveClassesView();
+      }
     }
 
-    function switchAdminTab(tabId, linkEl) {
-      document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+    function switchAdminTab(tabId, el) {
+      document.querySelectorAll('.admin-tab-content').forEach(t => t.style.display = 'none');
       document.getElementById(tabId).style.display = 'block';
-
       document.querySelectorAll('#adminPortalView aside .sidebar-link').forEach(l => l.classList.remove('active'));
-      if (linkEl) linkEl.classList.add('active');
-      renderAll();
-    }
-
-    function handleRemedialSubmit(e) {
-      e.preventDefault();
-      const newClaim = {
-        id: Date.now(),
-        teacher: document.getElementById('remTeacher').value,
-        date: document.getElementById('remDate').value,
-        subject: document.getElementById('remSubject').value,
-        type: document.getElementById('remType').value,
-        hours: parseInt(document.getElementById('remHours').value),
-        status: "Pending"
-      };
-      appData.claims.push(newClaim);
-      document.getElementById('remedialForm').reset();
-      alert('Remedial claim successfully filed.');
-      renderAll();
-    }
-
-    function handleCatSubmit(e) {
-      e.preventDefault();
-      const newCat = {
-        id: Date.now(),
-        title: document.getElementById('catTitle').value,
-        class: document.getElementById('catClass').value,
-        file: document.getElementById('catFile').value
-      };
-      appData.cats.push(newCat);
-      document.getElementById('catUploadForm').reset();
-      alert('CAT paper published.');
-      renderAll();
-    }
-
-    function handleScheduleSubmit(e) { e.preventDefault(); alert('Schedule broadcasted.'); }
-    function handleEventSubmit(e) { e.preventDefault(); alert('Notice broadcasted.'); }
-
-    function toggleClaimStatus(id) {
-      const claim = appData.claims.find(c => c.id === id);
-      if (claim) {
-        claim.status = claim.status === "Pending" ? "Approved" : "Pending";
-        renderAll();
+      el.classList.add('active');
+      if (tabId === 'adminSheetTab') {
+        refreshAdminMasterSheet();
+      } else if (tabId === 'adminLiveTab') {
+        refreshAdminLiveClasses();
+      } else if (tabId === 'adminNoticeTab') {
+        const notice = JSON.parse(localStorage.getItem('school_noticeboard'));
+        document.getElementById('adminWeeklyEventInput').value = notice.weeklyEvent;
+        document.getElementById('adminTodInput').value = notice.tod;
       }
     }
 
-    function renderAll() {
-      let staffHTML = '', adminHTML = '', letterHTML = '', studentHTML = '';
-      let pendingCount = 0, approvedCount = 0;
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const role = document.getElementById('roleSelect').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
 
-      appData.claims.forEach(c => {
-        const badge = c.status === 'Approved' ? 'badge-success' : 'badge-warning';
-        if (c.status === 'Pending') pendingCount++;
-        if (c.status === 'Approved') approvedCount++;
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      const user = users.find(u => u.email === email && u.password === password && u.role === role);
 
-        staffHTML += `<tr><td>${c.date}</td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.type}</td><td>${c.hours} hrs</td><td><span class="badge ${badge}">${c.status}</span></td></tr>`;
-        adminHTML += `<tr><td>${c.date}</td><td>${c.teacher}</td><td>${c.subject}</td><td>${c.hours} hrs</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline btn-sm" onclick="toggleClaimStatus(${c.id})">Toggle</button></td></tr>`;
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        checkSession();
+      } else {
+        alert('Invalid email, password, or role selection.');
+      }
+    });
 
-        if (c.status === 'Approved') {
-          letterHTML += `<tr><td>${c.date}</td><td>${c.subject} (${c.type})</td><td>${c.hours} hrs</td><td>Approved</td></tr>`;
+    function checkSession() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const authNav = document.getElementById('authNavArea');
+      
+      if (user) {
+        authNav.innerHTML = `<span style="font-weight: 500; font-size: 0.85rem;">${user.name}</span> <button class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" onclick="logout()">Logout</button>`;
+        if (user.role === 'admin') {
+          refreshAdminData();
+          switchView('adminPortalView');
+        } else {
+          document.getElementById('staffSidebarName').textContent = user.name;
+          refreshStaffData();
+          switchView('staffPortalView');
         }
-      });
-
-      document.getElementById('staffClaimTableBody').innerHTML = staffHTML || `<tr><td colspan="6" style="text-align: center;">No claims.</td></tr>`;
-      document.getElementById('adminClaimTableBody').innerHTML = adminHTML || `<tr><td colspan="6" style="text-align: center;">No claims.</td></tr>`;
-      document.getElementById('letterTableBody').innerHTML = letterHTML || `<tr><td colspan="4" style="text-align: center;">No approved claims.</td></tr>`;
-
-      appData.cats.forEach(cat => {
-        document.getElementById('staffCatTableBody').innerHTML = `<tr><td>${cat.title}</td><td>${cat.class}</td><td>${cat.file}</td></tr>`;
-        studentHTML += `<tr><td>${cat.title}</td><td>${cat.class}</td><td><a href="${cat.file}" class="btn btn-sm">Download</a></td></tr>`;
-      });
-      if(appData.cats.length > 0) document.getElementById('studentCatTableBody').innerHTML = studentHTML;
-
-      let teacherTotals = {};
-      appData.claims.filter(c => c.status === 'Approved').forEach(c => {
-        teacherTotals[c.teacher] = (teacherTotals[c.teacher] || 0) + c.hours;
-      });
-
-      let sheetHTML = '';
-      for (let t in teacherTotals) {
-        sheetHTML += `<tr><td>${t}</td><td>${teacherTotals[t]} hrs</td><td>Ksh 500/hr</td><td><strong>Ksh ${(teacherTotals[t] * 500).toLocaleString()}</strong></td></tr>`;
+      } else {
+        authNav.innerHTML = `<button class="btn" style="padding: 0.4rem 1rem; font-size: 0.8rem;" onclick="switchView('loginView')">Login</button>`;
+        switchView('homeView');
       }
-      document.getElementById('adminSheetTableBody').innerHTML = sheetHTML || `<tr><td colspan="4" style="text-align: center;">No payroll records.</td></tr>`;
-
-      document.getElementById('statStaffClaimsCount').innerText = appData.claims.length;
-      document.getElementById('statStaffApprovedCount').innerText = approvedCount;
-      document.getElementById('statStaffCatsCount').innerText = appData.cats.length;
-      document.getElementById('statAdminPendingCount').innerText = pendingCount;
-      document.getElementById('statAdminApprovedCount').innerText = approvedCount;
     }
 
-    function generatePDFLetter() {
+    function logout() {
+      localStorage.removeItem('currentUser');
+      checkSession();
+    }
+
+    function toggleDayTypeFields() {
+      const type = document.getElementById('remDayType').value;
+      document.getElementById('weekdaySessionGroup').style.display = type === 'Weekday' ? 'block' : 'none';
+      document.getElementById('weekendSessionGroup').style.display = type === 'Weekend' ? 'block' : 'none';
+    }
+
+    document.getElementById('remedialForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const claimId = document.getElementById('editClaimId').value;
+      
+      const selectedStreams = Array.from(document.querySelectorAll('input[name="remClassStream"]:checked'))
+        .map(cb => cb.value);
+      if (selectedStreams.length === 0) {
+        alert('Please select at least one class stream.');
+        return;
+      }
+      const className = selectedStreams.join(', ');
+
+      const subject = document.getElementById('remSubject').value.trim();
+      const dayType = document.getElementById('remDayType').value;
+      const date = document.getElementById('remDate').value;
+      
+      let details = '';
+      if (dayType === 'Weekday') {
+        details = document.getElementById('remWeekdaySession').value;
+      } else {
+        const checkedLessons = Array.from(document.querySelectorAll('input[name="weekendLesson"]:checked'))
+          .map(cb => cb.value);
+        if (checkedLessons.length === 0) {
+          alert('Please select at least one lesson attended for weekend classes.');
+          return;
+        }
+        details = checkedLessons.join(', ');
+      }
+
+      const amount = calculateClaimAmount(dayType, details);
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+
+      if (claimId) {
+        claims = claims.map(c => c.id == claimId ? { ...c, className, subject, dayType, details, date, amount } : c);
+        document.getElementById('editClaimId').value = '';
+      } else {
+        claims.push({ id: Date.now(), teacherEmail: user.email, teacherName: user.name, className, subject, dayType, details, date, amount, status: 'Pending Verification' });
+      }
+
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      document.getElementById('remedialForm').reset();
+      toggleDayTypeFields();
+      refreshStaffData();
+      alert('Remedial claim submitted successfully.');
+    });
+
+    function saveDraftClaim() {
+      const selectedStreams = Array.from(document.querySelectorAll('input[name="remClassStream"]:checked'))
+        .map(cb => cb.value).join(', ');
+      const subject = document.getElementById('remSubject').value;
+      const dayType = document.getElementById('remDayType').value;
+      const date = document.getElementById('remDate').value;
+      let drafts = JSON.parse(localStorage.getItem('claim_drafts')) || [];
+      drafts.push({ className: selectedStreams, subject, dayType, date });
+      localStorage.setItem('claim_drafts', JSON.stringify(drafts));
+      alert('Draft saved successfully.');
+    }
+
+    function refreshStaffData() {
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      const notice = JSON.parse(localStorage.getItem('school_noticeboard')) || { weeklyEvent: 'No event posted', tod: 'Not assigned' };
+
+      document.getElementById('dashWeeklyEventDisplay').textContent = notice.weeklyEvent;
+      document.getElementById('dashTodDisplay').textContent = notice.tod;
+
+      const userClaims = claims.filter(c => c.teacherEmail === user.email);
+      const userCats = cats.filter(cat => cat.teacherEmail === user.email);
+
+      document.getElementById('statStaffClaimsCount').textContent = userClaims.length;
+      document.getElementById('statStaffApprovedCount').textContent = userClaims.filter(c => c.status === 'Verified & Approved').length;
+      document.getElementById('statStaffCatsCount').textContent = userCats.length;
+
+      const claimTbody = document.getElementById('staffClaimTableBody');
+      claimTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No claims found.</td></tr>';
+      
+      let totalClaimSum = 0;
+      userClaims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        totalClaimSum += amt;
+        const badge = c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning';
+        claimTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${badge}">${c.status}</span></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="editClaim(${c.id})">Edit</button> <button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteClaim(${c.id})">Delete</button></td></tr>`;
+      });
+
+      const catTbody = document.getElementById('staffCatTableBody');
+      catTbody.innerHTML = userCats.length ? '' : '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No C.A.T papers uploaded.</td></tr>';
+      userCats.forEach(cat => {
+        catTbody.innerHTML += `<tr><td>${cat.title}</td><td>${cat.fileName}</td><td>${cat.date}</td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteCat(${cat.id})">Delete</button></td></tr>`;
+      });
+
+      document.getElementById('bursarLetterBody').innerHTML = `<p>Dear Bursar,</p><p style="margin-top:0.35rem;">I, <strong>${user.name}</strong>, am requesting payment disbursement for the verified remedial sessions attended during the current term.</p>`;
+      const bursarTbody = document.getElementById('bursarSummaryTableBody');
+      bursarTbody.innerHTML = userClaims.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No records available.</td></tr>';
+      userClaims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        bursarTbody.innerHTML += `<tr><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${c.status === 'Verified & Approved' ? 'badge-success' : 'badge-warning'}">${c.status}</span></td></tr>`;
+      });
+
+      document.getElementById('bursarTotalContainer').textContent = `Total Claim Amount: KES ${totalClaimSum.toLocaleString()}`;
+
+      const downloadTimestamp = new Date().toLocaleString();
+      document.getElementById('printFooterDate').textContent = `Downloaded on: ${downloadTimestamp}`;
+      refreshLiveClassesView();
+    }
+
+    function refreshLiveClassesView() {
+      const classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      const tbody = document.getElementById('liveClassesTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = classes.length ? '' : '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No active or scheduled timetable live sessions.</td></tr>';
+      classes.forEach(cls => {
+        const isLive = cls.status === 'Live Now';
+        const badgeClass = isLive ? 'badge-live' : 'badge-warning';
+        tbody.innerHTML += `<tr><td><span class="badge ${badgeClass}">${cls.status}</span></td><td>${cls.timeSlot}</td><td><strong>${cls.className}</strong></td><td>${cls.subject}</td><td>${cls.teacher}</td><td><a href="${cls.url}" target="_blank" class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Join Room &rarr;</a></td></tr>`;
+      });
+    }
+
+    function editClaim(id) {
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const claim = claims.find(c => c.id === id);
+      if (claim) {
+        document.getElementById('editClaimId').value = claim.id;
+        
+        // Check matching stream checkboxes
+        document.querySelectorAll('input[name="remClassStream"]').forEach(cb => {
+          cb.checked = claim.className.includes(cb.value);
+        });
+
+        document.getElementById('remSubject').value = claim.subject;
+        document.getElementById('remDayType').value = claim.dayType;
+        document.getElementById('remDate').value = claim.date;
+        toggleDayTypeFields();
+        if (claim.dayType === 'Weekday') {
+          document.getElementById('remWeekdaySession').value = claim.details;
+        } else {
+          document.querySelectorAll('input[name="weekendLesson"]').forEach(cb => {
+            cb.checked = claim.details.includes(cb.value);
+          });
+        }
+        switchStaffTab('staffRemedialTab', document.querySelectorAll('#staffPortalView aside .sidebar-link')[2]);
+      }
+    }
+
+    function deleteClaim(id) {
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      claims = claims.filter(c => c.id !== id);
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      refreshStaffData();
+    }
+
+    function downloadBursarLetterPDF() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      doc.text("BISHOP LAWI IMATHIU SCHOOL - BURSAR STATEMENT", 20, 20);
-      doc.save("Bursar_Statement.pdf");
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.teacherEmail === user.email);
+      const downloadTimestamp = new Date().toLocaleString();
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(27, 77, 62);
+      doc.text("BISHOP LAWI IMATHIU SCHOOL", 105, 20, { align: "center" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(85, 96, 89);
+      doc.text("Official Remedial Claim Letter & Summary Ledger", 105, 26, { align: "center" });
+
+      doc.setFontSize(10);
+      doc.setTextColor(28, 34, 30);
+      doc.text("Dear Bursar,", 20, 38);
+      
+      const introText = `I, ${user.name}, am requesting payment disbursement for the verified remedial sessions attended during the current term.`;
+      const splitIntro = doc.splitTextToSize(introText, 170);
+      doc.text(splitIntro, 20, 45);
+
+      let startY = 58;
+      doc.setFont("helvetica", "bold");
+      doc.text("Date", 20, startY);
+      doc.text("Class Streams", 50, startY);
+      doc.text("Subject", 85, startY);
+      doc.text("Occurrence & Details", 115, startY);
+      doc.text("Amount", 170, startY);
+      
+      doc.setLineWidth(0.2);
+      doc.line(20, startY + 2, 190, startY + 2);
+
+      startY += 8;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+
+      let totalSum = 0;
+      if (claims.length === 0) {
+        doc.text("No remedial claims recorded.", 20, startY);
+        startY += 10;
+      } else {
+        claims.forEach((c) => {
+          if (startY > 265) {
+            doc.addPage();
+            startY = 20;
+          }
+          const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+          totalSum += amt;
+          doc.text(String(c.date), 20, startY);
+          doc.text(String(c.className), 50, startY);
+          doc.text(String(c.subject), 85, startY);
+          doc.text(String(`${c.dayType}: ${c.details}`), 115, startY);
+          doc.text(`KES ${amt.toLocaleString()}`, 170, startY);
+          startY += 7;
+        });
+      }
+
+      startY += 4;
+      doc.setFont("helvetica", "bold");
+      doc.text(`Total Claim Amount: KES ${totalSum.toLocaleString()}`, 190, startY, { align: "right" });
+
+      const pageHeight = doc.internal.pageSize.height;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 100, 100);
+      doc.line(20, pageHeight - 18, 190, pageHeight - 18);
+      doc.text("KNOWLEDGE SHOWERS BLISS", 20, pageHeight - 12);
+      doc.text(`Downloaded on: ${downloadTimestamp}`, 190, pageHeight - 12, { align: "right" });
+
+      doc.save("Bursar_Remedial_Claim_Letter.pdf");
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('remDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('letterDate').innerText = new Date().toISOString().split('T')[0];
-      setInterval(() => { document.getElementById('liveClock').innerText = new Date().toLocaleTimeString(); }, 1000);
-      renderAll();
+    document.getElementById('catUploadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = JSON.parse(localStorage.getItem('currentUser'));
+      const title = document.getElementById('catTitle').value;
+      const fileInput = document.getElementById('catFile');
+      const fileName = fileInput.files[0] ? fileInput.files[0].name : 'Document.pdf';
+
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      cats.push({ id: Date.now(), teacherEmail: user.email, title, fileName, date: new Date().toISOString().split('T')[0] });
+      localStorage.setItem('cat_papers', JSON.stringify(cats));
+      document.getElementById('catUploadForm').reset();
+      refreshStaffData();
+      alert('C.A.T paper uploaded successfully.');
     });
+
+    function deleteCat(id) {
+      let cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+      cats = cats.filter(c => c.id !== id);
+      localStorage.setItem('cat_papers', JSON.stringify(cats));
+      refreshStaffData();
+    }
+
+    document.getElementById('noticeUpdateForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const weeklyEvent = document.getElementById('adminWeeklyEventInput').value.trim();
+      const tod = document.getElementById('adminTodInput').value.trim();
+      localStorage.setItem('school_noticeboard', JSON.stringify({ weeklyEvent, tod }));
+      alert('Noticeboard and Teacher on Duty updated successfully.');
+    });
+
+    document.getElementById('liveClassForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const timeSlot = document.getElementById('liveTimeSlot').value.trim();
+      const className = document.getElementById('liveClassStream').value;
+      const subject = document.getElementById('liveSubject').value.trim();
+      const teacher = document.getElementById('liveTeacher').value.trim();
+      const url = document.getElementById('liveUrl').value.trim();
+      const status = document.getElementById('liveStatus').value;
+
+      let classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      classes.push({ id: Date.now(), timeSlot, className, subject, teacher, url, status });
+      localStorage.setItem('live_classes', JSON.stringify(classes));
+      document.getElementById('liveClassForm').reset();
+      refreshAdminLiveClasses();
+      alert('Live class session published successfully.');
+    });
+
+    function refreshAdminLiveClasses() {
+      const classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      const tbody = document.getElementById('adminLiveTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = classes.length ? '' : '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No live timetable sessions published.</td></tr>';
+      classes.forEach(cls => {
+        const isLive = cls.status === 'Live Now';
+        tbody.innerHTML += `<tr><td><span class="badge ${isLive ? 'badge-live' : 'badge-warning'}">${cls.status}</span></td><td>${cls.timeSlot}</td><td>${cls.className}</td><td>${cls.subject}</td><td>${cls.teacher}</td><td><a href="${cls.url}" target="_blank" style="color: var(--primary);">Link</a></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444;" onclick="deleteLiveClass(${cls.id})">Delete</button></td></tr>`;
+      });
+    }
+
+    function deleteLiveClass(id) {
+      let classes = JSON.parse(localStorage.getItem('live_classes')) || [];
+      classes = classes.filter(c => c.id !== id);
+      localStorage.setItem('live_classes', JSON.stringify(classes));
+      refreshAdminLiveClasses();
+    }
+
+    function refreshAdminData() {
+      const users = JSON.parse(localStorage.getItem('school_users')) || [];
+      const claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      const cats = JSON.parse(localStorage.getItem('cat_papers')) || [];
+
+      document.getElementById('statAdminStaffCount').textContent = users.filter(u => u.role === 'staff').length;
+      document.getElementById('statAdminPendingCount').textContent = claims.filter(c => c.status === 'Pending Verification').length;
+      document.getElementById('statAdminCatsCount').textContent = cats.length;
+
+      const userTbody = document.getElementById('adminUserTableBody');
+      userTbody.innerHTML = '';
+      users.forEach(u => {
+        userTbody.innerHTML += `<tr><td>${u.name}</td><td>${u.email}</td><td><span style="text-transform: capitalize;">${u.role}</span></td><td><span class="badge badge-success">${u.status}</span></td><td><button class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;" onclick="resetPasswordPrompt('${u.email}')">Reset Password</button></td></tr>`;
+      });
+
+      const claimsTbody = document.getElementById('adminClaimsTableBody');
+      claimsTbody.innerHTML = claims.length ? '' : '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No claims pending review.</td></tr>';
+      claims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        const isVerified = c.status === 'Verified & Approved';
+        const actionBtn = isVerified ? `<span style="color: var(--primary); font-weight: 600;">Approved</span>` : `<button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;" onclick="verifyClaim(${c.id})">Approve</button>`;
+        claimsTbody.innerHTML += `<tr><td>${c.teacherName}</td><td>${c.date}</td><td>${c.className}</td><td>${c.subject}</td><td>${c.dayType}: ${c.details}</td><td>KES ${amt.toLocaleString()}</td><td><span class="badge ${isVerified ? 'badge-success' : 'badge-warning'}">${c.status}</span></td><td>${actionBtn}</td></tr>`;
+      });
+    }
+
+    function refreshAdminMasterSheet() {
+      const users = (JSON.parse(localStorage.getItem('school_users')) || []).filter(u => u.role === 'staff');
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.status === 'Verified & Approved');
+      const tableBody = document.getElementById('adminMasterSheetTableBody');
+      tableBody.innerHTML = '';
+
+      if (users.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No staff members found.</td></tr>';
+        return;
+      }
+
+      users.forEach(u => {
+        const teacherClaims = claims.filter(c => c.teacherEmail === u.email);
+        let totalAmount = 0;
+        let totalSessions = teacherClaims.length;
+        teacherClaims.forEach(c => {
+          totalAmount += (c.amount || calculateClaimAmount(c.dayType, c.details));
+        });
+
+        tableBody.innerHTML += `<tr><td><strong>${u.name}</strong></td><td>${u.email}</td><td>${totalSessions} Verified Session(s)</td><td><strong>KES ${totalAmount.toLocaleString()}</strong></td></tr>`;
+      });
+    }
+
+    function downloadMasterPaymentSheetPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const users = (JSON.parse(localStorage.getItem('school_users')) || []).filter(u => u.role === 'staff');
+      const claims = (JSON.parse(localStorage.getItem('remedial_claims')) || []).filter(c => c.status === 'Verified & Approved');
+      const downloadTimestamp = new Date().toLocaleString();
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(27, 77, 62);
+      doc.text("BISHOP LAWI IMATHIU SCHOOL", 105, 20, { align: "center" });
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(85, 96, 89);
+      doc.text("Master Teacher Remedial Payment Sheet (Verified Claims)", 105, 26, { align: "center" });
+
+      let startY = 40;
+      doc.setFont("helvetica", "bold");
+      doc.text("Teacher Name", 20, startY);
+      doc.text("Email", 80, startY);
+      doc.text("Verified Sessions", 135, startY);
+      doc.text("Total Amount (KES)", 165, startY);
+
+      doc.setLineWidth(0.2);
+      doc.line(20, startY + 2, 190, startY + 2);
+
+      startY += 8;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+
+      let grandTotal = 0;
+      users.forEach(u => {
+        const teacherClaims = claims.filter(c => c.teacherEmail === u.email);
+        let totalAmount = 0;
+        teacherClaims.forEach(c => {
+          totalAmount += (c.amount || calculateClaimAmount(c.dayType, c.details));
+        });
+        grandTotal += totalAmount;
+
+        if (startY > 265) {
+          doc.addPage();
+          startY = 20;
+        }
+
+        doc.text(String(u.name), 20, startY);
+        doc.text(String(u.email), 80, startY);
+        doc.text(String(`${teacherClaims.length} Session(s)`), 135, startY);
+        doc.text(`KES ${totalAmount.toLocaleString()}`, 165, startY);
+        startY += 8;
+      });
+
+      startY += 4;
+      doc.line(20, startY, 190, startY);
+      startY += 6;
+      doc.setFont("helvetica", "bold");
+      doc.text(`Grand Total Remedial Disbursement: KES ${grandTotal.toLocaleString()}`, 190, startY, { align: "right" });
+
+      const pageHeight = doc.internal.pageSize.height;
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100, 100, 100);
+      doc.line(20, pageHeight - 18, 190, pageHeight - 18);
+      doc.text("KNOWLEDGE SHOWERS BLISS", 20, pageHeight - 12);
+      doc.text(`Downloaded on: ${downloadTimestamp}`, 190, pageHeight - 12, { align: "right" });
+
+      doc.save("Master_Teacher_Remedial_Payment_Sheet.pdf");
+    }
+
+    function verifyClaim(id) {
+      let claims = JSON.parse(localStorage.getItem('remedial_claims')) || [];
+      claims = claims.map(c => c.id === id ? { ...c, status: 'Verified & Approved' } : c);
+      localStorage.setItem('remedial_claims', JSON.stringify(claims));
+      refreshAdminData();
+      alert('Claim verified and approved.');
+    }
+
+    function resetPasswordPrompt(email) {
+      const newPass = prompt("Enter new password for " + email + ":", "password123");
+      if (!newPass) return;
+      let users = JSON.parse(localStorage.getItem('school_users')) || [];
+      users = users.map(u => u.email === email ? { ...u, password: newPass } : u);
+      localStorage.setItem('school_users', JSON.stringify(users));
+      alert('Password updated successfully.');
+    }
+
+    function addNewStaffPrompt() {
+      const name = prompt("Enter staff full name:");
+      if (!name) return;
+      const email = prompt("Enter staff email address:");
+      if (!email) return;
+      const password = prompt("Enter temporary password:", "password123");
+
+      let users = JSON.parse(localStorage.getItem('school_users')) || [];
+      if (users.some(u => u.email === email)) {
+        alert('User email already exists.');
+        return;
+      }
+      users.push({ name, email, password, role: 'staff', status: 'Active' });
+      localStorage.setItem('school_users', JSON.stringify(users));
+      refreshAdminData();
+      alert('Staff registered successfully.');
+    }
+
+    function exportClaimsCSV() {
+      const claims = JSON.parse(localStorage.getItem('remedial claims')) || [];
+      if (!claims.length) {
+        alert('No data available to export.');
+        return;
+      }
+      let csv = 'Teacher,Date,Class Streams,Subject,Occurrence,Details,Amount,Status\n';
+      claims.forEach(c => {
+        const amt = c.amount || calculateClaimAmount(c.dayType, c.details);
+        csv += `"${c.teacherName}","${c.date}","${c.className}","${c.subject}","${c.dayType}","${c.details}","${amt}","${c.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'remedial_claims_report.csv');
+      a.click();
+    }
   </script>
 </body>
 </html>
