@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Springfield High School | Official Portal</title>
+    <title>Staff & Admin Portal | Bishop Lawi Imathiu Senior School</title>
     <!-- Google Fonts & FontAwesome for Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,6 +15,8 @@
             --dark: #1f2937;
             --light: #f3f4f6;
             --white: #ffffff;
+            --error: #dc2626;
+            --success: #16a34a;
             --transition: all 0.3s ease;
         }
 
@@ -27,404 +29,353 @@
 
         body {
             color: var(--dark);
-            background-color: var(--light);
-            line-height: 1.6;
+            background: linear-gradient(rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.9)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        /* Top Bar */
-        .top-bar {
+        .portal-container {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .portal-header {
             background-color: var(--primary);
             color: var(--white);
-            padding: 8px 5%;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-bar-info span {
-            margin-right: 20px;
-        }
-
-        .top-bar-info i {
-            color: var(--secondary);
-            margin-right: 6px;
-        }
-
-        /* Header & Navigation */
-        header {
-            background-color: var(--white);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-container i {
-            font-size: 2rem;
-            color: var(--primary);
-        }
-
-        .logo-text h1 {
-            font-size: 1.25rem;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .logo-text p {
-            font-size: 0.75rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
-        }
-
-        .portal-btn {
-            background-color: var(--secondary);
-            color: var(--white) !important;
-            padding: 8px 18px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .portal-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(30, 58, 138, 0.85), rgba(30, 58, 138, 0.85)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
-            color: var(--white);
-            padding: 100px 5%;
+            padding: 30px 20px;
             text-align: center;
         }
 
-        .hero-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .hero-content h2 {
-            font-size: 2.75rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn {
-            padding: 12px 25px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .btn-primary {
-            background-color: var(--secondary);
-            color: var(--white);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Quick Announcement Ticker */
-        .announcement-banner {
-            background-color: var(--secondary);
-            color: var(--white);
-            padding: 12px 5%;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .announcement-banner span.badge {
-            background-color: var(--white);
-            color: var(--secondary);
-            padding: 3px 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: 3px;
-            text-transform: uppercase;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 80px 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: var(--white);
-            padding: 35px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            transition: var(--transition);
-            border-top: 4px solid var(--primary);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-        }
-
-        .feature-card i {
+        .portal-header i {
             font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-            color: var(--dark);
-        }
-
-        .feature-card p {
-            color: #4b5563;
-            font-size: 0.95rem;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 50px 5% 20px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-col h4 {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
             color: var(--secondary);
-        }
-
-        .footer-col ul {
-            list-style: none;
-        }
-
-        .footer-col ul li {
             margin-bottom: 10px;
         }
 
-        .footer-col ul li a {
-            color: #9ca3af;
-            text-decoration: none;
+        .portal-header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .portal-header p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+        }
+
+        .portal-body {
+            padding: 30px;
+        }
+
+        /* Role Selector Tabs */
+        .role-tabs {
+            display: flex;
+            background-color: var(--light);
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 25px;
+        }
+
+        .role-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 4px;
             transition: var(--transition);
         }
 
-        .footer-col ul li a:hover {
-            color: var(--white);
+        .role-tab.active {
+            background-color: var(--white);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #374151;
-            color: #9ca3af;
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
             font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
         }
 
-        /* Responsive Mobile Menu Toggle */
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 42px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .form-actions a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .form-actions a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: var(--secondary);
+            color: var(--white);
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: var(--transition);
         }
 
-        @media (max-width: 768px) {
-            .top-bar {
-                display: none;
-            }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                padding: 20px;
-                box-shadow: 0 5px 5px rgba(0,0,0,0.05);
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .hero-content h2 {
-                font-size: 2rem;
-            }
+        .btn-login:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-home a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.9;
+            transition: var(--transition);
+        }
+
+        .back-home a:hover {
+            opacity: 1;
+        }
+
+        /* Error / Success feedback box */
+        .alert-box {
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .alert-error {
+            background-color: #fee2e2;
+            color: var(--error);
+            border: 1px solid #fecaca;
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="top-bar-info">
-            <span><i class="fas fa-envelope"></i> info@springfieldschool.edu</span>
-            <span><i class="fas fa-phone-alt"></i> +1 (555) 234-5678</span>
+    <div class="portal-container">
+        <div class="portal-header">
+            <i class="fas fa-shield-alt"></i>
+            <h1>Staff & Admin Portal</h1>
+            <p>Bishop Lawi Imathiu Senior School</p>
         </div>
-        <div class="top-bar-social">
-            <span><i class="fas fa-clock"></i> Mon - Fri: 8:00 AM - 4:00 PM</span>
-        </div>
-    </div>
 
-    <!-- Header / Navigation -->
-    <header>
-        <nav class="navbar">
-            <div class="logo-container">
-                <i class="fas fa-graduation-cap"></i>
-                <div class="logo-text">
-                    <h1>Springfield High</h1>
-                    <p>Excellence & Integrity</p>
+        <div class="portal-body">
+            <!-- Alert Feedback Box -->
+            <div id="alertBox" class="alert-box alert-error"></div>
+
+            <!-- Role Selector -->
+            <div class="role-tabs">
+                <div class="role-tab active" onclick="switchRole('staff')" id="staffTab">Staff Member</div>
+                <div class="role-tab" onclick="switchRole('admin')" id="adminTab">Administrator</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label id="emailLabel">Staff Email / ID</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="userEmail" class="form-control" placeholder="staff@bishoplawi.edu" required>
+                    </div>
                 </div>
-            </div>
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links" id="nav-list">
-                <li><a href="#" class="active">Home</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#academics">Academics</a></li>
-                <li><a href="#admissions">Admissions</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="portal.html" class="portal-btn"><i class="fas fa-lock"></i> Portal Login</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <!-- Live Announcement Banner -->
-    <div class="announcement-banner">
-        <span class="badge">Notice</span>
-        <p id="live-announcement">Welcome to the new academic term! Registration for extracurricular activities is now open.</p>
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="userPassword" class="form-control" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <label>
+                        <input type="checkbox" id="rememberMe"> Remember me
+                    </label>
+                    <a href="#" onclick="triggerPasswordReset()">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">Secure Login</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Empowering the Minds of Tomorrow</h2>
-            <p>Providing a dynamic learning environment where students discover their full potential, excel academically, and grow into responsible global citizens.</p>
-            <div class="btn-group">
-                <a href="#admissions" class="btn btn-primary">Apply Now</a>
-                <a href="#about" class="btn btn-outline">Learn More</a>
-            </div>
-        </div>
-    </section>
+    <div class="back-home">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Back to School Home</a>
+    </div>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="feature-card">
-            <i class="fas fa-book-reader"></i>
-            <h3>World-Class Curriculum</h3>
-            <p>Comprehensive academic programs designed to foster critical thinking, creativity, and scientific inquiry.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-laptop-code"></i>
-            <h3>Digital Learning Portal</h3>
-            <p>Real-time access to student performance reports, assignment trackers, fee balances, and homework modules.</p>
-        </div>
-        <div class="feature-card">
-            <i class="fas fa-users"></i>
-            <h3>Expert Faculty</h3>
-            <p>Dedicated and experienced educators committed to guiding every student toward personal and academic success.</p>
-        </div>
-    </section>
+    <!-- Firebase Connection Script Integration -->
+    <script type="module">
+        // Import Firebase modules (adjust version as matching your Firebase project setup)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>Springfield High School</h4>
-                <p style="color: #9ca3af; font-size: 0.9rem;">Building leaders of integrity, character, and scholastic excellence since 1995.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#academics">Programs</a></li>
-                    <li><a href="#admissions">Admissions Policy</a></li>
-                    <li><a href="portal.html">Student Portal</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact Us</h4>
-                <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 8px;">123 Education Drive, Academic City</p>
-                <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 8px;">Email: info@springfieldschool.edu</p>
-                <p style="color: #9ca3af; font-size: 0.9rem;">Phone: +1 (555) 234-5678</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Springfield High School. All rights reserved.</p>
-        </div>
-    </footer>
+        // TODO: Replace with your actual Firebase config keys
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-    <!-- JavaScript for Mobile Menu toggle -->
-    <script>
-        const mobileMenu = document.getElementById('mobile-menu');
-        const navList = document.getElementById('nav-list');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-        mobileMenu.addEventListener('click', () => {
-            navList.classList.toggle('active');
-        });
+        let currentRole = 'staff';
+
+        window.switchRole = function(role) {
+            currentRole = role;
+            const staffTab = document.getElementById('staffTab');
+            const adminTab = document.getElementById('adminTab');
+            const emailInput = document.getElementById('userEmail');
+
+            if(role === 'staff') {
+                staffTab.classList.add('active');
+                adminTab.classList.remove('active');
+                emailInput.placeholder = "staff@bishoplawi.edu";
+            } else {
+                adminTab.classList.add('active');
+                staffTab.classList.remove('active');
+                emailInput.placeholder = "admin@bishoplawi.edu";
+            }
+        }
+
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            const alertBox = document.getElementById('alertBox');
+            const loginBtn = document.getElementById('loginBtn');
+
+            alertBox.style.display = 'none';
+            loginBtn.innerText = "Authenticating...";
+
+            try {
+                // Authenticate with Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                // Successful login redirection based on role
+                alertBox.style.display = 'block';
+                alertBox.className = "alert-box";
+                alertBox.style.backgroundColor = "#dcfce7";
+                alertBox.style.color = "var(--success)";
+                alertBox.style.border = "1px solid #bbf7d0";
+                alertBox.innerText = "Login successful! Redirecting dashboard...";
+
+                setTimeout(() => {
+                    if(currentRole === 'admin') {
+                        window.location.href = "admin-dashboard.html";
+                    } else {
+                        window.location.href = "staff-dashboard.html";
+                    }
+                }, 1000);
+
+            } catch (error) {
+                loginBtn.innerText = "Secure Login";
+                alertBox.style.display = 'block';
+                alertBox.className = "alert-box alert-error";
+                
+                // Friendly error mapping
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') {
+                    alertBox.innerText = "Invalid email or password. Please verify your credentials.";
+                } else {
+                    alertBox.innerText = error.message;
+                }
+            }
+        }
+
+        window.triggerPasswordReset = async function() {
+            const email = document.getElementById('userEmail').value;
+            const alertBox = document.getElementById('alertBox');
+            if(!email) {
+                alertBox.style.display = 'block';
+                alertBox.innerText = "Please enter your email address first to reset password.";
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alertBox.style.display = 'block';
+                alertBox.className = "alert-box";
+                alertBox.style.backgroundColor = "#dcfce7";
+                alertBox.style.color = "var(--success)";
+                alertBox.innerText = "Password reset instructions sent to your email!";
+            } catch (error) {
+                alertBox.style.display = 'block';
+                alertBox.className = "alert-box alert-error";
+                alertBox.innerText = error.message;
+            }
+        }
     </script>
 </body>
 </html>
