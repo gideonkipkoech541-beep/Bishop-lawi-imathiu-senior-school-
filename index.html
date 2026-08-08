@@ -1915,4 +1915,94 @@
     }
   </script>
 </body>
+  <script>
+    // 1. Default settings for weeks (true = enabled/open, false = disabled/closed)
+    let weeklySettings = JSON.parse(localStorage.getItem('adminWeeklySettings')) || {
+        "Week 1": true,
+        "Week 2": false,
+        "Week 3": false,
+        "Week 4": false
+    };
+
+    // 2. Initialize the Admin Toggles and Teacher View on Page Load
+    document.addEventListener('DOMContentLoaded', () => {
+        setupAdminToggles();
+        renderTeacherWeeks();
+        setupAdminReviewDropdown();
+    });
+
+    // 3. Admin Panel: Handle Toggle Switches
+    function setupAdminToggles() {
+        const toggles = document.querySelectorAll('.week-toggle-input');
+        
+        toggles.forEach(toggle => {
+            const week = toggle.getAttribute('data-week');
+            // Set initial state from memory
+            toggle.checked = weeklySettings[week] || false;
+
+            // Listen for changes when admin clicks the switch
+            toggle.addEventListener('change', (e) => {
+                weeklySettings[week] = e.target.checked;
+                // Save to browser memory
+                localStorage.setItem('adminWeeklySettings', JSON.stringify(weeklySettings));
+                // Refresh the teacher portal view automatically
+                renderTeacherWeeks();
+            });
+        });
+    }
+
+    // 4. Teacher Portal: Render Active Weeks
+    function renderTeacherWeeks() {
+        const container = document.getElementById('active-weeks-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        Object.keys(weeklySettings).forEach(weekName => {
+            const isEnabled = weeklySettings[weekName];
+
+            const card = document.createElement('div');
+            card.className = 'week-activation-card ' + (isEnabled ? 'enabled' : '');
+            card.style.cssText = "background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; width: 200px; display: flex; flex-direction: column; align-items: flex-start;";
+            
+            if (isEnabled) {
+                card.style.borderColor = "#3b82f6";
+                card.style.background = "#eff6ff";
+            }
+
+            card.innerHTML = `
+                <span class="week-title" style="font-weight: 600; color: #1e293b;">${weekName}</span>
+                <span class="week-status ${isEnabled ? 'open' : 'closed'}" style="font-size: 0.85rem; margin: 8px 0 12px 0; font-weight: 500; color: ${isEnabled ? '#16a34a' : '#dc2626'};">
+                    Status: ${isEnabled ? 'Open' : 'Closed'}
+                </span>
+                <button class="claim-week-btn" ${!isEnabled ? 'disabled' : ''} style="background-color: ${isEnabled ? '#3b82f6' : '#cbd5e1'}; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: ${isEnabled ? 'pointer' : 'not-allowed'}; font-weight: 500; font-size: 0.9rem; width: 100%;">
+                    ${isEnabled ? 'Claim / Submit' : 'Closed'}
+                </button>
+            `;
+
+            // Optional: Add click event for the claim button if enabled
+            if (isEnabled) {
+                const btn = card.querySelector('.claim-week-btn');
+                btn.addEventListener('click', () => {
+                    alert(`Opening submission form for ${weekName}`);
+                    // Add your form opening logic here if needed
+                });
+            }
+
+            container.appendChild(card);
+        });
+    }
+
+    // 5. Admin Review Table: Filter/Setup
+    function setupAdminReviewDropdown() {
+        const weekSelect = document.getElementById('admin-week-select');
+        if (weekSelect) {
+            weekSelect.addEventListener('change', () => {
+                // This triggers when admin changes the week to review in the table
+                console.log("Selected review week:", weekSelect.value);
+                // You can plug your table rendering function here
+            });
+        }
+    }
+</script>
 </html>
