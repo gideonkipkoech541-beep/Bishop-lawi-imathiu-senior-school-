@@ -638,6 +638,101 @@
         </div>
 
         <!-- Remedial Claims Tab -->
+        <!-- Add this section to your teacher's portal file where teachers view and submit their weekly remedials -->
+<div class="teacher-portal-container">
+    <h3>Active Remedial Submission Windows</h3>
+    <p class="section-subtitle">You can only submit or claim remedials for the weeks currently enabled by the administration.</p>
+    
+    <div id="active-weeks-container" class="active-weeks-grid">
+        <!-- Enabled weeks from Firebase will dynamically populate here -->
+        <div class="loading-state">Loading active weeks...</div>
+    </div>
+</div>
+
+<style>
+.teacher-portal-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.teacher-portal-container h3 {
+    margin-top: 0;
+    color: #1e293b;
+    font-size: 1.25rem;
+}
+
+.section-subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.active-weeks-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.week-activation-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 15px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.week-activation-card.enabled {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.week-title {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.week-status {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.week-status.open {
+    color: #16a34a;
+}
+
+.week-status.closed {
+    color: #dc2626;
+}
+
+.claim-week-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.claim-week-btn:hover {
+    background-color: #2563eb;
+}
+
+.claim-week-btn:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+}
+</style>
         <div id="staffRemedialTab" class="staff-tab-content" style="display: none;">
           <div class="card">
             <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">Remedial Claim Form</h2>
