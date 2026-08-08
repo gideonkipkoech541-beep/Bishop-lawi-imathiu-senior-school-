@@ -905,6 +905,68 @@
   </div>
 
   <!-- ADMIN PORTAL -->
+  <!-- Place the Week Control Panel where the admin manages settings/weeks -->
+<div class="admin-portal-container">
+    <h3>Manage Weekly Remedial Windows</h3>
+    <p class="section-subtitle">Enable or disable specific weeks so that teachers can claim and submit their remedials.</p>
+    
+    <div class="admin-weeks-grid" id="admin-weeks-control-panel">
+        <div class="admin-week-card">
+            <span class="week-name">Week 1</span>
+            <label class="switch">
+                <input type="checkbox" data-week="Week 1" class="week-toggle-input">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="admin-week-card">
+            <span class="week-name">Week 2</span>
+            <label class="switch">
+                <input type="checkbox" data-week="Week 2" class="week-toggle-input">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="admin-week-card">
+            <span class="week-name">Week 3</span>
+            <label class="switch">
+                <input type="checkbox" data-week="Week 3" class="week-toggle-input">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        <div class="admin-week-card">
+            <span class="week-name">Week 4</span>
+            <label class="switch">
+                <input type="checkbox" data-week="Week 4" class="week-toggle-input">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- Place the Remedial Columnar Table where the admin reviews submissions -->
+<div class="admin-controls" style="margin-top: 30px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+    <label for="admin-week-select" style="font-weight: 600; color: #1e293b;">Select Week to Review:</label>
+    <select id="admin-week-select" class="form-control" style="padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1;">
+        <option value="Week 1">Week 1</option>
+        <option value="Week 2">Week 2</option>
+        <option value="Week 3">Week 3</option>
+        <option value="Week 4">Week 4</option>
+    </select>
+</div>
+
+<div class="table-responsive">
+    <table class="admin-remedial-table">
+        <thead>
+            <tr id="teacher-table-headers">
+                <!-- Teacher columns populated dynamically -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="teacher-table-body">
+                <!-- Records populated dynamically -->
+            </tr>
+        </tbody>
+    </table>
+</div>
   <div id="adminPortalView" class="view-section">
     <div class="portal-layout">
       <aside>
