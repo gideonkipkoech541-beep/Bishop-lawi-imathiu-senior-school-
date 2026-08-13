@@ -1,83 +1,1959 @@
-Here is the completion for the truncated `handleLogin` function and the remaining script structure for your portal. You should add this directly inside the `<script>` section where the code cuts off at `if (`.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bishop Lawi Imathiu Secondary School | Meru, Kenya</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- html2pdf.js CDN for Client-side PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Google Fonts: Lato (Light 300, Regular 400, Bold 700) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .portal-view { display: none; }
+        .portal-view.active { display: block; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        :root {
+            --dark-green-deep: #1a4d2e;
+            --dark-green-light: #2c6e49;
+            --dark-brown: #4a342e;
+            --light-cream: #fbf9f1;
+            --text-on-dark: #f0f0f0;
+        }
 
----
+        body {
+            background-color: var(--light-cream);
+            font-family: 'Lato', sans-serif !important;
+            font-weight: 400;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-### Completed `handleLogin` Function & Role Routing
+        /* Enforce Lato across standard elements, except formal printable sections */
+        *, body, button, input, select, textarea {
+            font-family: 'Lato', sans-serif !important;
+        }
 
-Replace or complete the end of your script with the following block:
+        /* Enforce Times New Roman for official printable reports/documents as requested */
+        #printable-section, #printable-section * {
+            font-family: "Times New Roman", Times, serif !important;
+        }
 
-```javascript
-            } else if (role === 'admin') {
-                if (inputVal === 'admin' && passwordVal === 'password123') {
-                    currentRole = 'admin';
-                    loggedUser = { name: 'Administrator', email: 'admin' };
-                    badge.textContent = 'Administrator';
+        h1, h2, h3, h4, h5, h6, .font-bold, font-extrabold {
+            font-family: 'Lato', sans-serif !important;
+            font-weight: 700;
+        }
+
+        .lato-light {
+            font-family: 'Lato', sans-serif !important;
+            font-weight: 300;
+        }
+
+        .nav-item:hover, .nav-item.active-nav {
+            background-color: var(--dark-green-light);
+            border-radius: 0.375rem;
+            color: #fff;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #printable-section, #printable-section * { visibility: visible; }
+            #printable-section { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- NAVIGATION BAR -->
+    <header class="bg-[--dark-green-deep] text-[--text-on-dark] sticky top-0 z-50 shadow-md no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showView('public')">
+                <div class="bg-amber-500 text-indigo-950 p-2 rounded-full font-bold text-xl flex items-center justify-center w-10 h-10 shadow-inner">
+                    BL
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight sm:text-xl">Bishop Lawi Imathiu</h1>
+                    <p class="text-xs text-amber-300">Secondary School - Meru</p>
+                </div>
+            </div>
+
+            <!-- Public Nav Links -->
+            <nav id="public-nav" class="hidden md:flex items-center gap-6 font-medium text-sm">
+                <a href="#about" class="hover:text-amber-400 transition">About Us</a>
+                <a href="#academics" class="hover:text-amber-400 transition">Academics</a>
+                <a href="#admissions" class="hover:text-amber-400 transition">Admissions</a>
+                <a href="#contact" class="hover:text-amber-400 transition">Contact</a>
+                <button onclick="showLoginModal()" class="bg-amber-500 hover:bg-amber-600 text-indigo-950 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Portal Login
+                </button>
+            </nav>
+
+            <!-- Authenticated User Nav Indicator -->
+            <div id="user-nav" class="hidden flex items-center gap-4">
+                <span id="user-badge" class="bg-indigo-900 border border-amber-400/40 text-amber-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow flex">
+
+        <!-- PUBLIC WEBSITE VIEW -->
+        <div id="public-view" class="portal-view active w-full no-print">
+            <section class="bg-gradient-to-r from-[--dark-green-deep] via-[#246342] to-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
+                        Excellence in Education
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-light mb-6 leading-tight lato-light">Nurturing Leaders of Tomorrow </h2>
+                    <p class="text-indigo-200 text-lg mb-8 max-w-2xl mx-auto">
+                        Providing quality education, moral foundation, and holistic development to empower students for local and global impact.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <a href="#admissions" class="bg-amber-500 hover:bg-amber-600 text-indigo-950 font-semibold px-6 py-3 rounded-lg shadow-lg transition">Apply for Admission</a>
+                        <button onclick="showLoginModal()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-lg transition">Access Staff Portal</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-900 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="book-open" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Academic Excellence</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Comprehensive KCSE and CBC senior secondary curriculum supported by experienced teaching staff.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Character & Values</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Grounded in strong Christian values, discipline, and community leadership development.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="trophy" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2">Co-Curriculars</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Active participation in athletics, football, music, drama, and science congress competitions.</p>
+                </div>
+            </section>
+
+            <section id="contact" class="bg-slate-100 py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-light text-slate-900 lato-light">Get in Touch</h2>
+                        <p class="text-slate-600 mt-2">We welcome inquiries from prospective parents and guardians.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="space-y-6">
+                            <h3 class="text-xl font-bold text-[--dark-green-deep]">School Contacts</h3>
+                            <div class="flex items-start gap-4">
+                                <div class="p-2 bg-indigo-50 text-indigo-900 rounded-lg"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-900">Postal Address</h4>
+                                    <p class="text-slate-600 text-sm">Bishop Lawi Imathiu Secondary School<br>P.O. BOX 2769-60200<br>Meru, Kenya</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="p-2 bg-indigo-50 text-indigo-900 rounded-lg"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-900">Phone</h4>
+                                    <p class="text-slate-600 text-sm">0111485527</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="p-2 bg-indigo-50 text-indigo-900 rounded-lg"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                                <div>
+                                    <h4 class="font-semibold text-sm text-slate-900">Email</h4>
+                                    <p class="text-slate-600 text-sm">info@bishoplawiimathiu.ac.ke</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form onsubmit="alert('Message sent successfully!'); return false;" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Full Name</label>
+                                <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Email / Phone</label>
+                                <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Message</label>
+                                <textarea rows="3" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-semibold py-2.5 rounded-lg transition text-sm">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SHARED PORTAL SIDEBAR -->
+        <aside id="portal-sidebar" class="hidden w-72 bg-[--dark-green-deep] text-[--text-on-dark] flex-col p-4 space-y-8 border-r border-[#246342] no-print">
+            <div class="text-center">
+                <div class="bg-amber-500 text-indigo-950 p-2 rounded-full font-bold text-3xl mx-auto flex items-center justify-center w-20 h-20 mb-3 shadow-md">
+                    BL
+                </div>
+                <h3 id="sidebar-portal-title" class="font-bold text-lg leading-tight text-amber-300">Staff Portal</h3>
+            </div>
+            
+            <!-- TEACHER SIDEBAR NAV -->
+            <div id="teacher-nav-items" class="space-y-2">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider px-3">Teacher Navigation</p>
+                <a href="#" onclick="switchTab('teacher', 't-dashboard')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition active-nav">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="#" onclick="switchTab('teacher', 't-remedials')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="clipboard-signature" class="w-5 h-5"></i> Submit Remedials
+                </a>
+                <a href="#" onclick="switchTab('teacher', 't-swapping')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="arrow-left-right" class="w-5 h-5"></i> Remedial Swapping
+                </a>
+                <a href="#" onclick="switchTab('teacher', 't-cats')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="pencil-ruler" class="w-5 h-5"></i> Submit CATs
+                </a>
+                <a href="#" onclick="switchTab('teacher', 't-upload-cat')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="file-up" class="w-5 h-5"></i> Upload Weekly CAT
+                </a>
+                <a href="#" onclick="switchTab('teacher', 't-exams')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="scroll-text" class="w-5 h-5"></i> Term Exam
+                </a>
+            </div>
+
+            <!-- ADMIN SIDEBAR NAV -->
+            <div id="admin-nav-items" class="space-y-2 hidden">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider px-3">Admin Navigation</p>
+                <a href="#" onclick="switchTab('admin', 'a-dashboard')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition active-nav">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a href="#" onclick="switchTab('admin', 'a-manage-teachers')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="users" class="w-5 h-5"></i> Manage Teachers
+                </a>
+                <a href="#" onclick="switchTab('admin', 'a-manage-weeks')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="calendar" class="w-5 h-5"></i> Control Academic Weeks
+                </a>
+                <a href="#" onclick="switchTab('admin', 'a-review-remedials')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="file-check" class="w-5 h-5"></i> Review Remedials Claims
+                </a>
+                <a href="#" onclick="switchTab('admin', 'a-approved-reports')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="download" class="w-5 h-5"></i> Approved Claims & Export
+                </a>
+            </div>
+
+            <div class="mt-auto pt-4 border-t border-[#246342] text-xs text-slate-400 text-center">
+                Portal v2.7[cite: 6] | BL Secondary
+            </div>
+        </aside>
+
+        <!-- PORTAL CONTENT WRAPPER -->
+        <div id="portal-content" class="hidden flex-grow bg-[--light-cream]">
+            
+            <!-- PORTAL TOP BAR -->
+            <div class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm no-print">
+                <h1 id="portal-title" class="text-xl font-bold text-[--dark-green-deep]">Dashboard</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border">Term 2 2026</span>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                        <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= TEACHER PORTAL VIEWS ================= -->
+            <div id="teacher-view" class="portal-view p-8 no-print">
+                
+                <!-- TAB: Teacher Dashboard -->
+                <div id="t-dashboard" class="tab-content active">
+                    <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-2xl font-light text-slate-900 lato-light">Teacher Overview</h2>
+                            <p class="text-slate-600 text-sm">Welcome back, <span id="teacher-logged-name" class="font-semibold text-[--dark-green-deep]">Mr. Joseph Mutuma</span></p>
+                        </div>
+                    </div>
+
+                    <div class="grid sm:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-[#f2a632] p-5 rounded-lg text-white flex items-center gap-4 shadow">
+                            <div class="bg-white/10 p-3 rounded-md"><i data-lucide="tag" class="w-7 h-7"></i></div>
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Subjects Taught</p>
+                                <p id="t-logged-dept" class="text-xl font-bold">Mathematics, Kiswahili, Physics, Business Studies, Agriculture, Geography, Computer Studies, CRE, History & Government, Music</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#1cc481] p-5 rounded-lg text-white flex items-center gap-4 shadow">
+                            <div class="bg-white/10 p-3 rounded-md"><i data-lucide="check-circle" class="w-7 h-7"></i></div>
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Submitted Claims</p>
+                                <p id="t-submitted-count" class="text-2xl font-bold">1 Claim</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#18c2ec] p-5 rounded-lg text-white flex items-center gap-4 shadow">
+                            <div class="bg-white/10 p-3 rounded-md"><i data-lucide="users" class="w-7 h-7"></i></div>
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Assigned Streams</p>
+                                <p id="t-logged-streams" class="text-xl font-bold">Grade 10, Form 3</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Submission History Table -->
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                        <h3 class="font-bold text-lg mb-4 text-slate-800">Recent Remedial Submissions</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead class="bg-slate-100 text-slate-700 uppercase text-xs">
+                                    <tr>
+                                        <th class="p-3">Week</th>
+                                        <th class="p-3">Morning Lessons</th>
+                                        <th class="p-3">Evening Lessons</th>
+                                        <th class="p-3">Saturday Lessons</th>
+                                        <th class="p-3">Total Sessions</th>
+                                        <th class="p-3">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="t-history-tbody" class="divide-y divide-slate-200">
+                                    <!-- Dynamic User Submissions -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Submit Remedials -->
+                <div id="t-remedials" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-light text-slate-900 lato-light">Submit Remedials Claim</h2>
+                        <p class="text-slate-600 text-sm">Record morning, evening, and Saturday remedials day-by-day via interactive day buttons.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-4xl">
+                        <form onsubmit="submitRemedialClaim(event)" class="space-y-6">
+                            
+                            <!-- Academic Week Selection -->
+                            <div class="max-w-xs">
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Select Academic Week</label>
+                                <select id="t-week-select" required class="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                    <!-- Active weeks populated dynamically -->
+                                </select>
+                            </div>
+
+                            <!-- MORNING REMEDIALS SECTION -->
+                            <div class="border-t pt-5">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h3 class="font-bold text-base text-[--dark-green-deep]">1. Morning Remedials (Mon - Fri)</h3>
+                                    <span class="text-xs font-bold text-slate-500">Selected Days: <span id="morn-count-badge" class="text-indigo-700">0</span></span>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-3">Click any day below to open the wizard and record class and subject details (including Music) (all fields mandatory).</p>
+                                
+                                <!-- Day selector buttons -->
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <button type="button" onclick="openDayWizard('morn', 'Monday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Monday</button>
+                                    <button type="button" onclick="openDayWizard('morn', 'Tuesday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Tuesday</button>
+                                    <button type="button" onclick="openDayWizard('morn', 'Wednesday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Wednesday</button>
+                                    <button type="button" onclick="openDayWizard('morn', 'Thursday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Thursday</button>
+                                    <button type="button" onclick="openDayWizard('morn', 'Friday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Friday</button>
+                                </div>
+
+                                <!-- Added Morning Days Container -->
+                                <div id="morn-days-container" class="space-y-2">
+                                    <p class="text-xs text-slate-400 italic">No morning remedial days added yet. Click a day above to add.</p>
+                                </div>
+                                <input type="hidden" id="morn-total" value="0">
+                            </div>
+
+                            <!-- EVENING REMEDIALS SECTION -->
+                            <div class="border-t pt-5">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h3 class="font-bold text-base text-[--dark-green-deep]">2. Evening Remedials (Mon - Fri)</h3>
+                                    <span class="text-xs font-bold text-slate-500">Selected Days: <span id="eve-count-badge" class="text-indigo-700">0</span></span>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-3">Click any day below to open the wizard and record class and subject details (including Music) (all fields mandatory).</p>
+                                
+                                <!-- Day selector buttons -->
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <button type="button" onclick="openDayWizard('eve', 'Monday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Monday</button>
+                                    <button type="button" onclick="openDayWizard('eve', 'Tuesday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Tuesday</button>
+                                    <button type="button" onclick="openDayWizard('eve', 'Wednesday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Wednesday</button>
+                                    <button type="button" onclick="openDayWizard('eve', 'Thursday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Thursday</button>
+                                    <button type="button" onclick="openDayWizard('eve', 'Friday')" class="px-4 py-2 bg-slate-100 hover:bg-[--dark-green-deep] hover:text-white border rounded-lg text-xs font-bold transition shadow-sm">Friday</button>
+                                </div>
+
+                                <!-- Added Evening Days Container -->
+                                <div id="eve-days-container" class="space-y-2">
+                                    <p class="text-xs text-slate-400 italic">No evening remedial days added yet. Click a day above to add.</p>
+                                </div>
+                                <input type="hidden" id="eve-total" value="0">
+                            </div>
+
+                            <!-- WEEKEND (SATURDAY) REMEDIALS SECTION -->
+                            <div class="border-t pt-5">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h3 class="font-bold text-base text-[--dark-green-deep]">3. Weekend (Saturday) Remedials</h3>
+                                    <span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-full font-bold">Max 4 Lessons / Saturday</span>
+                                </div>
+                                <p class="text-xs text-slate-500 mb-4">Select Saturday lessons, subject taught (including Business Studies, Agriculture, Geography, Computer Studies, CRE, History & Government, Music), and select target class from dropdown options.</p>
+
+                                <!-- Lesson Slots (1 to 4) -->
+                                <div class="space-y-4">
+                                    <!-- Lesson 1 -->
+                                    <div class="p-3 border rounded-lg bg-slate-50/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-xs font-bold text-slate-800 uppercase flex items-center gap-2">
+                                                <input type="checkbox" id="sat-l1-enable" onchange="calculateTotalClaimSessions()" class="rounded text-[--dark-green-deep]">
+                                                Saturday Lesson 1
+                                            </label>
+                                            <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono">8:00 AM - 9:30 AM</span>
+                                        </div>
+                                        <div class="grid sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Subject Taught</label>
+                                                <select id="sat-l1-subject" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Subject --</option>
+                                                    <option value="Kiswahili">Kiswahili</option>
+                                                    <option value="Essential Mathematics">Essential Mathematics</option>
+                                                    <option value="Core Mathematics">Core Mathematics</option>
+                                                    <option value="Home Science">Home Science</option>
+                                                    <option value="Power Mechanics">Power Mechanics</option>
+                                                    <option value="Metal Work">Metal Work</option>
+                                                    <option value="Electricity">Electricity</option>
+                                                    <option value="Community Service Learning">Community Service Learning</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Physics">Physics</option>
+                                                    <option value="Chemistry">Chemistry</option>
+                                                    <option value="Biology">Biology</option>
+                                                    <option value="English">English</option>
+                                                    <option value="Business Studies">Business Studies</option>
+                                                    <option value="Agriculture">Agriculture</option>
+                                                    <option value="Geography">Geography</option>
+                                                    <option value="Computer Studies">Computer Studies</option>
+                                                    <option value="CRE">CRE</option>
+                                                    <option value="History & Government">History & Government</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Select Target Class</label>
+                                                <select id="sat-l1-class" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Class --</option>
+                                                    <option value="Grade 10">Grade 10 (Whole Form)</option>
+                                                    <option value="Form 3">Form 3 (Whole Form)</option>
+                                                    <option value="Form 4">Form 4 (Whole Form)</option>
+                                                    <option value="Grade 10 East">Grade 10 East</option>
+                                                    <option value="Grade 10 West">Grade 10 West</option>
+                                                    <option value="Grade 10 North">Grade 10 North</option>
+                                                    <option value="Form 3 East">Form 3 East</option>
+                                                    <option value="Form 3 West">Form 3 West</option>
+                                                    <option value="Form 3 North">Form 3 North</option>
+                                                    <option value="Form 3 South">Form 3 South</option>
+                                                    <option value="Form 4 East">Form 4 East</option>
+                                                    <option value="Form 4 West">Form 4 West</option>
+                                                    <option value="Form 4 North">Form 4 North</option>
+                                                    <option value="Form 4 South">Form 4 South</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lesson 2 -->
+                                    <div class="p-3 border rounded-lg bg-slate-50/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-xs font-bold text-slate-800 uppercase flex items-center gap-2">
+                                                <input type="checkbox" id="sat-l2-enable" onchange="calculateTotalClaimSessions()" class="rounded text-[--dark-green-deep]">
+                                                Saturday Lesson 2
+                                            </label>
+                                            <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono">9:30 AM - 11:00 AM</span>
+                                        </div>
+                                        <div class="grid sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Subject Taught</label>
+                                                <select id="sat-l2-subject" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Subject --</option>
+                                                    <option value="Kiswahili">Kiswahili</option>
+                                                    <option value="Essential Mathematics">Essential Mathematics</option>
+                                                    <option value="Core Mathematics">Core Mathematics</option>
+                                                    <option value="Home Science">Home Science</option>
+                                                    <option value="Power Mechanics">Power Mechanics</option>
+                                                    <option value="Metal Work">Metal Work</option>
+                                                    <option value="Electricity">Electricity</option>
+                                                    <option value="Community Service Learning">Community Service Learning</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Physics">Physics</option>
+                                                    <option value="Chemistry">Chemistry</option>
+                                                    <option value="Biology">Biology</option>
+                                                    <option value="English">English</option>
+                                                    <option value="Business Studies">Business Studies</option>
+                                                    <option value="Agriculture">Agriculture</option>
+                                                    <option value="Geography">Geography</option>
+                                                    <option value="Computer Studies">Computer Studies</option>
+                                                    <option value="CRE">CRE</option>
+                                                    <option value="History & Government">History & Government</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Select Target Class</label>
+                                                <select id="sat-l2-class" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Class --</option>
+                                                    <option value="Grade 10">Grade 10 (Whole Form)</option>
+                                                    <option value="Form 3">Form 3 (Whole Form)</option>
+                                                    <option value="Form 4">Form 4 (Whole Form)</option>
+                                                    <option value="Grade 10 East">Grade 10 East</option>
+                                                    <option value="Grade 10 West">Grade 10 West</option>
+                                                    <option value="Grade 10 North">Grade 10 North</option>
+                                                    <option value="Form 3 East">Form 3 East</option>
+                                                    <option value="Form 3 West">Form 3 West</option>
+                                                    <option value="Form 3 North">Form 3 North</option>
+                                                    <option value="Form 3 South">Form 3 South</option>
+                                                    <option value="Form 4 East">Form 4 East</option>
+                                                    <option value="Form 4 West">Form 4 West</option>
+                                                    <option value="Form 4 North">Form 4 North</option>
+                                                    <option value="Form 4 South">Form 4 South</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lesson 3 -->
+                                    <div class="p-3 border rounded-lg bg-slate-50/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-xs font-bold text-slate-800 uppercase flex items-center gap-2">
+                                                <input type="checkbox" id="sat-l3-enable" onchange="calculateTotalClaimSessions()" class="rounded text-[--dark-green-deep]">
+                                                Saturday Lesson 3
+                                            </label>
+                                            <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono">11:30 AM - 1:00 PM</span>
+                                        </div>
+                                        <div class="grid sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Subject Taught</label>
+                                                <select id="sat-l3-subject" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Subject --</option>
+                                                    <option value="Kiswahili">Kiswahili</option>
+                                                    <option value="Essential Mathematics">Essential Mathematics</option>
+                                                    <option value="Core Mathematics">Core Mathematics</option>
+                                                    <option value="Home Science">Home Science</option>
+                                                    <option value="Power Mechanics">Power Mechanics</option>
+                                                    <option value="Metal Work">Metal Work</option>
+                                                    <option value="Electricity">Electricity</option>
+                                                    <option value="Community Service Learning">Community Service Learning</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Physics">Physics</option>
+                                                    <option value="Chemistry">Chemistry</option>
+                                                    <option value="Biology">Biology</option>
+                                                    <option value="English">English</option>
+                                                    <option value="Business Studies">Business Studies</option>
+                                                    <option value="Agriculture">Agriculture</option>
+                                                    <option value="Geography">Geography</option>
+                                                    <option value="Computer Studies">Computer Studies</option>
+                                                    <option value="CRE">CRE</option>
+                                                    <option value="History & Government">History & Government</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Select Target Class</label>
+                                                <select id="sat-l3-class" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Class --</option>
+                                                    <option value="Grade 10">Grade 10 (Whole Form)</option>
+                                                    <option value="Form 3">Form 3 (Whole Form)</option>
+                                                    <option value="Form 4">Form 4 (Whole Form)</option>
+                                                    <option value="Grade 10 East">Grade 10 East</option>
+                                                    <option value="Grade 10 West">Grade 10 West</option>
+                                                    <option value="Grade 10 North">Grade 10 North</option>
+                                                    <option value="Form 3 East">Form 3 East</option>
+                                                    <option value="Form 3 West">Form 3 West</option>
+                                                    <option value="Form 3 North">Form 3 North</option>
+                                                    <option value="Form 3 South">Form 3 South</option>
+                                                    <option value="Form 4 East">Form 4 East</option>
+                                                    <option value="Form 4 West">Form 4 West</option>
+                                                    <option value="Form 4 North">Form 4 North</option>
+                                                    <option value="Form 4 South">Form 4 South</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Lesson 4 -->
+                                    <div class="p-3 border rounded-lg bg-slate-50/50">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <label class="text-xs font-bold text-slate-800 uppercase flex items-center gap-2">
+                                                <input type="checkbox" id="sat-l4-enable" onchange="calculateTotalClaimSessions()" class="rounded text-[--dark-green-deep]">
+                                                Saturday Lesson 4
+                                            </label>
+                                            <span class="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-mono">2:00 PM - 3:30 PM</span>
+                                        </div>
+                                        <div class="grid sm:grid-cols-2 gap-3">
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Subject Taught</label>
+                                                <select id="sat-l4-subject" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Subject --</option>
+                                                    <option value="Kiswahili">Kiswahili</option>
+                                                    <option value="Essential Mathematics">Essential Mathematics</option>
+                                                    <option value="Core Mathematics">Core Mathematics</option>
+                                                    <option value="Home Science">Home Science</option>
+                                                    <option value="Power Mechanics">Power Mechanics</option>
+                                                    <option value="Metal Work">Metal Work</option>
+                                                    <option value="Electricity">Electricity</option>
+                                                    <option value="Community Service Learning">Community Service Learning</option>
+                                                    <option value="Music">Music</option>
+                                                    <option value="Physics">Physics</option>
+                                                    <option value="Chemistry">Chemistry</option>
+                                                    <option value="Biology">Biology</option>
+                                                    <option value="English">English</option>
+                                                    <option value="Business Studies">Business Studies</option>
+                                                    <option value="Agriculture">Agriculture</option>
+                                                    <option value="Geography">Geography</option>
+                                                    <option value="Computer Studies">Computer Studies</option>
+                                                    <option value="CRE">CRE</option>
+                                                    <option value="History & Government">History & Government</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Select Target Class</label>
+                                                <select id="sat-l4-class" class="w-full px-3 py-1.5 border rounded text-xs outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                                    <option value="">-- Choose Class --</option>
+                                                    <option value="Grade 10">Grade 10 (Whole Form)</option>
+                                                    <option value="Form 3">Form 3 (Whole Form)</option>
+                                                    <option value="Form 4">Form 4 (Whole Form)</option>
+                                                    <option value="Grade 10 East">Grade 10 East</option>
+                                                    <option value="Grade 10 West">Grade 10 West</option>
+                                                    <option value="Grade 10 North">Grade 10 North</option>
+                                                    <option value="Form 3 East">Form 3 East</option>
+                                                    <option value="Form 3 West">Form 3 West</option>
+                                                    <option value="Form 3 North">Form 3 North</option>
+                                                    <option value="Form 3 South">Form 3 South</option>
+                                                    <option value="Form 4 East">Form 4 East</option>
+                                                    <option value="Form 4 West">Form 4 West</option>
+                                                    <option value="Form 4 North">Form 4 North</option>
+                                                    <option value="Form 4 South">Form 4 South</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Claim Counter -->
+                            <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-lg flex justify-between items-center text-indigo-950">
+                                <div>
+                                    <p class="text-xs font-bold uppercase">Calculated Claim Total</p>
+                                    <p class="text-xs text-indigo-700">Combined Morning Days + Evening Days + Saturday Sessions</p>
+                                </div>
+                                <p class="text-2xl font-black text-[--dark-green-deep]"><span id="claim-total-badge">0</span> Sessions</p>
+                            </div>
+
+                            <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-3 rounded-lg shadow transition">
+                                Submit Remedial Claim
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TAB: Remedial Swapping -->
+                <div id="t-swapping" class="tab-content">
+                    <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Remedial Swapping Request</h2>
+                    <p class="text-slate-600 text-sm mb-6">Request or manage lesson swaps with colleagues.</p>
                     
-                    teacherNav.classList.add('hidden');
-                    adminNav.classList.remove('hidden');
-                    librarianNav.classList.add('hidden');
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Request Swap Form -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Post Swap Request</h3>
+                            <form onsubmit="postSwapRequest(event)" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Swap With Teacher</label>
+                                    <select id="swap-teacher" required class="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                        <!-- Dynamic teacher options -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Your Original Session Slot</label>
+                                    <input type="text" id="swap-my-slot" required placeholder="e.g. Week 2 Saturday Lesson 1 (Grade 10)" class="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Requested Replacement Slot</label>
+                                    <input type="text" id="swap-target-slot" required placeholder="e.g. Week 2 Saturday Lesson 3 (Form 3)" class="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                </div>
+                                <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-bold py-2 rounded text-sm transition">Send Swap Offer</button>
+                            </form>
+                        </div>
+
+                        <!-- Active Swaps Table -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Pending & Active Swaps</h3>
+                            <div id="swap-list" class="space-y-3 text-xs">
+                                <div class="p-3 border rounded bg-amber-50/50 border-amber-200 flex justify-between items-center">
+                                    <div>
+                                        <p class="font-bold text-slate-800">Swap Request to Mrs. Faith Kaimenyi</p>
+                                        <p class="text-slate-500">Offer: Sat L1 &rarr; Target: Sat L4</p>
+                                    </div>
+                                    <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded font-semibold text-[10px]">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Submit CATs -->
+                <div id="t-cats" class="tab-content">
+                    <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Continuous Assessment Tests (CATs)</h2>
+                    <p class="text-slate-600 text-sm mb-6">Enter student assessment marks per stream.</p>
                     
-                    showView('admin');
-                    switchTab('admin', 'a-dashboard');
-                    renderAdminDashboard();
-                } else {
-                    alert('Invalid admin credentials. Please use username "admin" and password "password123".');
-                    showLoginModal();
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex flex-wrap gap-4 mb-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Target Stream</label>
+                                <select class="px-3 py-1.5 border rounded text-xs outline-none">
+                                    <option>Grade 10 (Whole Form) - Mathematics</option>
+                                    <option>Form 3 (Whole Form) - Physics</option>
+                                    <option>Grade 10 East - Mathematics</option>
+                                    <option>Grade 10 East - Kiswahili</option>
+                                    <option>Form 3 East - Physics</option>
+                                    <option>Grade 10 East - Business Studies</option>
+                                    <option>Grade 10 East - Agriculture</option>
+                                    <option>Form 3 East - Geography</option>
+                                    <option>Grade 10 East - Computer Studies</option>
+                                    <option>Grade 10 East - CRE</option>
+                                    <option>Form 3 East - History & Government</option>
+                                    <option>Grade 10 East - Music</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">CAT Type</label>
+                                <select class="px-3 py-1.5 border rounded text-xs outline-none">
+                                    <option>CAT 1 (30 Marks)</option>
+                                    <option>CAT 2 (30 Marks)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead class="bg-slate-100 uppercase text-slate-700">
+                                    <tr>
+                                        <th class="p-2.5">Adm No</th>
+                                        <th class="p-2.5">Student Name</th>
+                                        <th class="p-2.5">Score (/30)</th>
+                                        <th class="p-2.5">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200">
+                                    <tr>
+                                        <td class="p-2 font-mono">4102</td>
+                                        <td class="p-2 font-medium">Kimathi Dennis</td>
+                                        <td class="p-2"><input type="number" max="30" value="24" class="w-20 px-2 py-1 border rounded text-xs"></td>
+                                        <td class="p-2"><input type="text" value="Good Progress" class="w-full px-2 py-1 border rounded text-xs"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 font-mono">4105</td>
+                                        <td class="p-2 font-medium">Muthoni Joy</td>
+                                        <td class="p-2"><input type="number" max="30" value="27" class="w-20 px-2 py-1 border rounded text-xs"></td>
+                                        <td class="p-2"><input type="text" value="Excellent" class="w-full px-2 py-1 border rounded text-xs"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button onclick="alert('CAT marks saved successfully!')" class="mt-4 bg-[--dark-green-deep] text-white px-4 py-2 rounded text-xs font-bold hover:bg-[--dark-green-light]">Save CAT Marks</button>
+                    </div>
+                </div>
+
+                <!-- TAB: Upload Weekly CAT -->
+                <div id="t-upload-cat" class="tab-content">
+                    <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Upload Weekly CAT</h2>
+                    <p class="text-slate-600 text-sm mb-6">Upload question papers, marking schemes, or digital assessment documents for weekly CATs.</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- File Upload Form -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Submit CAT Document</h3>
+                            <form onsubmit="handleCatFileUpload(event)" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Academic Week</label>
+                                    <select id="cat-upload-week" required class="cat-week-select w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                        <!-- Active weeks dynamically populated -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Subject</label>
+                                    <select id="cat-upload-subject" required class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                        <option value="">-- Choose Subject --</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Kiswahili">Kiswahili</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="English">English</option>
+                                        <option value="Business Studies">Business Studies</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Geography">Geography</option>
+                                        <option value="Computer Studies">Computer Studies</option>
+                                        <option value="CRE">CRE</option>
+                                        <option value="History & Government">History & Government</option>
+                                        <option value="Music">Music</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Target Class / Stream</label>
+                                    <select id="cat-upload-class" required class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                        <option value="">-- Choose Class --</option>
+                                        <option value="Grade 10">Grade 10 (Whole Form)</option>
+                                        <option value="Form 3">Form 3 (Whole Form)</option>
+                                        <option value="Form 4">Form 4 (Whole Form)</option>
+                                        <option value="Grade 10 East">Grade 10 East</option>
+                                        <option value="Grade 10 West">Grade 10 West</option>
+                                        <option value="Grade 10 North">Grade 10 North</option>
+                                        <option value="Form 3 East">Form 3 East</option>
+                                        <option value="Form 3 West">Form 3 West</option>
+                                        <option value="Form 3 North">Form 3 North</option>
+                                        <option value="Form 3 South">Form 3 South</option>
+                                        <option value="Form 4 East">Form 4 East</option>
+                                        <option value="Form 4 West">Form 4 West</option>
+                                        <option value="Form 4 North">Form 4 North</option>
+                                        <option value="Form 4 South">Form 4 South</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Document Type</label>
+                                    <select id="cat-upload-doc-type" required class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                        <option value="Question Paper">Question Paper</option>
+                                        <option value="Marking Scheme">Marking Scheme</option>
+                                        <option value="Combined Exam & Scheme">Combined Exam & Scheme</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Select File (PDF, DOCX, XLSX, PNG)</label>
+                                    <input type="file" id="cat-file-input" required accept=".pdf,.docx,.doc,.xlsx,.png,.jpg" class="w-full p-2 border rounded-lg outline-none bg-slate-50 text-xs">
+                                </div>
+                                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg text-sm transition shadow flex items-center justify-center gap-2">
+                                    <i data-lucide="upload" class="w-4 h-4"></i> Upload CAT Document
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Uploaded CAT Files History -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Recent Weekly CAT Uploads</h3>
+                            <div id="cat-uploads-history" class="space-y-3 text-xs">
+                                <!-- Uploaded items dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Term Exam -->
+                <div id="t-exams" class="tab-content">
+                    <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Term Examination Data Entry</h2>
+                    <p class="text-slate-600 text-sm mb-6">Record end-of-term examination scores.</p>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center py-12">
+                        <i data-lucide="lock" class="w-10 h-10 text-slate-400 mx-auto mb-2"></i>
+                        <h3 class="font-bold text-slate-700">Term Exams Portal Locked</h3>
+                        <p class="text-slate-500 text-xs mt-1">End of Term examination entry opens in Week 11.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= ADMIN PORTAL VIEWS ================= -->
+            <div id="admin-view" class="portal-view p-8 no-print">
+                <!-- TAB: Admin Dashboard -->
+                <div id="a-dashboard" class="tab-content active">
+                    <h2 class="text-2xl font-light text-slate-900 mb-6 lato-light">Admin Summary Overview</h2>
+                    <div class="grid sm:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-indigo-900 text-white p-5 rounded-lg shadow">
+                            <p class="text-xs uppercase text-indigo-300 font-semibold">Active Teachers</p>
+                            <p id="a-teacher-count" class="text-3xl font-bold mt-1">2</p>
+                        </div>
+                        <div class="bg-amber-600 text-white p-5 rounded-lg shadow">
+                            <p class="text-xs uppercase text-amber-200 font-semibold">Pending Claims</p>
+                            <p id="a-pending-count" class="text-3xl font-bold mt-1">2</p>
+                        </div>
+                        <div class="bg-emerald-700 text-white p-5 rounded-lg shadow">
+                            <p class="text-xs uppercase text-emerald-200 font-semibold">Approved Claims</p>
+                            <p id="a-approved-count" class="text-3xl font-bold mt-1">1</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Manage Teachers -->
+                <div id="a-manage-teachers" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-light text-slate-900 lato-light">Manage Teaching Staff</h2>
+                            <p class="text-slate-600 text-sm">Add teachers, assign passwords, subjects, streams, and manage emails.</p>
+                        </div>
+                        <button onclick="showAddTeacherModal()" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i> Add New Teacher
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 uppercase text-slate-700">
+                                <tr>
+                                    <th class="p-3">Teacher Name</th>
+                                    <th class="p-3">Email</th>
+                                    <th class="p-3">Password</th>
+                                    <th class="p-3">Department / Subjects</th>
+                                    <th class="p-3">Assigned Streams / Forms</th>
+                                    <th class="p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-teachers-tbody" class="divide-y divide-slate-200">
+                                <!-- Dynamic Teacher Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: Control Academic Weeks -->
+                <div id="a-manage-weeks" class="tab-content">
+                    <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Academic Weeks Configuration</h2>
+                    <p class="text-slate-600 text-sm mb-6">Add new academic weeks and toggle submission availability for teacher claims.</p>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Add Week Form -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Add New Academic Week</h3>
+                            <form onsubmit="addNewAcademicWeek(event)" class="space-y-4 text-xs">
+                                <div>
+                                    <label class="block font-semibold uppercase mb-1 text-slate-700">Week Title / Name</label>
+                                    <input type="text" id="new-week-title" required placeholder="e.g. Week 5" class="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                </div>
+                                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded text-xs transition">
+                                    Add Academic Week
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Active Weeks List -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                            <h3 class="font-bold text-base text-slate-800 mb-4">Toggle Week Status</h3>
+                            <div id="week-toggle-list" class="space-y-3 text-xs">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Review Remedials Claims -->
+                <div id="a-review-remedials" class="tab-content">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h2 class="text-2xl font-light text-slate-900 lato-light">Review Submitted Remedial Claims</h2>
+                            <p class="text-xs text-slate-500 italic mt-0.5">Showing detailed lesson counts, subject, classes taught, organized by academic weeks.</p>
+                        </div>
+                        <button onclick="clearAllClaims()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow transition">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> Delete/Clear All Claims
+                        </button>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 uppercase text-slate-700">
+                                <tr>
+                                    <th class="p-3">Academic Week</th>
+                                    <th class="p-3">Teacher Name</th>
+                                    <th class="p-3">Morning Classes & Subjects</th>
+                                    <th class="p-3">Evening Classes & Subjects</th>
+                                    <th class="p-3">Saturday Lesson Breakdown</th>
+                                    <th class="p-3">Total Sessions</th>
+                                    <th class="p-3">Status</th>
+                                    <th class="p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="a-review-tbody" class="divide-y divide-slate-200">
+                                <!-- Claims dynamic render -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB: Approved Reports -->
+                <div id="a-approved-reports" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-light text-slate-900 lato-light">Approved Claims & Official Reports</h2>
+                        <div class="flex gap-2">
+                            <button onclick="downloadReportPDF()" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
+                                <i data-lucide="file-text" class="w-4 h-4"></i> Download PDF
+                            </button>
+                            <button onclick="exportToCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Export CSV
+                            </button>
+                            <button onclick="window.print()" class="bg-[--dark-brown] hover:bg-[#5f463f] text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
+                                <i data-lucide="printer" class="w-4 h-4"></i> Print Letter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="printable-section" class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm" style="font-family: 'Times New Roman', Times, serif !important;">
+                        <!-- Letterhead -->
+                        <div class="text-center border-b pb-4 mb-6">
+                            <h2 class="text-xl font-bold uppercase tracking-wide text-slate-900">Bishop Lawi Imathiu Secondary School</h2>
+                            <p class="text-xs text-slate-600">P.O. BOX 2769-60200 Meru, Kenya | Tel: 0111485527</p>
+                            <p class="text-xs font-bold text-[--dark-green-deep] mt-1 uppercase">Official Remedial Claims Summary Report - Term 2 2026</p>
+                        </div>
+
+                        <table class="w-full text-left text-xs border border-slate-200">
+                            <thead class="bg-slate-100 uppercase border-b">
+                                <tr>
+                                    <th class="p-2 border-r">Academic Week</th>
+                                    <th class="p-2 border-r">Teacher Name</th>
+                                    <th class="p-2 border-r">Morning Sessions</th>
+                                    <th class="p-2 border-r">Evening Sessions</th>
+                                    <th class="p-2 border-r">Saturday Lessons</th>
+                                    <th class="p-2">Total Verified</th>
+                                </tr>
+                            </thead>
+                            <tbody id="approved-report-tbody" class="divide-y divide-slate-200">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+
+                        <div class="mt-12 flex justify-between text-xs pt-8 border-t border-slate-300">
+                            <div>
+                                <p class="font-bold">Prepared By: Principal / Deputy Principal</p>
+                                <p class="text-slate-500 mt-6">Signature: ______________________</p>
+                            </div>
+                            <div>
+                                <p class="font-bold">Stamp & Approval Date</p>
+                                <p class="text-slate-500 mt-6">Date: ________________________</p>
+                            </div>
+                        </div>
+
+                        <!-- Document Footer Requirement -->
+                        <div class="mt-8 pt-4 border-t border-slate-200 text-center text-xs text-slate-600" style="font-family: 'Times New Roman', Times, serif !important;">
+                            knowledge showers bliss &bull; <span class="report-footer-datetime"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- DOCUMENT FOOTER -->
+    <footer class="bg-[--dark-green-deep] text-white py-3 text-center text-xs mt-auto border-t border-[#246342]">
+        KNOWLEDGE SHOWERS BLISS &bull; <span id="footer-datetime"></span>
+    </footer>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="hideLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">Portal Sign In</h3>
+            <p class="text-sm text-slate-500 mb-6">Select your role and enter your credentials.</p>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Role</label>
+                    <select id="login-role" onchange="toggleLoginFormFields()" class="w-full px-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="login-id-label" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Teacher Email Address</label>
+                    <input type="text" id="login-username" required value="jmutuma@bishoplawiimathiu.ac.ke" class="w-full px-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <div id="password-field-container">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Password</label>
+                    <input type="password" id="login-password" value="password123" class="w-full px-4 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg transition text-sm">
+                    Access Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT TEACHER MODAL -->
+    <div id="teacher-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="hideAddTeacherModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="teacher-modal-title" class="text-2xl font-bold text-slate-900 mb-1">Add New Teacher</h3>
+            <p class="text-xs text-slate-500 mb-4">Register new teacher details, email, and password set by admin.</p>
+
+            <form onsubmit="saveTeacher(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="teacher-id-input" value="">
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Full Name</label>
+                    <input type="text" id="t-modal-name" required placeholder="e.g. Mr. Peter Mwenda" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Email Address</label>
+                    <input type="email" id="t-modal-user" required placeholder="e.g. pmwenda@bishoplawiimathiu.ac.ke" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Password (Set by Admin)</label>
+                    <input type="text" id="t-modal-pass" required placeholder="e.g. password123" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Department / Subjects</label>
+                    <input type="text" id="t-modal-dept" required placeholder="e.g. Kiswahili & History" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Assigned Streams / Forms</label>
+                    <input type="text" id="t-modal-streams" required placeholder="e.g. Grade 10, Form 3 North" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg transition text-xs mt-2">
+                    Save Teacher
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- DAY WIZARD MODAL FOR MORNING/EVENING REMEDIALS -->
+    <div id="day-wizard-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeDayWizard()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="wizard-modal-title" class="text-xl font-bold text-[--dark-green-deep] mb-1">Add Remedial Session</h3>
+            <p class="text-xs text-slate-500 mb-4">Please fill in all mandatory fields for the selected day.</p>
+
+            <form onsubmit="saveDayWizardData(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="wizard-type" value="">
+                <input type="hidden" id="wizard-day" value="">
+
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Selected Day</label>
+                    <input type="text" id="wizard-day-display" disabled class="w-full px-3 py-2 border rounded-lg bg-slate-100 font-bold text-slate-800">
+                </div>
+
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Subject Taught <span class="text-red-500">*</span></label>
+                    <select id="wizard-subject" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                        <option value="">-- Select Subject --</option>
+                        <option value="Kiswahili">Kiswahili</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="English">English</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Computer Studies">Computer Studies</option>
+                        <option value="CRE">CRE</option>
+                        <option value="History & Government">History & Government</option>
+                        <option value="Music">Music</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Class / Form Attended <span class="text-red-500">*</span></label>
+                    <select id="wizard-class" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                        <option value="">-- Select Class / Form --</option>
+                        <option value="Grade 10">Grade 10 (Whole Form)</option>
+                        <option value="Form 3">Form 3 (Whole Form)</option>
+                        <option value="Form 4">Form 4 (Whole Form)</option>
+                        <option value="Grade 10 East">Grade 10 East</option>
+                        <option value="Grade 10 West">Grade 10 West</option>
+                        <option value="Grade 10 North">Grade 10 North</option>
+                        <option value="Form 3 East">Form 3 East</option>
+                        <option value="Form 3 West">Form 3 West</option>
+                        <option value="Form 3 North">Form 3 North</option>
+                        <option value="Form 3 South">Form 3 South</option>
+                        <option value="Form 4 East">Form 4 East</option>
+                        <option value="Form 4 West">Form 4 West</option>
+                        <option value="Form 4 North">Form 4 North</option>
+                        <option value="Form 4 South">Form 4 South</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Time Slot / Schedule Note <span class="text-red-500">*</span></label>
+                    <input type="text" id="wizard-notes" required placeholder="e.g. 6:30 AM - 7:30 AM" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
+
+                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg transition text-xs mt-2">
+                    Confirm & Add Day Entry
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // System State
+        let currentRole = 'public';
+        let loggedUser = null;
+        
+        // Arrays to hold dynamically added wizard entries for the current claim form
+        let selectedMornDays = [];
+        let selectedEveDays = [];
+
+        let academicWeeks = [
+            { id: "week-1", label: "Week 1", active: true },
+            { id: "week-2", label: "Week 2", active: true },
+            { id: "week-3", label: "Week 3", active: true },
+            { id: "week-4", label: "Week 4", active: true }
+        ];
+
+        let uploadedCatFiles = [
+            {
+                id: 1,
+                teacher: "Mr. Joseph Mutuma",
+                weekLabel: "Week 1",
+                subject: "Mathematics",
+                class: "Grade 10",
+                docType: "Question Paper",
+                fileName: "Grade10_Math_CAT1_W1.pdf",
+                uploadDate: "2026-05-15"
+            }
+        ];
+
+        let teachersData = [
+            {
+                id: 1,
+                name: "Mr. Joseph Mutuma",
+                email: "jmutuma@bishoplawiimathiu.ac.ke",
+                password: "password123",
+                dept: "Mathematics, Kiswahili, Physics, Business Studies, Agriculture, Geography, Computer Studies, CRE, History & Government, Music",
+                streams: "Grade 10, Form 3"
+            },
+            {
+                id: 2,
+                name: "Mrs. Faith Kaimenyi",
+                email: "fkaimenyi@bishoplawiimathiu.ac.ke",
+                password: "password123",
+                dept: "Chemistry & Biology",
+                streams: "Form 3, Form 4"
+            }
+        ];
+
+        let claimsData = [
+            {
+                id: 101,
+                teacher: "Mr. Joseph Mutuma",
+                weekId: "week-1",
+                weekLabel: "Week 1",
+                mornTotal: 2,
+                mornEntries: [
+                    { day: "Monday", subject: "Kiswahili", class: "Grade 10", notes: "6:30 AM - 7:30 AM" },
+                    { day: "Wednesday", subject: "Kiswahili", class: "Form 3", notes: "6:30 AM - 7:30 AM" }
+                ],
+                eveTotal: 1,
+                eveEntries: [
+                    { day: "Tuesday", subject: "Mathematics", class: "Form 3", notes: "4:30 PM - 5:30 PM" }
+                ],
+                satLessons: [
+                    { lesson: 1, subject: "Kiswahili", class: "Grade 10" },
+                    { lesson: 2, subject: "Core Mathematics", class: "Form 3" }
+                ],
+                satTotal: 2,
+                grandTotal: 5,
+                status: "Approved"
+            }
+        ];
+
+        // Init Lucide Icons
+        lucide.createIcons();
+
+        // Footer Date and Time updater
+        function updateFooterDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            const formattedDateTime = now.toLocaleDateString('en-US', options);
+            
+            const el = document.getElementById('footer-datetime');
+            if (el) {
+                el.textContent = formattedDateTime;
+            }
+
+            const reportEl = document.querySelector('.report-footer-datetime');
+            if (reportEl) {
+                reportEl.textContent = formattedDateTime;
+            }
+        }
+        setInterval(updateFooterDateTime, 1000);
+        updateFooterDateTime();
+
+        function initWeekSelectors() {
+            const selects = [document.getElementById('t-week-select'), document.getElementById('cat-upload-week')];
+            selects.forEach(select => {
+                if (select) {
+                    select.innerHTML = academicWeeks
+                        .filter(w => w.active)
+                        .map(w => `<option value="${w.id}">${w.label}</option>`)
+                        .join('');
                 }
-            } else if (role === 'librarian') {
-                if (inputVal === 'librarian' && passwordVal === 'password123') {
-                    currentRole = 'librarian';
-                    loggedUser = { name: 'Librarian', email: 'librarian' };
-                    badge.textContent = 'Librarian';
-                    
-                    teacherNav.classList.add('hidden');
-                    adminNav.classList.add('hidden');
-                    librarianNav.classList.remove('hidden');
-                    
-                    showView('librarian');
-                    switchTab('librarian', 'l-dashboard');
-                    renderLibraryModule();
-                } else {
-                    alert('Invalid librarian credentials. Please use username "librarian" and password "password123".');
-                    showLoginModal();
+            });
+
+            const toggleList = document.getElementById('week-toggle-list');
+            if (toggleList) {
+                toggleList.innerHTML = academicWeeks.map(w => `
+                    <div class="flex justify-between items-center p-2.5 border rounded-lg bg-slate-50">
+                        <span class="font-medium text-slate-800">${w.label}</span>
+                        <label class="flex items-center gap-2 cursor-pointer text-xs">
+                            <input type="checkbox" ${w.active ? 'checked' : ''} onchange="toggleWeekState('${w.id}')" class="rounded text-[--dark-green-deep]">
+                            <span class="${w.active ? 'text-emerald-700 font-bold' : 'text-slate-400'}">${w.active ? 'Active' : 'Disabled'}</span>
+                        </label>
+                    </div>
+                `).join('');
+            }
+        }
+        initWeekSelectors();
+
+        function toggleWeekState(weekId) {
+            const w = academicWeeks.find(item => item.id === weekId);
+            if (w) w.active = !w.active;
+            initWeekSelectors();
+        }
+
+        function addNewAcademicWeek(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-week-title').value.trim();
+
+            if (!title) return;
+
+            const newId = `week-${academicWeeks.length + 1}`;
+
+            academicWeeks.push({ id: newId, label: title, active: true });
+            initWeekSelectors();
+
+            document.getElementById('new-week-title').value = '';
+            alert(`New Academic Week ("${title}") added successfully!`);
+        }
+
+        function renderTeachersTable() {
+            const tbody = document.getElementById('admin-teachers-tbody');
+            if (!tbody) return;
+
+            document.getElementById('a-teacher-count').textContent = teachersData.length;
+
+            tbody.innerHTML = teachersData.map(t => `
+                <tr>
+                    <td class="p-3 font-bold text-slate-800">${t.name}</td>
+                    <td class="p-3 font-mono text-slate-600">${t.email}</td>
+                    <td class="p-3 font-mono text-slate-600">${t.password}</td>
+                    <td class="p-3 text-slate-700">${t.dept}</td>
+                    <td class="p-3 text-slate-700">${t.streams}</td>
+                    <td class="p-3">
+                        <div class="flex gap-2">
+                            <button onclick="editTeacher(${t.id})" class="bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-[10px] font-bold">Edit</button>
+                            <button onclick="deleteTeacher(${t.id})" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Also update teacher dropdown in Swapping Tab
+            const swapSelect = document.getElementById('swap-teacher');
+            if (swapSelect) {
+                swapSelect.innerHTML = teachersData
+                    .filter(t => !loggedUser || t.email !== loggedUser.email)
+                    .map(t => `<option value="${t.name}">${t.name} (${t.dept})</option>`)
+                    .join('');
+            }
+        }
+        renderTeachersTable();
+
+        function showAddTeacherModal() {
+            document.getElementById('teacher-id-input').value = '';
+            document.getElementById('teacher-modal-title').textContent = 'Add New Teacher';
+            document.getElementById('t-modal-name').value = '';
+            document.getElementById('t-modal-user').value = '';
+            document.getElementById('t-modal-pass').value = 'password123';
+            document.getElementById('t-modal-dept').value = '';
+            document.getElementById('t-modal-streams').value = '';
+            document.getElementById('teacher-modal').classList.remove('hidden');
+        }
+
+        function hideAddTeacherModal() {
+            document.getElementById('teacher-modal').classList.add('hidden');
+        }
+
+        function editTeacher(teacherId) {
+            const teacher = teachersData.find(t => t.id === teacherId);
+            if (!teacher) return;
+
+            document.getElementById('teacher-id-input').value = teacher.id;
+            document.getElementById('teacher-modal-title').textContent = 'Edit Teacher Details';
+            document.getElementById('t-modal-name').value = teacher.name;
+            document.getElementById('t-modal-user').value = teacher.email;
+            document.getElementById('t-modal-pass').value = teacher.password;
+            document.getElementById('t-modal-dept').value = teacher.dept;
+            document.getElementById('t-modal-streams').value = teacher.streams;
+            document.getElementById('teacher-modal').classList.remove('hidden');
+        }
+
+        function saveTeacher(e) {
+            e.preventDefault();
+            const id = document.getElementById('teacher-id-input').value;
+            const name = document.getElementById('t-modal-name').value.trim();
+            const email = document.getElementById('t-modal-user').value.trim();
+            const password = document.getElementById('t-modal-pass').value.trim();
+            const dept = document.getElementById('t-modal-dept').value.trim();
+            const streams = document.getElementById('t-modal-streams').value.trim();
+
+            if (id) {
+                const teacher = teachersData.find(t => t.id == id);
+                if (teacher) {
+                    teacher.name = name;
+                    teacher.email = email;
+                    teacher.password = password;
+                    teacher.dept = dept;
+                    teacher.streams = streams;
+                    alert('Teacher updated successfully!');
                 }
+            } else {
+                const newTeacher = {
+                    id: Date.now(),
+                    name,
+                    email,
+                    password,
+                    dept,
+                    streams
+                };
+                teachersData.push(newTeacher);
+                alert('New teacher registered successfully with password set!');
+            }
+
+            hideAddTeacherModal();
+            renderTeachersTable();
+        }
+
+        function deleteTeacher(teacherId) {
+            if (confirm('Are you sure you want to remove this teacher?')) {
+                teachersData = teachersData.filter(t => t.id !== teacherId);
+                renderTeachersTable();
             }
         }
 
-        function logout() {
-            currentRole = 'public';
-            loggedUser = null;
-            showView('public');
+        function showLoginModal() { document.getElementById('login-modal').classList.remove('hidden'); }
+        function hideLoginModal() { document.getElementById('login-modal').classList.add('hidden'); }
+
+        function toggleLoginFormFields() {
+            const role = document.getElementById('login-role').value;
+            const passContainer = document.getElementById('password-field-container');
+            const userInput = document.getElementById('login-username');
+            const label = document.getElementById('login-id-label');
+
+            if (role === 'admin') {
+                passContainer.style.display = 'block';
+                label.textContent = 'Admin Username';
+                userInput.value = 'admin';
+            } else {
+                passContainer.style.display = 'block'; // Teacher login requires password set by admin now
+                label.textContent = 'Teacher Email Address';
+                userInput.value = 'jmutuma@bishoplawiimathiu.ac.ke';
+            }
         }
 
-        function switchTab(rolePrefix, tabId) {
-            document.querySelectorAll(`.${rolePrefix}-nav`).forEach(el => el.classList.remove('active-nav'));
-            event.currentTarget.classList.add('active-nav');
+        function showView(viewId) {
+            document.querySelectorAll('.portal-view').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(viewId + '-view');
+            if (target) target.classList.add('active');
 
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            const sidebar = document.getElementById('portal-sidebar');
+            const portalContent = document.getElementById('portal-content');
+            const publicNav = document.getElementById('public-nav');
+            const userNav = document.getElementById('user-nav');
+
+            if (viewId === 'public') {
+                sidebar.classList.add('hidden');
+                portalContent.classList.add('hidden');
+                publicNav.classList.remove('hidden');
+                userNav.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('hidden');
+                portalContent.classList.remove('hidden');
+                publicNav.classList.add('hidden');
+                userNav.classList.remove('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const role = document.getElementById('login-role').value;
+            const inputVal = document.getElementById('login-username').value.trim().toLowerCase();
+            const passwordVal = document.getElementById('login-password').value.trim();
+
+            hideLoginModal();
+
+            const badge = document.getElementById('user-badge');
+            const teacherNav = document.getElementById('teacher-nav-items');
+            const adminNav = document.getElementById('admin-nav-items');
+
+            if (role === 'teacher') {
+                // Verify if teacher email and admin-set password match
+                const matchedTeacher = teachersData.find(t => t.email.toLowerCase() === inputVal && t.password === passwordVal);
+                
+                if (!matchedTeacher) {
+                    alert('Access Denied: Incorrect email or password set by the admin.');
+                    showLoginModal();
+                    return;
+                }
+
+                loggedUser = matchedTeacher;
+                currentRole = 'teacher';
+                badge.textContent = `Teacher: ${loggedUser.name}`;
+                document.getElementById('teacher-logged-name').textContent = loggedUser.name;
+                document.getElementById('t-logged-dept').textContent = loggedUser.dept;
+                document.getElementById('t-logged-streams').textContent = loggedUser.streams;
+
+                teacherNav.classList.remove('hidden');
+                adminNav.classList.add('hidden');
+                showView('teacher');
+                switchTab('teacher', 't-dashboard');
+            } else {
+                if (passwordVal !== 'password123' && passwordVal !== 'admin') {
+                    alert('Incorrect Admin Password.');
+                    showLoginModal();
+                    return;
+                }
+                currentRole = 'admin';
+                loggedUser = { name: "Administrator", role: "admin" };
+                badge.textContent = "Administrator";
+                adminNav.classList.remove('hidden');
+                teacherNav.classList.add('hidden');
+                showView('admin');
+                switchTab('admin', 'a-dashboard');
+            }
+            renderClaimsTables();
+            renderTeachersTable();
+            renderCatUploadHistory();
+        }
+
+        function logout() { showView('public'); }
+
+        function switchTab(role, tabId) {
+            const navClass = role === 'teacher' ? '.t-nav' : '.a-nav';
+            document.querySelectorAll(navClass).forEach(el => el.classList.remove('active-nav'));
+
+            const activeView = document.getElementById(role + '-view');
+            activeView.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+
             const targetTab = document.getElementById(tabId);
             if (targetTab) targetTab.classList.add('active');
+
+            const titles = {
+                't-dashboard': 'Teacher Overview',
+                't-remedials': 'Submit Remedial Claims',
+                't-swapping': 'Remedial Swapping',
+                't-cats': 'Submit CATs',
+                't-upload-cat': 'Upload Weekly CAT',
+                't-exams': 'Term Exams',
+                'a-dashboard': 'Admin Overview',
+                'a-manage-teachers': 'Manage Staff',
+                'a-manage-weeks': 'Academic Weeks',
+                'a-review-remedials': 'Review Claims',
+                'a-approved-reports': 'Reports & Exports'
+            };
+            document.getElementById('portal-title').textContent = titles[tabId] || 'Portal';
         }
 
-        function renderAdminDashboard() {
-            document.getElementById('a-teacher-count').textContent = teachersData.length;
-            document.getElementById('a-pending-count').textContent = claimsData.filter(c => c.status === 'Pending').length;
-            document.getElementById('a-approved-count').textContent = claimsData.filter(c => c.status === 'Approved').length;
+        // ================= WIZARD FUNCTIONS FOR DAY REMEDIALS =================
+        function openDayWizard(type, dayName) {
+            const list = type === 'morn' ? selectedMornDays : selectedEveDays;
+            if (list.some(item => item.day === dayName)) {
+                alert(`${dayName} is already added for ${type === 'morn' ? 'Morning' : 'Evening'} remedials.`);
+                return;
+            }
+
+            document.getElementById('wizard-type').value = type;
+            document.getElementById('wizard-day').value = dayName;
+            document.getElementById('wizard-day-display').value = dayName + ` (${type === 'morn' ? 'Morning' : 'Evening'})`;
+            document.getElementById('wizard-subject').value = '';
+            document.getElementById('wizard-class').value = '';
+            document.getElementById('wizard-notes').value = type === 'morn' ? '6:30 AM - 7:30 AM' : '4:30 PM - 5:30 PM';
+
+            document.getElementById('day-wizard-modal').classList.remove('hidden');
         }
 
-        function renderLibraryModule() {
-            document.getElementById('lib-total-books').textContent = libraryBooks.reduce((sum, b) => sum + b.totalQty, 0);
-            document.getElementById('lib-available-books').textContent = libraryBooks.reduce((sum, b) => sum + b.availableQty, 0);
-            document.getElementById('lib-borrowed-books').textContent = libraryCirculations.filter(c => c.status === 'Active').length;
-            document.getElementById('lib-total-students').textContent = libraryPatrons.filter(p => p.type === 'Student').length;
-            document.getElementById('lib-total-teachers').textContent = libraryPatrons.filter(p => p.type === 'Teacher').length;
-            document.getElementById('lib-overdue-books').textContent = libraryCirculations.filter(c => c.status === 'Overdue').length;
+        function closeDayWizard() {
+            document.getElementById('day-wizard-modal').classList.add('hidden');
+        }
+
+        function saveDayWizardData(e) {
+            e.preventDefault();
+            const type = document.getElementById('wizard-type').value;
+            const day = document.getElementById('wizard-day').value;
+            const subject = document.getElementById('wizard-subject').value;
+            const className = document.getElementById('wizard-class').value;
+            const notes = document.getElementById('wizard-notes').value;
+
+            if (!subject || !className || !notes) {
+                alert('Please fill out all mandatory fields in the wizard.');
+                return;
+            }
+
+            const entry = { day, subject, class: className, notes };
+
+            if (type === 'morn') {
+                selectedMornDays.push(entry);
+            } else {
+                selectedEveDays.push(entry);
+            }
+
+            closeDayWizard();
+            renderSelectedDaysUI();
+            calculateTotalClaimSessions();
+        }
+
+        function removeDayEntry(type, index) {
+            if (type === 'morn') {
+                selectedMornDays.splice(index, 1);
+            } else {
+                selectedEveDays.splice(index, 1);
+            }
+            renderSelectedDaysUI();
+            calculateTotalClaimSessions();
+        }
+
+        function renderSelectedDaysUI() {
+            const mornContainer = document.getElementById('morn-days-container');
+            document.getElementById('morn-count-badge').textContent = selectedMornDays.length;
+            document.getElementById('morn-total').value = selectedMornDays.length;
+
+            if (selectedMornDays.length === 0) {
+                mornContainer.innerHTML = `<p class="text-xs text-slate-400 italic">No morning remedial days added yet. Click a day above to add.</p>`;
+            } else {
+                mornContainer.innerHTML = selectedMornDays.map((item, idx) => `
+                    <div class="p-2.5 border rounded-lg bg-emerald-50/50 border-emerald-200 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-[--dark-green-deep]">${item.day}:</span> 
+                            <span>${item.subject}</span> &bull; 
+                            <span class="text-slate-600 font-semibold">${item.class}</span> 
+                            <span class="text-slate-500 font-mono text-[10px] ml-1">(${item.notes})</span>
+                        </div>
+                        <button type="button" onclick="removeDayEntry('morn', ${idx})" class="text-red-600 hover:text-red-800 font-bold px-2 py-1 text-[11px]">Remove</button>
+                    </div>
+                `).join('');
+            }
+
+            const eveContainer = document.getElementById('eve-days-container');
+            document.getElementById('eve-count-badge').textContent = selectedEveDays.length;
+            document.getElementById('eve-total').value = selectedEveDays.length;
+
+            if (selectedEveDays.length === 0) {
+                eveContainer.innerHTML = `<p class="text-xs text-slate-400 italic">No evening remedial days added yet. Click a day above to add.</p>`;
+            } else {
+                eveContainer.innerHTML = selectedEveDays.map((item, idx) => `
+                    <div class="p-2.5 border rounded-lg bg-emerald-50/50 border-emerald-200 flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-bold text-[--dark-green-deep]">${item.day}:</span> 
+                            <span>${item.subject}</span> &bull; 
+                            <span class="text-slate-600 font-semibold">${item.class}</span> 
+                            <span class="text-slate-500 font-mono text-[10px] ml-1">(${item.notes})</span>
+                        </div>
+                        <button type="button" onclick="removeDayEntry('eve', ${idx})" class="text-red-600 hover:text-red-800 font-bold px-2 py-1 text-[11px]">Remove</button>
+                    </div>
+                `).join('');
+            }
+        }
+        // =================================================================
+
+        function handleCatFileUpload(e) {
+            e.preventDefault();
+            const weekId = document.getElementById('cat-upload-week').value;
+            const weekObj = academicWeeks.find(w => w.id === weekId);
+            const subject = document.getElementById('cat-upload-subject').value;
+            const targetClass = document.getElementById('cat-upload-class').value;
+            const docType = document.getElementById('cat-upload-doc-type').value;
+            const fileInput = document.getElementById('cat-file-input');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            const fileName = fileInput.files[0].name;
+            const teacherName = loggedUser ? loggedUser.name : "Mr. Joseph Mutuma";
+
+            const newUpload = {
+                id: Date.now(),
+                teacher: teacherName,
+                weekLabel: weekObj ? weekObj.label : weekId,
+                subject: subject,
+                class: targetClass,
+                docType: docType,
+                fileName: fileName,
+                uploadDate: new Date().toISOString().split('T')[0]
+            };
+
+            uploadedCatFiles.unshift(newUpload);
+            renderCatUploadHistory();
+
+            fileInput.value = '';
+            alert('Weekly CAT document uploaded successfully!');
+        }
+
+        function renderCatUploadHistory() {
+            const container = document.getElementById('cat-uploads-history');
+            if (!container) return;
+
+            const activeTeacherName = loggedUser ? loggedUser.name : "Mr. Joseph Mutuma";
+            const myUploads = uploadedCatFiles.filter(item => item.teacher === activeTeacherName);
+
+            if (myUploads.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 italic">No weekly CAT files uploaded yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = myUploads.map(item => `
+                <div class="p-3 border rounded-lg bg-slate-50 flex items-start justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">${item.weekLabel}</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-2 py-0.5 rounded">${item.docType}</span>
+                        </div>
+                        <p class="font-bold text-slate-800">${item.subject} (${item.class})</p>
+                        <p class="text-slate-500 font-mono text-[11px] mt-0.5 flex items-center gap-1">
+                            <i data-lucide="file-text" class="w-3 h-3"></i> ${item.fileName}
+                        </p>
+                    </div>
+                    <span class="text-[10px] text-slate-400 whitespace-nowrap">${item.uploadDate}</span>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function calculateTotalClaimSessions() {
+            const morn = selectedMornDays.length;
+            const eve = selectedEveDays.length;
+            let sat = 0;
+            for (let i = 1; i <= 4; i++) {
+                if (document.getElementById(`sat-l${i}-enable`).checked) sat++;
+            }
+            const grandTotal = morn + eve + sat;
+            document.getElementById('claim-total-badge').textContent = grandTotal;
+            return { morn, eve, sat, grandTotal };
+        }
+
+        function submitRemedialClaim(e) {
+            e.preventDefault();
+            const weekId = document.getElementById('t-week-select').value;
+            const weekObj = academicWeeks.find(w => w.id === weekId);
+            const totals = calculateTotalClaimSessions();
+
+            if (totals.grandTotal === 0) {
+                alert('Please add at least one morning, evening, or Saturday session before submitting.');
+                return;
+            }
+
+            const satLessons = [];
+            for (let i = 1; i <= 4; i++) {
+                if (document.getElementById(`sat-l${i}-enable`).checked) {
+                    satLessons.push({
+                        lesson: i,
+                        subject: document.getElementById(`sat-l${i}-subject`).value || 'General',
+                        class: document.getElementById(`sat-l${i}-class`).value || 'N/A'
+                    });
+                }
+            }
+
+            const teacherName = loggedUser ? loggedUser.name : "Mr. Joseph Mutuma";
+
+            const newClaim = {
+                id: Date.now(),
+                teacher: teacherName,
+                weekId: weekId,
+                weekLabel: weekObj ? weekObj.label : weekId,
+                mornTotal: totals.morn,
+                mornEntries: [...selectedMornDays],
+                eveTotal: totals.eve,
+                eveEntries: [...selectedEveDays],
+                satLessons: satLessons,
+                satTotal: totals.sat,
+                grandTotal: totals.grandTotal,
+                status: "Pending"
+            };
+
+            claimsData.unshift(newClaim);
             
-            const totalFines = libraryPatrons.reduce((sum, p) => sum + p.fine, 0);
-            document.getElementById('lib-outstanding-fines').textContent = `KES ${totalFines}`;
+            selectedMornDays = [];
+            selectedEveDays = [];
+            renderSelectedDaysUI();
+
+            renderClaimsTables();
+            alert('Remedial claim successfully submitted!');
+            switchTab('teacher', 't-dashboard');
+        }
+
+        function renderClaimsTables() {
+            const tTbody = document.getElementById('t-history-tbody');
+            const activeTeacherName = loggedUser ? loggedUser.name : "Mr. Joseph Mutuma";
+            const myClaims = claimsData.filter(c => c.teacher === activeTeacherName);
+            document.getElementById('t-submitted-count').textContent = myClaims.length + " Claims";
+
+            if (tTbody) {
+                tTbody.innerHTML = myClaims.map(c => `
+                    <tr>
+                        <td class="p-3 font-medium text-slate-900">${c.weekLabel}</td>
+                        <td class="p-3">${c.mornTotal} sessions</td>
+                        <td class="p-3">${c.eveTotal} sessions</td>
+                        <td class="p-3">${c.satTotal} lessons</td>
+                        <td class="p-3 font-bold">${c.grandTotal}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : (c.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800')}">
+                                ${c.status}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            const aTbody = document.getElementById('a-review-tbody');
+            if (aTbody) {
+                const sortedClaims = [...claimsData].sort((a, b) => a.weekLabel.localeCompare(b.weekLabel));
+
+                if (sortedClaims.length === 0) {
+                    aTbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400 italic">No remedial claims submitted or list has been cleared.</td></tr>`;
+                } else {
+                    aTbody.innerHTML = sortedClaims.map((c) => {
+                        const satHtml = c.satLessons && c.satLessons.length > 0 
+                            ? c.satLessons.map(sl => `<div class="bg-slate-100 p-2 rounded mb-1 text-xs"><strong>L${sl.lesson}:</strong> ${sl.subject}<br><span class="text-[10px] text-slate-500">${sl.class}</span></div>`).join('') 
+                            : '<span class="text-slate-400 italic">None</span>';
+
+                        const mornHtml = c.mornEntries && c.mornEntries.length > 0
+                            ? c.mornEntries.map(m => `<div><strong>${m.day}:</strong> ${m.subject} (${m.class})</div>`).join('')
+                            : `<span class="text-slate-400">${c.mornTotal} sessions</span>`;
+
+                        const eveHtml = c.eveEntries && c.eveEntries.length > 0
+                            ? c.eveEntries.map(e => `<div><strong>${e.day}:</strong> ${e.subject} (${e.class})</div>`).join('')
+                            : `<span class="text-slate-400">${c.eveTotal} sessions</span>`;
+
+                        return `
+                            <tr>
+                                <td class="p-3 font-bold text-slate-900">${c.weekLabel}</td>
+                                <td class="p-3 font-medium text-slate-800">${c.teacher}</td>
+                                <td class="p-3 text-slate-700 max-w-xs">${mornHtml}</td>
+                                <td class="p-3 text-slate-700 max-w-xs">${eveHtml}</td>
+                                <td class="p-3 text-slate-700 max-w-xs">${satHtml}</td>
+                                <td class="p-3 font-black text-indigo-900">${c.grandTotal}</td>
+                                <td class="p-3">
+                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : (c.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800')}">
+                                        ${c.status}
+                                    </span>
+                                </td>
+                                <td class="p-3">
+                                    <div class="flex gap-1.5">
+                                        ${c.status !== 'Approved' ? `<button onclick="updateClaimStatus(${c.id}, 'Approved')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[10px] font-bold">Approve</button>` : ''}
+                                        ${c.status !== 'Rejected' ? `<button onclick="updateClaimStatus(${c.id}, 'Rejected')" class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[10px] font-bold">Reject</button>` : ''}
+                                        <button onclick="deleteClaim(${c.id})" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Update Admin Counter Cards
+            const pendingCount = claimsData.filter(c => c.status === 'Pending').length;
+            const approvedCount = claimsData.filter(c => c.status === 'Approved').length;
+            if (document.getElementById('a-pending-count')) document.getElementById('a-pending-count').textContent = pendingCount;
+            if (document.getElementById('a-approved-count')) document.getElementById('a-approved-count').textContent = approvedCount;
+
+            renderApprovedReportsTable();
+        }
+        renderClaimsTables();
+
+        function updateClaimStatus(claimId, newStatus) {
+            const claim = claimsData.find(c => c.id === claimId);
+            if (claim) {
+                claim.status = newStatus;
+                renderClaimsTables();
+                alert(`Claim status updated to ${newStatus}.`);
+            }
+        }
+
+        function deleteClaim(claimId) {
+            if (confirm('Are you sure you want to delete this claim entry?')) {
+                claimsData = claimsData.filter(c => c.id !== claimId);
+                renderClaimsTables();
+            }
+        }
+
+        function clearAllClaims() {
+            if (confirm('WARNING: This will delete all submitted remedial claims. Proceed?')) {
+                claimsData = [];
+                renderClaimsTables();
+                alert('All claims have been cleared.');
+            }
+        }
+
+        function renderApprovedReportsTable() {
+            const tbody = document.getElementById('approved-report-tbody');
+            if (!tbody) return;
+
+            const approvedClaims = claimsData.filter(c => c.status === 'Approved');
+
+            if (approvedClaims.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500 italic">No approved remedial claims available for reporting.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = approvedClaims.map(c => `
+                <tr>
+                    <td class="p-2 border-r font-bold">${c.weekLabel}</td>
+                    <td class="p-2 border-r">${c.teacher}</td>
+                    <td class="p-2 border-r">${c.mornTotal} Sessions</td>
+                    <td class="p-2 border-r">${c.eveTotal} Sessions</td>
+                    <td class="p-2 border-r">${c.satTotal} Lessons</td>
+                    <td class="p-2 font-bold">${c.grandTotal} Sessions</td>
+                </tr>
+            `).join('');
+        }
+
+        function downloadReportPDF() {
+            const element = document.getElementById('printable-section');
+            const opt = {
+                margin:       0.5,
+                filename:     'BishopLawi_Remedial_Claims_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        }
+
+        function exportToCSV() {
+            let csv = 'Academic Week,Teacher Name,Morning Sessions,Evening Sessions,Saturday Lessons,Total Verified,Status\n';
+            claimsData.forEach(c => {
+                csv += `"${c.weekLabel}","${c.teacher}",${c.mornTotal},${c.eveTotal},${c.satTotal},${c.grandTotal},"${c.status}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.setAttribute('download', 'remedial_claims_export.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function postSwapRequest(e) {
+            e.preventDefault();
+            alert('Remedial swap request successfully posted to colleague!');
+            document.getElementById('swap-my-slot').value = '';
+            document.getElementById('swap-target-slot').value = '';
         }
     </script>
 </body>
 </html>
-
-```
+```[cite@bett.k: 7] 
