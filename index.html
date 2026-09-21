@@ -126,30 +126,30 @@
     <header class="bg-[--dark-green-deep] text-[--text-on-dark] sticky top-0 z-50 shadow-md no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="showView('public')">
-                <div class="bg-amber-500 text-indigo-950 p-2 rounded-full font-bold text-xl flex items-center justify-center w-10 h-10 shadow-inner">
+                <div class="bg-[--dark-brown] text-indigo-950 p-2 rounded-full font-bold text-xl flex items-center justify-center w-10 h-10 shadow-inner">
                     BL
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight sm:text-xl">Bishop Lawi Imathiu</h1>
-                    <p class="text-xs text-amber-300">Secondary School - Meru</p>
+                    <p class="text-xs text-[#cbb5ac]">Secondary School - Meru</p>
                 </div>
             </div>
 
             <!-- Public Nav Links -->
             <nav id="public-nav" class="hidden md:flex items-center gap-6 font-medium text-sm">
-                <a href="#about" class="hover:text-amber-400 transition">About Us</a>
-                <a href="#academics" class="hover:text-amber-400 transition">Academics</a>
-                <a href="#admissions" class="hover:text-amber-400 transition">Admissions</a>
-                <a href="#public-opportunities" class="hover:text-amber-400 transition">Tenders & Careers</a>
-                <a href="#contact" class="hover:text-amber-400 transition">Contact</a>
-                <button onclick="showLoginModal()" class="bg-amber-500 hover:bg-amber-600 text-indigo-950 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
+                <a href="#about" class="hover:text-[--dark-brown] transition">About Us</a>
+                <a href="#academics" class="hover:text-[--dark-brown] transition">Academics</a>
+                <a href="#admissions" class="hover:text-[--dark-brown] transition">Admissions</a>
+                <a href="#public-opportunities" class="hover:text-[--dark-brown] transition">Tenders & Careers</a>
+                <a href="#contact" class="hover:text-[--dark-brown] transition">Contact</a>
+                <button onclick="showLoginModal()" class="bg-[--dark-brown] hover:bg-[#5f463f] text-indigo-950 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Portal Login
                 </button>
             </nav>
 
             <!-- Authenticated User Nav Indicator -->
             <div id="user-nav" class="hidden flex items-center gap-4">
-                <span id="user-badge" class="bg-indigo-900 border border-amber-400/40 text-amber-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
+                <span id="user-badge" class="bg-indigo-900 border border-[#cbb5ac]/40 text-[#cbb5ac] px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
                 <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Logout
                 </button>
@@ -164,7 +164,7 @@
         <div id="public-view" class="portal-view active w-full no-print">
             <section class="bg-gradient-to-r from-[--dark-green-deep] via-[#246342] to-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 text-center">
                 <div class="max-w-4xl mx-auto">
-                    <span class="bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
+                    <span class="bg-[#4a342e]/20 text-[#cbb5ac] border border-[#4a342e]/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
                         Excellence in Education
                     </span>
                     <h2 class="text-3xl sm:text-5xl font-light mb-6 leading-tight lato-light">Nurturing Leaders of Tomorrow </h2>
@@ -172,7 +172,7 @@
                         Providing quality education, moral foundation, and holistic development to empower students for local and global impact.
                     </p>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <a href="#admissions" class="bg-amber-500 hover:bg-amber-600 text-indigo-950 font-semibold px-6 py-3 rounded-lg shadow-lg transition">Apply for Admission</a>
+                        <a href="#admissions" class="bg-[--dark-brown] hover:bg-[#5f463f] text-indigo-950 font-semibold px-6 py-3 rounded-lg shadow-lg transition">Apply for Admission</a>
                         <button onclick="showLoginModal()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-lg transition">Access Staff Portal</button>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                     <p class="text-slate-600 text-sm leading-relaxed">Comprehensive KCSE and CBC senior secondary curriculum supported by experienced teaching staff.</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-lg flex items-center justify-center mb-4">
+                    <div class="w-12 h-12 bg-[#f3ece8] text-[--dark-brown] rounded-lg flex items-center justify-center mb-4">
                         <i data-lucide="shield-check" class="w-6 h-6"></i>
                     </div>
                     <h3 class="font-bold text-xl mb-2">Character & Values</h3>
@@ -207,7 +207,7 @@
             <section id="public-opportunities" class="py-16 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-10">
-                        <span class="text-amber-600 font-semibold uppercase tracking-wider text-sm">Opportunities</span>
+                        <span class="text-[--dark-brown] font-semibold uppercase tracking-wider text-sm">Opportunities</span>
                         <h2 class="text-3xl font-light text-slate-900 lato-light mt-2">Open Tenders & Career Opportunities</h2>
                         <p class="text-slate-600 mt-2">View current school tenders and advertised career opportunities.</p>
                     </div>
@@ -250,18 +250,18 @@
                             </div>
                         </div>
 
-                        <form onsubmit="alert('Message sent successfully!'); return false;" class="space-y-4">
+                        <form onsubmit="submitContactInquiry(event); return false;" class="space-y-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Full Name</label>
-                                <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
+                                <input id="contact-full-name" type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Email / Phone</label>
-                                <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
+                                <input id="contact-email-phone" type="text" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Message</label>
-                                <textarea rows="3" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm"></textarea>
+                                <textarea id="contact-message" rows="3" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm"></textarea>
                             </div>
                             <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-semibold py-2.5 rounded-lg transition text-sm">Send Message</button>
                         </form>
@@ -273,10 +273,10 @@
         <!-- SHARED PORTAL SIDEBAR -->
         <aside id="portal-sidebar" class="hidden w-72 bg-[--dark-green-deep] text-[--text-on-dark] flex-col p-4 space-y-8 border-r border-[#246342] no-print">
             <div class="text-center">
-                <div class="bg-amber-500 text-indigo-950 p-2 rounded-full font-bold text-3xl mx-auto flex items-center justify-center w-20 h-20 mb-3 shadow-md">
+                <div class="bg-[--dark-brown] text-indigo-950 p-2 rounded-full font-bold text-3xl mx-auto flex items-center justify-center w-20 h-20 mb-3 shadow-md">
                     BL
                 </div>
-                <h3 id="sidebar-portal-title" class="font-bold text-lg leading-tight text-amber-300">Staff Portal</h3>
+                <h3 id="sidebar-portal-title" class="font-bold text-lg leading-tight text-[#cbb5ac]">Staff Portal</h3>
             </div>
             
             <!-- TEACHER SIDEBAR NAV -->
@@ -300,6 +300,7 @@
                 <a href="#" onclick="switchTab('teacher', 't-exams')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
                     <i data-lucide="scroll-text" class="w-5 h-5"></i> Term Exam
                 </a>
+                <a href="#" onclick="switchTab('teacher', 't-attendance')" class="nav-item t-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition"><i data-lucide="clock-3" class="w-5 h-5"></i> Staff Attendance</a>
             </div>
 
             <!-- ADMIN SIDEBAR NAV -->
@@ -323,6 +324,7 @@
                         <button onclick="switchTab('admin','a-timetable-memos')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="calendar-days" class="w-8 h-8 text-slate-400 mb-2"></i> Timetable / Memo</button>
                         <button onclick="switchTab('admin','a-admissions')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="graduation-cap" class="w-8 h-8 text-slate-400 mb-2"></i> Admissions</button>
                         <button onclick="switchTab('admin','a-opportunities')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="megaphone" class="w-8 h-8 text-slate-400 mb-2"></i> Tenders & Careers</button>
+                        <button onclick="switchTab('admin','a-inquiries')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="messages-square" class="w-8 h-8 text-slate-400 mb-2"></i> Messages & Inquiries <span id="admin-inquiry-badge" class="hidden ml-1 bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full align-middle">0</span></button>
 </div>
 
             <!-- STORE KEEPER SIDEBAR NAV -->
@@ -369,7 +371,10 @@
                 <a href="#" onclick="switchTab('librarian', 'l-dashboard')" class="nav-item l-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition active-nav">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
                 </a>
-                <a href="#" onclick="switchTab('librarian', 'l-catalog')" class="nav-item l-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                <a href="#" onclick="switchTab('librarian', 'l-search'); return false;" class="nav-item l-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
+                    <i data-lucide="search" class="w-5 h-5"></i> Library Search
+                </a>
+                <a href="#" onclick="switchTab('librarian', 'l-catalog'); return false;" class="nav-item l-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
                     <i data-lucide="book-marked" class="w-5 h-5"></i> Book Inventory
                 </a>
                 <a href="#" onclick="switchTab('librarian', 'l-circulations')" class="nav-item l-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
@@ -415,7 +420,7 @@
                     </div>
 
                     <div class="grid sm:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-[#f2a632] p-5 rounded-lg text-white flex items-center gap-4 shadow">
+                        <div class="bg-[var(--dark-brown)] p-5 rounded-lg text-white flex items-center gap-4 shadow">
                             <div class="bg-white/10 p-3 rounded-md"><i data-lucide="tag" class="w-7 h-7"></i></div>
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-white/80">Subjects Taught</p>
@@ -475,15 +480,15 @@
                             <div class="p-4 rounded-lg border border-[--dark-green-deep] bg-[--dark-green-deep] text-white shadow-md">
                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                     <div>
-                                        <p class="text-xs font-bold uppercase text-amber-300">Remedial Claim Weeks</p>
+                                        <p class="text-xs font-bold uppercase text-[#cbb5ac]">Remedial Claim Weeks</p>
                                         <p id="remedial-week-instruction" class="text-sm text-white/90 mt-1">Complete each open week below. All open weeks are submitted together once.</p>
                                     </div>
                                     <div class="text-right">
-                                        <span id="remedial-week-progress" class="text-xs font-black text-amber-300">Week 1 of 1</span>
+                                        <span id="remedial-week-progress" class="text-xs font-black text-[#cbb5ac]">Week 1 of 1</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
-                                    <div id="remedial-week-progress-bar" class="h-full bg-amber-400 rounded-full transition-all" style="width:100%"></div>
+                                    <div id="remedial-week-progress-bar" class="h-full bg-[--dark-brown] rounded-full transition-all" style="width:100%"></div>
                                 </div>
                                 <input type="hidden" id="t-week-select" value="">
                             </div>
@@ -857,12 +862,12 @@
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                             <h3 class="font-bold text-base text-slate-800 mb-4">Pending & Active Swaps</h3>
                             <div id="swap-list" class="space-y-3 text-xs">
-                                <div class="p-3 border rounded bg-amber-50/50 border-amber-200 flex justify-between items-center">
+                                <div class="p-3 border rounded bg-[#fbf8f3] border-[#d8c5be] flex justify-between items-center">
                                     <div>
                                         <p class="font-bold text-slate-800">Swap Request to Mrs. Faith Kaimenyi</p>
                                         <p class="text-slate-500">Offer: Sat L1 &rarr; Target: Sat L4</p>
                                     </div>
-                                    <span class="bg-amber-200 text-amber-800 px-2 py-0.5 rounded font-semibold text-[10px]">Pending</span>
+                                    <span class="bg-[#e8d8d1] text-[--dark-brown] px-2 py-0.5 rounded font-semibold text-[10px]">Pending</span>
                                 </div>
                             </div>
                         </div>
@@ -980,7 +985,7 @@
                         <!-- File Upload Form -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                             <h3 class="font-bold text-base text-slate-800 mb-4">Submit CAT Document</h3>
-                            <form onsubmit="handleCatFileUpload(event)" class="space-y-4 text-xs">
+                            <form id="cat-upload-form" onsubmit="handleCatFileUpload(event); return false;" class="space-y-4 text-xs">
                                 <div>
                                     <label class="block font-semibold uppercase mb-1 text-slate-700">Academic Week</label>
                                     <select id="cat-upload-week" required class="cat-week-select w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
@@ -1038,7 +1043,7 @@
                                     <label class="block font-semibold uppercase mb-1 text-slate-700">Select File (PDF, DOCX, XLSX, PNG)</label>
                                     <input type="file" id="cat-file-input" required accept=".pdf,.docx,.doc,.xlsx,.png,.jpg" class="w-full p-2 border rounded-lg outline-none bg-slate-50 text-xs">
                                 </div>
-                                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg text-sm transition shadow flex items-center justify-center gap-2">
+                                <button type="button" onclick="handleCatFileUpload(event)" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-bold py-2.5 rounded-lg text-sm transition shadow flex items-center justify-center gap-2 cursor-pointer">
                                     <i data-lucide="upload" class="w-4 h-4"></i> Upload CAT Document
                                 </button>
                             </form>
@@ -1046,7 +1051,7 @@
 
                         <!-- Uploaded CAT Files History -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-bold text-base text-[--dark-green-deep] mb-1">Weekly CAT Documents — Shared with Teachers</h3>
+                            <h3 class="font-bold text-base text-[--dark-green-deep] mb-1">Weekly CAT Documents ? Shared with Teachers</h3>
                             <div id="cat-uploads-history" class="space-y-3 text-xs">
                                 <!-- Uploaded items dynamically populated -->
                             </div>
@@ -1055,6 +1060,15 @@
                 </div>
 
                 <!-- TAB: Term Exam -->
+                <div id="t-attendance" class="tab-content">
+                    <div class="mb-6"><h2 class="text-2xl font-light text-slate-900">Staff Attendance</h2><p class="text-sm text-slate-500">Sign in and sign out for the school day. Attendance is restricted to the approved school Wi-Fi network.</p></div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5"><div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-5"><div><p class="text-xs font-bold uppercase tracking-wider text-slate-500">Logged-in teacher</p><h3 id="attendance-teacher-name" class="text-xl font-bold text-slate-900">—</h3><p id="attendance-teacher-email" class="text-sm text-slate-500">—</p></div><div id="attendance-network-badge" class="px-3 py-2 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">Checking school Wi-Fi…</div></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5"><div class="rounded-xl border border-slate-200 p-5 bg-slate-50"><p class="text-xs uppercase font-bold text-slate-500 mb-1">Today's status</p><p id="attendance-today-status" class="text-lg font-bold text-slate-800">Not signed in</p><p id="attendance-clock-times" class="text-sm text-slate-500 mt-1">No attendance recorded today.</p></div><div class="rounded-xl border border-slate-200 p-5 bg-slate-50"><p class="text-xs uppercase font-bold text-slate-500 mb-1">Detected public IP</p><p id="attendance-public-ip" class="text-lg font-mono font-bold text-slate-800">Checking…</p><p class="text-xs text-slate-500 mt-1">Must match an approved school-network IP.</p></div></div>
+                    <div id="attendance-setup-warning" class="hidden mb-5 p-4 rounded-lg border border-amber-300 bg-amber-50 text-amber-900 text-sm">The school public IPv4 has not yet been configured. Add it before attendance can be recorded.</div>
+                    <div class="flex flex-wrap gap-3"><button id="attendance-sign-in-btn" onclick="recordTeacherAttendance('sign_in')" disabled class="px-5 py-3 rounded-lg bg-[--dark-green-deep] text-white font-bold disabled:opacity-50">Sign In</button><button id="attendance-sign-out-btn" onclick="recordTeacherAttendance('sign_out')" disabled class="px-5 py-3 rounded-lg bg-[--dark-brown] text-white font-bold disabled:opacity-50">Sign Out</button><button onclick="checkTeacherAttendanceNetwork()" class="px-5 py-3 rounded-lg border border-slate-300 text-slate-700 font-bold">Re-check Network</button></div><p id="attendance-action-status" class="mt-4 text-sm font-semibold"></p></div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6"><h3 class="font-bold text-slate-900 mb-4">Attendance History</h3><div id="attendance-history" class="space-y-3"><p class="text-sm text-slate-500">Loading attendance history…</p></div></div></div></div>
+
                 <div id="t-exams" class="tab-content">
                     <h2 class="text-2xl font-light text-slate-900 mb-2 lato-light">Term Examination Data Entry</h2>
                     <p class="text-slate-600 text-sm mb-6">Record end-of-term examination scores.</p>
@@ -1091,7 +1105,7 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase mb-1">File</label>
-                                <input id="doc-file" type="file" required class="w-full px-3 py-2 border rounded-lg">
+                                <input id="doc-file" type="file" required accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg" class="w-full px-3 py-2 border rounded-lg">
                             </div>
                             <div class="md:col-span-3">
                                 <button type="submit" class="bg-[--dark-green-deep] text-white px-5 py-2.5 rounded-lg font-bold">Upload & Publish</button>
@@ -1129,9 +1143,7 @@
                         <p class="text-sm text-slate-500">Capture the required admission information and upload the KJSEA results slip.</p>
                     </div>
                     <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
-                        <form onsubmit="saveAdmission(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                
+                        <form onsubmit="saveAdmission(event); return false;" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold uppercase mb-1">Learner Full Name</label>
                                 <input type="text" id="adm-learner-name" required
@@ -1152,12 +1164,14 @@
                                 </select>
                             </div>
 
-<div class="md:col-span-2 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <div class="md:col-span-2 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
                                 <label class="block text-xs font-semibold uppercase mb-1 text-emerald-800">Admission Number</label>
                                 <input id="adm-admission-number" readonly class="w-full px-3 py-2 border rounded-lg bg-white font-bold text-emerald-800" placeholder="Automatically assigned after approval">
                                 <p class="text-xs text-emerald-700 mt-1">This number is generated automatically after all required admission documents are submitted and the admission is approved.</p>
                             </div>
-                            <label class="block text-xs font-semibold uppercase mb-1">Assessment Number</label>
+
+                            <div>
+                                <label class="block text-xs font-semibold uppercase mb-1">Assessment Number</label>
                                 <input id="adm-assessment" required class="w-full px-3 py-2 border rounded-lg">
                             </div>
                             <div>
@@ -1254,6 +1268,22 @@
                 </div>
 
 
+                <!-- TAB: MESSAGES & INQUIRIES -->
+                <div id="a-inquiries" class="tab-content">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <h2 class="text-2xl font-light text-slate-900">Messages & Inquiries</h2>
+                            <p class="text-sm text-slate-500">Messages submitted by visitors through the public Contact Us section.</p>
+                        </div>
+                        <button type="button" onclick="markAllContactInquiriesRead()" class="bg-[--dark-green-deep] text-white px-4 py-2 rounded-lg text-xs font-bold">Mark All as Read</button>
+                    </div>
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                        <div id="admin-inquiries-list" class="space-y-4">
+                            <p class="text-sm text-slate-400 italic">No inquiries received yet.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TAB: Admin Dashboard -->
                 <div id="a-dashboard" class="tab-content active">
                     <button onclick="switchTab('admin','a-admin-security')" class="text-left bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
@@ -1287,8 +1317,8 @@
                             <p class="text-xs uppercase text-indigo-300 font-semibold">Active Teachers</p>
                             <p id="a-teacher-count" class="text-3xl font-bold mt-1">2</p>
                         </div>
-                        <div class="bg-amber-600 text-white p-5 rounded-lg shadow">
-                            <p class="text-xs uppercase text-amber-200 font-semibold">Pending Claims</p>
+                        <div class="bg-[#5f463f] text-white p-5 rounded-lg shadow">
+                            <p class="text-xs uppercase text-[#d8c5be] font-semibold">Pending Claims</p>
                             <p id="a-pending-count" class="text-3xl font-bold mt-1">2</p>
                         </div>
                         <div class="bg-emerald-700 text-white p-5 rounded-lg shadow">
@@ -1327,7 +1357,7 @@
                                 Change Administrator Password
                             </button>
                         </form>
-                        <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
+                        <div class="mt-5 p-4 bg-[#fbf8f3] border border-[#d8c5be] rounded-lg text-xs text-[#3b2924]">
                             <strong>Security:</strong> The password is changed through Firebase Authentication. The current administrator must be signed in.
                         </div>
                     </div>
@@ -1528,8 +1558,8 @@
                             <div class="text-3xl mb-2">??</div><h3 class="font-bold text-slate-800">General Stock</h3><p class="text-xs text-slate-500 mt-1">Add any new stock not classified as books or furniture.</p>
                         </button>
 
-                        <button onclick="switchTab('storekeeper','sk-furniture')" class="text-left bg-white p-6 rounded-xl border-2 border-amber-200 shadow-sm hover:shadow-lg transition">
-                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center mb-4"><i data-lucide="armchair" class="w-6 h-6"></i></div>
+                        <button onclick="switchTab('storekeeper','sk-furniture')" class="text-left bg-white p-6 rounded-xl border-2 border-[#d8c5be] shadow-sm hover:shadow-lg transition">
+                            <div class="w-12 h-12 rounded-xl bg-[#f3ece8] text-[--dark-brown] flex items-center justify-center mb-4"><i data-lucide="armchair" class="w-6 h-6"></i></div>
                             <h3 class="font-bold text-lg text-slate-900">Furniture and equipment</h3>
                             <p class="text-xs text-slate-500 mt-1">Track desks, chairs, equipment and other assets.</p>
                         </button>
@@ -1577,7 +1607,7 @@
 
                 <div id="sk-books-stationery" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Books & Stationery</h2><p class="text-sm text-slate-600 mt-2 mb-5">Add books and stationery received into the store.</p><form id="sk-book-form" onsubmit="saveStoreStock(event,'Books & Stationery')" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-emerald-50 p-5 rounded-xl border mb-6"><input name="itemName" required placeholder="Book / stationery name" class="p-3 border rounded-lg"><select name="subCategory" class="p-3 border rounded-lg"><option>Book</option><option>Stationery</option><option>Textbook</option><option>Exercise Book</option><option>Other</option></select><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="unit" required placeholder="Unit (pcs, boxes, reams...)" class="p-3 border rounded-lg"><input name="supplier" placeholder="Supplier" class="p-3 border rounded-lg"><input name="reference" placeholder="GRN / Invoice No." class="p-3 border rounded-lg"><input name="date" type="date" required class="p-3 border rounded-lg"><input name="remarks" placeholder="Remarks" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-[--dark-green-deep] text-white font-bold py-3 rounded-lg">Add Book / Stationery</button></form><div class="mt-5 mb-3"><div class="relative"><input id="sk-books-stationery-search" type="search" oninput="filterStoreSearch('sk-books-stationery', this.value)" placeholder="Search books, stationery, suppliers or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-books-stationery-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-books-list"></div></div></div>
                 <div id="sk-general" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">General Stock</h2><p class="text-sm text-slate-600 mt-2 mb-5">Add any new school stock such as cleaning materials, office supplies, sports materials, maintenance items and other store items.</p><form id="sk-general-form" onsubmit="saveStoreStock(event,'General Stock')" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-cyan-50 p-5 rounded-xl border mb-6"><input name="itemName" required placeholder="Stock item name" class="p-3 border rounded-lg"><input name="subCategory" placeholder="Sub-category" class="p-3 border rounded-lg"><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="unit" required placeholder="Unit (pcs, boxes, litres...)" class="p-3 border rounded-lg"><input name="supplier" placeholder="Supplier" class="p-3 border rounded-lg"><input name="reference" placeholder="GRN / Invoice No." class="p-3 border rounded-lg"><input name="date" type="date" required class="p-3 border rounded-lg"><input name="remarks" placeholder="Remarks / condition" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-cyan-700 text-white font-bold py-3 rounded-lg">Add General Stock</button></form><div class="mt-5 mb-3"><div class="relative"><input id="sk-general-search" type="search" oninput="filterStoreSearch('sk-general', this.value)" placeholder="Search general stock, suppliers or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-general-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-general-list"></div></div></div>
-                <div id="sk-furniture" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Furniture & Equipment</h2><p class="text-sm text-slate-600 mt-2 mb-5">Add desks, chairs, tables, equipment and other assets.</p><form id="sk-furniture-form" onsubmit="saveStoreStock(event,'Furniture & Equipment')" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-amber-50 p-5 rounded-xl border mb-6"><input name="itemName" required placeholder="Furniture / equipment name" class="p-3 border rounded-lg"><select name="subCategory" class="p-3 border rounded-lg"><option>Furniture</option><option>Equipment</option><option>ICT Equipment</option><option>Laboratory Equipment</option><option>Other</option></select><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="unit" required placeholder="Unit (pcs, sets...)" class="p-3 border rounded-lg"><input name="supplier" placeholder="Supplier" class="p-3 border rounded-lg"><input name="reference" placeholder="GRN / Invoice No." class="p-3 border rounded-lg"><input name="date" type="date" required class="p-3 border rounded-lg"><input name="remarks" placeholder="Condition / remarks" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-amber-800 text-white font-bold py-3 rounded-lg">Add Furniture / Equipment</button></form><div class="mt-5 mb-3"><div class="relative"><input id="sk-furniture-search" type="search" oninput="filterStoreSearch('sk-furniture', this.value)" placeholder="Search furniture, equipment, suppliers or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-furniture-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-furniture-list"></div></div></div>
+                <div id="sk-furniture" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Furniture & Equipment</h2><p class="text-sm text-slate-600 mt-2 mb-5">Add desks, chairs, tables, equipment and other assets.</p><form id="sk-furniture-form" onsubmit="saveStoreStock(event,'Furniture & Equipment')" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-[#fbf8f3] p-5 rounded-xl border mb-6"><input name="itemName" required placeholder="Furniture / equipment name" class="p-3 border rounded-lg"><select name="subCategory" class="p-3 border rounded-lg"><option>Furniture</option><option>Equipment</option><option>ICT Equipment</option><option>Laboratory Equipment</option><option>Other</option></select><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="unit" required placeholder="Unit (pcs, sets...)" class="p-3 border rounded-lg"><input name="supplier" placeholder="Supplier" class="p-3 border rounded-lg"><input name="reference" placeholder="GRN / Invoice No." class="p-3 border rounded-lg"><input name="date" type="date" required class="p-3 border rounded-lg"><input name="remarks" placeholder="Condition / remarks" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-[#3b2924] text-white font-bold py-3 rounded-lg">Add Furniture / Equipment</button></form><div class="mt-5 mb-3"><div class="relative"><input id="sk-furniture-search" type="search" oninput="filterStoreSearch('sk-furniture', this.value)" placeholder="Search furniture, equipment, suppliers or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-furniture-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-furniture-list"></div></div></div>
                 <div id="sk-received" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Record Stock Received</h2><p class="text-sm text-slate-600 mt-2 mb-5">Record any new stock entering the school store.</p><form onsubmit="recordStockReceived(event)" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-blue-50 p-5 rounded-xl border mb-6"><input name="itemName" required list="sk-item-datalist" placeholder="Item name" class="p-3 border rounded-lg"><select name="category" class="p-3 border rounded-lg"><option>Books & Stationery</option><option>Furniture & Equipment</option><option>General Stock</option></select><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="unit" required placeholder="Unit" class="p-3 border rounded-lg"><input name="supplier" placeholder="Supplier" class="p-3 border rounded-lg"><input name="reference" placeholder="GRN / Invoice No." class="p-3 border rounded-lg"><input name="date" type="date" required class="p-3 border rounded-lg"><input name="remarks" placeholder="Remarks" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-blue-700 text-white font-bold py-3 rounded-lg">Record Stock Received</button></form><datalist id="sk-item-datalist"></datalist><div class="mt-5 mb-3"><div class="relative"><input id="sk-received-search" type="search" oninput="filterStoreSearch('sk-received', this.value)" placeholder="Search received transactions, items, suppliers, references or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-received-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-received-list"></div></div></div>
                 <div id="sk-issued" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Record Items Issued</h2><p class="text-sm text-slate-600 mt-2 mb-5">Issue stock to departments, teachers or other recipients. The system checks the available balance.</p><form onsubmit="recordStoreIssue(event)" class="grid md:grid-cols-2 lg:grid-cols-4 gap-3 bg-orange-50 p-5 rounded-xl border mb-6"><input name="itemName" required list="sk-issue-datalist" placeholder="Item to issue" class="p-3 border rounded-lg"><input name="quantity" type="number" min="1" required placeholder="Quantity" class="p-3 border rounded-lg"><input name="recipient" required placeholder="Teacher / department" class="p-3 border rounded-lg"><select name="recipientType" class="p-3 border rounded-lg"><option>Department</option><option>Teacher</option><option>Other</option></select><input name="date" type="date" required class="p-3 border rounded-lg"><input name="reference" placeholder="Issue Voucher No." class="p-3 border rounded-lg"><input name="purpose" placeholder="Purpose" class="p-3 border rounded-lg"><input name="remarks" placeholder="Remarks" class="p-3 border rounded-lg"><button class="md:col-span-2 lg:col-span-4 bg-orange-700 text-white font-bold py-3 rounded-lg">Record Item Issued</button></form><datalist id="sk-issue-datalist"></datalist><div class="mt-5 mb-3"><div class="relative"><input id="sk-issued-search" type="search" oninput="filterStoreSearch('sk-issued', this.value)" placeholder="Search issued transactions, items, recipients, references or dates..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-issued-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-issued-list"></div></div></div>
                 <div id="sk-balances" class="tab-content"><div class="bg-white p-6 rounded-xl border shadow-sm"><h2 class="text-2xl font-light">Current Stock Balances</h2><p class="text-sm text-slate-600 mt-2">View current stock quantities and balances.</p><div class="mt-5 mb-3"><div class="relative"><input id="sk-balances-search" type="search" oninput="filterStoreSearch('sk-balances', this.value)" placeholder="Search current stock balances by item or category..." class="sk-search-input w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" autocomplete="off"><i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-slate-400"></i></div><p id="sk-balances-search-status" class="text-xs text-slate-500 mt-2"></p></div><div id="sk-balances-list" class="mt-5"></div></div></div>
@@ -1592,7 +1622,7 @@
                         <p class="text-slate-600 text-sm">Change or reset the password used to enter the Store Keeper Portal.</p>
                     </div>
                     <div class="max-w-2xl bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg mb-5 text-sm text-amber-900">
+                        <div class="p-4 bg-[#fbf8f3] border border-[#d8c5be] rounded-lg mb-5 text-sm text-[#3b2924]">
                             <strong>Current account:</strong> storekeeper<br>
                             <span class="text-xs">For security, enter the current password before choosing a new password.</span>
                         </div>
@@ -1615,8 +1645,8 @@
                             </div>
                         </form>
                         <div id="storekeeper-password-status" class="hidden mt-4 p-3 rounded-lg text-sm"></div>
-                        <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
-                            <strong>Default password:</strong> storekeeper. Use “Reset to Default” only when you intentionally want to restore the original password.
+                        <div class="mt-5 p-4 bg-[#fbf8f3] border border-[#d8c5be] rounded-lg text-xs text-[#3b2924]">
+                            <strong>Default password:</strong> storekeeper. Use ?Reset to Default? only when you intentionally want to restore the original password.
                         </div>
                     </div>
                 </div>
@@ -1645,9 +1675,9 @@
                             </div>
                             <div class="bg-white/10 p-3 rounded-lg"><i data-lucide="book-open-check" class="w-6 h-6"></i></div>
                         </div>
-                        <div class="bg-amber-600 text-white p-5 rounded-lg shadow flex items-center justify-between">
+                        <div class="bg-[#5f463f] text-white p-5 rounded-lg shadow flex items-center justify-between">
                             <div>
-                                <p class="text-xs uppercase text-amber-200 font-semibold">Borrowed Books</p>
+                                <p class="text-xs uppercase text-[#d8c5be] font-semibold">Borrowed Books</p>
                                 <p id="lib-borrowed-books" class="text-3xl font-bold mt-1">0</p>
                             </div>
                             <div class="bg-white/10 p-3 rounded-lg"><i data-lucide="book-copy" class="w-6 h-6"></i></div>
@@ -1681,6 +1711,27 @@
                             <div class="bg-white/10 p-3 rounded-lg"><i data-lucide="wallet" class="w-6 h-6"></i></div>
                         </div>
                     </div>
+                </div>
+
+                <!-- TAB: Library Search -->
+                <div id="l-search" class="tab-content">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-light text-slate-900 lato-light">Library Search</h2>
+                        <p class="text-slate-600 text-sm">Search books, students, teachers, admission numbers, ISBNs and borrowing records from one place.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+                        <div class="relative">
+                            <input id="library-global-search" type="search" oninput="searchLibrary(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();searchLibrary(this.value);}" placeholder="Search by book title, author, ISBN, student name, admission number, teacher or transaction..." class="w-full pl-12 pr-12 py-4 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300 text-sm" autocomplete="off">
+                            <i data-lucide="search" class="absolute left-4 top-4 w-5 h-5 text-slate-400"></i>
+                            <button type="button" onclick="clearLibrarySearch()" class="absolute right-3 top-2.5 p-2 text-slate-400 hover:text-slate-700" title="Clear search">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <p id="library-search-status" class="text-xs text-slate-500 mt-3">Type a name, admission number, book title, ISBN or any other library detail.</p>
+                    </div>
+
+                    <div id="library-search-results" class="space-y-4"></div>
                 </div>
 
                 <!-- TAB: Book Inventory -->
@@ -1772,6 +1823,52 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+                <!-- TAB: Library Book Profile -->
+                <div id="l-book-profile" class="tab-content">
+                    <div class="mb-6 flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">Library Book Profile</p>
+                            <h2 id="library-page-book-title" class="text-2xl font-light text-slate-900">Book Details</h2>
+                            <p id="library-page-book-isbn" class="text-slate-600 text-sm mt-1"></p>
+                        </div>
+                        <button type="button" onclick="switchTab('librarian','l-search')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold">Back to Search</button>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Author</p><p id="library-page-book-author" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Category</p><p id="library-page-book-subject" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Total Copies</p><p id="library-page-book-total" class="font-bold text-lg text-indigo-800 mt-1">0</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Available Copies</p><p id="library-page-book-available" class="font-bold text-lg text-emerald-700 mt-1">0</p></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4">Borrowing Records for This Book</h3>
+                        <div id="library-page-book-history"></div>
+                    </div>
+                </div>
+
+                <!-- TAB: Library Student Profile -->
+                <div id="l-student-profile" class="tab-content">
+                    <div class="mb-6 flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">Library Student Profile</p>
+                            <h2 id="library-page-profile-name" class="text-2xl font-light text-slate-900">Student Profile</h2>
+                            <p id="library-page-profile-admission" class="text-slate-600 text-sm mt-1"></p>
+                        </div>
+                        <button type="button" onclick="switchTab('librarian','l-search')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold">Back to Search</button>
+                    </div>
+                    <div class="grid md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Class</p><p id="library-page-profile-class" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Books Borrowed</p><p id="library-page-profile-count" class="font-bold text-lg text-indigo-800 mt-1">0</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Borrowing Status</p><p id="library-page-profile-status" class="font-bold mt-1">No</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Penalty / Fine</p><p id="library-page-profile-fine" class="font-bold text-lg text-purple-900 mt-1">KES 0</p></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg text-slate-800 mb-4">Borrowing History</h3>
+                        <div id="library-page-profile-history"></div>
+                    </div>
+                </div>
+
                 <div id="l-security" class="tab-content">
                     <div class="mb-6">
                         <h2 class="text-2xl font-light text-slate-900">Librarian Security</h2>
@@ -1801,8 +1898,8 @@
                             </div>
                         </form>
                         <div id="librarian-password-status" class="hidden mt-4 p-3 rounded-lg text-sm"></div>
-                        <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
-                            <strong>Default password:</strong> librarian. Use “Reset to Default” only when you intentionally want to restore the original password.
+                        <div class="mt-5 p-4 bg-[#fbf8f3] border border-[#d8c5be] rounded-lg text-xs text-[#3b2924]">
+                            <strong>Default password:</strong> librarian. Use ?Reset to Default? only when you intentionally want to restore the original password.
                         </div>
                     </div>
                 </div>
@@ -1825,12 +1922,33 @@
         <h2 id="library-profile-name" class="text-2xl font-black text-slate-900 mt-1">Student</h2>
         <p id="library-profile-admission" class="text-sm text-slate-500 mt-1"></p>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Class</p><p id="library-profile-class" class="font-bold mt-1">—</p></div>
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Class</p><p id="library-profile-class" class="font-bold mt-1">?</p></div>
           <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Borrowed Now</p><p id="library-profile-count" class="font-bold mt-1">0</p></div>
           <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Borrowing Status</p><p id="library-profile-status" class="font-bold mt-1">Not borrowing</p></div>
           <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Fine</p><p id="library-profile-fine" class="font-bold mt-1">KES 0</p></div>
         </div>
         <div class="mt-6 border rounded-xl overflow-hidden"><div class="p-4 bg-slate-100 border-b"><h3 class="font-bold">Borrowing History</h3></div><div id="library-profile-history" class="p-4"></div></div>
+      </div>
+    </div>
+
+    <!-- LIBRARY TEACHER PROFILE MODAL -->
+    <div id="library-teacher-profile-modal" class="fixed inset-0 bg-black/50 hidden z-[70] flex items-center justify-center p-4 no-print">
+      <div class="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl p-6 relative">
+        <button type="button" onclick="closeLibraryTeacherProfile()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-900"><i data-lucide="x" class="w-6 h-6"></i></button>
+        <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">Library Teacher Profile</p>
+        <h2 id="library-teacher-profile-name" class="text-2xl font-black text-slate-900 mt-1">Teacher</h2>
+        <p id="library-teacher-profile-id" class="text-sm text-slate-500 mt-1"></p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Staff / ID</p><p id="library-teacher-id-card" class="font-bold mt-1">?</p></div>
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Books Borrowed</p><p id="library-teacher-count" class="font-bold mt-1">0</p></div>
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Borrowing Status</p><p id="library-teacher-status" class="font-bold mt-1">Not borrowing</p></div>
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Penalty / Fine</p><p id="library-teacher-fine" class="font-bold mt-1">KES 0</p></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Department / Subjects</p><p id="library-teacher-subjects" class="font-semibold mt-1 text-sm"></p></div>
+          <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Assigned Streams</p><p id="library-teacher-streams" class="font-semibold mt-1 text-sm"></p></div>
+        </div>
+        <div class="mt-6 border rounded-xl overflow-hidden"><div class="p-4 bg-slate-100 border-b"><h3 class="font-bold">Borrowing History</h3></div><div id="library-teacher-history" class="p-4"></div></div>
       </div>
     </div>
 
@@ -2284,7 +2402,7 @@ window.addEventListener("beforeunload", savePortalRoute);
             const isSkipped = !!(currentDraft && currentDraft.skipped);
 
             if (select) select.value = currentWeek.id;
-            if (progress) progress.textContent = `${currentWeek.label} — Week ${remedialWeekIndex + 1} of ${activeWeeks.length}`;
+            if (progress) progress.textContent = `${currentWeek.label} ? Week ${remedialWeekIndex + 1} of ${activeWeeks.length}`;
             if (bar) bar.style.width = `${((remedialWeekIndex + 1) / activeWeeks.length) * 100}%`;
 
             if (isSkipped) {
@@ -2292,7 +2410,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                 if (skipHelp) skipHelp.textContent = `You have skipped ${currentWeek.label}. You can undo this if you actually conducted a remedial lesson during this week.`;
                 if (skipBtn) skipBtn.classList.add('hidden');
                 if (unskipBtn) unskipBtn.classList.remove('hidden');
-                if (skipNotice) skipNotice.textContent = `? ${currentWeek.label} marked as SKIPPED — no claim will be submitted for this week.`;
+                if (skipNotice) skipNotice.textContent = `? ${currentWeek.label} marked as SKIPPED ? no claim will be submitted for this week.`;
             } else {
                 if (instruction) instruction.textContent = `Complete ${currentWeek.label}. When finished, move to the next open week. Submit only once after all ${activeWeeks.length} open week(s) are complete.`;
                 if (skipHelp) skipHelp.textContent = `If you did not conduct any remedial lesson during the entire week shown above, skip that week and continue to the next open week.`;
@@ -2569,6 +2687,8 @@ window.addEventListener("beforeunload", savePortalRoute);
             }, showFirebaseError);
             loadCollection('claims', claimsData, a=>{claimsData=a; renderClaimsTables();});
             loadCollection('uploadedCatFiles', uploadedCatFiles, a=>{uploadedCatFiles=a; renderCatUploadHistory();});
+            loadCollection('schoolDocuments', schoolDocuments, a=>{schoolDocuments=a; renderSchoolDocuments();});
+            loadCollection('contactMessages', contactMessages, a=>{contactMessages=a; renderContactInquiries();});
             db.ref('continuousAssessment').on('value', snap => { const data=snap.val()||{}; continuousAssessmentMarks=Object.keys(data).map(k=>({id:k,...data[k]})); renderContinuousAssessmentMarks(); }, showFirebaseError);
             loadCollection('library/books', libraryBooks, a=>{libraryBooks=a; renderLibraryModule();});
             loadCollection('library/patrons', libraryPatrons, a=>{libraryPatrons=a; renderLibraryModule();});
@@ -2819,7 +2939,8 @@ window.addEventListener("beforeunload", savePortalRoute);
                     '#tenders-careers': ['admin', 'a-opportunities'],
                     '#timetable-memo': ['admin', 'a-timetable'],
                     '#admissions': ['admin', 'a-admissions'],
-                    '#admin-security': ['admin', 'a-admin-security']
+                    '#admin-security': ['admin', 'a-admin-security'],
+                    '#admin-inquiries': ['admin', 'a-inquiries']
                 };
 
                 const target = routeMap[savedHash];
@@ -3090,26 +3211,264 @@ window.addEventListener("beforeunload", savePortalRoute);
             showView('public');
         }
 
-        function switchTab(role, tabId, pushHistory = true) {
-            // Add Admin/portal tab changes to browser history so Back/Forward works.
-            if (pushHistory) {
-                const routeMap = {
-                    'a-dashboard': '#admin-dashboard',
-                    'a-manage-teachers': '#manage-teachers',
-                    'a-manage-weeks': '#academic-weeks',
-                    'a-review-remedials': '#review-remedials',
-                    'a-approved-reports': '#approved-claims',
-                    'a-opportunities': '#tenders-careers',
-                    'a-timetable': '#timetable-memo',
-                    'a-admissions': '#admissions',
-                    'a-admin-security': '#admin-security',
-                    'l-security': '#librarian-security',
-                    'sk-security': '#storekeeper-security'
-                };
-                const route = routeMap[tabId];
-                if (route && window.location.hash !== route) {
-                    history.pushState({ portalRoute: route }, "", route);
+        // ================= TEACHER STAFF ATTENDANCE =================
+// Approved public IPv4 address for the school Wi-Fi.
+const SCHOOL_ALLOWED_PUBLIC_IPS = ['129.222.147.4'];
+let teacherAttendancePublicIp = '';
+let teacherAttendanceNetworkApproved = false;
+
+function attendanceLocalDateKey(date = new Date()) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+}
+
+function attendanceTeacherKey() {
+    const email = String(loggedUser?.email || loggedUser?.name || 'unknown-teacher').trim().toLowerCase();
+    return email.replace(/[^a-z0-9._-]/g, '_');
+}
+
+function attendanceFormatTime(value) {
+    if (!value) return '—';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    return d.toLocaleString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function updateTeacherAttendanceUI(record = null) {
+    const nameEl = document.getElementById('attendance-teacher-name');
+    const emailEl = document.getElementById('attendance-teacher-email');
+    const statusEl = document.getElementById('attendance-today-status');
+    const timesEl = document.getElementById('attendance-clock-times');
+    const ipEl = document.getElementById('attendance-public-ip');
+    const badgeEl = document.getElementById('attendance-network-badge');
+    const signInBtn = document.getElementById('attendance-sign-in-btn');
+    const signOutBtn = document.getElementById('attendance-sign-out-btn');
+    const warningEl = document.getElementById('attendance-setup-warning');
+
+    if (nameEl) nameEl.textContent = loggedUser?.name || loggedUser?.fullName || 'Teacher';
+    if (emailEl) emailEl.textContent = loggedUser?.email || '—';
+    if (ipEl) ipEl.textContent = teacherAttendancePublicIp || 'Checking…';
+
+    const configured = SCHOOL_ALLOWED_PUBLIC_IPS.length > 0;
+    if (warningEl) warningEl.classList.toggle('hidden', configured);
+
+    if (badgeEl) {
+        if (!configured) {
+            badgeEl.textContent = 'School network not configured';
+            badgeEl.className = 'px-3 py-2 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold';
+        } else if (teacherAttendanceNetworkApproved) {
+            badgeEl.textContent = '✓ Approved school network';
+            badgeEl.className = 'px-3 py-2 rounded-lg bg-green-100 text-green-800 text-xs font-bold';
+        } else {
+            badgeEl.textContent = '✕ Outside approved network';
+            badgeEl.className = 'px-3 py-2 rounded-lg bg-red-100 text-red-800 text-xs font-bold';
+        }
+    }
+
+    if (statusEl) {
+        if (record?.signInAt && !record?.signOutAt) statusEl.textContent = 'Signed in';
+        else if (record?.signInAt && record?.signOutAt) statusEl.textContent = 'Signed in and signed out';
+        else statusEl.textContent = 'Not signed in';
+    }
+    if (timesEl) {
+        if (record?.signInAt || record?.signOutAt) {
+            timesEl.textContent = `Sign in: ${attendanceFormatTime(record.signInAt)} • Sign out: ${attendanceFormatTime(record.signOutAt)}`;
+        } else timesEl.textContent = 'No attendance recorded today.';
+    }
+
+    const canSignIn = configured && teacherAttendanceNetworkApproved && !record?.signInAt;
+    const canSignOut = configured && teacherAttendanceNetworkApproved && !!record?.signInAt && !record?.signOutAt;
+    if (signInBtn) signInBtn.disabled = !canSignIn;
+    if (signOutBtn) signOutBtn.disabled = !canSignOut;
+}
+
+async function getTeacherAttendancePublicIp() {
+    const endpoints = [
+        'https://api.ipify.org?format=json',
+        'https://api64.ipify.org?format=json'
+    ];
+    for (const endpoint of endpoints) {
+        try {
+            const response = await fetch(endpoint, { cache: 'no-store' });
+            if (!response.ok) continue;
+            const data = await response.json();
+            if (data && data.ip) return String(data.ip).trim();
+        } catch (e) {}
+    }
+    return '';
+}
+
+async function loadTeacherAttendanceToday() {
+    const historyEl = document.getElementById('attendance-history');
+    const today = attendanceLocalDateKey();
+    const key = attendanceTeacherKey();
+    try {
+        const snap = await db.ref(`teacherAttendance/${key}/${today}`).once('value');
+        const record = snap.val() || null;
+        updateTeacherAttendanceUI(record);
+        return record;
+    } catch (e) {
+        console.error('Could not load teacher attendance:', e);
+        const statusEl = document.getElementById('attendance-action-status');
+        if (statusEl) statusEl.textContent = 'Could not load attendance from Firebase.';
+        updateTeacherAttendanceUI(null);
+        return null;
+    }
+}
+
+async function loadTeacherAttendanceHistory() {
+    const historyEl = document.getElementById('attendance-history');
+    if (!historyEl) return;
+    try {
+        const snap = await db.ref(`teacherAttendance/${attendanceTeacherKey()}`).limitToLast(10).once('value');
+        const records = snap.val() || {};
+        const rows = Object.entries(records).sort((a,b) => b[0].localeCompare(a[0]));
+        if (!rows.length) {
+            historyEl.innerHTML = '<p class="text-sm text-slate-500">No attendance records yet.</p>';
+            return;
+        }
+        historyEl.innerHTML = rows.map(([date, r]) => `
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 last:border-0">
+                <div><p class="font-semibold text-slate-800">${date}</p><p class="text-xs text-slate-500">IP: ${String(r.publicIp || '—')}</p></div>
+                <div class="text-sm text-slate-600">In: ${attendanceFormatTime(r.signInAt)} &nbsp; Out: ${attendanceFormatTime(r.signOutAt)}</div>
+            </div>`).join('');
+    } catch (e) {
+        historyEl.innerHTML = '<p class="text-sm text-red-600">Unable to load attendance history.</p>';
+    }
+}
+
+async function checkTeacherAttendanceNetwork() {
+    const statusEl = document.getElementById('attendance-action-status');
+    if (statusEl) statusEl.textContent = 'Checking school network…';
+    teacherAttendancePublicIp = await getTeacherAttendancePublicIp();
+    teacherAttendanceNetworkApproved = SCHOOL_ALLOWED_PUBLIC_IPS.includes(teacherAttendancePublicIp);
+    const record = await loadTeacherAttendanceToday();
+    updateTeacherAttendanceUI(record);
+    await loadTeacherAttendanceHistory();
+    if (statusEl) {
+        statusEl.textContent = teacherAttendanceNetworkApproved
+            ? 'This device is connected through the approved school Internet connection.'
+            : `This device is not using the approved school network. Detected IP: ${teacherAttendancePublicIp || 'unavailable'}`;
+    }
+}
+
+async function recordTeacherAttendance(action) {
+    const statusEl = document.getElementById('attendance-action-status');
+    if (!teacherAttendanceNetworkApproved) {
+        if (statusEl) statusEl.textContent = 'Attendance can only be recorded from the approved school Wi-Fi.';
+        return;
+    }
+    if (!loggedUser) {
+        if (statusEl) statusEl.textContent = 'Please log in as a teacher first.';
+        return;
+    }
+
+    const today = attendanceLocalDateKey();
+    const path = `teacherAttendance/${attendanceTeacherKey()}/${today}`;
+    try {
+        const snap = await db.ref(path).once('value');
+        const current = snap.val() || {};
+        const now = new Date().toISOString();
+
+        if (action === 'sign_in') {
+            if (current.signInAt) {
+                if (statusEl) statusEl.textContent = 'You have already signed in today.';
+                return;
+            }
+            await db.ref(path).set({
+                teacherName: loggedUser.name || loggedUser.fullName || 'Teacher',
+                teacherEmail: loggedUser.email || '',
+                date: today,
+                publicIp: teacherAttendancePublicIp,
+                signInAt: now,
+                signOutAt: null
+            });
+            if (statusEl) statusEl.textContent = 'Staff sign-in recorded successfully.';
+        } else if (action === 'sign_out') {
+            if (!current.signInAt) {
+                if (statusEl) statusEl.textContent = 'You must sign in before signing out.';
+                return;
+            }
+            if (current.signOutAt) {
+                if (statusEl) statusEl.textContent = 'You have already signed out today.';
+                return;
+            }
+            await db.ref(path).update({ signOutAt: now, signOutPublicIp: teacherAttendancePublicIp });
+            if (statusEl) statusEl.textContent = 'Staff sign-out recorded successfully.';
+        }
+        const record = await loadTeacherAttendanceToday();
+        updateTeacherAttendanceUI(record);
+        await loadTeacherAttendanceHistory();
+    } catch (e) {
+        console.error('Attendance save failed:', e);
+        if (statusEl) statusEl.textContent = 'Attendance could not be saved. Check Firebase Database access.';
+    }
+}
+
+async function initializeTeacherAttendance() {
+    updateTeacherAttendanceUI(null);
+    await checkTeacherAttendanceNetwork();
+}
+
+function switchTab(role, tabId, pushHistory = true) {
+            // Keep every portal section in browser history so Back/Forward moves
+            // between actual portal pages instead of leaving the portal.
+            const routeMap = {
+                't-dashboard': '#teacher-dashboard',
+                't-remedials': '#teacher-remedials',
+                't-swapping': '#teacher-swapping',
+                't-cats': '#teacher-cats',
+                't-upload-cat': '#teacher-upload-cat',
+                't-exams': '#teacher-exams',
+                    't-attendance': '#teacher-attendance',
+                'a-dashboard': '#admin-dashboard',
+                'a-manage-teachers': '#manage-teachers',
+                'a-manage-weeks': '#academic-weeks',
+                'a-review-remedials': '#review-remedials',
+                'a-approved-reports': '#approved-claims',
+                'a-opportunities': '#tenders-careers',
+                'a-timetable': '#timetable-memo',
+                'a-admissions': '#admissions',
+                'a-admin-security': '#admin-security',
+                'a-inquiries': '#admin-inquiries',
+                'l-dashboard': '#library-dashboard',
+                'l-search': '#library-search',
+                'l-catalog': '#book-inventory',
+                'l-circulations': '#library-circulations',
+                'l-patrons': '#patrons-fines',
+                'l-student-profile': '#library-student-profile',
+                'l-book-profile': '#library-book-profile',
+                'l-security': '#librarian-security',
+                'sk-dashboard': '#storekeeper-dashboard',
+                'sk-books-stationery': '#books-stationery',
+                'sk-general': '#general-stock',
+                'sk-furniture': '#furniture-equipment',
+                'sk-received': '#stock-received',
+                'sk-issued': '#items-issued',
+                'sk-balances': '#current-stock',
+                'sk-people': '#suppliers-recipients',
+                'sk-history': '#transaction-history',
+                'sk-reports': '#stock-reports',
+                'sk-security': '#storekeeper-security'
+            };
+            const route = routeMap[tabId];
+            if (role === 'teacher' && tabId === 't-attendance') setTimeout(initializeTeacherAttendance, 0);
+
+            try {
+                if (route) {
+                    localStorage.setItem('schoolPortalLastHash', route);
+                    if (pushHistory && window.location.hash !== route) {
+                        history.pushState(
+                            { portalRoute: route, role: role, tabId: tabId },
+                            '',
+                            route
+                        );
+                    }
                 }
+            } catch (e) {
+                console.warn('Could not save portal route:', e);
             }
 
             let navClass = '.t-nav';
@@ -3142,15 +3501,21 @@ window.addEventListener("beforeunload", savePortalRoute);
                 't-cats': 'Submit CATs',
                 't-upload-cat': 'Upload Weekly CAT',
                 't-exams': 'Term Exams',
+                't-attendance': 'Staff Attendance',
                 'a-dashboard': 'Admin Overview',
                 'a-manage-teachers': 'Manage Staff',
                 'a-manage-weeks': 'Academic Weeks',
                 'a-review-remedials': 'Review Claims',
                 'a-approved-reports': 'Reports & Exports',
                 'l-dashboard': 'Library Dashboard',
+                'l-search': 'Library Search',
                 'l-catalog': 'Book Inventory Catalog',
                 'l-circulations': 'Issue & Return Circulations',
                 'l-patrons': 'Patrons & Fines Records',
+                'l-search': 'Library Search',
+                'l-student-profile': 'Student Library Profile',
+                'l-book-profile': 'Book Library Profile',
+                'l-student-profile': 'Student Library Profile',
                 'sk-dashboard': 'Store Keeper Dashboard',
                 'sk-books-stationery': 'Books & Stationery',
                 'sk-general': 'General Stock',
@@ -3492,88 +3857,373 @@ function searchStoreDashboard(query){
         let admissionsData = [];
         let schoolDocuments = [];
         let opportunitiesData = [];
+        let contactMessages = [];
 
-        function addSchoolDocument(e) {
+        async function submitContactInquiry(e) {
+            if (e) e.preventDefault();
+            const nameEl = document.getElementById('contact-full-name');
+            const contactEl = document.getElementById('contact-email-phone');
+            const messageEl = document.getElementById('contact-message');
+            if (!nameEl || !contactEl || !messageEl) return false;
+            const name = nameEl.value.trim();
+            const contact = contactEl.value.trim();
+            const message = messageEl.value.trim();
+            if (!name || !contact || !message) { alert('Please complete all the fields.'); return false; }
+            try {
+                const id = 'msg_' + Date.now();
+                const item = { id, name, contact, message, submittedAt: new Date().toISOString(), read: false };
+                await db.ref('contactMessages/' + id).set(item);
+                contactMessages.unshift(item);
+                renderContactInquiries();
+                const form = nameEl.closest('form');
+                if (form) form.reset();
+                alert('Your message has been sent successfully.');
+            } catch (error) {
+                console.error('Contact inquiry submission failed:', error);
+                alert('Your message could not be sent. Please try again.');
+            }
+            return false;
+        }
+
+        function renderContactInquiries() {
+            const el = document.getElementById('admin-inquiries-list');
+            const badge = document.getElementById('admin-inquiry-badge');
+            const rows = [...contactMessages].sort((a,b) => String(b.submittedAt || '').localeCompare(String(a.submittedAt || '')));
+            const unread = rows.filter(x => !x.read).length;
+            if (badge) { badge.textContent = unread; badge.classList.toggle('hidden', unread === 0); }
+            if (!el) return;
+            if (!rows.length) { el.innerHTML = '<p class="text-sm text-slate-400 italic">No inquiries received yet.</p>'; return; }
+            el.innerHTML = rows.map(m => `
+                <div class="border rounded-xl p-4 ${m.read ? 'bg-slate-50' : 'bg-[#f7f3ed] border-[--dark-brown]'}">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-slate-900">${escapeLibrarySearchHtml(m.name || 'Unknown')}</h3>
+                                ${m.read ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-semibold">Read</span>' : '<span class="text-[10px] px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-semibold">New</span>'}
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">${escapeLibrarySearchHtml(m.contact || '')} ? ${escapeLibrarySearchHtml(formatContactDate(m.submittedAt))}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            ${!m.read ? `<button type="button" onclick="markContactInquiryRead('${m.id}')" class="text-xs bg-[--dark-green-deep] text-white px-3 py-1.5 rounded-lg font-semibold">Mark Read</button>` : ''}
+                            <button type="button" onclick="deleteContactInquiry('${m.id}')" class="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg font-semibold">Delete</button>
+                        </div>
+                    </div>
+                    <div class="mt-3 bg-white border rounded-lg p-3 text-sm text-slate-700 whitespace-pre-wrap">${escapeLibrarySearchHtml(m.message || '')}</div>
+                </div>`).join('');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function formatContactDate(value) {
+            if (!value) return '';
+            const d = new Date(value);
+            return isNaN(d.getTime()) ? String(value) : d.toLocaleString();
+        }
+
+        async function markContactInquiryRead(id) {
+            try {
+                await db.ref('contactMessages/' + id + '/read').set(true);
+                const item = contactMessages.find(x => x.id === id);
+                if (item) item.read = true;
+                renderContactInquiries();
+            } catch (error) { alert('Could not update the message.'); }
+        }
+
+        async function markAllContactInquiriesRead() {
+            const updates = {};
+            contactMessages.forEach(m => { if (!m.read) updates[m.id + '/read'] = true; });
+            if (!Object.keys(updates).length) { alert('There are no unread messages.'); return; }
+            try {
+                await db.ref('contactMessages').update(updates);
+                contactMessages.forEach(m => { m.read = true; });
+                renderContactInquiries();
+            } catch (error) { alert('Could not update the messages.'); }
+        }
+
+        async function deleteContactInquiry(id) {
+            if (!confirm('Delete this inquiry permanently?')) return;
+            try {
+                await db.ref('contactMessages/' + id).remove();
+                contactMessages = contactMessages.filter(m => m.id !== id);
+                renderContactInquiries();
+            } catch (error) { alert('Could not delete the inquiry.'); }
+        }
+
+        async function addSchoolDocument(e) {
             e.preventDefault();
-            const file = document.getElementById('doc-file').files[0];
-            const item = {
-                id: Date.now(),
-                title: document.getElementById('doc-title').value.trim(),
-                type: document.getElementById('doc-type').value,
-                fileName: file ? file.name : '',
-                addedAt: new Date().toLocaleString()
-            };
-            schoolDocuments.push(item);
-            renderSchoolDocuments();
-            e.target.reset();
-            alert('Document added to the portal list. Firebase Storage integration can be connected next for permanent file hosting.');
+            const fileInput = document.getElementById('doc-file');
+            const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+            if (!file) {
+                alert('Please select a document to upload.');
+                return;
+            }
+
+            if (!storage || typeof storage.ref !== 'function') {
+                alert('Firebase Storage is not available. Please check the Firebase configuration.');
+                return;
+            }
+
+            const uploadId = 'doc_' + Date.now();
+            const title = document.getElementById('doc-title').value.trim();
+            const type = document.getElementById('doc-type').value;
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton ? submitButton.innerHTML : '';
+
+            try {
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-1"></i> Uploading...';
+                    lucide.createIcons();
+                }
+
+                const storageRef = storage.ref('schoolDocuments/' + uploadId + '_' + file.name);
+                const snapshot = await storageRef.put(file);
+                const downloadURL = await snapshot.ref.getDownloadURL();
+
+                const item = {
+                    id: uploadId,
+                    title,
+                    type,
+                    fileName: file.name,
+                    fileType: file.type || '',
+                    downloadURL,
+                    addedAt: new Date().toLocaleString()
+                };
+
+                await db.ref('schoolDocuments/' + uploadId).set(item);
+                e.target.reset();
+                alert('Document uploaded and published successfully.');
+            } catch (error) {
+                console.error('School document upload failed:', error);
+                alert('Document upload failed. Please check Firebase Storage and Database rules and try again.');
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        function openSchoolDocument(id) {
+            const doc = schoolDocuments.find(d => String(d.id) === String(id));
+            if (!doc || !doc.downloadURL) {
+                alert('This document is not available for viewing yet.');
+                return false;
+            }
+
+            // Opening a PDF directly in a new tab lets the browser's built-in PDF viewer
+            // display the document with its normal toolbar, zoom, print and download controls.
+            const viewer = window.open(doc.downloadURL, '_blank', 'noopener');
+            if (!viewer) {
+                window.location.href = doc.downloadURL;
+            }
+            return false;
+        }
+
+        function downloadSchoolDocument(id) {
+            const doc = schoolDocuments.find(d => String(d.id) === String(id));
+            if (!doc || !doc.downloadURL) {
+                alert('This document is not available for download yet.');
+                return false;
+            }
+            const a = document.createElement('a');
+            a.href = doc.downloadURL;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.download = doc.fileName || doc.title || 'school-document';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            return false;
         }
 
         function renderSchoolDocuments() {
             const el = document.getElementById('school-documents-list');
             if (!el) return;
-            el.innerHTML = schoolDocuments.map(d => `
-                <div class="flex items-center justify-between gap-3 p-4 border rounded-lg bg-slate-50">
-                    <div>
-                        <div class="font-bold text-slate-900">${d.title}</div>
-                        <div class="text-xs text-slate-500">${d.type} · ${d.fileName} · ${d.addedAt}</div>
-                    </div>
-                    <span class="text-xs font-semibold text-emerald-700">Published</span>
-                </div>
-            `).join('');
-        }
-
-        function saveAdmission(e) {
-            const learnerName = document.getElementById('adm-learner-name')?.value.trim();
-            const classJoining = document.getElementById('adm-class-joining')?.value;
-            if (!learnerName || !classJoining) {
-                alert('Please enter the learner name and select the class being joined.');
+            const rows = [...schoolDocuments].sort((a, b) => String(b.addedAt || '').localeCompare(String(a.addedAt || '')));
+            if (!rows.length) {
+                el.innerHTML = '<p class="text-sm text-slate-400 italic">No school documents have been published yet.</p>';
                 return;
             }
 
-            const admissionNumber = generateAdmissionNumber();
-            document.getElementById('adm-admission-number').value = admissionNumber;
+            el.innerHTML = rows.map(d => `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border rounded-lg bg-slate-50 hover:bg-slate-100 transition">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                            <i data-lucide="file-text" class="w-5 h-5 text-[--dark-green-deep] shrink-0"></i>
+                            <div class="font-bold text-slate-900 truncate">${escapeLibrarySearchHtml(d.title || 'Untitled document')}</div>
+                        </div>
+                        <div class="text-xs text-slate-500">${escapeLibrarySearchHtml(d.type || 'Document')} ? ${escapeLibrarySearchHtml(d.fileName || '')} ? ${escapeLibrarySearchHtml(d.addedAt || '')}</div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button type="button" onclick="openSchoolDocument('${d.id}'); return false;" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Open / View
+                        </button>
+                        <button type="button" onclick="downloadSchoolDocument('${d.id}'); return false;" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1 shadow-sm">
+                            <i data-lucide="download" class="w-4 h-4"></i> Download
+                        </button>
+                        <span class="text-xs font-semibold text-emerald-700">Published</span>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
 
+        async function saveAdmission(e) {
+            if (e) e.preventDefault();
 
-            e.preventDefault();
-            const file = document.getElementById('adm-results-slip').files[0];
+            const learnerName = document.getElementById('adm-learner-name')?.value.trim();
+            const classJoining = document.getElementById('adm-class-joining')?.value;
+            const assessmentNumber = document.getElementById('adm-assessment')?.value.trim();
+            const birthCertificateNo = document.getElementById('adm-birth-cert')?.value.trim();
+            const juniorSchool = document.getElementById('adm-junior-school')?.value.trim();
+            const pathway = document.getElementById('adm-pathway')?.value;
+            const gender = document.getElementById('adm-gender')?.value;
+            const fileInput = document.getElementById('adm-results-slip');
+            const file = fileInput && fileInput.files ? fileInput.files[0] : null;
+            const submitButton = e && e.target ? e.target.querySelector('button[type="submit"]') : null;
 
-            const admission = {
-                admissionNumber: admissionNumber,
-                learnerName: learnerName,
-                classJoining: classJoining,
+            if (!learnerName || !classJoining || !assessmentNumber || !birthCertificateNo || !juniorSchool || !pathway || !gender || !file) {
+                alert('Please complete all admission fields and select the learner\'s KJSEA results slip.');
+                return false;
+            }
 
-                id: Date.now(),
-                assessmentNumber: document.getElementById('adm-assessment').value.trim(),
-                birthCertificateNo: document.getElementById('adm-birth-cert').value.trim(),
-                juniorSchool: document.getElementById('adm-junior-school').value.trim(),
-                pathway: document.getElementById('adm-pathway').value,
-                gender: document.getElementById('adm-gender').value,
-                resultsSlipName: file ? file.name : '',
-                submittedAt: new Date().toLocaleString()
-            };
+            if (!storage || typeof storage.ref !== 'function') {
+                alert('Firebase Storage is not available. Please check the Firebase configuration.');
+                return false;
+            }
+            if (!db || typeof db.ref !== 'function') {
+                alert('Firebase Realtime Database is not available. Please check the Firebase configuration.');
+                return false;
+            }
 
-            admissionsData.push(admission);
-            renderAdmissionsTable();
-            e.target.reset();
-            alert('Admission record captured successfully.');
+            const admissionId = 'adm_' + Date.now();
+            const originalButtonText = submitButton ? submitButton.innerHTML : '';
+
+            try {
+                // Upload the actual results slip to Firebase Storage first.
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-1"></i> Uploading Results Slip...';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+
+                const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const storageRef = storage.ref('admissionResultsSlips/' + admissionId + '_' + safeFileName);
+                const uploadTask = storageRef.put(file);
+
+                const snapshot = await new Promise((resolve, reject) => {
+                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                        snap => {
+                            const pct = snap.totalBytes ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
+                            if (submitButton) {
+                                submitButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-1"></i> Uploading Results Slip ' + pct + '%...';
+                                if (typeof lucide !== 'undefined') lucide.createIcons();
+                            }
+                        },
+                        reject,
+                        () => resolve(uploadTask.snapshot)
+                    );
+                });
+
+                const resultsSlipURL = await snapshot.ref.getDownloadURL();
+                const admissionNumber = generateAdmissionNumber();
+
+                const admission = {
+                    id: admissionId,
+                    admissionNumber,
+                    learnerName,
+                    classJoining,
+                    assessmentNumber,
+                    birthCertificateNo,
+                    juniorSchool,
+                    pathway,
+                    gender,
+                    resultsSlipName: file.name,
+                    resultsSlipURL,
+                    resultsSlipPath: 'admissionResultsSlips/' + admissionId + '_' + safeFileName,
+                    submittedAt: new Date().toLocaleString(),
+                    submittedAtISO: new Date().toISOString()
+                };
+
+                // Save the complete admission record, including the Storage URL.
+                await db.ref('admissions/' + admissionId).set(admission);
+                document.getElementById('adm-admission-number').value = admissionNumber;
+                alert('Admission record and KJSEA results slip saved successfully.');
+
+                // The realtime listener will render the saved record.
+                if (fileInput) fileInput.value = '';
+                e.target.reset();
+                document.getElementById('adm-admission-number').value = admissionNumber;
+            } catch (error) {
+                console.error('Admission save/upload failed:', error);
+                let message = error && error.message ? error.message : String(error);
+                if (error && error.code === 'storage/unauthorized') {
+                    message = 'Firebase Storage denied the results-slip upload. Check your Firebase Storage rules.';
+                } else if (error && error.code === 'storage/canceled') {
+                    message = 'The results-slip upload was cancelled.';
+                }
+                alert('Admission could not be saved.\n\n' + message);
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText || 'Submit Admission';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+            }
+            return false;
         }
 
         function renderAdmissionsTable() {
             const body = document.getElementById('admissions-table-body');
             if (!body) return;
 
-            body.innerHTML = admissionsData.map(a => `
-                <tr>
-                    <td class="p-2 border font-bold text-emerald-700">${a.admissionNumber || "Pending"}</td>
-                    <td class="p-2 border">${a.assessmentNumber}</td><td class="p-2 border">${a.learnerName || ""}</td><td class="p-2 border">${a.classJoining || ""}</td>
-                    <td class="p-2 border">${a.birthCertificateNo}</td>
-                    <td class="p-2 border">${a.juniorSchool}</td>
-                    <td class="p-2 border">${a.pathway}</td>
-                    <td class="p-2 border">${a.gender}</td>
-                    <td class="p-2 border">${a.resultsSlipName || '—'}</td>
-                </tr>
-            `).join('');
+            const rows = Array.isArray(admissionsData) ? admissionsData : [];
+            if (!rows.length) {
+                body.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400 italic">No admission records found.</td></tr>';
+                return;
+            }
+
+            const esc = value => {
+                if (typeof escapeLibrarySearchHtml === 'function') return escapeLibrarySearchHtml(value ?? '');
+                return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+            };
+
+            body.innerHTML = rows.map(a => {
+                const slipUrl = a.resultsSlipURL || a.resultsSlipUrl || a.downloadURL || '';
+                const slipName = a.resultsSlipName || '';
+                const slipCell = slipUrl
+                    ? `<button type="button" onclick="openAdmissionResultsSlip('${esc(a.id)}'); return false;" class="text-[--dark-green-deep] hover:underline font-semibold inline-flex items-center gap-1" title="Open results slip"><i data-lucide="file-text" class="w-4 h-4"></i>${esc(slipName || 'Open Slip')}</button>`
+                    : `<span class="text-slate-400" title="No results slip URL saved">${esc(slipName || 'Not available')}</span>`;
+
+                return `
+                <tr class="hover:bg-slate-50">
+                    <td class="p-2 border font-bold text-emerald-700">${esc(a.admissionNumber || 'Pending')}</td>
+                    <td class="p-2 border">${esc(a.learnerName || '')}</td>
+                    <td class="p-2 border">${esc(a.classJoining || '')}</td>
+                    <td class="p-2 border">${esc(a.assessmentNumber || '')}</td>
+                    <td class="p-2 border">${esc(a.birthCertificateNo || '')}</td>
+                    <td class="p-2 border">${esc(a.juniorSchool || '')}</td>
+                    <td class="p-2 border">${esc(a.pathway || '')}</td>
+                    <td class="p-2 border">${esc(a.gender || '')}</td>
+                    <td class="p-2 border">${slipCell}</td>
+                </tr>`;
+            }).join('');
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function openAdmissionResultsSlip(id) {
+            const admission = (Array.isArray(admissionsData) ? admissionsData : []).find(a => String(a.id) === String(id));
+            const url = admission && (admission.resultsSlipURL || admission.resultsSlipUrl || admission.downloadURL);
+            if (!url) {
+                alert('This learner does not have an accessible results slip saved. Older records may need the slip uploaded again.');
+                return false;
+            }
+
+            const viewer = window.open(url, '_blank', 'noopener');
+            if (!viewer) window.location.href = url;
+            return false;
         }
 
         function saveOpportunity(e) {
@@ -3751,7 +4401,7 @@ function searchStoreDashboard(query){
             el.innerHTML = items.map(o => `
                 <article class="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
                     <div class="flex items-start justify-between gap-3">
-                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase bg-amber-100 text-amber-800">${o.category}</span>
+                        <span class="inline-flex px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#f3ece8] text-[--dark-brown]">${o.category}</span>
                         <span class="text-xs text-slate-500">${o.date || ''}</span>
                     </div>
                     <h3 class="text-xl font-bold text-slate-900 mt-3">${o.title}</h3>
@@ -3778,22 +4428,225 @@ function searchStoreDashboard(query){
         }
 
         function openLibraryStudentProfile(id) {
-            const student=getAdmittedLibraryStudents().find(a=>String(a.id)===String(id));
-            if(!student){alert('Student record not found.');return;}
-            const records=libraryCirculations.filter(c=>String(c.patronId||'')===student.id || (String(c.patronName||'')===student.name && String(c.patronType||'')==='Student'));
-            const active=records.filter(c=>c.status==='Active'||c.status==='Overdue');
-            document.getElementById('library-profile-name').textContent=student.name;
-            document.getElementById('library-profile-admission').textContent='Admission Number: '+student.admNo;
-            document.getElementById('library-profile-class').textContent=student.classJoining||'Not specified';
-            document.getElementById('library-profile-count').textContent=active.length;
-            const st=document.getElementById('library-profile-status'); st.textContent=active.length?'Yes — currently borrowing':'No — no book currently borrowed'; st.className='font-bold mt-1 '+(active.length?'text-amber-700':'text-emerald-700');
-            const patron=libraryPatrons.find(p=>String(p.admNo)===student.admNo); document.getElementById('library-profile-fine').textContent='KES '+Number((patron&&patron.fine)||0);
-            document.getElementById('library-profile-history').innerHTML=records.length?`<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Book</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c=>`<tr><td class="p-3 font-semibold">${c.bookTitle||'—'}</td><td class="p-3">${c.issueDate||'—'}</td><td class="p-3">${c.dueDate||'—'}</td><td class="p-3 font-bold">${c.status||'Unknown'}</td></tr>`).join('')}</tbody></table></div>`:`<div class="p-5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="font-bold text-emerald-800">No book borrowed</p><p class="text-sm text-emerald-700 mt-1">This learner has no library borrowing records.</p></div>`;
-            document.getElementById('library-student-profile-modal').classList.remove('hidden'); if(window.lucide) lucide.createIcons();
+            const student = getAdmittedLibraryStudents().find(a => String(a.id) === String(id));
+            if (!student) { alert('Student record not found.'); return false; }
+
+            const records = libraryCirculations.filter(c =>
+                String(c.patronId || '') === String(student.id) ||
+                (String(c.patronName || '') === String(student.name) && String(c.patronType || '').toLowerCase() === 'student')
+            );
+            const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue');
+            const patron = libraryPatrons.find(p => String(p.admNo || '') === String(student.admNo));
+            const fine = Number((patron && patron.fine) || 0);
+
+            // Open the dedicated student profile tab, NOT Patrons & Fines.
+            switchTab('librarian', 'l-student-profile', false);
+
+            document.getElementById('library-page-profile-name').textContent = student.name;
+            document.getElementById('library-page-profile-admission').textContent = 'Admission Number: ' + student.admNo;
+            document.getElementById('library-page-profile-class').textContent = student.classJoining || 'Not specified';
+            document.getElementById('library-page-profile-count').textContent = active.length;
+            const statusEl = document.getElementById('library-page-profile-status');
+            statusEl.textContent = active.length ? 'Yes ? currently borrowing' : 'No ? no book currently borrowed';
+            statusEl.className = 'font-bold mt-1 ' + (active.length ? 'text-[#5f463f]' : 'text-emerald-700');
+            document.getElementById('library-page-profile-fine').textContent = 'KES ' + fine;
+            document.getElementById('library-page-profile-history').innerHTML = records.length ?
+                `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Book</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c => `<tr><td class="p-3 font-semibold">${escapeLibrarySearchHtml(c.bookTitle || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.issueDate || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.dueDate || '')}</td><td class="p-3 font-bold">${escapeLibrarySearchHtml(c.status || 'Unknown')}</td></tr>`).join('')}</tbody></table></div>` :
+                `<div class="p-5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="font-bold text-emerald-800">No book borrowed</p><p class="text-sm text-emerald-700 mt-1">This learner has no library borrowing records.</p></div>`;
+
+            if (window.lucide) lucide.createIcons();
+            return false;
         }
-        function closeLibraryStudentProfile(){document.getElementById('library-student-profile-modal')?.classList.add('hidden');}
+
+        function openLibraryTeacherProfile(teacherKey) {
+            const teacher = teachersData.find(t => String(t.id) === String(teacherKey) || String(t.tscNo || '') === String(teacherKey) || String(t.name || t.fullName || '') === String(teacherKey));
+            if (!teacher) { alert('Teacher record not found.'); return; }
+            const name = teacher.name || teacher.fullName || 'Teacher';
+            const staffId = teacher.tscNo || teacher.staffNo || teacher.id || '';
+            const records = libraryCirculations.filter(c =>
+                String(c.patronName || '') === String(name) && String(c.patronType || '').toLowerCase() === 'teacher'
+            );
+            const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue');
+            const patron = libraryPatrons.find(p =>
+                String(p.name || '') === String(name) || String(p.admNo || '') === String(staffId)
+            );
+            const fine = Number((patron && patron.fine) || 0);
+            const subjects = Array.isArray(teacher.subjects) ? teacher.subjects.join(', ') : (teacher.subjects || teacher.dept || teacher.subject || 'Not specified');
+            const streams = teacher.streams || teacher.classes || 'Not specified';
+
+            document.getElementById('library-teacher-profile-name').textContent = name;
+            document.getElementById('library-teacher-profile-id').textContent = 'Staff / ID: ' + (staffId || 'Not specified');
+            document.getElementById('library-teacher-id-card').textContent = staffId || '?';
+            document.getElementById('library-teacher-count').textContent = active.length;
+            const statusEl = document.getElementById('library-teacher-status');
+            statusEl.textContent = active.length ? 'Yes ? currently borrowing' : 'No ? no book currently borrowed';
+            statusEl.className = 'font-bold mt-1 ' + (active.length ? 'text-[#5f463f]' : 'text-emerald-700');
+            document.getElementById('library-teacher-fine').textContent = 'KES ' + fine;
+            document.getElementById('library-teacher-subjects').textContent = subjects;
+            document.getElementById('library-teacher-streams').textContent = streams;
+            document.getElementById('library-teacher-history').innerHTML = records.length ? `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Book</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c => `<tr><td class="p-3 font-semibold">${escapeLibrarySearchHtml(c.bookTitle || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.issueDate || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.dueDate || '')}</td><td class="p-3 font-bold">${escapeLibrarySearchHtml(c.status || 'Unknown')}</td></tr>`).join('')}</tbody></table></div>` : `<div class="p-5 rounded-xl bg-emerald-50 border border-emerald-200"><p class="font-bold text-emerald-800">No borrowing records</p><p class="text-sm text-emerald-700 mt-1">This teacher has no library borrowing records.</p></div>`;
+            document.getElementById('library-teacher-profile-modal').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        }
+        function closeLibraryTeacherProfile(){ document.getElementById('library-teacher-profile-modal')?.classList.add('hidden'); }
 
         // ================= LIBRARIAN MODULE FUNCTIONS =================
+        function escapeLibrarySearchHtml(value) {
+            return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+                '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
+            }[ch]));
+        }
+
+        function openLibraryBookProfile(id) {
+            const book = libraryBooks.find(b => String(b.id) === String(id));
+            if (!book) { alert('Book record not found.'); return false; }
+
+            const records = libraryCirculations.filter(c =>
+                String(c.bookId || '') === String(book.id) ||
+                String(c.bookTitle || '').trim().toLowerCase() === String(book.title || '').trim().toLowerCase()
+            );
+            const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue');
+
+            switchTab('librarian', 'l-book-profile', false);
+            document.getElementById('library-page-book-title').textContent = book.title || 'Book Details';
+            document.getElementById('library-page-book-isbn').textContent = 'ISBN / Code: ' + (book.isbn || 'Not specified');
+            document.getElementById('library-page-book-author').textContent = book.author || 'Not specified';
+            document.getElementById('library-page-book-subject').textContent = book.subject || 'Not specified';
+            document.getElementById('library-page-book-total').textContent = Number(book.totalQty || 0);
+            document.getElementById('library-page-book-available').textContent = Number(book.availableQty || 0);
+
+            document.getElementById('library-page-book-history').innerHTML = records.length ?
+                `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Borrower</th><th class="p-3 text-left">Category</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c => `<tr><td class="p-3 font-semibold">${escapeLibrarySearchHtml(c.patronName || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.patronType || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.issueDate || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.dueDate || '')}</td><td class="p-3 font-bold">${escapeLibrarySearchHtml(c.status || 'Unknown')}</td></tr>`).join('')}</tbody></table></div>` :
+                `<div class="p-5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800">No borrowing records for this book yet.</div>`;
+
+            return false;
+        }
+
+        function searchLibrary(query) {
+            const resultsEl = document.getElementById('library-search-results');
+            const statusEl = document.getElementById('library-search-status');
+            if (!resultsEl || !statusEl) return;
+
+            const q = String(query || '').trim().toLowerCase();
+            if (!q) {
+                statusEl.textContent = 'Type a name, admission number, book title, ISBN or any other library detail.';
+                resultsEl.innerHTML = '';
+                return;
+            }
+
+            const contains = value => String(value ?? '').toLowerCase().includes(q);
+            const matches = [];
+
+            libraryBooks.forEach(book => {
+                if ([book.isbn, book.title, book.author, book.subject, book.id].some(contains)) {
+                    matches.push({
+                        type: 'Book', icon: 'book-open',
+                        title: book.title,
+                        details: `ISBN/Code: ${book.isbn || '?'} ? Author: ${book.author || '?'} ? Category: ${book.subject || '?'}`,
+                        extra: `Available: ${book.availableQty ?? 0} / ${book.totalQty ?? 0}`,
+                        action: `openLibraryBookProfile('${book.id}'); return false;`
+                    });
+                }
+            });
+
+            getAdmittedLibraryStudents().forEach(student => {
+                if ([student.name, student.admNo, student.classJoining, student.id].some(contains)) {
+                    const records = libraryCirculations.filter(c =>
+                        String(c.patronId || '') === String(student.id) ||
+                        (String(c.patronName || '') === String(student.name) && String(c.patronType || '') === 'Student')
+                    );
+                    const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue').length;
+                    const patron = libraryPatrons.find(p => String(p.admNo) === String(student.admNo));
+                    const fine = Number((patron && patron.fine) || 0);
+                    const safeId = String(student.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                    matches.push({
+                        type: 'Student', icon: 'graduation-cap',
+                        title: student.name,
+                        details: `Admission No: ${student.admNo || '?'} ? Class: ${student.classJoining || '?'}`,
+                        extra: `Currently borrowed: ${active} ? Fine: KES ${fine}`,
+                        action: `openLibraryStudentProfile('${safeId}'); return false;`
+                    });
+                }
+            });
+
+            teachersData.forEach(teacher => {
+                const name = teacher.name || teacher.fullName || '';
+                const id = teacher.id || teacher.tscNo || '';
+                const subjects = Array.isArray(teacher.subjects) ? teacher.subjects.join(', ') : (teacher.subjects || teacher.subject || '');
+                if ([name, id, subjects].some(contains)) {
+                    matches.push({
+                        type: 'Teacher', icon: 'user',
+                        title: name || 'Teacher',
+                        details: `Staff/ID: ${id || '?'} ? Subjects: ${subjects || '?'}`,
+                        extra: (() => {
+                            const teacherRecords = libraryCirculations.filter(c => String(c.patronName || '') === String(name) && String(c.patronType || '').toLowerCase() === 'teacher');
+                            const teacherActive = teacherRecords.filter(c => c.status === 'Active' || c.status === 'Overdue').length;
+                            const teacherPatron = libraryPatrons.find(p => String(p.name || '') === String(name) || String(p.admNo || '') === String(id));
+                            return `Currently borrowed: ${teacherActive} ? Fine: KES ${Number((teacherPatron && teacherPatron.fine) || 0)}`;
+                        })(),
+                        action: `openLibraryTeacherProfile('${String(teacher.id || teacher.tscNo || name).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')`
+                    });
+                }
+            });
+
+            libraryPatrons.forEach(patron => {
+                if ([patron.name, patron.admNo, patron.type, patron.id].some(contains) &&
+                    !matches.some(m => (m.type === 'Student' || m.type === 'Teacher') && m.title === patron.name)) {
+                    matches.push({
+                        type: patron.type || 'Patron', icon: 'user-round',
+                        title: patron.name,
+                        details: `Admission/ID: ${patron.admNo || '?'} ? Type: ${patron.type || '?'}`,
+                        extra: `Outstanding fine: KES ${Number(patron.fine || 0)}`,
+                        action: `switchTab('librarian','l-patrons')`
+                    });
+                }
+            });
+
+            libraryCirculations.forEach(circ => {
+                if ([circ.id, circ.patronName, circ.patronType, circ.bookTitle, circ.issueDate, circ.dueDate, circ.status].some(contains)) {
+                    matches.push({
+                        type: 'Borrowing Record', icon: 'repeat',
+                        title: circ.bookTitle || 'Library transaction',
+                        details: `Patron: ${circ.patronName || '?'} (${circ.patronType || '?'}) ? TXN-${circ.id}`,
+                        extra: `Issued: ${circ.issueDate || '?'} ? Due: ${circ.dueDate || '?'} ? Status: ${circ.status || '?'}`,
+                        action: `switchTab('librarian','l-circulations')`
+                    });
+                }
+            });
+
+            statusEl.textContent = `${matches.length} result${matches.length === 1 ? '' : 's'} found for ?${query}?.`;
+
+            if (!matches.length) {
+                resultsEl.innerHTML = `<div class="bg-white p-8 rounded-xl border border-slate-200 text-center shadow-sm"><i data-lucide="search-x" class="w-10 h-10 mx-auto text-slate-300"></i><p class="font-bold text-slate-700 mt-3">No matching library records</p><p class="text-sm text-slate-500 mt-1">Try a different book title, student name, admission number, ISBN or transaction detail.</p></div>`;
+            } else {
+                resultsEl.innerHTML = matches.map((m, index) => `
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-emerald-300 transition">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-emerald-50 text-emerald-700 rounded-lg shrink-0"><i data-lucide="${escapeLibrarySearchHtml(m.icon)}" class="w-5 h-5"></i></div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-[10px] uppercase font-black tracking-wider px-2 py-1 rounded bg-slate-100 text-slate-600">${escapeLibrarySearchHtml(m.type)}</span>
+                                    <span class="text-xs text-slate-400">Result ${index + 1}</span>
+                                </div>
+                                <h3 class="font-bold text-slate-900 mt-2">${escapeLibrarySearchHtml(m.title)}</h3>
+                                <p class="text-sm text-slate-600 mt-1">${escapeLibrarySearchHtml(m.details)}</p>
+                                <p class="text-xs font-semibold text-emerald-700 mt-2">${escapeLibrarySearchHtml(m.extra)}</p>
+                            </div>
+                            <button type="button" onclick="${m.action}" class="shrink-0 bg-[--dark-green-deep] text-white px-3 py-2 rounded-lg text-xs font-bold">Open</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function clearLibrarySearch() {
+            const input = document.getElementById('library-global-search');
+            if (input) input.value = '';
+            searchLibrary('');
+            if (input) input.focus();
+        }
+
         function renderLibraryModule() {
             let totalBooksCount = libraryBooks.reduce((sum, b) => sum + b.totalQty, 0);
             let availableBooksCount = libraryBooks.reduce((sum, b) => sum + b.availableQty, 0);
@@ -3860,7 +4713,7 @@ function searchStoreDashboard(query){
                     const overdue=records.filter(c=>c.status==='Overdue').length;
                     const id=String(p.id).replace(/'/g,"\\'");
                     const fine=Number(p.fine||0);
-                    return `<tr><td class="p-3 font-bold"><button type="button" onclick="openLibraryStudentProfile('${id}')" class="text-indigo-800 hover:text-emerald-700 hover:underline text-left">${p.name}</button></td><td class="p-3 text-slate-600"><button type="button" onclick="openLibraryStudentProfile('${id}')" class="font-mono text-indigo-800 hover:underline">${p.admNo}</button> <span>(${p.classJoining||'—'})</span></td><td class="p-3 font-semibold">${active}</td><td class="p-3 text-red-600 font-bold">${overdue?overdue+' Overdue':'None'}</td><td class="p-3 font-black text-purple-900">KES ${fine}</td><td class="p-3">${fine>0?`<button onclick="clearFine('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Fine</button>`:`<span class="text-slate-400 italic">Clear</span>`}</td></tr>`;
+                    return `<tr><td class="p-3 font-bold"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="text-indigo-800 hover:text-emerald-700 hover:underline text-left">${p.name}</button></td><td class="p-3 text-slate-600"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="font-mono text-indigo-800 hover:underline">${p.admNo}</button> <span>(${p.classJoining||'?'})</span></td><td class="p-3 font-semibold">${active}</td><td class="p-3 text-red-600 font-bold">${overdue?overdue+' Overdue':'None'}</td><td class="p-3 font-black text-purple-900">KES ${fine}</td><td class="p-3">${fine>0?`<button onclick="clearFine('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Fine</button>`:`<span class="text-slate-400 italic">Clear</span>`}</td></tr>`;
                 }).join('');
             }
 
@@ -4172,30 +5025,112 @@ function searchStoreDashboard(query){
         }
 
         async function handleCatFileUpload(e) {
-            e.preventDefault();
-            const weekId = document.getElementById('cat-upload-week').value;
-            const weekObj = academicWeeks.find(w => w.id === weekId);
-            const subject = document.getElementById('cat-upload-subject').value;
-            const targetClass = document.getElementById('cat-upload-class').value;
-            const docType = document.getElementById('cat-upload-doc-type').value;
+            if (e) e.preventDefault();
+
+            const weekEl = document.getElementById('cat-upload-week');
+            const subjectEl = document.getElementById('cat-upload-subject');
+            const classEl = document.getElementById('cat-upload-class');
+            const typeEl = document.getElementById('cat-upload-doc-type');
             const fileInput = document.getElementById('cat-file-input');
-            if (!fileInput.files || fileInput.files.length === 0) { alert('Please select a file to upload.'); return; }
+            const button = e && e.currentTarget && e.currentTarget.tagName === 'BUTTON'
+                ? e.currentTarget : document.querySelector('#cat-upload-form button[type="button"]');
+
+            if (!weekEl || !subjectEl || !classEl || !typeEl || !fileInput) {
+                alert('The CAT upload form could not be loaded. Please refresh the page and try again.');
+                return false;
+            }
+
+            const weekId = weekEl.value;
+            const subject = subjectEl.value;
+            const targetClass = classEl.value;
+            const docType = typeEl.value;
+            if (!weekId) { alert('Please select an Academic Week.'); weekEl.focus(); return false; }
+            if (!subject) { alert('Please select a Subject.'); subjectEl.focus(); return false; }
+            if (!targetClass) { alert('Please select a Target Class / Stream.'); classEl.focus(); return false; }
+            if (!fileInput.files || !fileInput.files.length) { alert('Please select a CAT file first.'); fileInput.click(); return false; }
+
             const file = fileInput.files[0];
             const teacherName = loggedUser ? loggedUser.name : 'Mr. Joseph Mutuma';
             const uploadId = 'cat_' + Date.now();
+            const originalText = button ? button.innerHTML : '';
+
             try {
+                if (!storage || typeof storage.ref !== 'function') throw new Error('Firebase Storage is not initialized.');
+                if (!db || typeof db.ref !== 'function') throw new Error('Firebase Realtime Database is not initialized.');
+
+                if (button) {
+                    button.disabled = true;
+                    button.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading 0%...';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
+
+                const weekObj = academicWeeks.find(w => w.id === weekId);
                 const storageRef = storage.ref('catUploads/' + uploadId + '_' + file.name);
-                const snapshot = await storageRef.put(file);
-                const downloadURL = await snapshot.ref.getDownloadURL();
-                const newUpload = { id: uploadId, teacher: teacherName, weekLabel: weekObj ? weekObj.label : weekId, weekId, subject, class: targetClass, docType, fileName: file.name, uploadDate: new Date().toISOString().split('T')[0], downloadURL };
+
+                // Use the Firebase upload task so progress/errors are reported instead of
+                // leaving the button stuck on "Uploading..." when Storage rejects the request.
+                const uploadTask = storageRef.put(file);
+                const uploadResult = await new Promise((resolve, reject) => {
+                    let finished = false;
+                    const timeout = setTimeout(() => {
+                        if (!finished) {
+                            finished = true;
+                            try { uploadTask.cancel(); } catch (_) {}
+                            reject(new Error('Upload timed out after 60 seconds. Firebase Storage may be blocked or its Storage rules/bucket configuration may need attention.'));
+                        }
+                    }, 60000);
+
+                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                        snapshot => {
+                            const pct = snapshot.totalBytes ? Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100) : 0;
+                            if (button) button.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Uploading ' + pct + '%...';
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        },
+                        error => {
+                            if (finished) return;
+                            finished = true;
+                            clearTimeout(timeout);
+                            reject(error);
+                        },
+                        () => {
+                            if (finished) return;
+                            finished = true;
+                            clearTimeout(timeout);
+                            resolve(uploadTask.snapshot);
+                        }
+                    );
+                });
+
+                const downloadURL = await uploadResult.ref.getDownloadURL();
+                const newUpload = {
+                    id: uploadId, teacher: teacherName,
+                    weekLabel: weekObj ? weekObj.label : weekId,
+                    weekId, subject, class: targetClass, docType,
+                    fileName: file.name,
+                    uploadDate: new Date().toISOString().split('T')[0],
+                    downloadURL
+                };
+
                 await db.ref('uploadedCatFiles/' + uploadId).set(newUpload);
+                uploadedCatFiles.unshift(newUpload);
                 fileInput.value = '';
                 renderCatUploadHistory();
                 alert('Weekly CAT document uploaded successfully. It is now visible to other teachers.');
             } catch (error) {
-                console.error(error);
-                alert('CAT upload failed. Check Firebase Storage rules and try again.');
+                console.error('CAT upload error:', error);
+                let message = error && error.message ? error.message : String(error);
+                if (error && error.code === 'storage/unauthorized') message = 'Firebase Storage denied the upload. Check your Storage security rules and teacher authentication.';
+                else if (error && error.code === 'storage/canceled') message = 'The upload was cancelled or timed out.';
+                else if (error && error.code === 'storage/unknown') message = 'Firebase Storage returned an unknown error. Check the Storage bucket and Firebase configuration.';
+                alert('CAT upload failed:\n\n' + message);
+            } finally {
+                if (button) {
+                    button.disabled = false;
+                    button.innerHTML = originalText || '<i data-lucide="upload" class="w-4 h-4"></i> Upload CAT Document';
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }
             }
+            return false;
         }
 
         function renderCatUploadHistory() {
@@ -4336,7 +5271,7 @@ function searchStoreDashboard(query){
                         <td class="p-3">${c.satTotal} lessons</td>
                         <td class="p-3 font-bold">${c.grandTotal}</td>
                         <td class="p-3">
-                            <span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : (c.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800')}">
+                            <span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Approved' ? 'bg-emerald-100 text-emerald-800' : (c.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-[#f3ece8] text-[--dark-brown]')}">
                                 ${c.status}
                             </span>
                         </td>
@@ -4363,9 +5298,9 @@ function searchStoreDashboard(query){
                         const weeks = [...teacherClaims].sort((a, b) => String(a.weekLabel || '').localeCompare(String(b.weekLabel || '')));
                         const weekHtml = weeks.map(c => {
                             const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-                            const morningDetails = (c.mornEntries || []).map(m => `${escapeHtml(m.subject || 'Subject not specified')} — ${escapeHtml(m.class || 'Class not specified')}`).join('<br>');
-                            const eveningDetails = (c.eveEntries || []).map(e => `${escapeHtml(e.subject || 'Subject not specified')} — ${escapeHtml(e.class || 'Class not specified')}`).join('<br>');
-                            const saturdayDetails = (c.satLessons || []).map(sl => `${escapeHtml(sl.subject || 'Subject not specified')} — ${escapeHtml(sl.class || 'Class not specified')}`).join('<br>');
+                            const morningDetails = (c.mornEntries || []).map(m => `${escapeHtml(m.subject || 'Subject not specified')} ? ${escapeHtml(m.class || 'Class not specified')}`).join('<br>');
+                            const eveningDetails = (c.eveEntries || []).map(e => `${escapeHtml(e.subject || 'Subject not specified')} ? ${escapeHtml(e.class || 'Class not specified')}`).join('<br>');
+                            const saturdayDetails = (c.satLessons || []).map(sl => `${escapeHtml(sl.subject || 'Subject not specified')} ? ${escapeHtml(sl.class || 'Class not specified')}`).join('<br>');
                             const details = [
                                 morningDetails ? `<div><span class="font-bold text-slate-600">Morning:</span> ${morningDetails}</div>` : '',
                                 eveningDetails ? `<div><span class="font-bold text-slate-600">Evening:</span> ${eveningDetails}</div>` : '',
@@ -4381,7 +5316,7 @@ function searchStoreDashboard(query){
                         const approved = teacherClaims.filter(c => c.status === 'Approved').length;
                         const rejected = teacherClaims.filter(c => c.status === 'Rejected').length;
                         let statusText = 'Pending';
-                        let statusClass = 'bg-amber-100 text-amber-800';
+                        let statusClass = 'bg-[#f3ece8] text-[--dark-brown]';
                         if (approved === teacherClaims.length) {
                             statusText = 'Approved';
                             statusClass = 'bg-emerald-100 text-emerald-800';
@@ -4406,7 +5341,7 @@ function searchStoreDashboard(query){
                                 <td class="p-3">
                                     <div class="flex flex-wrap gap-1.5">
                                         ${pending ? `<button onclick='updateTeacherClaimsStatus(${idsJson}, "Approved")' class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[10px] font-bold">Approve All</button>` : ''}
-                                        ${pending ? `<button onclick='updateTeacherClaimsStatus(${idsJson}, "Rejected")' class="bg-amber-600 hover:bg-amber-700 text-white px-2 py-1 rounded text-[10px] font-bold">Reject All</button>` : ''}
+                                        ${pending ? `<button onclick='updateTeacherClaimsStatus(${idsJson}, "Rejected")' class="bg-[#5f463f] hover:bg-[#4a342e] text-white px-2 py-1 rounded text-[10px] font-bold">Reject All</button>` : ''}
                                         <button onclick='deleteTeacherClaims(${idsJson})' class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">Delete All</button>
                                     </div>
                                 </td>
@@ -4586,37 +5521,124 @@ function searchStoreDashboard(query){
 
 <script>
 (function () {
+    // One authoritative route table for browser Back/Forward and refresh.
     const routeMap = {
-        '#admin-dashboard': ['admin','a-dashboard'], '#manage-teachers':['admin','a-manage-teachers'],
-        '#academic-weeks':['admin','a-manage-weeks'], '#review-remedials':['admin','a-review-remedials'],
-        '#approved-claims':['admin','a-approved-reports'], '#tenders-careers':['admin','a-opportunities'],
-        '#timetable-memo':['admin','a-timetable-memos'], '#admissions':['admin','a-admissions'], '#admin-security':['admin','a-admin-security']
+        '#teacher-dashboard':['teacher','t-dashboard'],
+        '#teacher-remedials':['teacher','t-remedials'],
+        '#teacher-swapping':['teacher','t-swapping'],
+        '#teacher-cats':['teacher','t-cats'],
+        '#teacher-upload-cat':['teacher','t-upload-cat'],
+        '#teacher-exams':['teacher','t-exams'],
+        '#teacher-attendance':['teacher','t-attendance'],
+        '#admin-dashboard':['admin','a-dashboard'],
+        '#manage-teachers':['admin','a-manage-teachers'],
+        '#academic-weeks':['admin','a-manage-weeks'],
+        '#review-remedials':['admin','a-review-remedials'],
+        '#approved-claims':['admin','a-approved-reports'],
+        '#tenders-careers':['admin','a-opportunities'],
+        '#timetable-memo':['admin','a-timetable'],
+        '#admissions':['admin','a-admissions'],
+        '#admin-security':['admin','a-admin-security'],
+        '#admin-inquiries':['admin','a-inquiries'],
+        '#library-dashboard':['librarian','l-dashboard'],
+        '#library-search':['librarian','l-search'],
+        '#book-inventory':['librarian','l-catalog'],
+        '#library-circulations':['librarian','l-circulations'],
+        '#patrons-fines':['librarian','l-patrons'],
+        '#library-student-profile':['librarian','l-student-profile'],
+        '#library-book-profile':['librarian','l-book-profile'],
+        '#librarian-security':['librarian','l-security'],
+        '#storekeeper-dashboard':['storekeeper','sk-dashboard'],
+        '#books-stationery':['storekeeper','sk-books-stationery'],
+        '#general-stock':['storekeeper','sk-general'],
+        '#furniture-equipment':['storekeeper','sk-furniture'],
+        '#stock-received':['storekeeper','sk-received'],
+        '#items-issued':['storekeeper','sk-issued'],
+        '#current-stock':['storekeeper','sk-balances'],
+        '#suppliers-recipients':['storekeeper','sk-people'],
+        '#transaction-history':['storekeeper','sk-history'],
+        '#stock-reports':['storekeeper','sk-reports'],
+        '#storekeeper-security':['storekeeper','sk-security']
     };
-    window.addEventListener('popstate', function(){
-        const route=routeMap[window.location.hash];
-        if(route && currentRole===route[0]) switchTab(route[0],route[1],false);
-        savePortalRoute();
+
+    function restoreRoute() {
+        const hash = window.location.hash || localStorage.getItem('schoolPortalLastHash');
+        const route = routeMap[hash];
+
+        if (route && typeof currentRole !== 'undefined' && currentRole === route[0]) {
+            switchTab(route[0], route[1], false);
+            return true;
+        }
+        return false;
+    }
+
+    window.addEventListener('popstate', function () {
+        // Do not create another history entry while responding to Back/Forward.
+        if (!restoreRoute()) {
+            try {
+                localStorage.setItem('schoolPortalLastHash', window.location.hash || '');
+            } catch (_) {}
+        }
     });
-    window.addEventListener('DOMContentLoaded', function(){
-        if(window.firebase && firebase.auth){
-            firebase.auth().onAuthStateChanged(function(user){
-                if(user){
-                    currentRole='admin';
-                    loggedUser={name:'Administrator',role:'admin',email:user.email,uid:user.uid};
-                    try{localStorage.setItem('schoolPortalSession',JSON.stringify({role:'admin',user:loggedUser,savedAt:Date.now()}));}catch(_){}
-                    document.getElementById('user-badge').textContent='Administrator';
+
+    window.addEventListener('DOMContentLoaded', function () {
+        if (window.firebase && typeof firebase.auth === 'function') {
+            // Firebase Auth LOCAL persistence keeps the Administrator signed in
+            // across refreshes. Do not trust localStorage alone for admin access.
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    currentRole = 'admin';
+                    loggedUser = {
+                        name: 'Administrator',
+                        role: 'admin',
+                        email: user.email,
+                        uid: user.uid
+                    };
+
+                    try {
+                        localStorage.setItem(
+                            'schoolPortalSession',
+                            JSON.stringify({
+                                role: 'admin',
+                                user: loggedUser,
+                                savedAt: Date.now()
+                            })
+                        );
+                    } catch (_) {}
+
+                    document.getElementById('user-badge').textContent = 'Administrator';
                     document.getElementById('admin-nav-items').classList.remove('hidden');
                     document.getElementById('teacher-nav-items').classList.add('hidden');
                     document.getElementById('librarian-nav-items').classList.add('hidden');
+                    document.getElementById('storekeeper-nav-items').classList.add('hidden');
+
                     showView('admin');
-                    const saved=localStorage.getItem('schoolPortalLastHash');
-                    const target=routeMap[saved];
-                    switchTab('admin',target?target[1]:'a-dashboard',false);
+
+                    if (!restoreRoute()) {
+                        switchTab('admin', 'a-dashboard', false);
+                    }
+                } else if (currentRole === 'admin') {
+                    // Firebase says the admin session really ended; do not restore
+                    // an old local admin session.
+                    clearPortalSession();
+                    currentRole = 'public';
+                    loggedUser = null;
+                    showView('public');
                 } else {
+                    // Teacher, Librarian and Store Keeper use their portal session
+                    // record, so their page survives a normal browser refresh.
                     restorePortalSession();
+                    if (currentRole !== 'public') {
+                        restoreRoute();
+                    }
                 }
             });
-        } else { restorePortalSession(); }
+        } else {
+            restorePortalSession();
+            if (currentRole !== 'public') {
+                restoreRoute();
+            }
+        }
     });
 })();
 </script>
