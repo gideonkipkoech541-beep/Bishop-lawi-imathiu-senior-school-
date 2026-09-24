@@ -69,6 +69,40 @@
             color: #fff;
         }
 
+        /* Mobile-first portal responsiveness */
+        html, body { max-width: 100%; overflow-x: hidden; }
+        img, video, canvas { max-width: 100%; height: auto; }
+        button, input, select, textarea { max-width: 100%; }
+        .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+        @media (max-width: 767px) {
+            header .max-w-7xl { height: auto; min-height: 4.5rem; padding-top: .7rem; padding-bottom: .7rem; }
+            header h1 { font-size: 1rem !important; }
+            header p { font-size: .65rem !important; }
+            #mobile-portal-login-btn { display: inline-flex !important; }
+            #public-nav { display: none !important; }
+            main { flex-direction: column !important; width: 100%; }
+            #portal-sidebar { width: 100% !important; min-width: 0 !important; flex: none !important; height: auto !important; max-height: 46vh; position: relative !important; top: auto !important; overflow-y: auto !important; overflow-x: hidden !important; padding: .75rem !important; gap: .65rem !important; }
+            #portal-sidebar > div:first-child { display:none; }
+            #portal-sidebar nav { display: grid !important; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .35rem !important; }
+            #portal-sidebar .nav-item { min-width: 0; font-size: .72rem !important; padding: .55rem .5rem !important; }
+            #portal-sidebar .nav-item svg { width: 1rem !important; height: 1rem !important; flex: 0 0 auto; }
+            #portal-content { width: 100% !important; min-width: 0 !important; overflow: visible !important; }
+            #portal-content > .bg-white { padding: .75rem !important; position: sticky; top: 0; z-index: 20; }
+            #portal-content > .bg-white h1 { font-size: 1rem !important; }
+            #portal-content > .bg-white > div { gap: .4rem !important; }
+            #portal-content > .bg-white .text-sm { font-size: .68rem !important; }
+            .portal-view { padding: .75rem !important; }
+            .portal-view h2 { font-size: 1.25rem !important; }
+            .portal-view h3 { font-size: 1rem !important; }
+            .portal-view .p-6 { padding: 1rem !important; }
+            .portal-view .p-8 { padding: .75rem !important; }
+            .portal-view .grid { width: 100%; }
+            .portal-view table { min-width: 720px; }
+            .portal-view .overflow-x-auto { width: 100%; max-width: 100%; overflow-x: auto !important; }
+            #login-modal > div, #book-modal > div, #issue-book-modal > div { width: calc(100vw - 1.5rem) !important; max-width: none !important; max-height: 92vh; overflow-y: auto; padding: 1rem !important; }
+            .flex-wrap { row-gap: .5rem; }
+        }
+
         @media print {
             body * { visibility: hidden; }
             #printable-section, #printable-section * { visibility: visible; }
@@ -119,6 +153,273 @@
         }
     }
 </style>
+
+<style id="portal-structure-theme-overhaul">
+:root{
+ --portal-green:#123d2b;
+ --portal-green-2:#0d2f22;
+ --portal-brown:#4a2f24;
+ --portal-black:#111111;
+ --portal-white:#ffffff;
+ --portal-border:#4a2f24;
+}
+html,body{width:100%;max-width:100%;overflow-x:hidden;background:var(--portal-white);color:var(--portal-black);}
+body{min-height:100vh;}
+*,*::before,*::after{box-sizing:border-box;}
+/* Keep the entire application inside the viewport. */
+#portal-container{min-height:calc(100vh - 80px);width:100%;min-width:0;}
+#portal-sidebar{background:var(--portal-green)!important;color:var(--portal-white)!important;border-color:var(--portal-brown)!important;flex:0 0 18rem;width:18rem;min-width:18rem;max-width:18rem;height:calc(100vh - 80px);max-height:calc(100vh - 80px);overflow-y:auto;overflow-x:hidden;position:sticky;top:80px;align-self:flex-start;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--portal-brown) var(--portal-green-2);}
+#portal-sidebar::-webkit-scrollbar{width:8px;}
+#portal-sidebar::-webkit-scrollbar-track{background:var(--portal-green-2);}
+#portal-sidebar::-webkit-scrollbar-thumb{background:var(--portal-brown);border-radius:8px;}
+#portal-sidebar a,#portal-sidebar button{color:var(--portal-white)!important;}
+#portal-sidebar .active,#portal-sidebar .bg-white,#portal-sidebar .bg-gray-100,#portal-sidebar .bg-slate-100{background:var(--portal-brown)!important;color:var(--portal-white)!important;}
+#portal-sidebar .hover\:bg-gray-100:hover,#portal-sidebar .hover\:bg-slate-100:hover,#portal-sidebar .hover\:bg-white:hover{background:var(--portal-brown)!important;color:var(--portal-white)!important;}
+#portal-sidebar [class*="text-"]{color:var(--portal-white)!important;}
+#portal-sidebar .text-black{color:var(--portal-black)!important;}
+#portal-sidebar [class*="border-"]{border-color:var(--portal-brown)!important;}
+#portal-sidebar > div:first-child{color:var(--portal-white)!important;}
+#portal-sidebar .bg-\[--dark-brown\]{background:var(--portal-brown)!important;color:var(--portal-white)!important;}
+.portal-view{min-width:0;width:100%;height:calc(100vh - 80px);max-height:calc(100vh - 80px);overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;overscroll-behavior:contain;padding-bottom:5rem;scrollbar-width:thin;scrollbar-color:var(--portal-brown) var(--portal-white);}
+.portal-view::-webkit-scrollbar{width:10px;}
+.portal-view::-webkit-scrollbar-track{background:var(--portal-white);}
+.portal-view::-webkit-scrollbar-thumb{background:var(--portal-brown);border-radius:10px;border:2px solid var(--portal-white);}
+#portal-content{min-width:0;flex:1 1 auto;overflow:hidden;}
+.tab-content{min-width:0;max-width:100%;}
+.tab-content > *{max-width:100%;}
+/* Restrict page palette to green, brown, black and white. */
+.bg-white{background-color:var(--portal-white)!important;}
+.text-white{color:var(--portal-white)!important;}
+.text-black{color:var(--portal-black)!important;}
+.bg-black{background-color:var(--portal-black)!important;}
+.text-slate-900,.text-slate-800,.text-slate-700,.text-slate-600,.text-slate-500,.text-slate-400,.text-gray-900,.text-gray-800,.text-gray-700,.text-gray-600,.text-gray-500,.text-gray-400{color:var(--portal-black)!important;}
+.bg-slate-50,.bg-slate-100,.bg-slate-200,.bg-gray-50,.bg-gray-100,.bg-gray-200{background-color:var(--portal-white)!important;}
+.border-slate-200,.border-slate-300,.border-gray-200,.border-gray-300,.border-gray-400{border-color:var(--portal-brown)!important;}
+[class*="bg-[--dark-green-deep]"]{background-color:var(--portal-green)!important;}
+[class*="bg-[--dark-brown]"]{background-color:var(--portal-brown)!important;}
+[class*="text-[--dark-green-deep]"]{color:var(--portal-green)!important;}
+[class*="text-[--dark-brown]"]{color:var(--portal-brown)!important;}
+[class*="border-[--dark-green-deep]"]{border-color:var(--portal-green)!important;}
+[class*="border-[--dark-brown]"]{border-color:var(--portal-brown)!important;}
+/* Common Tailwind green/brown states used by the portal. */
+.text-green-700,.text-green-600,.text-green-500,.text-emerald-700,.text-emerald-600,.text-emerald-500{color:var(--portal-green)!important;}
+.bg-green-50,.bg-green-100,.bg-emerald-50,.bg-emerald-100{background-color:var(--portal-white)!important;}
+.bg-green-600,.bg-green-700,.bg-emerald-600,.bg-emerald-700{background-color:var(--portal-green)!important;color:var(--portal-white)!important;}
+.border-green-200,.border-green-300,.border-green-500,.border-emerald-200,.border-emerald-300{border-color:var(--portal-green)!important;}
+/* Brown is the only secondary accent. */
+button,a{transition:background-color .15s ease,color .15s ease,border-color .15s ease,box-shadow .15s ease;}
+button:hover{filter:none;}
+input,select,textarea{color:var(--portal-black)!important;background:var(--portal-white)!important;border-color:var(--portal-brown)!important;}
+input::placeholder,textarea::placeholder{color:var(--portal-black)!important;opacity:.65;}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:var(--portal-green)!important;box-shadow:0 0 0 2px var(--portal-green)!important;}
+/* Tables stay inside their content area and scroll horizontally rather than breaking the page. */
+.overflow-x-auto{max-width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--portal-brown) var(--portal-white);}
+.overflow-x-auto::-webkit-scrollbar{height:8px;}
+.overflow-x-auto::-webkit-scrollbar-track{background:var(--portal-white);}
+.overflow-x-auto::-webkit-scrollbar-thumb{background:var(--portal-brown);border-radius:8px;}
+/* Remove accidental horizontal page expansion from wide forms/tables. */
+img,svg,video,canvas{max-width:100%;}
+@media(max-width:767px){
+ #portal-sidebar{position:relative;top:auto;flex:0 0 auto;width:100%;min-width:0;max-width:none;height:auto;max-height:42vh;overflow-y:auto;border-right:0;border-bottom:2px solid var(--portal-brown);}
+ #portal-container{display:flex;flex-direction:column;min-height:0;}
+ #portal-content{width:100%;min-width:0;}
+ .portal-view{height:auto;max-height:none;min-height:calc(100vh - 80px);overflow-y:visible;padding:1rem .75rem 4rem;}
+ .portal-view .tab-content{width:100%;}
+}
+@media(min-width:768px){
+ #portal-container{display:flex;align-items:flex-start;}
+}
+</style>
+
+
+<style id="final-portal-ux-overhaul">
+:root{--portal-green:#123d2b;--portal-green-dark:#0d2f22;--portal-brown:#4a2f24;--portal-black:#111111;--portal-white:#ffffff;}
+/* Single-scroll portal layout: only the active content view and sidebar scroll. */
+html{scroll-behavior:smooth;}
+body{overflow:hidden;}
+main{min-height:0;flex:1 1 auto;}
+#portal-container{height:calc(100vh - 80px);min-height:0;overflow:hidden;}
+#portal-sidebar{flex:0 0 14rem!important;width:14rem!important;min-width:14rem!important;max-width:14rem!important;height:calc(100vh - 80px)!important;max-height:calc(100vh - 80px)!important;overflow-y:auto!important;overflow-x:hidden!important;position:sticky!important;top:80px!important;padding:.7rem!important;scrollbar-width:thin!important;overscroll-behavior:contain;}
+#portal-sidebar h3{font-size:.82rem!important;}
+#portal-sidebar p{font-size:.62rem!important;}
+#portal-sidebar .nav-item{font-size:.72rem!important;line-height:1.15!important;padding:.48rem .5rem!important;gap:.45rem!important;min-height:2.25rem;}
+#portal-sidebar .nav-item svg{width:1rem!important;height:1rem!important;flex:0 0 1rem;}
+#portal-sidebar nav{gap:.3rem!important;}
+#portal-content{height:calc(100vh - 80px)!important;min-height:0!important;width:auto!important;flex:1 1 auto!important;overflow:hidden!important;}
+#portal-content>.bg-white{position:sticky;top:0;z-index:30;}
+.portal-view{height:100%!important;max-height:none!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;scroll-behavior:smooth!important;overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important;padding-bottom:4rem!important;}
+.portal-view::-webkit-scrollbar{width:9px;}
+.portal-view::-webkit-scrollbar-track{background:var(--portal-white);}
+.portal-view::-webkit-scrollbar-thumb{background:var(--portal-brown);border-radius:8px;}
+#portal-sidebar::-webkit-scrollbar{width:7px;}
+#portal-sidebar::-webkit-scrollbar-track{background:var(--portal-green-dark);}
+#portal-sidebar::-webkit-scrollbar-thumb{background:var(--portal-brown);border-radius:8px;}
+/* Landing identity animation */
+.landing-identity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
+.landing-identity-card{background:var(--portal-green-dark);border:2px solid var(--portal-brown);border-radius:1rem;padding:1.1rem 1rem;color:var(--portal-white);box-shadow:0 8px 20px rgba(0,0,0,.18);animation:identityRise .9s ease both;transition:transform .25s ease;}
+.landing-identity-card:nth-child(2){animation-delay:.12s}.landing-identity-card:nth-child(3){animation-delay:.24s}.landing-identity-card:nth-child(4){animation-delay:.36s}
+.landing-identity-card:hover{transform:translateY(-4px);}
+.landing-school-card{grid-column:1/-1;}
+.landing-label{font-size:.68rem;font-weight:800;letter-spacing:.18em;margin-bottom:.45rem;color:var(--portal-brown);background:var(--portal-white);display:inline-block;padding:.25rem .5rem;border-radius:.35rem;}
+.landing-school-name{font-size:clamp(1.45rem,4vw,2.5rem);font-weight:800;line-height:1.1;margin:0;}
+.landing-location{font-size:.78rem;margin-top:.35rem;}
+.landing-identity-card p{font-size:.9rem;line-height:1.5;margin:0;}
+.landing-motto-card p{font-size:1.2rem;font-weight:800;}
+@keyframes identityRise{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:767px){
+ body{overflow:hidden;}
+ #portal-container{height:calc(100vh - 80px)!important;}
+ #portal-sidebar{position:relative!important;top:auto!important;flex:0 0 auto!important;width:100%!important;min-width:0!important;max-width:none!important;height:auto!important;max-height:38vh!important;overflow-y:auto!important;}
+ #portal-content{height:calc(100vh - 80px)!important;overflow:hidden!important;}
+ .portal-view{height:100%!important;overflow-y:auto!important;}
+ .landing-identity-grid{grid-template-columns:1fr;gap:.7rem;}
+ .landing-school-card{grid-column:auto;}
+ .landing-identity-card{padding:.85rem .8rem;}
+ .landing-identity-card p{font-size:.78rem;}
+ .landing-motto-card p{font-size:1rem;}
+}
+@media(prefers-reduced-motion:reduce){.landing-identity-card{animation:none!important;transition:none!important;}}
+</style>
+
+<style id="home-cream-green-brown-theme">
+:root{--home-cream:#f7f1e3;}
+/* Home page: cream/white foundation with restrained dark-green and dark-brown accents. */
+#public-view{background:var(--home-cream)!important;color:var(--portal-black)!important;}
+#public-view .bg-gradient-to-r{background:var(--portal-green)!important;}
+#public-view section{color:var(--portal-black);}
+#public-view section:first-child{background:var(--portal-green)!important;color:var(--portal-white)!important;}
+#public-view .bg-white{background:#fff!important;color:var(--portal-black)!important;border-color:var(--portal-brown)!important;}
+#public-view .bg-slate-100,#public-view .bg-gray-100{background:var(--home-cream)!important;color:var(--portal-black)!important;}
+#public-view [class*="text-slate-"],#public-view [class*="text-indigo-"],#public-view [class*="text-emerald-"]{color:var(--portal-black)!important;}
+#public-view .text-white{color:#fff!important;}
+#public-view .bg-indigo-100,#public-view .bg-indigo-50,#public-view .bg-emerald-100{background:var(--portal-green)!important;color:#fff!important;}
+#public-view .bg-\[--dark-brown\]{background:var(--portal-brown)!important;color:#fff!important;}
+#public-view a:hover,#public-view button:hover{color:#fff!important;}
+#public-view .border-slate-200,#public-view .border-gray-200{border-color:var(--portal-brown)!important;}
+#public-view input,#public-view textarea,#public-view select{background:#fff!important;color:var(--portal-black)!important;border-color:var(--portal-brown)!important;}
+/* Keep the public navigation visible only on the home/public view. */
+body.portal-mode #public-nav{display:none!important;}
+body.portal-mode #mobile-portal-login-btn{display:none!important;}
+/* Main portal pages use one clean scrolling surface. */
+#portal-content{overflow:hidden!important;min-height:calc(100vh - 80px)!important;}
+#portal-content .portal-view{height:calc(100vh - 80px)!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;padding-bottom:7rem!important;}
+#portal-content .tab-content{min-height:0;}
+</style>
+
+<style id="home-large-cream-frame-theme">
+/* HOME PAGE ONLY: large cream canvas with dark-green structural frames and restrained dark-brown accents. */
+body:not(.portal-mode) > header{
+  background:var(--home-cream)!important;
+  color:var(--portal-black)!important;
+  border-bottom:4px solid var(--portal-green)!important;
+  box-shadow:0 2px 10px rgba(0,0,0,.08)!important;
+}
+body:not(.portal-mode) > header h1,
+body:not(.portal-mode) > header p,
+body:not(.portal-mode) > header a{color:var(--portal-black)!important;}
+body:not(.portal-mode) > header .bg-\[--dark-brown\]{background:var(--portal-brown)!important;color:#fff!important;}
+body:not(.portal-mode) > header #portal-login-btn,
+body:not(.portal-mode) > header #mobile-portal-login-btn{background:var(--portal-brown)!important;color:#fff!important;}
+body:not(.portal-mode) > header #public-nav a:hover{color:var(--portal-green)!important;}
+
+#public-view{
+  background:var(--home-cream)!important;
+  color:var(--portal-black)!important;
+  border-left:6px solid var(--portal-green);
+  border-right:6px solid var(--portal-green);
+}
+#public-view section,
+#public-view section:first-child,
+#public-view .bg-gradient-to-r{
+  background:var(--home-cream)!important;
+  color:var(--portal-black)!important;
+}
+/* Large cream areas; green is used mainly as frames/borders. */
+#public-view section{
+  border-bottom:3px solid var(--portal-green)!important;
+  box-shadow:inset 0 1px 0 rgba(74,52,46,.12);
+}
+#public-view section > div{
+  border-left:2px solid var(--portal-green);
+  border-right:2px solid var(--portal-green);
+  border-radius:1rem;
+}
+#public-view .landing-identity-grid{
+  background:var(--home-cream)!important;
+  border:3px solid var(--portal-green);
+  border-radius:1.25rem;
+  padding:1rem;
+}
+#public-view .landing-identity-card{
+  background:var(--home-cream)!important;
+  color:var(--portal-black)!important;
+  border:2px solid var(--portal-green)!important;
+  box-shadow:0 5px 14px rgba(0,0,0,.10)!important;
+}
+#public-view .landing-identity-card p,
+#public-view .landing-school-name,
+#public-view .landing-location{color:var(--portal-black)!important;}
+#public-view .landing-label{
+  background:var(--portal-green)!important;
+  color:#fff!important;
+  border:1px solid var(--portal-brown);
+}
+#public-view .landing-identity-card:hover{border-color:var(--portal-brown)!important;}
+#public-view .bg-white{
+  background:#fff!important;
+  color:var(--portal-black)!important;
+  border-color:var(--portal-green)!important;
+}
+#public-view .bg-slate-100,#public-view .bg-gray-100{
+  background:var(--home-cream)!important;
+  color:var(--portal-black)!important;
+}
+#public-view [class*="text-slate-"],#public-view [class*="text-indigo-"],#public-view [class*="text-emerald-"]{color:var(--portal-black)!important;}
+#public-view .text-white{color:var(--portal-black)!important;}
+#public-view .bg-indigo-100,#public-view .bg-indigo-50,#public-view .bg-emerald-100{
+  background:var(--home-cream)!important;color:var(--portal-black)!important;border:2px solid var(--portal-green)!important;
+}
+#public-view .bg-\[--dark-brown\]{background:var(--portal-brown)!important;color:#fff!important;}
+#public-view a:hover,#public-view button:hover{color:var(--portal-green)!important;}
+#public-view .border-slate-200,#public-view .border-gray-200{border-color:var(--portal-green)!important;}
+#public-view input,#public-view textarea,#public-view select{background:#fff!important;color:var(--portal-black)!important;border-color:var(--portal-green)!important;}
+/* Preserve dark-green only as frames/lines on the home page. */
+#public-view hr{border-color:var(--portal-green)!important;}
+</style>
+
+<style id="home-mouse-wheel-scroll-fix">
+/* HOME PAGE: use the browser document as the scroll surface. */
+body:not(.portal-mode){
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+body:not(.portal-mode) main{
+  display:block!important;
+  min-height:0!important;
+  flex:none!important;
+}
+body:not(.portal-mode) #public-view{
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow:visible!important;
+  overflow-y:visible!important;
+}
+body:not(.portal-mode) #public-view > section{
+  overflow:visible!important;
+}
+
+/* Remedial navigation button: dark brown with cream text. */
+#remedial-next-btn{
+  background:var(--portal-brown)!important;
+  color:var(--home-cream,#f7f1e3)!important;
+  border-color:var(--portal-brown)!important;
+}
+#remedial-next-btn:hover{
+  background:var(--portal-green)!important;
+  color:var(--home-cream,#f7f1e3)!important;
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -126,12 +427,12 @@
     <header class="bg-[--dark-green-deep] text-[--text-on-dark] sticky top-0 z-50 shadow-md no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer" onclick="showView('public')">
-                <div class="bg-[--dark-brown] text-indigo-950 p-2 rounded-full font-bold text-xl flex items-center justify-center w-10 h-10 shadow-inner">
+                <div class="bg-[--dark-brown] text-white p-2 rounded-full font-bold text-xl flex items-center justify-center w-10 h-10 shadow-inner">
                     BL
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight sm:text-xl">Bishop Lawi Imathiu</h1>
-                    <p class="text-xs text-[#cbb5ac]">Secondary School - Meru</p>
+                    <p class="text-xs text-white">Secondary School - Meru</p>
                 </div>
             </div>
 
@@ -142,14 +443,18 @@
                 <a href="#admissions" class="hover:text-[--dark-brown] transition">Admissions</a>
                 <a href="#public-opportunities" class="hover:text-[--dark-brown] transition">Tenders & Careers</a>
                 <a href="#contact" class="hover:text-[--dark-brown] transition">Contact</a>
-                <button onclick="showLoginModal()" class="bg-[--dark-brown] hover:bg-[#5f463f] text-indigo-950 px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
+                <button type="button" id="portal-login-btn" onclick="showLoginModal()" class="bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Portal Login
                 </button>
             </nav>
 
+            <button type="button" id="mobile-portal-login-btn" onclick="showLoginModal()" class="hidden md:hidden bg-[--dark-brown] text-white px-3 py-2 rounded-lg font-semibold text-xs items-center gap-1 shadow" aria-label="Portal Login">
+                <i data-lucide="log-in" class="w-4 h-4"></i> Login
+            </button>
+
             <!-- Authenticated User Nav Indicator -->
             <div id="user-nav" class="hidden flex items-center gap-4">
-                <span id="user-badge" class="bg-indigo-900 border border-[#cbb5ac]/40 text-[#cbb5ac] px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
+                <span id="user-badge" class="bg-indigo-900 border border-[#cbb5ac]/40 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
                 <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition">
                     <i data-lucide="log-out" class="w-4 h-4"></i> Logout
                 </button>
@@ -162,18 +467,37 @@
 
         <!-- PUBLIC WEBSITE VIEW -->
         <div id="public-view" class="portal-view active w-full no-print">
-            <section class="bg-gradient-to-r from-[--dark-green-deep] via-[#246342] to-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 text-center">
+            <section class="bg-[--dark-green-deep] text-white py-20 px-4 sm:px-6 lg:px-8 text-center">
                 <div class="max-w-4xl mx-auto">
-                    <span class="bg-[#4a342e]/20 text-[#cbb5ac] border border-[#4a342e]/30 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
+                    <div class="landing-identity-grid mb-8">
+                        <div class="landing-identity-card landing-school-card">
+                            <div class="landing-label">SCHOOL</div>
+                            <h1 class="landing-school-name">Bishop Lawi Imathiu Secondary School</h1>
+                            <p class="landing-location">Meru, Kenya</p>
+                        </div>
+                        <div class="landing-identity-card">
+                            <div class="landing-label">MISSION</div>
+                            <p>To provide quality education, moral foundation and holistic development for responsible and productive citizens.</p>
+                        </div>
+                        <div class="landing-identity-card">
+                            <div class="landing-label">VISION</div>
+                            <p>To nurture disciplined, knowledgeable and innovative learners who positively impact society.</p>
+                        </div>
+                        <div class="landing-identity-card landing-motto-card">
+                            <div class="landing-label">MOTTO</div>
+                            <p>Excellence in Education</p>
+                        </div>
+                    </div>
+                    <span class="bg-[--dark-brown] text-white border border-[--dark-brown] px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
                         Excellence in Education
                     </span>
                     <h2 class="text-3xl sm:text-5xl font-light mb-6 leading-tight lato-light">Nurturing Leaders of Tomorrow </h2>
-                    <p class="text-indigo-200 text-lg mb-8 max-w-2xl mx-auto">
+                    <p class="text-white text-lg mb-8 max-w-2xl mx-auto">
                         Providing quality education, moral foundation, and holistic development to empower students for local and global impact.
                     </p>
                     <div class="flex flex-wrap justify-center gap-4">
-                        <a href="#admissions" class="bg-[--dark-brown] hover:bg-[#5f463f] text-indigo-950 font-semibold px-6 py-3 rounded-lg shadow-lg transition">Apply for Admission</a>
-                        <button onclick="showLoginModal()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-lg transition">Access Staff Portal</button>
+                        <a href="#admissions" class="bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition">Apply for Admission</a>
+                        <button type="button" id="staff-portal-login-btn" onclick="showLoginModal()" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-6 py-3 rounded-lg transition">Access Staff Portal</button>
                     </div>
                 </div>
             </section>
@@ -263,7 +587,7 @@
                                 <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Message</label>
                                 <textarea id="contact-message" rows="3" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[--dark-brown] outline-none text-sm"></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-semibold py-2.5 rounded-lg transition text-sm">Send Message</button>
+                            <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white font-semibold py-2.5 rounded-lg transition text-sm">Send Message</button>
                         </form>
                     </div>
                 </div>
@@ -273,10 +597,10 @@
         <!-- SHARED PORTAL SIDEBAR -->
         <aside id="portal-sidebar" class="hidden w-72 bg-[--dark-green-deep] text-[--text-on-dark] flex-col p-4 space-y-8 border-r border-[#246342] no-print">
             <div class="text-center">
-                <div class="bg-[--dark-brown] text-indigo-950 p-2 rounded-full font-bold text-3xl mx-auto flex items-center justify-center w-20 h-20 mb-3 shadow-md">
+                <div class="bg-[--dark-brown] text-white p-2 rounded-full font-bold text-3xl mx-auto flex items-center justify-center w-20 h-20 mb-3 shadow-md">
                     BL
                 </div>
-                <h3 id="sidebar-portal-title" class="font-bold text-lg leading-tight text-[#cbb5ac]">Staff Portal</h3>
+                <h3 id="sidebar-portal-title" class="font-bold text-lg leading-tight text-white">Staff Portal</h3>
             </div>
             
             <!-- TEACHER SIDEBAR NAV -->
@@ -480,11 +804,11 @@
                             <div class="p-4 rounded-lg border border-[--dark-green-deep] bg-[--dark-green-deep] text-white shadow-md">
                                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                     <div>
-                                        <p class="text-xs font-bold uppercase text-[#cbb5ac]">Remedial Claim Weeks</p>
+                                        <p class="text-xs font-bold uppercase text-white">Remedial Claim Weeks</p>
                                         <p id="remedial-week-instruction" class="text-sm text-white/90 mt-1">Complete each open week below. All open weeks are submitted together once.</p>
                                     </div>
                                     <div class="text-right">
-                                        <span id="remedial-week-progress" class="text-xs font-black text-[#cbb5ac]">Week 1 of 1</span>
+                                        <span id="remedial-week-progress" class="text-xs font-black text-white">Week 1 of 1</span>
                                     </div>
                                 </div>
                                 <div class="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
@@ -569,6 +893,11 @@
                                     <span class="bg-[--dark-brown] text-white text-xs px-2.5 py-1 rounded-full font-bold">Max 4 Lessons / Saturday</span>
                                 </div>
                                 <p class="text-xs text-slate-500 mb-4">Select Saturday lessons, subject taught (including Business Studies, Agriculture, Geography, Computer Studies, CRE, History & Government, Music), and select target class from dropdown options.</p>
+                                <div class="mb-4 max-w-sm">
+                                    <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Saturday Date <span class="text-red-500">*</span></label>
+                                    <input type="date" id="sat-date" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                                    <p class="text-[11px] text-slate-500 mt-1">Required when at least one Saturday lesson is selected. The date must be a Saturday.</p>
+                                </div>
 
                                 <!-- Lesson Slots (1 to 4) -->
                                 <div class="space-y-4">
@@ -807,7 +1136,7 @@
                             </div>
 
                             <!-- Live Claim Counter -->
-                            <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-lg flex justify-between items-center text-indigo-950">
+                            <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-lg flex justify-between items-center text-white">
                                 <div>
                                     <p class="text-xs font-bold uppercase">Calculated Claim Total</p>
                                     <p class="text-xs text-indigo-700">Combined Morning Days + Evening Days + Saturday Sessions</p>
@@ -816,11 +1145,11 @@
                             </div>
 
                             <div class="flex flex-col sm:flex-row gap-3">
-                                <button id="remedial-prev-btn" type="button" onclick="goToPreviousRemedialWeek()" class="hidden sm:w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-lg shadow transition">
-                                    ? Previous Week
+                                <button id="remedial-prev-btn" type="button" onclick="goToPreviousRemedialWeek()" class="hidden sm:w-1/3 bg-[--dark-brown] hover:bg-[--dark-green-deep] text-[--light-cream] font-bold py-3 rounded-lg shadow transition border border-[--dark-brown]">
+                                    Previous Week
                                 </button>
-                                <button id="remedial-next-btn" type="button" onclick="goToNextRemedialWeek()" class="w-full bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 rounded-lg shadow transition">
-                                    Save Week & Go to Next Week ?
+                                <button id="remedial-next-btn" type="button" onclick="goToNextRemedialWeek()" class="w-full bg-[--dark-brown] hover:bg-[--dark-green-deep] text-[--light-cream] font-bold py-3 rounded-lg shadow transition border border-[--dark-brown]">
+                                    Save Week & Go to Next Week
                                 </button>
                                 <button id="remedial-final-submit-btn" type="submit" class="hidden w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-3 rounded-lg shadow transition">
                                     Submit All Open Weeks Together
@@ -854,7 +1183,7 @@
                                     <label class="block font-semibold uppercase mb-1 text-slate-700">Requested Replacement Slot</label>
                                     <input type="text" id="swap-target-slot" required placeholder="e.g. Week 2 Saturday Lesson 3 (Form 3)" class="w-full p-2 border rounded outline-none focus:ring-2 focus:ring-[--dark-brown]">
                                 </div>
-                                <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-bold py-2 rounded text-sm transition">Send Swap Offer</button>
+                                <button type="submit" class="w-full bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white font-bold py-2 rounded text-sm transition">Send Swap Offer</button>
                             </form>
                         </div>
 
@@ -1043,7 +1372,7 @@
                                     <label class="block font-semibold uppercase mb-1 text-slate-700">Select File (PDF, DOCX, XLSX, PNG)</label>
                                     <input type="file" id="cat-file-input" required accept=".pdf,.docx,.doc,.xlsx,.png,.jpg" class="w-full p-2 border rounded-lg outline-none bg-slate-50 text-xs">
                                 </div>
-                                <button type="button" onclick="handleCatFileUpload(event)" class="w-full bg-[--dark-brown] hover:bg-[#5f463f] text-white font-bold py-2.5 rounded-lg text-sm transition shadow flex items-center justify-center gap-2 cursor-pointer">
+                                <button type="button" onclick="handleCatFileUpload(event)" class="w-full bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white font-bold py-2.5 rounded-lg text-sm transition shadow flex items-center justify-center gap-2 cursor-pointer">
                                     <i data-lucide="upload" class="w-4 h-4"></i> Upload CAT Document
                                 </button>
                             </form>
@@ -1199,10 +1528,6 @@
                                     <option>Female</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase mb-1">KJSEA Results Slip</label>
-                                <input id="adm-results-slip" type="file" accept=".pdf,.jpg,.jpeg,.png" required class="w-full px-3 py-2 border rounded-lg">
-                            </div>
                             <div class="md:col-span-2">
                                 <button type="submit" class="bg-[--dark-green-deep] text-white px-5 py-2.5 rounded-lg font-bold">Submit Admission</button>
                             </div>
@@ -1219,7 +1544,7 @@
                                         <th class="p-2 border text-left">Junior School</th>
                                         <th class="p-2 border text-left">Pathway</th>
                                         <th class="p-2 border text-left">Gender</th>
-                                        <th class="p-2 border text-left">Results Slip</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="admissions-table-body"></tbody>
@@ -1429,7 +1754,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <h2 class="text-2xl font-light text-slate-900 lato-light">Review Submitted Remedial Claims</h2>
-                            <p class="text-xs text-slate-500 italic mt-0.5">Showing detailed lesson counts, subject, classes taught, organized by academic weeks.</p>
+                            <p class="text-xs text-slate-500 italic mt-0.5">Showing lesson counts, subjects, classes, and the exact date/day for each remedial session, organized by academic weeks.</p>
                         </div>
                         <button onclick="clearAllClaims()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow transition">
                             <i data-lucide="trash-2" class="w-4 h-4"></i> Delete/Clear All Claims
@@ -1467,7 +1792,7 @@
                             <button onclick="exportToCSV()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
                                 <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Export CSV
                             </button>
-                            <button onclick="window.print()" class="bg-[--dark-brown] hover:bg-[#5f463f] text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
+                            <button onclick="window.print()" class="bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white px-3 py-1.5 rounded text-xs font-bold flex items-center gap-1 shadow">
                                 <i data-lucide="printer" class="w-4 h-4"></i> Print Letter
                             </button>
                         </div>
@@ -1555,7 +1880,7 @@
                             <p class="text-xs text-slate-500 mt-1">Manage learning materials and stationery stock.</p>
                         </button>
                         <button onclick="switchTab('storekeeper','sk-general')" class="text-left bg-white p-6 rounded-xl border-2 border-cyan-200 shadow-sm hover:shadow-lg transition">
-                            <div class="text-3xl mb-2">??</div><h3 class="font-bold text-slate-800">General Stock</h3><p class="text-xs text-slate-500 mt-1">Add any new stock not classified as books or furniture.</p>
+                            <div class="text-3xl mb-2">▦</div><h3 class="font-bold text-slate-800">General Stock</h3><p class="text-xs text-slate-500 mt-1">Add any new stock not classified as books or furniture.</p>
                         </button>
 
                         <button onclick="switchTab('storekeeper','sk-furniture')" class="text-left bg-white p-6 rounded-xl border-2 border-[#d8c5be] shadow-sm hover:shadow-lg transition">
@@ -1739,7 +2064,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-2xl font-light text-slate-900 lato-light">Book Inventory Catalog</h2>
-                            <p class="text-slate-600 text-sm">Add, update, and inspect books available in the school library.</p>
+                            <p class="text-slate-600 text-sm">Add a general book name/type, then click it to view and manage every individual copy.</p>
                         </div>
                         <button onclick="showAddBookModal()" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 shadow">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i> Add New Book
@@ -1750,11 +2075,11 @@
                         <table class="w-full text-left text-xs">
                             <thead class="bg-slate-100 uppercase text-slate-700">
                                 <tr>
+                                    <th class="p-3">General Book Name</th>
                                     <th class="p-3">ISBN / Code</th>
-                                    <th class="p-3">Book Title</th>
-                                    <th class="p-3">Author</th>
+                                    <th class="p-3">Author / Publisher</th>
                                     <th class="p-3">Subject / Category</th>
-                                    <th class="p-3">Total Qty</th>
+                                    <th class="p-3">Total Copies</th>
                                     <th class="p-3">Available</th>
                                     <th class="p-3">Actions</th>
                                 </tr>
@@ -1768,6 +2093,10 @@
 
                 <!-- TAB: Issue / Return -->
                 <div id="l-circulations" class="tab-content">
+                    <div class="mb-4 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                        <h3 class="font-bold text-emerald-900">Clear Returned / Due Books</h3>
+                        <p class="text-xs text-emerald-800 mt-1">Returned individual copies can be cleared here and made available for re-issue.</p>
+                    </div>
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-2xl font-light text-slate-900 lato-light">Book Issue & Return Circulation</h2>
@@ -1786,6 +2115,7 @@
                                     <th class="p-3">Patron Name</th>
                                     <th class="p-3">Patron Type</th>
                                     <th class="p-3">Book Title</th>
+                                    <th class="p-3">Individual Registration No.</th>
                                     <th class="p-3">Issue Date</th>
                                     <th class="p-3">Due Date</th>
                                     <th class="p-3">Status</th>
@@ -1827,19 +2157,29 @@
 
                 <!-- TAB: Library Book Profile -->
                 <div id="l-book-profile" class="tab-content">
-                    <div class="mb-6 flex items-center justify-between gap-4">
+                    <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div>
-                            <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">Library Book Profile</p>
+                            <p class="text-xs uppercase font-bold tracking-wider text-emerald-700">General Book Profile</p>
                             <h2 id="library-page-book-title" class="text-2xl font-light text-slate-900">Book Details</h2>
                             <p id="library-page-book-isbn" class="text-slate-600 text-sm mt-1"></p>
                         </div>
-                        <button type="button" onclick="switchTab('librarian','l-search')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold">Back to Search</button>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="showAddLibraryCopyModal()" class="bg-[--dark-green-deep] text-white px-4 py-2 rounded-lg text-xs font-bold">+ Add Individual Copy</button>
+                            <button type="button" onclick="switchTab('librarian','l-catalog')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2 rounded-lg text-xs font-bold">Back to Book Inventory</button>
+                        </div>
                     </div>
-                    <div class="grid md:grid-cols-4 gap-4 mb-6">
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Author</p><p id="library-page-book-author" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Author / Publisher</p><p id="library-page-book-author" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Category</p><p id="library-page-book-subject" class="font-bold text-lg text-slate-900 mt-1">?</p></div>
-                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Total Copies</p><p id="library-page-book-total" class="font-bold text-lg text-indigo-800 mt-1">0</p></div>
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Total Individual Copies</p><p id="library-page-book-total" class="font-bold text-lg text-indigo-800 mt-1">0</p></div>
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Available Copies</p><p id="library-page-book-available" class="font-bold text-lg text-emerald-700 mt-1">0</p></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                            <div><h3 class="font-bold text-lg text-slate-800">Individual Copies</h3><p class="text-xs text-slate-500">Each physical book must have its own registration number.</p></div>
+                            <button type="button" onclick="showAddLibraryCopyModal()" class="bg-emerald-700 text-white px-3 py-2 rounded-lg text-xs font-bold">Add Copy</button>
+                        </div>
+                        <div id="library-page-book-copies"></div>
                     </div>
                     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                         <h3 class="font-bold text-lg text-slate-800 mb-4">Borrowing Records for This Book</h3>
@@ -1862,6 +2202,15 @@
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Books Borrowed</p><p id="library-page-profile-count" class="font-bold text-lg text-indigo-800 mt-1">0</p></div>
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Borrowing Status</p><p id="library-page-profile-status" class="font-bold mt-1">No</p></div>
                         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm"><p class="text-xs uppercase font-bold text-slate-500">Penalty / Fine</p><p id="library-page-profile-fine" class="font-bold text-lg text-purple-900 mt-1">KES 0</p></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-emerald-200 shadow-sm mb-6">
+                        <h3 class="font-bold text-lg text-slate-800 mb-3">Library Actions</h3>
+                        <p class="text-xs text-slate-500 mb-4">Manage this learner directly from the search result.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="issueBookToLibraryPatron('student')" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-4 py-2 rounded-lg text-xs font-bold">Issue Book</button>
+                            <button type="button" onclick="clearFineForCurrentLibraryProfile('student')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Clear Fine</button>
+                            <button type="button" onclick="clearReturnedBooksForCurrentLibraryProfile('student')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Clear Returned Book</button>
+                        </div>
                     </div>
                     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                         <h3 class="font-bold text-lg text-slate-800 mb-4">Borrowing History</h3>
@@ -1927,6 +2276,24 @@
           <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Borrowing Status</p><p id="library-profile-status" class="font-bold mt-1">Not borrowing</p></div>
           <div class="p-4 bg-slate-50 rounded-xl border"><p class="text-xs uppercase font-bold text-slate-500">Fine</p><p id="library-profile-fine" class="font-bold mt-1">KES 0</p></div>
         </div>
+        <div class="mt-6 p-4 bg-white border border-emerald-200 rounded-xl">
+          <h3 class="font-bold text-lg text-slate-800 mb-3">Library Actions</h3>
+          <p class="text-xs text-slate-500 mb-4">Manage this teacher directly from the search result.</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="issueBookToLibraryPatron('teacher')" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-4 py-2 rounded-lg text-xs font-bold">Issue Book</button>
+            <button type="button" onclick="clearFineForCurrentLibraryProfile('teacher')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Clear Fine</button>
+            <button type="button" onclick="clearReturnedBooksForCurrentLibraryProfile('teacher')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Clear Returned Book</button>
+          </div>
+        </div>
+        <div class="mt-6 bg-white border border-emerald-200 rounded-xl p-5 shadow-sm">
+          <h3 class="font-bold text-lg text-slate-800 mb-1">Library Actions — Assign / Return / Clear Fine</h3>
+          <p class="text-xs text-slate-500 mb-4">Manage this teacher directly from the library search profile.</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="issueBookToLibraryPatron('teacher')" class="bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white px-4 py-2 rounded-lg text-xs font-bold">Assign / Issue Book</button>
+            <button type="button" onclick="returnSpecificBookForCurrentLibraryProfile('teacher')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Return Book</button>
+            <button type="button" onclick="clearFineForCurrentLibraryProfile('teacher')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold">Clear Fine</button>
+          </div>
+        </div>
         <div class="mt-6 border rounded-xl overflow-hidden"><div class="p-4 bg-slate-100 border-b"><h3 class="font-bold">Borrowing History</h3></div><div id="library-profile-history" class="p-4"></div></div>
       </div>
     </div>
@@ -1953,7 +2320,7 @@
     </div>
 
     <!-- LOGIN MODAL -->
-    <div id="login-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+    <div id="login-modal" class="fixed inset-0 bg-black/50 hidden z-[100] flex items-center justify-center p-4 no-print">
         <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
             <button onclick="hideLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
                 <i data-lucide="x" class="w-6 h-6"></i>
@@ -2031,34 +2398,48 @@
             <button onclick="hideAddBookModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h3 id="book-modal-title" class="text-2xl font-bold text-slate-900 mb-1">Add New Book</h3>
-            <p class="text-xs text-slate-500 mb-4">Enter book catalog specifications.</p>
-
+            <h3 id="book-modal-heading" class="text-2xl font-bold text-slate-900 mb-1">Add New Book</h3>
+            <p class="text-xs text-slate-500 mb-4">First create the general book entry. Individual physical copies and their registration numbers are added from the book profile.</p>
             <form onsubmit="saveBook(event)" class="space-y-3 text-xs">
-                <input type="hidden" id="book-id-input" value="">
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">General Book Name / Type</label>
+                    <input type="text" id="b-modal-title" required placeholder="e.g. KLB Mathematics Form 3" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                </div>
                 <div>
                     <label class="block font-semibold uppercase mb-1 text-slate-700">ISBN / Code</label>
-                    <input type="text" id="b-modal-isbn" required placeholder="e.g. 978-9966-50-123-4" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                    <input type="text" id="b-modal-isbn" placeholder="e.g. 978-9966-50-123-4" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase mb-1 text-slate-700">Book Title</label>
-                    <input type="text" id="b-modal-title" required placeholder="e.g. Comprehensive Mathematics Form 3" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
-                </div>
-                <div>
-                    <label class="block font-semibold uppercase mb-1 text-slate-700">Author</label>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Author / Publisher</label>
                     <input type="text" id="b-modal-author" required placeholder="e.g. KLB Publishers" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
                 </div>
                 <div>
                     <label class="block font-semibold uppercase mb-1 text-slate-700">Subject / Category</label>
                     <input type="text" id="b-modal-subject" required placeholder="e.g. Mathematics" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
                 </div>
-                <div>
-                    <label class="block font-semibold uppercase mb-1 text-slate-700">Total Quantity</label>
-                    <input type="number" id="b-modal-qty" min="1" required value="10" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
-                </div>
                 <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg transition text-xs mt-2">
-                    Save Book Entry
+                    Create General Book Profile
                 </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD INDIVIDUAL COPY MODAL -->
+    <div id="library-copy-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="hideAddLibraryCopyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">Add Individual Book Copy</h3>
+            <p id="library-copy-book-name" class="text-sm font-semibold text-emerald-800 mb-4"></p>
+            <form onsubmit="saveLibraryCopy(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="library-copy-title-id">
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Individual Registration / Accession No.</label>
+                    <input type="text" id="library-copy-reg-no" required placeholder="e.g. BLI-MATH-F3-002" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                    <p class="text-[11px] text-slate-500 mt-1">Enter the exact number written/stamped on this physical book.</p>
+                </div>
+                <button type="submit" class="w-full bg-[--dark-green-deep] hover:bg-[--dark-green-light] text-white font-bold py-2.5 rounded-lg">Save Individual Copy</button>
             </form>
         </div>
     </div>
@@ -2069,22 +2450,25 @@
             <button onclick="hideIssueBookModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h3 class="text-2xl font-bold text-slate-900 mb-1">Issue Book to Patron</h3>
-            <p class="text-xs text-slate-500 mb-4">Record a book checkout transaction.</p>
+            <h3 class="text-2xl font-bold text-slate-900 mb-1">Issue Book to Learner</h3>
+            <p class="text-xs text-slate-500 mb-4">Enter the exact book name and the individual registration number written on the physical book.</p>
 
             <form onsubmit="saveIssuedBook(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block font-semibold uppercase mb-1 text-slate-700">Select Patron</label>
-                    <select id="issue-patron-select" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
-                        <!-- Populated dynamically -->
-                    </select>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Learner</label>
+                    <input id="issue-profile-patron" type="text" readonly class="w-full px-3 py-2 border rounded-lg bg-slate-100 font-bold text-slate-800">
+                    <input id="issue-patron-select" type="hidden">
                 </div>
                 <div>
-                    <label class="block font-semibold uppercase mb-1 text-slate-700">Select Book</label>
-                    <select id="issue-book-select" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
-                        <!-- Populated dynamically -->
-                    </select>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Book Name</label>
+                    <input id="issue-book-name-input" type="text" required autocomplete="off" placeholder="e.g. KLB Mathematics Form 3" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
                 </div>
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Individual Registration No.</label>
+                    <input id="issue-book-reg-input" type="text" required autocomplete="off" placeholder="e.g. BLI-MATH-F3-003" class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                    <p class="text-[11px] text-slate-500 mt-1">The registration number must already exist in the library system and must belong to the book name entered above.</p>
+                </div>
+                <div id="issue-book-lookup-status" class="hidden p-3 rounded-lg text-xs font-bold"></div>
                 <div>
                     <label class="block font-semibold uppercase mb-1 text-slate-700">Due Date</label>
                     <input type="date" id="issue-due-date" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
@@ -2112,6 +2496,12 @@
                 <div>
                     <label class="block font-semibold uppercase mb-1 text-slate-700">Selected Day</label>
                     <input type="text" id="wizard-day-display" disabled class="w-full px-3 py-2 border rounded-lg bg-slate-100 font-bold text-slate-800">
+                </div>
+
+                <div>
+                    <label class="block font-semibold uppercase mb-1 text-slate-700">Actual Date <span class="text-red-500">*</span></label>
+                    <input type="date" id="wizard-date" required class="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[--dark-brown]">
+                    <p id="wizard-date-help" class="text-[11px] text-slate-500 mt-1">Select the actual calendar date for this remedial session.</p>
                 </div>
 
                 <div>
@@ -2287,10 +2677,17 @@ window.addEventListener("beforeunload", savePortalRoute);
             }
         ];
 
+        // General library titles (the catalogue level). Individual physical books are stored in libraryBooks.
+        let libraryBookTitles = [
+            { id: 'title-1', title: 'Secondary Mathematics Form 3', isbn: '', author: 'KLB Publishers', subject: 'Mathematics' },
+            { id: 'title-2', title: 'Kiswahili Mufti Kidato cha 3', isbn: '', author: 'Moran Publishers', subject: 'Kiswahili' },
+            { id: 'title-3', title: 'Comprehensive Physics Form 4', isbn: '', author: 'Longhorn', subject: 'Physics' }
+        ];
+
         let libraryBooks = [
-            { id: 1, isbn: "978-9966-50-101-1", title: "Secondary Mathematics Form 3", author: "KLB Publishers", subject: "Mathematics", totalQty: 30, availableQty: 26 },
-            { id: 2, isbn: "978-9966-50-102-8", title: "Kiswahili Mufti Kidato cha 3", author: "Moran Publishers", subject: "Kiswahili", totalQty: 25, availableQty: 23 },
-            { id: 3, isbn: "978-9966-50-103-5", title: "Comprehensive Physics Form 4", author: "Longhorn", subject: "Physics", totalQty: 20, availableQty: 18 }
+            { id: 'sample-1-001', registrationNo: 'BLI-MATH-F3-001', copyNo: 1, titleId: 'title-1', title: 'Secondary Mathematics Form 3', isbn: '', author: 'KLB Publishers', subject: 'Mathematics', status: 'Available', borrower: '', issueDate: '', dueDate: '' },
+            { id: 'sample-2-001', registrationNo: 'BLI-KIS-F3-001', copyNo: 1, titleId: 'title-2', title: 'Kiswahili Mufti Kidato cha 3', isbn: '', author: 'Moran Publishers', subject: 'Kiswahili', status: 'Available', borrower: '', issueDate: '', dueDate: '' },
+            { id: 'sample-3-001', registrationNo: 'BLI-PHY-F4-001', copyNo: 1, titleId: 'title-3', title: 'Comprehensive Physics Form 4', isbn: '', author: 'Longhorn', subject: 'Physics', status: 'Available', borrower: '', issueDate: '', dueDate: '' }
         ];
 
         let libraryPatrons = [
@@ -2522,6 +2919,21 @@ window.addEventListener("beforeunload", savePortalRoute);
             }
 
             const satLessons = [];
+            const saturdayCount = totals.sat;
+            const satDateEl = document.getElementById('sat-date');
+            const satDate = satDateEl ? satDateEl.value : '';
+            if (saturdayCount > 0) {
+                if (!satDate) {
+                    alert(`Please select the Saturday date for ${week.label}.`);
+                    return null;
+                }
+                const satCalendarDate = new Date(satDate + 'T12:00:00');
+                const satDay = satCalendarDate.toLocaleDateString('en-US', { weekday: 'long' });
+                if (satDay !== 'Saturday') {
+                    alert(`The selected Saturday date is ${satDay}. Please choose a date that falls on Saturday.`);
+                    return null;
+                }
+            }
             for (let i = 1; i <= 4; i++) {
                 const enabled = document.getElementById(`sat-l${i}-enable`).checked;
                 if (enabled) {
@@ -2531,7 +2943,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                         alert(`Please select the subject and target class for Saturday Lesson ${i} in ${week.label}.`);
                         return null;
                     }
-                    satLessons.push({ lesson: i, subject, class: className });
+                    satLessons.push({ lesson: i, day: 'Saturday', date: satDate, subject, class: className });
                 }
             }
 
@@ -2539,7 +2951,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                 weekId: week.id, weekLabel: week.label,
                 mornTotal: totals.morn, mornEntries: [...selectedMornDays],
                 eveTotal: totals.eve, eveEntries: [...selectedEveDays],
-                satLessons, satTotal: totals.sat, grandTotal: totals.grandTotal
+                satDate: satDate || '', satLessons, satTotal: totals.sat, grandTotal: totals.grandTotal
             };
         }
 
@@ -2552,6 +2964,8 @@ window.addEventListener("beforeunload", savePortalRoute);
             }
             selectedMornDays = [...(draft.mornEntries || [])];
             selectedEveDays = [...(draft.eveEntries || [])];
+            const satDateEl = document.getElementById('sat-date');
+            if (satDateEl) satDateEl.value = draft.satDate || (draft.satLessons && draft.satLessons[0] ? (draft.satLessons[0].date || '') : '');
             (draft.satLessons || []).forEach(item => {
                 const enable = document.getElementById(`sat-l${item.lesson}-enable`);
                 const subject = document.getElementById(`sat-l${item.lesson}-subject`);
@@ -2690,7 +3104,8 @@ window.addEventListener("beforeunload", savePortalRoute);
             loadCollection('schoolDocuments', schoolDocuments, a=>{schoolDocuments=a; renderSchoolDocuments();});
             loadCollection('contactMessages', contactMessages, a=>{contactMessages=a; renderContactInquiries();});
             db.ref('continuousAssessment').on('value', snap => { const data=snap.val()||{}; continuousAssessmentMarks=Object.keys(data).map(k=>({id:k,...data[k]})); renderContinuousAssessmentMarks(); }, showFirebaseError);
-            loadCollection('library/books', libraryBooks, a=>{libraryBooks=a; renderLibraryModule();});
+            loadCollection('library/catalog', libraryBookTitles, a=>{libraryBookTitles=a; if(!libraryBookTitles.length){ libraryBookTitles=deriveLibraryBookTitles(); } renderLibraryModule();});
+            loadCollection('library/books', libraryBooks, a=>{libraryBooks=a; libraryBooks.forEach((b,i)=>{ if(!b.registrationNo) b.registrationNo='LEGACY-'+String(b.copyNo || i+1).padStart(3,'0'); }); if(!libraryBookTitles.length){ libraryBookTitles=deriveLibraryBookTitles(); } renderLibraryModule();});
             loadCollection('library/patrons', libraryPatrons, a=>{libraryPatrons=a; renderLibraryModule();});
             loadCollection('library/circulations', libraryCirculations, a=>{libraryCirculations=a; renderLibraryModule();});
             db.ref('admissions').on('value', snap => { admissionsData=Object.keys(snap.val()||{}).map(k=>({id:k,...snap.val()[k]})); renderAdmissionsTable(); syncAdmittedStudentsToLibrary(); renderLibraryModule(); }, showFirebaseError);
@@ -2850,11 +3265,13 @@ window.addEventListener("beforeunload", savePortalRoute);
             const userNav = document.getElementById('user-nav');
 
             if (viewId === 'public') {
+                document.body.classList.remove('portal-mode');
                 sidebar.classList.add('hidden');
                 portalContent.classList.add('hidden');
                 publicNav.classList.remove('hidden');
                 userNav.classList.add('hidden');
             } else {
+                document.body.classList.add('portal-mode');
                 sidebar.classList.remove('hidden');
                 portalContent.classList.remove('hidden');
                 publicNav.classList.add('hidden');
@@ -4079,17 +4496,10 @@ function searchStoreDashboard(query){
             const juniorSchool = document.getElementById('adm-junior-school')?.value.trim();
             const pathway = document.getElementById('adm-pathway')?.value;
             const gender = document.getElementById('adm-gender')?.value;
-            const fileInput = document.getElementById('adm-results-slip');
-            const file = fileInput && fileInput.files ? fileInput.files[0] : null;
             const submitButton = e && e.target ? e.target.querySelector('button[type="submit"]') : null;
 
-            if (!learnerName || !classJoining || !assessmentNumber || !birthCertificateNo || !juniorSchool || !pathway || !gender || !file) {
-                alert('Please complete all admission fields and select the learner\'s KJSEA results slip.');
-                return false;
-            }
-
-            if (!storage || typeof storage.ref !== 'function') {
-                alert('Firebase Storage is not available. Please check the Firebase configuration.');
+            if (!learnerName || !classJoining || !assessmentNumber || !birthCertificateNo || !juniorSchool || !pathway || !gender) {
+                alert('Please complete all admission fields.');
                 return false;
             }
             if (!db || typeof db.ref !== 'function') {
@@ -4101,34 +4511,12 @@ function searchStoreDashboard(query){
             const originalButtonText = submitButton ? submitButton.innerHTML : '';
 
             try {
-                // Upload the actual results slip to Firebase Storage first.
                 if (submitButton) {
                     submitButton.disabled = true;
-                    submitButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-1"></i> Uploading Results Slip...';
-                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                    submitButton.innerHTML = 'Saving Admission...';
                 }
 
-                const safeFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-                const storageRef = storage.ref('admissionResultsSlips/' + admissionId + '_' + safeFileName);
-                const uploadTask = storageRef.put(file);
-
-                const snapshot = await new Promise((resolve, reject) => {
-                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-                        snap => {
-                            const pct = snap.totalBytes ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
-                            if (submitButton) {
-                                submitButton.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin inline-block mr-1"></i> Uploading Results Slip ' + pct + '%...';
-                                if (typeof lucide !== 'undefined') lucide.createIcons();
-                            }
-                        },
-                        reject,
-                        () => resolve(uploadTask.snapshot)
-                    );
-                });
-
-                const resultsSlipURL = await snapshot.ref.getDownloadURL();
                 const admissionNumber = generateAdmissionNumber();
-
                 const admission = {
                     id: admissionId,
                     admissionNumber,
@@ -4139,31 +4527,19 @@ function searchStoreDashboard(query){
                     juniorSchool,
                     pathway,
                     gender,
-                    resultsSlipName: file.name,
-                    resultsSlipURL,
-                    resultsSlipPath: 'admissionResultsSlips/' + admissionId + '_' + safeFileName,
                     submittedAt: new Date().toLocaleString(),
                     submittedAtISO: new Date().toISOString()
                 };
 
-                // Save the complete admission record, including the Storage URL.
                 await db.ref('admissions/' + admissionId).set(admission);
-                document.getElementById('adm-admission-number').value = admissionNumber;
-                alert('Admission record and KJSEA results slip saved successfully.');
-
-                // The realtime listener will render the saved record.
-                if (fileInput) fileInput.value = '';
-                e.target.reset();
-                document.getElementById('adm-admission-number').value = admissionNumber;
+                const admissionNumberEl = document.getElementById('adm-admission-number');
+                if (admissionNumberEl) admissionNumberEl.value = admissionNumber;
+                if (e && e.target) e.target.reset();
+                if (admissionNumberEl) admissionNumberEl.value = admissionNumber;
+                alert('Admission record saved successfully.');
             } catch (error) {
-                console.error('Admission save/upload failed:', error);
-                let message = error && error.message ? error.message : String(error);
-                if (error && error.code === 'storage/unauthorized') {
-                    message = 'Firebase Storage denied the results-slip upload. Check your Firebase Storage rules.';
-                } else if (error && error.code === 'storage/canceled') {
-                    message = 'The results-slip upload was cancelled.';
-                }
-                alert('Admission could not be saved.\n\n' + message);
+                console.error('Admission save failed:', error);
+                alert('Admission could not be saved.\n\n' + (error?.message || String(error)));
             } finally {
                 if (submitButton) {
                     submitButton.disabled = false;
@@ -4177,26 +4553,16 @@ function searchStoreDashboard(query){
         function renderAdmissionsTable() {
             const body = document.getElementById('admissions-table-body');
             if (!body) return;
-
             const rows = Array.isArray(admissionsData) ? admissionsData : [];
             if (!rows.length) {
-                body.innerHTML = '<tr><td colspan="9" class="p-6 text-center text-slate-400 italic">No admission records found.</td></tr>';
+                body.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-slate-400 italic">No admission records found.</td></tr>';
                 return;
             }
-
             const esc = value => {
                 if (typeof escapeLibrarySearchHtml === 'function') return escapeLibrarySearchHtml(value ?? '');
                 return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
             };
-
-            body.innerHTML = rows.map(a => {
-                const slipUrl = a.resultsSlipURL || a.resultsSlipUrl || a.downloadURL || '';
-                const slipName = a.resultsSlipName || '';
-                const slipCell = slipUrl
-                    ? `<button type="button" onclick="openAdmissionResultsSlip('${esc(a.id)}'); return false;" class="text-[--dark-green-deep] hover:underline font-semibold inline-flex items-center gap-1" title="Open results slip"><i data-lucide="file-text" class="w-4 h-4"></i>${esc(slipName || 'Open Slip')}</button>`
-                    : `<span class="text-slate-400" title="No results slip URL saved">${esc(slipName || 'Not available')}</span>`;
-
-                return `
+            body.innerHTML = rows.map(a => `
                 <tr class="hover:bg-slate-50">
                     <td class="p-2 border font-bold text-emerald-700">${esc(a.admissionNumber || 'Pending')}</td>
                     <td class="p-2 border">${esc(a.learnerName || '')}</td>
@@ -4206,24 +4572,7 @@ function searchStoreDashboard(query){
                     <td class="p-2 border">${esc(a.juniorSchool || '')}</td>
                     <td class="p-2 border">${esc(a.pathway || '')}</td>
                     <td class="p-2 border">${esc(a.gender || '')}</td>
-                    <td class="p-2 border">${slipCell}</td>
-                </tr>`;
-            }).join('');
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function openAdmissionResultsSlip(id) {
-            const admission = (Array.isArray(admissionsData) ? admissionsData : []).find(a => String(a.id) === String(id));
-            const url = admission && (admission.resultsSlipURL || admission.resultsSlipUrl || admission.downloadURL);
-            if (!url) {
-                alert('This learner does not have an accessible results slip saved. Older records may need the slip uploaded again.');
-                return false;
-            }
-
-            const viewer = window.open(url, '_blank', 'noopener');
-            if (!viewer) window.location.href = url;
-            return false;
+                </tr>`).join('');
         }
 
         function saveOpportunity(e) {
@@ -4381,7 +4730,7 @@ function searchStoreDashboard(query){
         function assignAdmissionNumber(admission) {
             if (!admission || !admission.assessmentNumber ||
                 !admission.birthCertificateNo || !admission.juniorSchool ||
-                !admission.pathway || !admission.gender || !admission.resultsSlipName) {
+                !admission.pathway || !admission.gender) {
                 return null;
             }
             return generateAdmissionNumber();
@@ -4438,6 +4787,7 @@ function searchStoreDashboard(query){
             const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue');
             const patron = libraryPatrons.find(p => String(p.admNo || '') === String(student.admNo));
             const fine = Number((patron && patron.fine) || 0);
+            currentLibraryProfile = { type: 'student', id: String(student.id), name: student.name, admNo: student.admNo || '' };
 
             // Open the dedicated student profile tab, NOT Patrons & Fines.
             switchTab('librarian', 'l-student-profile', false);
@@ -4471,6 +4821,7 @@ function searchStoreDashboard(query){
                 String(p.name || '') === String(name) || String(p.admNo || '') === String(staffId)
             );
             const fine = Number((patron && patron.fine) || 0);
+            currentLibraryProfile = { type: 'teacher', id: String(teacher.id || teacher.tscNo || teacher.name), name: name, admNo: staffId || '' };
             const subjects = Array.isArray(teacher.subjects) ? teacher.subjects.join(', ') : (teacher.subjects || teacher.dept || teacher.subject || 'Not specified');
             const streams = teacher.streams || teacher.classes || 'Not specified';
 
@@ -4491,35 +4842,255 @@ function searchStoreDashboard(query){
         function closeLibraryTeacherProfile(){ document.getElementById('library-teacher-profile-modal')?.classList.add('hidden'); }
 
         // ================= LIBRARIAN MODULE FUNCTIONS =================
+        let currentLibraryProfile = { type: '', id: '', name: '', admNo: '' };
+
+        function findOrCreateLibraryPatron(name, type, identifier) {
+            let patron = libraryPatrons.find(p =>
+                String(p.name || '') === String(name || '') &&
+                String(p.type || '').toLowerCase() === String(type || '').toLowerCase()
+            );
+            if (!patron) {
+                patron = {
+                    id: 'p_' + String(identifier || name || Date.now()),
+                    name: name,
+                    type: type,
+                    admNo: identifier || '',
+                    fine: 0
+                };
+                libraryPatrons.push(patron);
+                db.ref('library/patrons/' + patron.id).set(patron).catch(showFirebaseError);
+            }
+            return patron;
+        }
+
+        function issueBookToLibraryPatron(type) {
+            const name = currentLibraryProfile.name;
+            const identifier = currentLibraryProfile.admNo || currentLibraryProfile.id;
+            if (!name) { alert('No library patron is selected.'); return; }
+
+            const patron = findOrCreateLibraryPatron(name, type === 'teacher' ? 'Teacher' : 'Student', identifier);
+            const profilePatron = document.getElementById('issue-profile-patron');
+            const hiddenPatron = document.getElementById('issue-patron-select');
+            if (profilePatron) profilePatron.value = `${patron.name} (${patron.type})${identifier ? ' — ' + identifier : ''}`;
+            if (hiddenPatron) hiddenPatron.value = patron.name;
+
+            const bookName = document.getElementById('issue-book-name-input');
+            const bookReg = document.getElementById('issue-book-reg-input');
+            const status = document.getElementById('issue-book-lookup-status');
+            if (bookName) bookName.value = '';
+            if (bookReg) bookReg.value = '';
+            if (status) { status.className = 'hidden p-3 rounded-lg text-xs font-bold'; status.textContent = ''; }
+
+            document.getElementById('issue-due-date').value = new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
+            document.getElementById('issue-book-modal').classList.remove('hidden');
+            setTimeout(() => bookName?.focus(), 50);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function clearFineForCurrentLibraryProfile(type) {
+            const patron = findOrCreateLibraryPatron(currentLibraryProfile.name, type === 'teacher' ? 'Teacher' : 'Student', currentLibraryProfile.admNo || currentLibraryProfile.id);
+            clearFine(patron.id);
+        }
+
+        async function returnSpecificBookForCurrentLibraryProfile(type) {
+            const current = type === 'teacher' ? window.currentLibraryTeacherProfile : window.currentLibraryStudentProfile;
+            if (!current) { alert('Open the patron profile first.'); return; }
+            const name = current.name || '';
+            const active = libraryCirculations.filter(c => String(c.patronName || '') === String(name) && (c.status === 'Active' || c.status === 'Overdue'));
+            if (!active.length) { alert('This patron has no active borrowed book.'); return; }
+            const choices = active.map((c,i) => `${i+1}. ${c.bookTitle} — Reg. ${c.registrationNo || ('COPY-' + (c.copyNo || c.bookId || ''))}`).join('\n');
+            const answer = prompt('Enter the number of the EXACT book being returned:\n\n' + choices);
+            if (answer === null) return;
+            const index = Number(answer) - 1;
+            if (!Number.isInteger(index) || !active[index]) { alert('Invalid selection. No book was returned.'); return; }
+            const txn = active[index];
+            const reg = txn.registrationNo || '';
+            const confirmReg = prompt('Enter the individual registration number written on the returned book:\n\nExpected: ' + reg);
+            if (confirmReg === null) return;
+            if (String(confirmReg).trim().toLowerCase() !== String(reg).trim().toLowerCase()) {
+                alert('Registration number does not match the issued book. The return was NOT recorded.');
+                return;
+            }
+            await markBookReturned(txn.id);
+        }
+
+        async function returnBooksForCurrentLibraryProfile(type) {
+            if (!currentLibraryProfile || currentLibraryProfile.type !== type) {
+                alert('Open a learner or teacher profile first.');
+                return;
+            }
+            const name = currentLibraryProfile.name;
+            const patronId = String(currentLibraryProfile.id || '');
+            const active = libraryCirculations.filter(c =>
+                (String(c.patronId || '') === patronId || String(c.patronName || '') === String(name)) &&
+                (c.status === 'Active' || c.status === 'Overdue')
+            );
+            if (!active.length) {
+                alert('This patron has no active borrowed book to return.');
+                return;
+            }
+            if (!confirm('Return all currently borrowed books for ' + name + '?')) return;
+            const updates = {};
+            active.forEach(c => {
+                updates['library/circulations/' + c.id + '/status'] = 'Returned';
+                updates['library/circulations/' + c.id + '/returnDate'] = new Date().toISOString().slice(0,10);
+                if (c.bookId) {
+                    updates['library/books/' + c.bookId + '/status'] = 'Available';
+                    updates['library/books/' + c.bookId + '/borrower'] = '';
+                    updates['library/books/' + c.bookId + '/dueDate'] = '';
+                }
+            });
+            db.ref().update(updates).then(() => {
+                alert('Book(s) returned successfully.');
+                if (type === 'student') openLibraryStudentProfile(currentLibraryProfile.id);
+                else openLibraryTeacherProfile(currentLibraryProfile.id);
+            }).catch(showFirebaseError);
+        }
+
+        async function clearReturnedBooksForCurrentLibraryProfile(type) {
+            const name = currentLibraryProfile.name;
+            const patronType = type === 'teacher' ? 'Teacher' : 'Student';
+            if (!name) return;
+
+            const records = libraryCirculations.filter(c =>
+                String(c.patronName || '') === String(name) &&
+                String(c.patronType || '').toLowerCase() === patronType.toLowerCase() &&
+                String(c.status || '').toLowerCase() === 'returned'
+            );
+            if (!records.length) {
+                alert('There are no returned books to clear for this patron.');
+                return;
+            }
+            if (!confirm(`Clear ${records.length} returned book copy/copies for ${name}?`)) return;
+
+            const writes = [];
+            records.forEach(txn => {
+                if (txn.bookId) {
+                    const book = libraryBooks.find(b => String(b.id) === String(txn.bookId));
+                    if (book) {
+                        book.status = 'Available';
+                        book.borrower = '';
+                        book.issueDate = '';
+                        book.dueDate = '';
+                        writes.push(db.ref('library/books/' + book.id).set(book));
+                    }
+                }
+                txn.cleared = true;
+                txn.clearedDate = new Date().toISOString().split('T')[0];
+                writes.push(db.ref('library/circulations/' + txn.id).set(txn));
+            });
+            try {
+                await Promise.all(writes);
+                renderLibraryModule();
+                if (type === 'student') {
+                    openLibraryStudentProfile(currentLibraryProfile.id);
+                } else {
+                    openLibraryTeacherProfile(currentLibraryProfile.id);
+                }
+                alert('Returned book copies cleared successfully and are available for re-issue.');
+            } catch (err) {
+                showFirebaseError(err);
+            }
+        }
+
         function escapeLibrarySearchHtml(value) {
             return String(value ?? '').replace(/[&<>'"]/g, ch => ({
                 '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
             }[ch]));
         }
 
+        function deriveLibraryBookTitles() {
+            const map = {};
+            libraryBooks.forEach((b, i) => {
+                const title = String(b.title || 'Untitled Book').trim() || 'Untitled Book';
+                const key = String(b.titleId || title).toLowerCase();
+                if (!map[key]) map[key] = { id: b.titleId || ('derived-' + i), title, isbn: b.isbn || '', author: b.author || '', subject: b.subject || '' };
+            });
+            return Object.values(map);
+        }
+
+        function getLibraryBookTitleRecord(idOrBook) {
+            const id = typeof idOrBook === 'object' ? idOrBook.titleId : idOrBook;
+            let rec = libraryBookTitles.find(t => String(t.id) === String(id));
+            if (rec) return rec;
+            const book = typeof idOrBook === 'object' ? idOrBook : libraryBooks.find(b => String(b.id) === String(idOrBook));
+            if (!book) return null;
+            rec = libraryBookTitles.find(t => String(t.title || '').trim().toLowerCase() === String(book.title || '').trim().toLowerCase());
+            return rec || null;
+        }
+
+        function toggleLibraryBookGroup(groupId) {
+            const row = document.getElementById(groupId);
+            const icon = document.getElementById(groupId + '-icon');
+            if (!row) return;
+            row.classList.toggle('hidden');
+            if (icon) {
+                icon.setAttribute('data-lucide', row.classList.contains('hidden') ? 'chevron-right' : 'chevron-down');
+                if (typeof lucide !== 'undefined') lucide.createIcons();
+            }
+        }
+
         function openLibraryBookProfile(id) {
-            const book = libraryBooks.find(b => String(b.id) === String(id));
-            if (!book) { alert('Book record not found.'); return false; }
+            let titleRec = getLibraryBookTitleRecord(id);
+            if (!titleRec) {
+                const book = libraryBooks.find(b => String(b.id) === String(id));
+                if (book) {
+                    titleRec = { id: book.titleId || ('title-' + Date.now()), title: book.title || 'Untitled Book', isbn: book.isbn || '', author: book.author || '', subject: book.subject || '' };
+                    libraryBookTitles.push(titleRec);
+                }
+            }
+            if (!titleRec) { alert('Book profile not found.'); return false; }
 
-            const records = libraryCirculations.filter(c =>
-                String(c.bookId || '') === String(book.id) ||
-                String(c.bookTitle || '').trim().toLowerCase() === String(book.title || '').trim().toLowerCase()
-            );
-            const active = records.filter(c => c.status === 'Active' || c.status === 'Overdue');
+            const copies = libraryBooks.filter(b => String(b.titleId || '').toLowerCase() === String(titleRec.id).toLowerCase() || (String(b.title || '').trim().toLowerCase() === String(titleRec.title || '').trim().toLowerCase()));
+            const records = libraryCirculations.filter(c => copies.some(b => String(b.id) === String(c.bookId)) || String(c.bookTitle || '').trim().toLowerCase() === String(titleRec.title || '').trim().toLowerCase());
+            const available = copies.filter(b => String(b.status || 'Available').toLowerCase() === 'available').length;
 
+            window.currentLibraryBookTitleId = titleRec.id;
             switchTab('librarian', 'l-book-profile', false);
-            document.getElementById('library-page-book-title').textContent = book.title || 'Book Details';
-            document.getElementById('library-page-book-isbn').textContent = 'ISBN / Code: ' + (book.isbn || 'Not specified');
-            document.getElementById('library-page-book-author').textContent = book.author || 'Not specified';
-            document.getElementById('library-page-book-subject').textContent = book.subject || 'Not specified';
-            document.getElementById('library-page-book-total').textContent = Number(book.totalQty || 0);
-            document.getElementById('library-page-book-available').textContent = Number(book.availableQty || 0);
+            document.getElementById('library-page-book-title').textContent = titleRec.title || 'Book Details';
+            document.getElementById('library-page-book-isbn').textContent = 'ISBN / Code: ' + (titleRec.isbn || 'Not specified');
+            document.getElementById('library-page-book-author').textContent = titleRec.author || 'Not specified';
+            document.getElementById('library-page-book-subject').textContent = titleRec.subject || 'Not specified';
+            document.getElementById('library-page-book-total').textContent = copies.length;
+            document.getElementById('library-page-book-available').textContent = available;
 
-            document.getElementById('library-page-book-history').innerHTML = records.length ?
-                `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Borrower</th><th class="p-3 text-left">Category</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c => `<tr><td class="p-3 font-semibold">${escapeLibrarySearchHtml(c.patronName || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.patronType || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.issueDate || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.dueDate || '')}</td><td class="p-3 font-bold">${escapeLibrarySearchHtml(c.status || 'Unknown')}</td></tr>`).join('')}</tbody></table></div>` :
-                `<div class="p-5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800">No borrowing records for this book yet.</div>`;
+            document.getElementById('library-page-book-copies').innerHTML = copies.length ? `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Registration No.</th><th class="p-3 text-left">Copy</th><th class="p-3 text-left">Status</th><th class="p-3 text-left">Borrower</th><th class="p-3 text-left">Due Date</th></tr></thead><tbody class="divide-y">${copies.map((b,i)=>`<tr><td class="p-3 font-mono font-bold text-indigo-900">${escapeLibrarySearchHtml(b.registrationNo || 'NOT ASSIGNED')}</td><td class="p-3">${escapeLibrarySearchHtml(b.copyNo || i+1)}</td><td class="p-3 font-semibold">${escapeLibrarySearchHtml(b.status || 'Available')}</td><td class="p-3">${escapeLibrarySearchHtml(b.borrower || '—')}</td><td class="p-3">${escapeLibrarySearchHtml(b.dueDate || '—')}</td></tr>`).join('')}</tbody></table></div>` : `<div class="p-5 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-900">No individual copies have been added yet. Click <strong>Add Individual Copy</strong> to register the physical books.</div>`;
 
+            document.getElementById('library-page-book-history').innerHTML = records.length ? `<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Registration No.</th><th class="p-3 text-left">Borrower</th><th class="p-3 text-left">Issue Date</th><th class="p-3 text-left">Due Date</th><th class="p-3 text-left">Status</th></tr></thead><tbody class="divide-y">${records.map(c => `<tr><td class="p-3 font-mono font-bold">${escapeLibrarySearchHtml(c.registrationNo || '—')}</td><td class="p-3 font-semibold">${escapeLibrarySearchHtml(c.patronName || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.issueDate || '')}</td><td class="p-3">${escapeLibrarySearchHtml(c.dueDate || '')}</td><td class="p-3 font-bold">${escapeLibrarySearchHtml(c.status || 'Unknown')}</td></tr>`).join('')}</tbody></table></div>` : `<div class="p-5 bg-emerald-50 border border-emerald-200 rounded-lg text-sm text-emerald-800">No borrowing records for this book yet.</div>`;
             return false;
+        }
+
+        function showAddLibraryCopyModal() {
+            const titleId = window.currentLibraryBookTitleId;
+            const titleRec = libraryBookTitles.find(t => String(t.id) === String(titleId));
+            if (!titleRec) { alert('Open a general book profile first.'); return; }
+            document.getElementById('library-copy-title-id').value = titleRec.id;
+            document.getElementById('library-copy-book-name').textContent = titleRec.title;
+            document.getElementById('library-copy-reg-no').value = '';
+            document.getElementById('library-copy-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('library-copy-reg-no')?.focus(), 50);
+        }
+
+        function hideAddLibraryCopyModal() { document.getElementById('library-copy-modal').classList.add('hidden'); }
+
+        function saveLibraryCopy(e) {
+            e.preventDefault();
+            const titleId = document.getElementById('library-copy-title-id').value;
+            const titleRec = libraryBookTitles.find(t => String(t.id) === String(titleId));
+            const regNo = document.getElementById('library-copy-reg-no').value.trim();
+            if (!titleRec || !regNo) return;
+            if (libraryBooks.some(b => String(b.registrationNo || '').trim().toLowerCase() === regNo.toLowerCase())) { alert('That registration number already exists. Each physical book must have a unique registration number.'); return; }
+            const copies = libraryBooks.filter(b => String(b.titleId || '') === String(titleRec.id) || String(b.title || '').trim().toLowerCase() === String(titleRec.title || '').trim().toLowerCase());
+            const copyNo = copies.length + 1;
+            const id = 'copy-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+            const book = { id, titleId: titleRec.id, registrationNo: regNo, copyNo, isbn: titleRec.isbn || '', title: titleRec.title, author: titleRec.author || '', subject: titleRec.subject || '', status: 'Available', borrower: '', issueDate: '', dueDate: '' };
+            db.ref('library/books/' + id).set(book).then(() => {
+                libraryBooks.push(book);
+                hideAddLibraryCopyModal();
+                renderLibraryModule();
+                openLibraryBookProfile(titleRec.id);
+                alert('Individual copy registered successfully. Registration No.: ' + regNo);
+            }).catch(showFirebaseError);
         }
 
         function searchLibrary(query) {
@@ -4543,7 +5114,7 @@ function searchStoreDashboard(query){
                         type: 'Book', icon: 'book-open',
                         title: book.title,
                         details: `ISBN/Code: ${book.isbn || '?'} ? Author: ${book.author || '?'} ? Category: ${book.subject || '?'}`,
-                        extra: `Available: ${book.availableQty ?? 0} / ${book.totalQty ?? 0}`,
+                        extra: `Registration No.: ${book.registrationNo || 'Not assigned'} ? Status: ${book.status || 'Available'}`,
                         action: `openLibraryBookProfile('${book.id}'); return false;`
                     });
                 }
@@ -4648,13 +5219,13 @@ function searchStoreDashboard(query){
         }
 
         function renderLibraryModule() {
-            let totalBooksCount = libraryBooks.reduce((sum, b) => sum + b.totalQty, 0);
-            let availableBooksCount = libraryBooks.reduce((sum, b) => sum + b.availableQty, 0);
-            let borrowedBooksCount = totalBooksCount - availableBooksCount;
-            let totalStudentsCount = getAdmittedLibraryStudents().length;
-            let totalTeachersCount = teachersData.length;
-            let overdueBooksCount = libraryCirculations.filter(c => c.status === 'Overdue').length;
-            let outstandingFinesSum = libraryPatrons.reduce((sum, p) => sum + p.fine, 0);
+            const totalBooksCount = libraryBooks.length;
+            const availableBooksCount = libraryBooks.filter(b => (b.status || 'Available') === 'Available').length;
+            const borrowedBooksCount = totalBooksCount - availableBooksCount;
+            const totalStudentsCount = getAdmittedLibraryStudents().length;
+            const totalTeachersCount = teachersData.length;
+            const overdueBooksCount = libraryCirculations.filter(c => c.status === 'Overdue' || (c.dueDate && c.status === 'Active' && new Date(c.dueDate) < new Date())).length;
+            const outstandingFinesSum = libraryPatrons.reduce((sum, p) => sum + Number(p.fine || 0), 0);
 
             document.getElementById('lib-total-books').textContent = totalBooksCount;
             document.getElementById('lib-available-books').textContent = availableBooksCount;
@@ -4664,43 +5235,28 @@ function searchStoreDashboard(query){
             document.getElementById('lib-overdue-books').textContent = overdueBooksCount;
             document.getElementById('lib-outstanding-fines').textContent = `KES ${outstandingFinesSum}`;
 
+            if (!libraryBookTitles.length) libraryBookTitles = deriveLibraryBookTitles();
             const booksTbody = document.getElementById('library-books-tbody');
             if (booksTbody) {
-                booksTbody.innerHTML = libraryBooks.map(b => `
-                    <tr>
-                        <td class="p-3 font-mono">${b.isbn}</td>
-                        <td class="p-3 font-bold text-slate-800">${b.title}</td>
-                        <td class="p-3 text-slate-600">${b.author}</td>
-                        <td class="p-3"><span class="bg-indigo-50 text-indigo-800 px-2 py-0.5 rounded font-semibold">${b.subject}</span></td>
-                        <td class="p-3 font-semibold">${b.totalQty}</td>
-                        <td class="p-3 font-semibold text-emerald-700">${b.availableQty}</td>
-                        <td class="p-3">
-                            <button onclick="deleteBook(${b.id})" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[10px] font-bold">Delete</button>
-                        </td>
-                    </tr>
-                `).join('');
+                booksTbody.innerHTML = libraryBookTitles.map((t, gi) => {
+                    const copies = libraryBooks.filter(b => String(b.titleId || '') === String(t.id) || String(b.title || '').trim().toLowerCase() === String(t.title || '').trim().toLowerCase());
+                    const available = copies.filter(b => String(b.status || 'Available').toLowerCase() === 'available').length;
+                    const safeId = String(t.id).replace(/'/g, "\\'");
+                    return `<tr class="border-b border-slate-200 bg-white hover:bg-emerald-50/40">
+                        <td class="p-3"><button type="button" onclick="openLibraryBookProfile('${safeId}'); return false;" class="font-bold text-[--dark-green-deep] hover:underline text-left">${escapeLibrarySearchHtml(t.title)}</button></td>
+                        <td class="p-3 font-mono">${escapeLibrarySearchHtml(t.isbn || '—')}</td>
+                        <td class="p-3 text-slate-600">${escapeLibrarySearchHtml(t.author || '—')}</td>
+                        <td class="p-3"><span class="bg-indigo-50 text-indigo-800 px-2 py-0.5 rounded font-semibold">${escapeLibrarySearchHtml(t.subject || '—')}</span></td>
+                        <td class="p-3 font-semibold">${copies.length}</td>
+                        <td class="p-3 font-semibold text-emerald-700">${available}</td>
+                        <td class="p-3"><button type="button" onclick="openLibraryBookProfile('${safeId}'); return false;" class="bg-[--dark-green-deep] text-white px-3 py-1.5 rounded text-[10px] font-bold">Open Profile</button></td>
+                    </tr>`;
+                }).join('');
             }
 
             const circTbody = document.getElementById('library-circulations-tbody');
             if (circTbody) {
-                circTbody.innerHTML = libraryCirculations.map(c => `
-                    <tr>
-                        <td class="p-3 font-mono">TXN-${c.id}</td>
-                        <td class="p-3 font-bold text-slate-800">${c.patronName}</td>
-                        <td class="p-3 text-slate-600">${c.patronType}</td>
-                        <td class="p-3 font-medium text-indigo-900">${c.bookTitle}</td>
-                        <td class="p-3 text-slate-500">${c.issueDate}</td>
-                        <td class="p-3 text-slate-500">${c.dueDate}</td>
-                        <td class="p-3">
-                            <span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
-                                ${c.status}
-                            </span>
-                        </td>
-                        <td class="p-3">
-                            ${c.status === 'Overdue' ? `<button onclick="markBookReturned(${c.id})" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2 py-1 rounded text-[10px] font-bold">Process Return</button>` : `<span class="text-slate-400 italic">No action</span>`}
-                        </td>
-                    </tr>
-                `).join('');
+                circTbody.innerHTML = libraryCirculations.map(c => `<tr><td class="p-3 font-mono">TXN-${c.id}</td><td class="p-3 font-bold text-slate-800">${escapeLibrarySearchHtml(c.patronName)}</td><td class="p-3 text-slate-600">${escapeLibrarySearchHtml(c.patronType)}</td><td class="p-3 font-medium text-indigo-900">${escapeLibrarySearchHtml(c.bookTitle)}</td><td class="p-3 font-mono font-bold text-indigo-900">${escapeLibrarySearchHtml(c.registrationNo || '—')}</td><td class="p-3 text-slate-500">${escapeLibrarySearchHtml(c.issueDate)}</td><td class="p-3 text-slate-500">${escapeLibrarySearchHtml(c.dueDate)}</td><td class="p-3"><span class="px-2 py-0.5 text-[10px] font-bold rounded ${c.status === 'Active' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${escapeLibrarySearchHtml(c.status)}</span></td><td class="p-3">${(c.status === 'Active' || c.status === 'Overdue') ? `<button onclick="markBookReturned(${c.id})" class="bg-emerald-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Returned</button>` : (c.status === 'Returned' && !c.cleared ? `<button onclick="clearReturnedBook('${String(c.bookId).replace(/'/g,"\\'")}')" class="bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Returned</button>` : `<span class="text-slate-400 italic">${c.cleared ? 'Cleared' : 'No action'}</span>`)}</td></tr>`).join('');
             }
 
             const patronsTbody = document.getElementById('library-patrons-tbody');
@@ -4711,30 +5267,24 @@ function searchStoreDashboard(query){
                     const records=libraryCirculations.filter(c=>String(c.patronId||'')===p.id || (String(c.patronName||'')===p.name && String(c.patronType||'')==='Student'));
                     const active=records.filter(c=>c.status==='Active'||c.status==='Overdue').length;
                     const overdue=records.filter(c=>c.status==='Overdue').length;
-                    const id=String(p.id).replace(/'/g,"\\'");
-                    const fine=Number(p.fine||0);
-                    return `<tr><td class="p-3 font-bold"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="text-indigo-800 hover:text-emerald-700 hover:underline text-left">${p.name}</button></td><td class="p-3 text-slate-600"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="font-mono text-indigo-800 hover:underline">${p.admNo}</button> <span>(${p.classJoining||'?'})</span></td><td class="p-3 font-semibold">${active}</td><td class="p-3 text-red-600 font-bold">${overdue?overdue+' Overdue':'None'}</td><td class="p-3 font-black text-purple-900">KES ${fine}</td><td class="p-3">${fine>0?`<button onclick="clearFine('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Fine</button>`:`<span class="text-slate-400 italic">Clear</span>`}</td></tr>`;
+                    const id=String(p.id).replace(/'/g,"\\'"); const fine=Number(p.fine||0);
+                    return `<tr><td class="p-3 font-bold"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="text-indigo-800 hover:text-emerald-700 hover:underline text-left">${escapeLibrarySearchHtml(p.name)}</button></td><td class="p-3 text-slate-600"><button type="button" onclick="openLibraryStudentProfile('${id}'); return false;" class="font-mono text-indigo-800 hover:underline">${escapeLibrarySearchHtml(p.admNo)}</button> <span>(${escapeLibrarySearchHtml(p.classJoining||'?')})</span></td><td class="p-3 font-semibold">${active}</td><td class="p-3 text-red-600 font-bold">${overdue?overdue+' Overdue':'None'}</td><td class="p-3 font-black text-purple-900">KES ${fine}</td><td class="p-3">${fine>0?`<button onclick="clearFine('${id}')" class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Clear Fine</button>`:`<span class="text-slate-400 italic">Clear</span>`}</td></tr>`;
                 }).join('');
             }
 
             const patronSelect = document.getElementById('issue-patron-select');
-            if (patronSelect) {
-                patronSelect.innerHTML = libraryPatrons.map(p => `<option value="${p.name}">${p.name} (${p.type})</option>`).join('');
-            }
+            if (patronSelect) patronSelect.innerHTML = libraryPatrons.map(p => `<option value="${escapeLibrarySearchHtml(p.name)}" data-type="${escapeLibrarySearchHtml(p.type || 'Student')}" data-patron-id="${escapeLibrarySearchHtml(p.id || '')}">${escapeLibrarySearchHtml(p.name)} (${escapeLibrarySearchHtml(p.type || 'Student')})</option>`).join('');
             const bookSelect = document.getElementById('issue-book-select');
-            if (bookSelect) {
-                bookSelect.innerHTML = libraryBooks.filter(b => b.availableQty > 0).map(b => `<option value="${b.title}">${b.title} (Available: ${b.availableQty})</option>`).join('');
-            }
+            if (bookSelect) bookSelect.innerHTML = libraryBooks.filter(b => (b.status || 'Available') === 'Available' && b.registrationNo).map(b => `<option value="${escapeLibrarySearchHtml(b.id)}">${escapeLibrarySearchHtml(b.title)} — Reg. ${escapeLibrarySearchHtml(b.registrationNo)}</option>`).join('');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function showAddBookModal() {
-            document.getElementById('book-id-input').value = '';
-            document.getElementById('book-modal-title').textContent = 'Add New Book';
+            document.getElementById('book-modal-heading').textContent = 'Add New Book';
             document.getElementById('b-modal-isbn').value = '';
             document.getElementById('b-modal-title').value = '';
             document.getElementById('b-modal-author').value = '';
             document.getElementById('b-modal-subject').value = '';
-            document.getElementById('b-modal-qty').value = 10;
             document.getElementById('book-modal').classList.remove('hidden');
         }
 
@@ -4744,25 +5294,20 @@ function searchStoreDashboard(query){
 
         function saveBook(e) {
             e.preventDefault();
-            const isbn = document.getElementById('b-modal-isbn').value.trim();
             const title = document.getElementById('b-modal-title').value.trim();
+            const isbn = document.getElementById('b-modal-isbn').value.trim();
             const author = document.getElementById('b-modal-author').value.trim();
             const subject = document.getElementById('b-modal-subject').value.trim();
-            const qty = parseInt(document.getElementById('b-modal-qty').value);
-
-            const newBook = {
-                id: Date.now(),
-                isbn,
-                title,
-                author,
-                subject,
-                totalQty: qty,
-                availableQty: qty
-            };
-
-            db.ref('library/books/' + newBook.id).set(newBook).then(() => {
+            if (!title || !author || !subject) return;
+            if (libraryBookTitles.some(t => String(t.title || '').trim().toLowerCase() === title.toLowerCase())) { alert('A general book profile with this name already exists. Open it and add individual copies instead.'); return; }
+            const id = 'title-' + Date.now();
+            const record = { id, title, isbn, author, subject, createdAt: new Date().toISOString() };
+            db.ref('library/catalog/' + id).set(record).then(() => {
+                libraryBookTitles.push(record);
                 hideAddBookModal();
-                alert('Book added to inventory successfully!');
+                renderLibraryModule();
+                openLibraryBookProfile(id);
+                alert('General book profile created. Now add each physical copy with its own registration number.');
             }).catch(showFirebaseError);
         }
 
@@ -4773,7 +5318,12 @@ function searchStoreDashboard(query){
         }
 
         function showIssueBookModal() {
-            document.getElementById('issue-book-modal').classList.remove('hidden');
+            const profile = currentLibraryProfile || {};
+            if (!profile.name) {
+                alert('Please search for and open the learner/teacher profile first.');
+                return;
+            }
+            issueBookToLibraryPatron(profile.type === 'teacher' ? 'teacher' : 'student');
         }
 
         function hideIssueBookModal() {
@@ -4782,43 +5332,125 @@ function searchStoreDashboard(query){
 
         function saveIssuedBook(e) {
             e.preventDefault();
-            const patronName = document.getElementById('issue-patron-select').value;
-            const patronObj = libraryPatrons.find(p => p.name === patronName);
-            const bookTitle = document.getElementById('issue-book-select').value;
+            const patronName = String(document.getElementById('issue-patron-select')?.value || currentLibraryProfile.name || '').trim();
+            const patronType = currentLibraryProfile.type === 'teacher' ? 'Teacher' : 'Student';
+            const patronId = String(currentLibraryProfile.admNo || currentLibraryProfile.id || '').trim();
+            const bookName = String(document.getElementById('issue-book-name-input')?.value || '').trim();
+            const regNo = String(document.getElementById('issue-book-reg-input')?.value || '').trim();
             const dueDate = document.getElementById('issue-due-date').value;
+            const statusEl = document.getElementById('issue-book-lookup-status');
 
-            const bookObj = libraryBooks.find(b => b.title === bookTitle);
-            if (!bookObj || bookObj.availableQty <= 0) { alert('This book is not available.'); return; }
-            bookObj.availableQty -= 1;
+            if (!patronName || !bookName || !regNo) {
+                alert('Enter the book name and individual registration number.');
+                return;
+            }
 
+            const normalizedReg = regNo.toLowerCase();
+            const normalizedName = bookName.toLowerCase();
+            const bookObj = libraryBooks.find(b => String(b.registrationNo || '').trim().toLowerCase() === normalizedReg);
+
+            if (!bookObj || String(bookObj.title || '').trim().toLowerCase() !== normalizedName) {
+                if (statusEl) {
+                    statusEl.textContent = 'Individual reg no and name entered not found';
+                    statusEl.className = 'p-3 rounded-lg text-xs font-bold bg-red-50 border border-red-200 text-red-800';
+                }
+                alert('Individual reg no and name entered not found');
+                return;
+            }
+
+            if (String(bookObj.status || 'Available').toLowerCase() !== 'available') {
+                if (statusEl) {
+                    statusEl.textContent = 'This individual registration number is already issued or unavailable.';
+                    statusEl.className = 'p-3 rounded-lg text-xs font-bold bg-amber-50 border border-amber-200 text-amber-800';
+                }
+                alert('This individual registration number is already issued or unavailable.');
+                return;
+            }
+
+            const patron = findOrCreateLibraryPatron(patronName, patronType, patronId);
+            const issuedDate = new Date().toISOString().split('T')[0];
             const newCirc = {
                 id: Date.now(),
-                patronName,
-                patronType: patronObj ? patronObj.type : 'Student',
-                bookTitle,
-                issueDate: new Date().toISOString().split('T')[0],
-                dueDate: dueDate || '2026-06-15',
+                patronName: patronName,
+                patronType: patron.type || patronType,
+                patronId: patron.id || patronId,
+                bookId: bookObj.id,
+                bookTitle: bookObj.title,
+                copyNo: bookObj.copyNo || bookObj.id,
+                registrationNo: bookObj.registrationNo,
+                issueDate: issuedDate,
+                dueDate: dueDate || '',
                 status: 'Active'
             };
+
+            bookObj.status = 'Issued';
+            bookObj.borrower = patronName;
+            bookObj.issueDate = issuedDate;
+            bookObj.dueDate = dueDate || '';
 
             Promise.all([
                 db.ref('library/books/' + bookObj.id).set(bookObj),
                 db.ref('library/circulations/' + newCirc.id).set(newCirc)
             ]).then(() => {
+                const existingIndex = libraryCirculations.findIndex(c => String(c.id) === String(newCirc.id));
+                if (existingIndex >= 0) libraryCirculations[existingIndex] = newCirc;
+                else libraryCirculations.push(newCirc);
                 hideIssueBookModal();
-                alert('Book issued successfully!');
+                renderLibraryModule();
+                if (currentLibraryProfile.type === 'student') openLibraryStudentProfile(currentLibraryProfile.id);
+                else if (currentLibraryProfile.type === 'teacher') openLibraryTeacherProfile(currentLibraryProfile.id);
+                alert(`Book issued successfully.
+
+Book: ${bookObj.title}
+Individual Reg No.: ${bookObj.registrationNo}
+Learner: ${patronName}`);
             }).catch(showFirebaseError);
         }
 
         function markBookReturned(txnId) {
-            const txn = libraryCirculations.find(c => c.id === txnId);
-            if (txn) {
-                txn.status = 'Returned';
-                const bookObj = libraryBooks.find(b => b.title === txn.bookTitle);
-                if (bookObj) bookObj.availableQty += 1;
-                const writes = [db.ref('library/circulations/' + txn.id).set(txn)];
-                if (bookObj) writes.push(db.ref('library/books/' + bookObj.id).set(bookObj));
-                Promise.all(writes).then(() => alert('Book return successfully processed.')).catch(showFirebaseError);
+            const txn = libraryCirculations.find(c => String(c.id) === String(txnId));
+            if (!txn) return;
+
+            const bookObj = libraryBooks.find(b => String(b.id) === String(txn.bookId));
+            if (bookObj) {
+                bookObj.status = 'Returned';
+                bookObj.borrower = '';
+                bookObj.issueDate = '';
+                bookObj.dueDate = '';
+            }
+
+            txn.status = 'Returned';
+            txn.returnDate = new Date().toISOString().split('T')[0];
+
+            const writes = [db.ref('library/circulations/' + txn.id).set(txn)];
+            if (bookObj) writes.push(db.ref('library/books/' + bookObj.id).set(bookObj));
+
+            Promise.all(writes)
+                .then(() => alert('Book returned. The individual copy has been cleared and is ready for re-issue.'))
+                .catch(showFirebaseError);
+        }
+
+        function clearReturnedBook(bookId) {
+            const bookObj = libraryBooks.find(b => String(b.id) === String(bookId));
+            if (!bookObj) return;
+
+            bookObj.status = 'Available';
+            bookObj.borrower = '';
+            bookObj.issueDate = '';
+            bookObj.dueDate = '';
+
+            db.ref('library/books/' + bookObj.id).set(bookObj)
+                .then(() => alert('Returned book copy cleared successfully.'))
+                .catch(showFirebaseError);
+        }
+
+        function clearDueBook(txnId) {
+            const txn = libraryCirculations.find(c => String(c.id) === String(txnId));
+            if (!txn) return;
+
+            if (txn.status === 'Active') {
+                if (!confirm('Clear this due/active book and mark it as returned?')) return;
+                markBookReturned(txnId);
             }
         }
 
@@ -4841,6 +5473,10 @@ function searchStoreDashboard(query){
             document.getElementById('wizard-type').value = type;
             document.getElementById('wizard-day').value = dayName;
             document.getElementById('wizard-day-display').value = dayName + ` (${type === 'morn' ? 'Morning' : 'Evening'})`;
+            const wizardDate = document.getElementById('wizard-date');
+            if (wizardDate) wizardDate.value = '';
+            const wizardDateHelp = document.getElementById('wizard-date-help');
+            if (wizardDateHelp) wizardDateHelp.textContent = `Choose the actual calendar date for ${dayName}.`;
             document.getElementById('wizard-subject').value = '';
             document.getElementById('wizard-class').value = '';
             document.getElementById('wizard-notes').value = type === 'morn' ? '6:30 AM - 7:30 AM' : '4:30 PM - 5:30 PM';
@@ -4856,16 +5492,24 @@ function searchStoreDashboard(query){
             e.preventDefault();
             const type = document.getElementById('wizard-type').value;
             const day = document.getElementById('wizard-day').value;
+            const date = document.getElementById('wizard-date').value;
             const subject = document.getElementById('wizard-subject').value;
             const className = document.getElementById('wizard-class').value;
             const notes = document.getElementById('wizard-notes').value;
 
-            if (!subject || !className || !notes) {
-                alert('Please fill out all mandatory fields in the wizard.');
+            if (!date || !subject || !className || !notes) {
+                alert('Please fill out the date, subject, class and session details.');
                 return;
             }
 
-            const entry = { day, subject, class: className, notes };
+            const selectedDate = new Date(date + 'T12:00:00');
+            const actualDay = selectedDate.toLocaleDateString('en-US', { weekday: 'long' });
+            if (actualDay !== day) {
+                alert(`The selected date is ${actualDay}, but you selected ${day}. Please choose the correct ${day} date.`);
+                return;
+            }
+
+            const entry = { day, date, subject, class: className, notes };
 
             if (type === 'morn') {
                 selectedMornDays.push(entry);
@@ -4899,7 +5543,8 @@ function searchStoreDashboard(query){
                 mornContainer.innerHTML = selectedMornDays.map((item, idx) => `
                     <div class="p-2.5 border rounded-lg bg-emerald-50/50 border-emerald-200 flex justify-between items-center text-xs">
                         <div>
-                            <span class="font-bold text-[--dark-green-deep]">${item.day}:</span> 
+                            <span class="font-bold text-[--dark-green-deep]">${item.day}</span> 
+                            <span class="text-slate-500 font-semibold">(${item.date || 'Date not captured'})</span>: 
                             <span>${item.subject}</span> &bull; 
                             <span class="text-slate-600 font-semibold">${item.class}</span> 
                             <span class="text-slate-500 font-mono text-[10px] ml-1">(${item.notes})</span>
@@ -4919,7 +5564,8 @@ function searchStoreDashboard(query){
                 eveContainer.innerHTML = selectedEveDays.map((item, idx) => `
                     <div class="p-2.5 border rounded-lg bg-emerald-50/50 border-emerald-200 flex justify-between items-center text-xs">
                         <div>
-                            <span class="font-bold text-[--dark-green-deep]">${item.day}:</span> 
+                            <span class="font-bold text-[--dark-green-deep]">${item.day}</span> 
+                            <span class="text-slate-500 font-semibold">(${item.date || 'Date not captured'})</span>: 
                             <span>${item.subject}</span> &bull; 
                             <span class="text-slate-600 font-semibold">${item.class}</span> 
                             <span class="text-slate-500 font-mono text-[10px] ml-1">(${item.notes})</span>
@@ -5228,6 +5874,7 @@ function searchStoreDashboard(query){
                     mornEntries: draft.mornEntries,
                     eveTotal: draft.eveTotal,
                     eveEntries: draft.eveEntries,
+                    satDate: draft.satDate || '',
                     satLessons: draft.satLessons,
                     satTotal: draft.satTotal,
                     grandTotal: draft.grandTotal,
@@ -5265,7 +5912,7 @@ function searchStoreDashboard(query){
             if (tTbody) {
                 tTbody.innerHTML = myClaims.map(c => `
                     <tr>
-                        <td class="p-3 font-medium text-slate-900">${c.weekLabel}</td>
+                        <td class="p-3 font-medium text-slate-900"><div>${c.weekLabel}</div><div class="text-[10px] text-slate-500 mt-1">${[...(c.mornEntries || []), ...(c.eveEntries || [])].map(x => x.date ? `${x.day || ''} ${x.date}` : '').filter(Boolean).join(', ') || 'Dates not captured in older record'}</div></td>
                         <td class="p-3">${c.mornTotal} sessions</td>
                         <td class="p-3">${c.eveTotal} sessions</td>
                         <td class="p-3">${c.satTotal} lessons</td>
@@ -5298,15 +5945,23 @@ function searchStoreDashboard(query){
                         const weeks = [...teacherClaims].sort((a, b) => String(a.weekLabel || '').localeCompare(String(b.weekLabel || '')));
                         const weekHtml = weeks.map(c => {
                             const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-                            const morningDetails = (c.mornEntries || []).map(m => `${escapeHtml(m.subject || 'Subject not specified')} ? ${escapeHtml(m.class || 'Class not specified')}`).join('<br>');
-                            const eveningDetails = (c.eveEntries || []).map(e => `${escapeHtml(e.subject || 'Subject not specified')} ? ${escapeHtml(e.class || 'Class not specified')}`).join('<br>');
-                            const saturdayDetails = (c.satLessons || []).map(sl => `${escapeHtml(sl.subject || 'Subject not specified')} ? ${escapeHtml(sl.class || 'Class not specified')}`).join('<br>');
+                            const formatClaimDate = (entry, fallbackDay) => {
+                                const day = entry.day || fallbackDay || '';
+                                const date = entry.date || '';
+                                if (date && day) return `${escapeHtml(day)}, ${escapeHtml(date)}`;
+                                if (date) return escapeHtml(date);
+                                if (day) return escapeHtml(day);
+                                return 'Date/day not captured';
+                            };
+                            const morningDetails = (c.mornEntries || []).map(m => `<div><span class="font-semibold">${formatClaimDate(m, '')}</span> — ${escapeHtml(m.subject || 'Subject not specified')} - ${escapeHtml(m.class || 'Class not specified')}</div>`).join('');
+                            const eveningDetails = (c.eveEntries || []).map(e => `<div><span class="font-semibold">${formatClaimDate(e, '')}</span> — ${escapeHtml(e.subject || 'Subject not specified')} - ${escapeHtml(e.class || 'Class not specified')}</div>`).join('');
+                            const saturdayDetails = (c.satLessons || []).map(sl => `<div><span class="font-semibold">${formatClaimDate(sl, 'Saturday')}</span> — Lesson ${escapeHtml(sl.lesson || '')}: ${escapeHtml(sl.subject || 'Subject not specified')} - ${escapeHtml(sl.class || 'Class not specified')}</div>`).join('');
                             const details = [
                                 morningDetails ? `<div><span class="font-bold text-slate-600">Morning:</span> ${morningDetails}</div>` : '',
                                 eveningDetails ? `<div><span class="font-bold text-slate-600">Evening:</span> ${eveningDetails}</div>` : '',
                                 saturdayDetails ? `<div><span class="font-bold text-slate-600">Saturday:</span> ${saturdayDetails}</div>` : ''
                             ].filter(Boolean).join('');
-                            return `<div class="mb-2 p-2 bg-slate-50 border border-slate-200 rounded-lg"><div class="font-bold text-slate-900 mb-1">${escapeHtml(c.weekLabel || 'Week')}</div>${details || '<span class="text-slate-400 italic">Subject/class details not recorded.</span>'}</div>`;
+                            return `<div class="mb-2 p-2 bg-slate-50 border border-slate-200 rounded-lg"><div class="font-bold text-slate-900 mb-1">${escapeHtml(c.weekLabel || 'Week')}</div><div class="text-[10px] uppercase font-bold text-slate-500 mb-1">Session dates & days</div>${details || '<span class="text-slate-400 italic">Subject/class/date details not recorded.</span>'}</div>`;
                         }).join('');
                         const morning = teacherClaims.reduce((sum, c) => sum + (Number(c.mornTotal) || 0), 0);
                         const evening = teacherClaims.reduce((sum, c) => sum + (Number(c.eveTotal) || 0), 0);
@@ -5647,6 +6302,13 @@ function searchStoreDashboard(query){
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    ['portal-login-btn', 'staff-portal-login-btn'].forEach(function (id) {
+        const btn = document.getElementById(id);
+        if (btn) btn.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (typeof showLoginModal === 'function') showLoginModal();
+        });
+    });
     if (typeof loadAdmissionNumberSettings === 'function') {
         loadAdmissionNumberSettings();
     }
