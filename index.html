@@ -472,9 +472,7 @@ body:not(.portal-mode) #public-view > section{
             <!-- Authenticated User Nav Indicator -->
             <div id="user-nav" class="hidden flex items-center gap-4">
                 <span id="user-badge" class="bg-indigo-900 border border-[#cbb5ac]/40 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
-                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-                </button>
+                
             </div>
         </div>
     </header>
@@ -3317,7 +3315,7 @@ window.addEventListener("beforeunload", savePortalRoute);
 
         function persistPortalSession() {
             try {
-                localStorage.setItem('schoolPortalSession', JSON.stringify({
+                sessionStorage.setItem('schoolPortalSession', JSON.stringify({
                     role: currentRole,
                     user: loggedUser,
                     savedAt: Date.now()
@@ -3329,14 +3327,14 @@ window.addEventListener("beforeunload", savePortalRoute);
 
         function clearPortalSession() {
             try {
-                localStorage.removeItem('schoolPortalSession');
+                sessionStorage.removeItem('schoolPortalSession');
                 localStorage.removeItem('schoolPortalLastHash');
             } catch (e) {}
         }
 
         function restorePortalSession() {
             try {
-                const raw = localStorage.getItem('schoolPortalSession');
+                const raw = sessionStorage.getItem('schoolPortalSession');
                 if (!raw) return false;
 
                 const session = JSON.parse(raw);
@@ -3440,7 +3438,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                 throw new Error('Enter the Administrator email and password.');
             }
             const auth = firebase.auth();
-            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+            await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
             const result = await auth.signInWithEmailAndPassword(email, password);
             return result.user;
         }
@@ -6519,7 +6517,7 @@ Learner: ${patronName}`);
         if (window.firebase && typeof firebase.auth === 'function') {
             // Firebase Auth LOCAL persistence keeps the Administrator signed in
             // across refreshes. Do not trust localStorage alone for admin access.
-            firebase.auth().onAuthStateChanged(function (user) {
+            firebase.auth().onAuthStateChanged(async function (user) {
                 if (user) {
                     currentRole = 'admin';
                     loggedUser = {
@@ -6530,7 +6528,7 @@ Learner: ${patronName}`);
                     };
 
                     try {
-                        localStorage.setItem(
+                        sessionStorage.setItem(
                             'schoolPortalSession',
                             JSON.stringify({
                                 role: 'admin',
@@ -6579,6 +6577,11 @@ Learner: ${patronName}`);
 
 
 
+<script>
+// Portal sessions are intentionally session-only. Any old persistent session from
+// previous versions must not automatically reopen the portal.
+try { localStorage.removeItem('schoolPortalSession'); } catch (e) {}
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     ['portal-login-btn', 'staff-portal-login-btn'].forEach(function (id) {
