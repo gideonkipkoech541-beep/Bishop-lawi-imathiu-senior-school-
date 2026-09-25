@@ -70,12 +70,12 @@
         }
 
         /* Mobile-first portal responsiveness */
-        html, body { max-width: 100%; overflow-x: hidden; }
+        html, body { max-width: 100%; overflow-x: hidden; overflow-y: auto; }
         img, video, canvas { max-width: 100%; height: auto; }
         button, input, select, textarea { max-width: 100%; }
         .overflow-x-auto { -webkit-overflow-scrolling: touch; }
         @media (max-width: 767px) {
-            header .max-w-7xl { height: auto; min-height: 4.5rem; padding-top: .7rem; padding-bottom: .7rem; }
+            header .max-w-7xl { height: auto; min-height: 4.5rem; flex-wrap:wrap; padding-top: .7rem; padding-bottom: .7rem; }
             header h1 { font-size: 1rem !important; }
             header p { font-size: .65rem !important; }
             #mobile-portal-login-btn { display: inline-flex !important; }
@@ -87,6 +87,9 @@
             #portal-sidebar .nav-item { min-width: 0; font-size: .72rem !important; padding: .55rem .5rem !important; }
             #portal-sidebar .nav-item svg { width: 1rem !important; height: 1rem !important; flex: 0 0 auto; }
             #portal-content { width: 100% !important; min-width: 0 !important; overflow: visible !important; }
+            #public-view { overflow: visible !important; }
+            #public-view section { width: 100%; }
+            #public-nav { gap: .25rem !important; }
             #portal-content > .bg-white { padding: .75rem !important; position: sticky; top: 0; z-index: 20; }
             #portal-content > .bg-white h1 { font-size: 1rem !important; }
             #portal-content > .bg-white > div { gap: .4rem !important; }
@@ -110,13 +113,23 @@
             .no-print { display: none !important; }
         }
     </style>
+<style id="home-hover-sections">
+.home-nav-item{position:relative}
+.home-nav-item>a{display:inline-flex;align-items:center}
+.home-hover-panel{position:absolute;top:calc(100% + .55rem);left:50%;transform:translateX(-50%) translateY(-4px);width:300px;background:#fffdf7;color:#111;border:2px solid var(--portal-green);border-radius:.75rem;box-shadow:0 12px 30px rgba(0,0,0,.16);padding:1rem;text-align:left;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .18s ease,transform .18s ease,visibility .18s ease;z-index:80}
+.home-nav-item:hover .home-hover-panel,.home-nav-item:focus-within .home-hover-panel{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.home-hover-panel h4{color:var(--portal-green);font-weight:800;margin-bottom:.35rem}
+.home-hover-panel p,.home-hover-panel li{font-size:.8rem;line-height:1.45}
+.home-hover-panel ul{list-style:disc;padding-left:1.15rem}
+@media(max-width:767px){.home-hover-panel{position:fixed;left:1rem;right:1rem;top:5rem;transform:translateY(-4px);width:auto;max-width:none}.home-nav-item:hover .home-hover-panel,.home-nav-item:focus-within .home-hover-panel{transform:translateY(0)}}
+</style>
 <style id="remedial-dark-green-brown-theme">#t-remedials{--remedial-green:#123f2a;--remedial-brown:#5a321f}#t-remedials .border-t{border-color:rgba(90,50,31,.28)!important}#t-remedials input[type=checkbox]{accent-color:var(--remedial-green)}#t-remedials input:disabled,#t-remedials select:disabled{opacity:.6;cursor:not-allowed;background:#f1f5f9}#t-remedials select:focus,#t-remedials input:focus{border-color:var(--remedial-green)!important;box-shadow:0 0 0 2px rgba(18,63,42,.16)!important}</style>
 <style id="portal-layout-fix">
     /* Keep the sidebar and portal content as two independent columns. */
     #portal-sidebar {
-        flex: 0 0 18rem;
-        width: 18rem;
-        min-width: 18rem;
+        flex: 0 0 14rem;
+        width: 14rem;
+        min-width: 14rem;
         height: calc(100vh - 5rem);
         position: sticky;
         top: 0;
@@ -147,9 +160,9 @@
     }
     @media (max-width: 768px) {
         #portal-sidebar {
-            flex-basis: 15rem;
-            width: 15rem;
-            min-width: 15rem;
+            flex-basis: 12rem;
+            width: 12rem;
+            min-width: 12rem;
         }
     }
 </style>
@@ -438,15 +451,19 @@ body:not(.portal-mode) #public-view > section{
 
             <!-- Public Nav Links -->
             <nav id="public-nav" class="hidden md:flex items-center gap-6 font-medium text-sm">
-                <a href="#about" class="hover:text-[--dark-brown] transition">About Us</a>
-                <a href="#academics" class="hover:text-[--dark-brown] transition">Academics</a>
-                <a href="#admissions" class="hover:text-[--dark-brown] transition">Admissions</a>
-                <a href="#public-opportunities" class="hover:text-[--dark-brown] transition">Tenders & Careers</a>
-                <a href="#contact" class="hover:text-[--dark-brown] transition">Contact</a>
+                <div class="home-nav-item"><a href="#about" class="hover:text-[--dark-brown] transition">About Us</a><div class="home-hover-panel"><h4>About Us</h4><p>Learn about Bishop Lawi Imathiu Secondary School, its values, leadership and commitment to holistic learner development.</p></div></div>
+                <div class="home-nav-item"><a href="#academics" class="hover:text-[--dark-brown] transition">Academics</a><div class="home-hover-panel"><h4>Academics</h4><p>Explore the school's academic programme, learner support and co-curricular development.</p></div></div>
+                <div class="home-nav-item"><a href="#admissions" class="hover:text-[--dark-brown] transition">Admissions</a><div class="home-hover-panel"><h4>Education offered</h4><ul><li>Junior and senior secondary learning programmes</li><li>Sciences and mathematics</li><li>Languages and humanities</li><li>Business, agriculture and technical/computer studies</li><li>Co-curricular and holistic learner development</li></ul></div></div>
+                <div class="home-nav-item"><a href="#public-opportunities" class="hover:text-[--dark-brown] transition">Tenders & Careers</a><div class="home-hover-panel"><h4>Tenders & Careers</h4><p>View current school opportunities, notices, tenders and career-related information.</p></div></div>
+                <div class="home-nav-item"><a href="#contact" class="hover:text-[--dark-brown] transition">Contact</a><div class="home-hover-panel"><h4>School address</h4><p><strong>Bishop Lawi Imathiu Secondary School</strong><br>Meru, Kenya</p><p class="mt-2">Email: info@bishoplawiimathiu.ac.ke</p><p>Use the contact section below for enquiries.</p></div></div>
                 <button type="button" id="portal-login-btn" onclick="showLoginModal()" class="bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition shadow">
                     <i data-lucide="log-in" class="w-4 h-4"></i> Portal Login
                 </button>
             </nav>
+
+            <div id="mobile-public-nav" class="hidden w-full mt-2 gap-1 flex-wrap justify-center text-xs font-semibold md:hidden">
+                <a href="#about" class="px-2 py-1 rounded border border-[--dark-green-deep] text-[--dark-green-deep] bg-white">About</a><a href="#academics" class="px-2 py-1 rounded border border-[--dark-green-deep] text-[--dark-green-deep] bg-white">Academics</a><a href="#admissions" class="px-2 py-1 rounded border border-[--dark-green-deep] text-[--dark-green-deep] bg-white">Admissions</a><a href="#contact" class="px-2 py-1 rounded border border-[--dark-green-deep] text-[--dark-green-deep] bg-white">Contact</a>
+            </div>
 
             <button type="button" id="mobile-portal-login-btn" onclick="showLoginModal()" class="hidden md:hidden bg-[--dark-brown] text-white px-3 py-2 rounded-lg font-semibold text-xs items-center gap-1 shadow" aria-label="Portal Login">
                 <i data-lucide="log-in" class="w-4 h-4"></i> Login
@@ -645,6 +662,7 @@ body:not(.portal-mode) #public-view > section{
                 <a href="#" onclick="switchTab('admin', 'a-approved-reports')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition">
                     <i data-lucide="download" class="w-5 h-5"></i> Approved Claims & Export
                 </a>
+                <a href="#" onclick="switchTab('admin', 'a-attendance-report')" class="nav-item a-nav flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition"><i data-lucide="clock-3" class="w-5 h-5"></i> Teacher Attendance Report</a>
                         <button onclick="switchTab('admin','a-timetable-memos')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="calendar-days" class="w-8 h-8 text-slate-400 mb-2"></i> Timetable / Memo</button>
                         <button onclick="switchTab('admin','a-admissions')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="graduation-cap" class="w-8 h-8 text-slate-400 mb-2"></i> Admissions</button>
                         <button onclick="switchTab('admin','a-opportunities')" class="a-nav w-full text-left px-4 py-2 rounded-lg"><i data-lucide="megaphone" class="w-8 h-8 text-slate-400 mb-2"></i> Tenders & Careers</button>
@@ -1380,7 +1398,7 @@ body:not(.portal-mode) #public-view > section{
 
                         <!-- Uploaded CAT Files History -->
                         <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                            <h3 class="font-bold text-base text-[--dark-green-deep] mb-1">Weekly CAT Documents ? Shared with Teachers</h3>
+                            <h3 class="font-bold text-base text-[--dark-green-deep] mb-1">Weekly CAT Documents - Shared with Teachers in the Same Department</h3>
                             <div id="cat-uploads-history" class="space-y-3 text-xs">
                                 <!-- Uploaded items dynamically populated -->
                             </div>
@@ -1411,6 +1429,15 @@ body:not(.portal-mode) #public-view > section{
 
             <!-- ================= ADMIN PORTAL VIEWS ================= -->
             <div id="admin-view" class="portal-view p-8 no-print">
+                <!-- TEACHER ATTENDANCE REPORT -->
+                <div id="a-attendance-report" class="tab-content">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-6"><div><h2 class="text-2xl font-light text-slate-900">Teacher Attendance Report</h2><p class="text-sm text-slate-600">View teacher sign-in and sign-out names, dates, times and recorded public IP addresses.</p></div><button onclick="downloadTeacherAttendancePDF()" class="bg-[--dark-brown] hover:bg-[--dark-green-deep] text-white font-bold px-4 py-2.5 rounded-lg">Download PDF</button></div>
+                    <div id="attendance-report-print" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                      <div class="flex flex-wrap justify-between gap-3 border-b pb-4 mb-4"><div><h3 class="font-bold text-[--dark-green-deep] text-lg">Bishop Lawi Imathiu Secondary School</h3><p class="text-sm text-slate-600">Teacher Attendance Report</p></div><p id="attendance-report-generated" class="text-xs text-slate-500"></p></div>
+                      <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="bg-[--dark-green-deep] text-white"><th class="p-2 text-left">Teacher</th><th class="p-2 text-left">Email</th><th class="p-2 text-left">Date</th><th class="p-2 text-left">Sign In</th><th class="p-2 text-left">Sign Out</th><th class="p-2 text-left">IP</th></tr></thead><tbody id="attendance-report-body"></tbody></table></div>
+                    </div>
+                </div>
+
                 <!-- TIMETABLE / MEMO -->
                 <div id="a-timetable-memos" class="tab-content">
                     <div class="mb-6">
@@ -2745,9 +2772,8 @@ window.addEventListener("beforeunload", savePortalRoute);
 
             const catSelect = document.getElementById('cat-upload-week');
             if (catSelect) {
-                catSelect.innerHTML = activeWeeks
-                    .map(w => `<option value="${w.id}">${w.label}</option>`)
-                    .join('');
+                const catWeeks = Array.from({length: 13}, (_, i) => ({id:`cat-week-${i+1}`, label:`Week ${i+1}`}));
+                catSelect.innerHTML = catWeeks.map(w => `<option value="${w.id}">${w.label}</option>`).join('');
             }
 
             const toggleList = document.getElementById('week-toggle-list');
@@ -3263,6 +3289,7 @@ window.addEventListener("beforeunload", savePortalRoute);
             const portalContent = document.getElementById('portal-content');
             const publicNav = document.getElementById('public-nav');
             const userNav = document.getElementById('user-nav');
+            const mobilePublicNav = document.getElementById('mobile-public-nav');
 
             if (viewId === 'public') {
                 document.body.classList.remove('portal-mode');
@@ -3270,12 +3297,14 @@ window.addEventListener("beforeunload", savePortalRoute);
                 portalContent.classList.add('hidden');
                 publicNav.classList.remove('hidden');
                 userNav.classList.add('hidden');
+                if (mobilePublicNav) mobilePublicNav.classList.remove('hidden');
             } else {
                 document.body.classList.add('portal-mode');
                 sidebar.classList.remove('hidden');
                 portalContent.classList.remove('hidden');
                 publicNav.classList.add('hidden');
                 userNav.classList.remove('hidden');
+                if (mobilePublicNav) mobilePublicNav.classList.add('hidden');
             }
         }
 
@@ -3357,7 +3386,8 @@ window.addEventListener("beforeunload", savePortalRoute);
                     '#timetable-memo': ['admin', 'a-timetable'],
                     '#admissions': ['admin', 'a-admissions'],
                     '#admin-security': ['admin', 'a-admin-security'],
-                    '#admin-inquiries': ['admin', 'a-inquiries']
+                    '#admin-inquiries': ['admin', 'a-inquiries'],
+                    '#teacher-attendance-report': ['admin', 'a-attendance-report']
                 };
 
                 const target = routeMap[savedHash];
@@ -3628,7 +3658,31 @@ window.addEventListener("beforeunload", savePortalRoute);
             showView('public');
         }
 
-        // ================= TEACHER STAFF ATTENDANCE =================
+        // ================= ADMIN TEACHER ATTENDANCE REPORT =================
+async function loadAdminAttendanceReport() {
+    const body = document.getElementById('attendance-report-body');
+    if (!body || !db) return;
+    body.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-slate-500">Loading attendance records...</td></tr>';
+    try {
+        const snap = await db.ref('teacherAttendance').once('value');
+        const all = snap.val() || {}; const rows=[];
+        Object.entries(all).forEach(([teacherKey, dates]) => Object.entries(dates || {}).forEach(([date, r]) => rows.push({teacherKey,date,...r})));
+        rows.sort((a,b)=>String(b.date).localeCompare(String(a.date)) || String(a.teacherName||'').localeCompare(String(b.teacherName||'')));
+        if (!rows.length) { body.innerHTML='<tr><td colspan="6" class="p-4 text-center text-slate-500">No attendance records found.</td></tr>'; }
+        else body.innerHTML=rows.map(r=>`<tr class="border-b"><td class="p-2 font-semibold">${escapeHtml(r.teacherName||'Teacher')}</td><td class="p-2">${escapeHtml(r.teacherEmail||'')}</td><td class="p-2">${escapeHtml(r.date||'')}</td><td class="p-2">${attendanceFormatTime(r.signInAt)}</td><td class="p-2">${attendanceFormatTime(r.signOutAt)}</td><td class="p-2 font-mono text-xs">${escapeHtml(r.publicIp||'—')}</td></tr>`).join('');
+        const gen=document.getElementById('attendance-report-generated'); if(gen) gen.textContent='Generated: '+new Date().toLocaleString();
+    } catch(e) { console.error(e); body.innerHTML='<tr><td colspan="6" class="p-4 text-center text-red-700">Could not load attendance records. Check Firebase Database rules.</td></tr>'; }
+}
+function escapeHtml(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]||c));}
+async function downloadTeacherAttendancePDF(){
+    await loadAdminAttendanceReport();
+    const el=document.getElementById('attendance-report-print'); if(!el) return;
+    if(typeof html2pdf==='undefined'){window.print();return;}
+    const opt={margin:.35,filename:'teacher-attendance-report.pdf',image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'a4',orientation:'landscape'}};
+    html2pdf().set(opt).from(el).save();
+}
+
+// ================= TEACHER STAFF ATTENDANCE =================
 // Approved public IPv4 address for the school Wi-Fi.
 const SCHOOL_ALLOWED_PUBLIC_IPS = ['129.222.147.4'];
 let teacherAttendancePublicIp = '';
@@ -3701,17 +3755,20 @@ function updateTeacherAttendanceUI(record = null) {
     if (signOutBtn) signOutBtn.disabled = !canSignOut;
 }
 
+function normalizeIPv4(ip) { return String(ip || '').trim().replace(/\s+/g,''); }
+
 async function getTeacherAttendancePublicIp() {
     const endpoints = [
         'https://api.ipify.org?format=json',
-        'https://api64.ipify.org?format=json'
+        'https://ipv4.icanhazip.com/'
     ];
     for (const endpoint of endpoints) {
         try {
             const response = await fetch(endpoint, { cache: 'no-store' });
             if (!response.ok) continue;
-            const data = await response.json();
-            if (data && data.ip) return String(data.ip).trim();
+            const text = endpoint.includes('icanhazip') ? (await response.text()).trim() : null;
+            if (text && /^(?:\d{1,3}\.){3}\d{1,3}$/.test(text)) return text;
+            if (!text) { const data = await response.json(); if (data && data.ip && /^(?:\d{1,3}\.){3}\d{1,3}$/.test(String(data.ip).trim())) return String(data.ip).trim(); }
         } catch (e) {}
     }
     return '';
@@ -3760,7 +3817,7 @@ async function checkTeacherAttendanceNetwork() {
     const statusEl = document.getElementById('attendance-action-status');
     if (statusEl) statusEl.textContent = 'Checking school network…';
     teacherAttendancePublicIp = await getTeacherAttendancePublicIp();
-    teacherAttendanceNetworkApproved = SCHOOL_ALLOWED_PUBLIC_IPS.includes(teacherAttendancePublicIp);
+    teacherAttendanceNetworkApproved = SCHOOL_ALLOWED_PUBLIC_IPS.map(normalizeIPv4).includes(normalizeIPv4(teacherAttendancePublicIp));
     const record = await loadTeacherAttendanceToday();
     updateTeacherAttendanceUI(record);
     await loadTeacherAttendanceHistory();
@@ -3830,6 +3887,7 @@ async function initializeTeacherAttendance() {
 }
 
 function switchTab(role, tabId, pushHistory = true) {
+            if (role === 'admin' && tabId === 'a-attendance-report') setTimeout(loadAdminAttendanceReport, 0);
             // Keep every portal section in browser history so Back/Forward moves
             // between actual portal pages instead of leaving the portal.
             const routeMap = {
@@ -5690,13 +5748,14 @@ Learner: ${patronName}`);
             const subject = subjectEl.value;
             const targetClass = classEl.value;
             const docType = typeEl.value;
-            if (!weekId) { alert('Please select an Academic Week.'); weekEl.focus(); return false; }
+            if (!weekId) { alert('Please select a CAT week.'); weekEl.focus(); return false; }
             if (!subject) { alert('Please select a Subject.'); subjectEl.focus(); return false; }
             if (!targetClass) { alert('Please select a Target Class / Stream.'); classEl.focus(); return false; }
             if (!fileInput.files || !fileInput.files.length) { alert('Please select a CAT file first.'); fileInput.click(); return false; }
 
             const file = fileInput.files[0];
             const teacherName = loggedUser ? loggedUser.name : 'Mr. Joseph Mutuma';
+            const teacherDepartment = loggedUser ? (loggedUser.dept || loggedUser.department || '') : '';
             const uploadId = 'cat_' + Date.now();
             const originalText = button ? button.innerHTML : '';
 
@@ -5710,7 +5769,7 @@ Learner: ${patronName}`);
                     if (typeof lucide !== 'undefined') lucide.createIcons();
                 }
 
-                const weekObj = academicWeeks.find(w => w.id === weekId);
+                const weekObj = academicWeeks.find(w => w.id === weekId) || {id: weekId, label: String(weekId).replace('cat-week-','Week ')};
                 const storageRef = storage.ref('catUploads/' + uploadId + '_' + file.name);
 
                 // Use the Firebase upload task so progress/errors are reported instead of
@@ -5750,8 +5809,10 @@ Learner: ${patronName}`);
                 const downloadURL = await uploadResult.ref.getDownloadURL();
                 const newUpload = {
                     id: uploadId, teacher: teacherName,
+                    teacherEmail: loggedUser ? (loggedUser.email || '') : '',
                     weekLabel: weekObj ? weekObj.label : weekId,
                     weekId, subject, class: targetClass, docType,
+                    department: teacherDepartment,
                     fileName: file.name,
                     uploadDate: new Date().toISOString().split('T')[0],
                     downloadURL
@@ -5784,7 +5845,10 @@ Learner: ${patronName}`);
             if (!container) return;
 
             const activeTeacherName = loggedUser ? loggedUser.name : "Mr. Joseph Mutuma";
-            const myUploads = [...uploadedCatFiles].sort((a, b) => String(b.uploadDate || "").localeCompare(String(a.uploadDate || "")));
+            const activeDept = String(loggedUser?.dept || loggedUser?.department || '').trim().toLowerCase();
+            const getUploadDepartment = item => String(item.department || teachersData.find(t => String(t.email||'').toLowerCase() === String(item.teacherEmail||'').toLowerCase() || String(t.name||'').toLowerCase() === String(item.teacher||'').toLowerCase())?.dept || '').trim().toLowerCase();
+            const visibleUploads = activeDept ? uploadedCatFiles.filter(item => getUploadDepartment(item) === activeDept) : uploadedCatFiles;
+            const myUploads = [...visibleUploads].sort((a, b) => String(b.uploadDate || "").localeCompare(String(a.uploadDate || "")));
 
             if (myUploads.length === 0) {
                 container.innerHTML = `<p class="text-slate-400 italic">No weekly CAT files uploaded yet.</p>`;
@@ -5858,6 +5922,7 @@ Learner: ${patronName}`);
 
             const skippedWeeks = activeWeeks.filter(w => remedialWeekDrafts[w.id] && remedialWeekDrafts[w.id].skipped);
             const teacherName = loggedUser ? loggedUser.name : 'Mr. Joseph Mutuma';
+            const teacherDepartment = loggedUser ? (loggedUser.dept || loggedUser.department || '') : '';
             const batchId = 'remedial_batch_' + Date.now();
 
             const writes = attendedWeeks.map((week, index) => {
