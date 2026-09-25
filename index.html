@@ -2606,30 +2606,14 @@ body:not(.portal-mode) #public-view > section{
         }
         const db = firebase.database();
 
-// Keep the administrator/portal login active after a normal page refresh.
+// Portal authentication is session-only. A fresh opening of the website must require credentials.
 if (firebase && firebase.auth) {
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .catch(err => console.warn("Auth persistence could not be enabled:", err));
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+        .catch(err => console.warn("Auth session persistence could not be enabled:", err));
 }
-
-function savePortalRoute() {
-    try {
-        if (window.location.hash && window.location.hash !== "#login") {
-            localStorage.setItem("schoolPortalLastHash", window.location.hash);
-        }
-    } catch (e) {}
-}
-
-function restorePortalRoute() {
-    try {
-        const saved = localStorage.getItem("schoolPortalLastHash");
-        if (saved && saved !== "#login" && window.location.hash !== saved) {
-            history.replaceState({ portalRoute: saved }, "", saved);
-        }
-    } catch (e) {}
-}
-window.addEventListener("hashchange", savePortalRoute);
-window.addEventListener("beforeunload", savePortalRoute);
+// Do not persist the last portal section in localStorage. Browser Back/Forward
+// uses the actual history stack instead.
+try { localStorage.removeItem("schoolPortalLastHash"); } catch (e) {}
 
         const storage = (firebase && typeof firebase.storage === 'function') ? firebase.storage() : null;
 
@@ -3333,91 +3317,11 @@ window.addEventListener("beforeunload", savePortalRoute);
         }
 
         function restorePortalSession() {
-            try {
-                const raw = sessionStorage.getItem('schoolPortalSession');
-                if (!raw) return false;
-
-                const session = JSON.parse(raw);
-                if (!session || !session.role || !session.user) return false;
-
-                // Rebuild the same UI state created after a successful login.
-                const badge = document.getElementById('user-badge');
-                const teacherNav = document.getElementById('teacher-nav-items');
-                const adminNav = document.getElementById('admin-nav-items');
-                const librarianNav = document.getElementById('librarian-nav-items');
-                const storekeeperNav = document.getElementById('storekeeper-nav-items');
-
-                currentRole = session.role;
-                loggedUser = session.user;
-
-                teacherNav.classList.add('hidden');
-                adminNav.classList.add('hidden');
-                librarianNav.classList.add('hidden');
-                storekeeperNav.classList.add('hidden');
-
-                if (currentRole === 'admin') {
-                    badge.textContent = 'Administrator';
-                    adminNav.classList.remove('hidden');
-                    showView('admin');
-                } else if (currentRole === 'teacher') {
-                    badge.textContent = `Teacher: ${loggedUser.name}`;
-                    document.getElementById('teacher-logged-name').textContent = loggedUser.name || '';
-                    document.getElementById('t-logged-dept').textContent = loggedUser.dept || '';
-                    document.getElementById('t-logged-streams').textContent = loggedUser.streams || '';
-                    teacherNav.classList.remove('hidden');
-                    showView('teacher');
-                } else if (currentRole === 'librarian') {
-                    badge.textContent = 'Librarian Portal';
-                    librarianNav.classList.remove('hidden');
-                    showView('librarian');
-                } else if (currentRole === 'storekeeper') {
-                    badge.textContent = 'Store Keeper Portal';
-                    storekeeperNav.classList.remove('hidden');
-                    showView('storekeeper');
-                } else {
-                    clearPortalSession();
-                    return false;
-                }
-
-                // Restore the last section, or use the appropriate dashboard.
-                const savedHash = localStorage.getItem('schoolPortalLastHash');
-                const routeMap = {
-                    '#admin-dashboard': ['admin', 'a-dashboard'],
-                    '#manage-teachers': ['admin', 'a-manage-teachers'],
-                    '#academic-weeks': ['admin', 'a-manage-weeks'],
-                    '#review-remedials': ['admin', 'a-review-remedials'],
-                    '#approved-claims': ['admin', 'a-approved-reports'],
-                    '#tenders-careers': ['admin', 'a-opportunities'],
-                    '#timetable-memo': ['admin', 'a-timetable'],
-                    '#admissions': ['admin', 'a-admissions'],
-                    '#admin-security': ['admin', 'a-admin-security'],
-                    '#admin-inquiries': ['admin', 'a-inquiries'],
-                    '#teacher-attendance-report': ['admin', 'a-attendance-report']
-                };
-
-                const target = routeMap[savedHash];
-                if (target && target[0] === currentRole) {
-                    switchTab(target[0], target[1], false);
-                } else if (currentRole === 'admin') {
-                    switchTab('admin', 'a-dashboard', false);
-                } else if (currentRole === 'teacher') {
-                    switchTab('teacher', 't-dashboard', false);
-                } else if (currentRole === 'librarian') {
-                    switchTab('librarian', 'l-dashboard', false);
-                    renderLibraryModule();
-                } else {
-                    switchTab('storekeeper', 'sk-dashboard', false);
-                }
-
-                renderClaimsTables();
-                renderTeachersTable();
-                renderCatUploadHistory();
-                return true;
-            } catch (e) {
-                console.warn('Could not restore portal session:', e);
-                clearPortalSession();
-                return false;
-            }
+            // Never automatically reopen a portal from a previous visit.
+            clearPortalSession();
+            currentRole = 'public';
+            loggedUser = null;
+            return false;
         }
 
         function setLoginStatus(message, type = 'error') {
@@ -3569,10 +3473,9 @@ window.addEventListener("beforeunload", savePortalRoute);
                     librarianNav.classList.add('hidden');
                     storekeeperNav.classList.add('hidden');
                     persistPortalSession();
-                    try { localStorage.setItem('schoolPortalLastHash', '#admin-dashboard'); } catch (_) {}
                     hideLoginModal();
                     showView('admin');
-                    switchTab('admin', 'a-dashboard', false);
+                    switchTab('admin', 'a-dashboard', true);
                     setLoginStatus('Administrator login successful.', 'success');
                 } else if (role === 'teacher') {
                     const matchedTeacher = teachersData.find(t => String(t.email||'').toLowerCase() === inputVal.toLowerCase() && String(t.password||'') === passwordVal);
@@ -3590,7 +3493,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                     persistPortalSession();
                     hideLoginModal();
                     showView('teacher');
-                    switchTab('teacher', 't-dashboard', false);
+                    switchTab('teacher', 't-dashboard', true);
                 } else if (role === 'librarian') {
                     const librarianPassword = getPortalPassword('librarian');
                     if (passwordVal !== librarianPassword) throw new Error('Incorrect Librarian Password.');
@@ -3604,7 +3507,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                     persistPortalSession();
                     hideLoginModal();
                     showView('librarian');
-                    switchTab('librarian','l-dashboard', false);
+                    switchTab('librarian','l-dashboard', true);
                     renderLibraryModule();
                 } else if (role === 'storekeeper') {
                     const storeKeeperPassword = getPortalPassword('storekeeper');
@@ -3621,7 +3524,7 @@ window.addEventListener("beforeunload", savePortalRoute);
                     persistPortalSession();
                     hideLoginModal();
                     showView('storekeeper');
-                    switchTab('storekeeper','sk-dashboard', false);
+                    switchTab('storekeeper','sk-dashboard', true);
                 }
                 renderClaimsTables();
                 renderTeachersTable();
@@ -3660,6 +3563,7 @@ window.addEventListener("beforeunload", savePortalRoute);
             document.getElementById('librarian-nav-items').classList.add('hidden');
             document.getElementById('storekeeper-nav-items').classList.add('hidden');
 
+            try { history.replaceState({ publicPage: true }, '', window.location.pathname + window.location.search); } catch (e) {}
             showView('public');
         }
 
@@ -3973,7 +3877,6 @@ function switchTab(role, tabId, pushHistory = true) {
 
             try {
                 if (route) {
-                    localStorage.setItem('schoolPortalLastHash', route);
                     if (pushHistory && window.location.hash !== route) {
                         history.pushState(
                             { portalRoute: route, role: role, tabId: tabId },
@@ -6494,9 +6397,8 @@ Learner: ${patronName}`);
     };
 
     function restoreRoute() {
-        const hash = window.location.hash || localStorage.getItem('schoolPortalLastHash');
+        const hash = window.location.hash || '';
         const route = routeMap[hash];
-
         if (route && typeof currentRole !== 'undefined' && currentRole === route[0]) {
             switchTab(route[0], route[1], false);
             return true;
@@ -6505,71 +6407,38 @@ Learner: ${patronName}`);
     }
 
     window.addEventListener('popstate', function () {
-        // Do not create another history entry while responding to Back/Forward.
+        // Back and Forward use the real browser history.
         if (!restoreRoute()) {
-            try {
-                localStorage.setItem('schoolPortalLastHash', window.location.hash || '');
-            } catch (_) {}
+            // Going Back to the public page does not log the user out; this keeps
+            // Forward fully functional. Explicit Logout is what ends the session.
+            showView('public');
         }
     });
 
     window.addEventListener('DOMContentLoaded', function () {
+        // Never restore a previous portal automatically when this page is opened.
+        clearPortalSession();
+        currentRole = 'public';
+        loggedUser = null;
+        try { history.replaceState({ publicPage: true }, '', window.location.pathname + window.location.search); } catch (_) {}
+        showView('public');
+
         if (window.firebase && typeof firebase.auth === 'function') {
-            // Firebase Auth LOCAL persistence keeps the Administrator signed in
-            // across refreshes. Do not trust localStorage alone for admin access.
+            let firstAuthCheck = true;
             firebase.auth().onAuthStateChanged(async function (user) {
-                if (user) {
-                    currentRole = 'admin';
-                    loggedUser = {
-                        name: 'Administrator',
-                        role: 'admin',
-                        email: user.email,
-                        uid: user.uid
-                    };
-
-                    try {
-                        sessionStorage.setItem(
-                            'schoolPortalSession',
-                            JSON.stringify({
-                                role: 'admin',
-                                user: loggedUser,
-                                savedAt: Date.now()
-                            })
-                        );
-                    } catch (_) {}
-
-                    document.getElementById('user-badge').textContent = 'Administrator';
-                    document.getElementById('admin-nav-items').classList.remove('hidden');
-                    document.getElementById('teacher-nav-items').classList.add('hidden');
-                    document.getElementById('librarian-nav-items').classList.add('hidden');
-                    document.getElementById('storekeeper-nav-items').classList.add('hidden');
-
-                    showView('admin');
-
-                    if (!restoreRoute()) {
-                        switchTab('admin', 'a-dashboard', false);
-                    }
-                } else if (currentRole === 'admin') {
-                    // Firebase says the admin session really ended; do not restore
-                    // an old local admin session.
-                    clearPortalSession();
-                    currentRole = 'public';
-                    loggedUser = null;
-                    showView('public');
-                } else {
-                    // Teacher, Librarian and Store Keeper use their portal session
-                    // record, so their page survives a normal browser refresh.
-                    restorePortalSession();
-                    if (currentRole !== 'public') {
-                        restoreRoute();
+                if (firstAuthCheck) {
+                    firstAuthCheck = false;
+                    if (user) {
+                        try { await firebase.auth().signOut(); } catch (_) {}
+                        clearPortalSession();
+                        currentRole = 'public';
+                        loggedUser = null;
+                        showView('public');
+                        return;
                     }
                 }
+                if (currentRole === 'public') showView('public');
             });
-        } else {
-            restorePortalSession();
-            if (currentRole !== 'public') {
-                restoreRoute();
-            }
         }
     });
 })();
