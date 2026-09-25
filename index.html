@@ -740,7 +740,12 @@ body:not(.portal-mode) #public-view > section{
             
             <!-- PORTAL TOP BAR -->
             <div class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm no-print">
-                <h1 id="portal-title" class="text-xl font-bold text-[--dark-green-deep]">Dashboard</h1>
+                <div class="flex items-center gap-2 min-w-0">
+                    <button id="mobile-portal-menu-btn" type="button" onclick="openMobilePortalMenu()" class="hidden items-center justify-center w-10 h-10 rounded-lg bg-[--dark-green-deep] text-white shadow-sm" aria-label="Open portal menu">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <h1 id="portal-title" class="text-xl font-bold text-[--dark-green-deep] truncate">Dashboard</h1>
+                </div>
                 <div class="flex items-center gap-4">
                     <span class="text-sm font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border">Term 2 2026</span>
                     <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
@@ -3292,7 +3297,7 @@ window.addEventListener("beforeunload", savePortalRoute);
             const mobilePublicNav = document.getElementById('mobile-public-nav');
 
             if (viewId === 'public') {
-                document.body.classList.remove('portal-mode');
+                document.body.classList.remove('portal-mode', 'mobile-portal-menu-open', 'mobile-portal-section-open');
                 sidebar.classList.add('hidden');
                 portalContent.classList.add('hidden');
                 publicNav.classList.remove('hidden');
@@ -3300,6 +3305,8 @@ window.addEventListener("beforeunload", savePortalRoute);
                 if (mobilePublicNav) mobilePublicNav.classList.remove('hidden');
             } else {
                 document.body.classList.add('portal-mode');
+                document.body.classList.remove('mobile-portal-section-open');
+                document.body.classList.add('mobile-portal-menu-open');
                 sidebar.classList.remove('hidden');
                 portalContent.classList.remove('hidden');
                 publicNav.classList.add('hidden');
@@ -3886,6 +3893,17 @@ async function initializeTeacherAttendance() {
     await checkTeacherAttendanceNetwork();
 }
 
+function openMobilePortalMenu() {
+    if (!document.body.classList.contains('portal-mode')) return;
+    document.body.classList.remove('mobile-portal-section-open');
+    document.body.classList.add('mobile-portal-menu-open');
+    const sidebar = document.getElementById('portal-sidebar');
+    const portalContent = document.getElementById('portal-content');
+    if (sidebar) sidebar.scrollTop = 0;
+    if (portalContent) portalContent.scrollTop = 0;
+    if (window.lucide && typeof lucide.createIcons === 'function') { try { lucide.createIcons(); } catch(e) {} }
+}
+
 function switchTab(role, tabId, pushHistory = true) {
             if (role === 'admin' && tabId === 'a-attendance-report') setTimeout(loadAdminAttendanceReport, 0);
             // Keep every portal section in browser history so Back/Forward moves
@@ -4010,6 +4028,24 @@ function switchTab(role, tabId, pushHistory = true) {
             document.getElementById('portal-title').textContent = titles[tabId] || 'Portal';
             if (role === 'librarian') renderLibraryModule();
             if (role === 'storekeeper') renderStoreKeeperModule();
+
+            // On phones, clicking a sidebar item closes the menu and gives the
+            // selected section the entire available screen. Initial portal
+            // selection uses pushHistory=false and therefore keeps the menu open.
+            if (window.matchMedia && window.matchMedia('(max-width: 767px)').matches && document.body.classList.contains('portal-mode')) {
+                if (pushHistory) {
+                    document.body.classList.remove('mobile-portal-menu-open');
+                    document.body.classList.add('mobile-portal-section-open');
+                    const view = document.getElementById(role + '-view');
+                    if (view) view.scrollTop = 0;
+                    const content = document.getElementById('portal-content');
+                    if (content) content.scrollTop = 0;
+                    if (window.lucide && typeof lucide.createIcons === 'function') { try { lucide.createIcons(); } catch(e) {} }
+                } else {
+                    document.body.classList.remove('mobile-portal-section-open');
+                    document.body.classList.add('mobile-portal-menu-open');
+                }
+            }
         }
         
         function renderStoreKeeperSearchIcons(){
@@ -6235,6 +6271,144 @@ Learner: ${patronName}`);
             }).catch(showFirebaseError);
         }
     </script>
+
+<style id="mobile-portal-menu-fullscreen-fix">
+/* Mobile portal: menu-first, then full-screen section. */
+@media (max-width: 767px) {
+  html, body { width:100%; max-width:100%; }
+
+  body.portal-mode {
+    height:100dvh !important;
+    min-height:100dvh !important;
+    overflow:hidden !important;
+  }
+
+  body.portal-mode main {
+    width:100% !important;
+    height:calc(100dvh - 80px) !important;
+    min-height:0 !important;
+    display:block !important;
+    overflow:hidden !important;
+  }
+
+  /* Immediately after login: show ONLY the menu. */
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar {
+    display:flex !important;
+    position:relative !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    height:calc(100dvh - 80px) !important;
+    max-height:none !important;
+    min-height:0 !important;
+    border:0 !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    padding:1rem !important;
+    box-sizing:border-box !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-content {
+    display:none !important;
+  }
+
+  /* After selecting a menu item: content becomes the entire phone screen. */
+  body.portal-mode.mobile-portal-section-open #portal-sidebar {
+    display:none !important;
+  }
+  body.portal-mode.mobile-portal-section-open #portal-content {
+    display:flex !important;
+    flex-direction:column !important;
+    width:100% !important;
+    height:calc(100dvh - 80px) !important;
+    max-height:none !important;
+    min-height:0 !important;
+    overflow:hidden !important;
+  }
+  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white {
+    position:relative !important;
+    top:auto !important;
+    flex:0 0 auto !important;
+    min-height:64px !important;
+    padding:.65rem .7rem !important;
+  }
+  body.portal-mode.mobile-portal-section-open #portal-content .portal-view {
+    flex:1 1 auto !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-y:contain !important;
+    padding:.75rem .65rem 5rem !important;
+    box-sizing:border-box !important;
+  }
+  body.portal-mode.mobile-portal-section-open #mobile-portal-menu-btn {
+    display:flex !important;
+  }
+
+  /* Compact menu, like a dedicated phone menu rather than a desktop sidebar. */
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child {
+    display:block !important;
+    margin-bottom:1rem !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child > div:first-child {
+    width:58px !important;
+    height:58px !important;
+    font-size:1.35rem !important;
+    margin-bottom:.5rem !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child h3 {
+    font-size:1rem !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child p {
+    font-size:.68rem !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar nav {
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:.35rem !important;
+    width:100% !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item {
+    min-height:3rem !important;
+    width:100% !important;
+    font-size:.88rem !important;
+    line-height:1.2 !important;
+    padding:.7rem .75rem !important;
+    gap:.65rem !important;
+  }
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item svg {
+    width:1.15rem !important;
+    height:1.15rem !important;
+  }
+
+  /* Prevent wide tables from widening the section itself. */
+  body.portal-mode.mobile-portal-section-open .portal-view .overflow-x-auto {
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+  }
+  body.portal-mode.mobile-portal-section-open .portal-view table {
+    min-width:650px !important;
+  }
+
+  /* Keep the mobile header controls usable. */
+  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white .flex.items-center.gap-4 {
+    gap:.35rem !important;
+  }
+  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white .text-sm {
+    font-size:.62rem !important;
+    padding:.35rem .5rem !important;
+  }
+  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white button[onclick="logout()"] {
+    padding:.5rem .65rem !important;
+    font-size:.72rem !important;
+  }
+}
+</style>
 </body>
 </html>
 
