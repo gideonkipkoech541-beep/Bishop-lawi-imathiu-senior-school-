@@ -3317,11 +3317,21 @@ try { localStorage.removeItem("schoolPortalLastHash"); } catch (e) {}
         }
 
         function restorePortalSession() {
-            // Never automatically reopen a portal from a previous visit.
-            clearPortalSession();
-            currentRole = 'public';
-            loggedUser = null;
-            return false;
+            // Restore only the current browser-tab session. sessionStorage survives
+            // a normal page refresh, but is cleared when the tab/window is closed.
+            // Explicit logout removes it via clearPortalSession().
+            try {
+                const raw = sessionStorage.getItem('schoolPortalSession');
+                if (!raw) return false;
+                const saved = JSON.parse(raw);
+                if (!saved || !saved.role || saved.role === 'public' || !saved.user) return false;
+                currentRole = saved.role;
+                loggedUser = saved.user;
+                return true;
+            } catch (e) {
+                console.warn('Could not restore portal session:', e);
+                return false;
+            }
         }
 
         function setLoginStatus(message, type = 'error') {
@@ -4809,7 +4819,7 @@ function searchStoreDashboard(query){
             currentLibraryProfile = { type: 'student', id: String(student.id), name: student.name, admNo: student.admNo || '' };
 
             // Open the dedicated student profile tab, NOT Patrons & Fines.
-            switchTab('librarian', 'l-student-profile', false);
+            switchTab('librarian', 'l-student-profile', true);
 
             document.getElementById('library-page-profile-name').textContent = student.name;
             document.getElementById('library-page-profile-admission').textContent = 'Admission Number: ' + student.admNo;
@@ -6197,156 +6207,119 @@ Learner: ${patronName}`);
         }
     </script>
 
-<style id="mobile-portal-menu-fullscreen-fix">
-/* Mobile portal: menu-first, then full-screen section. */
+<style id="mobile-top-navigation-fix">
+/* MOBILE: portal navigation is a horizontal bar across the TOP.
+   Tapping a section changes the content below without opening the old full-screen sidebar. */
 @media (max-width: 767px) {
-  html, body { width:100%; max-width:100%; }
-
   body.portal-mode {
-    height:100dvh !important;
+    height:auto !important;
     min-height:100dvh !important;
-    overflow:hidden !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
   }
-
   body.portal-mode main {
     width:100% !important;
-    height:calc(100dvh - 80px) !important;
+    height:auto !important;
     min-height:0 !important;
     display:block !important;
-    overflow:hidden !important;
+    overflow:visible !important;
   }
-
-  /* Mobile sidebar navigation must receive taps directly. */
-  @media (max-width: 767px) {
-    body.portal-mode.mobile-portal-menu-open #portal-sidebar,
-    body.portal-mode.mobile-portal-menu-open #portal-sidebar nav,
-    body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item {
-      pointer-events:auto !important;
-      touch-action:manipulation !important;
-    }
-    body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item {
-      position:relative !important;
-      z-index:1002 !important;
-      cursor:pointer !important;
-      -webkit-tap-highlight-color:transparent;
-    }
-  }
-
-  /* Immediately after login: show ONLY the menu. */
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar {
-    display:flex !important;
-    position:relative !important;
-    width:100% !important;
-    max-width:none !important;
-    min-width:0 !important;
-    height:calc(100dvh - 80px) !important;
-    max-height:none !important;
-    min-height:0 !important;
-    border:0 !important;
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    padding:1rem !important;
-    box-sizing:border-box !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-content {
-    display:none !important;
-  }
-
-  /* After selecting a menu item: content becomes the entire phone screen. */
+  body.portal-mode #portal-sidebar,
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar,
   body.portal-mode.mobile-portal-section-open #portal-sidebar {
-    display:none !important;
-  }
-  body.portal-mode.mobile-portal-section-open #portal-content {
-    display:flex !important;
-    flex-direction:column !important;
+    display:block !important;
+    position:sticky !important;
+    top:0 !important;
+    z-index:1000 !important;
     width:100% !important;
-    height:calc(100dvh - 80px) !important;
+    min-width:0 !important;
+    max-width:none !important;
+    height:auto !important;
     max-height:none !important;
     min-height:0 !important;
+    padding:.45rem .5rem !important;
+    border:0 !important;
     overflow:hidden !important;
+    background:#123d2b !important;
+    box-shadow:0 2px 8px rgba(0,0,0,.18) !important;
   }
-  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white {
-    position:relative !important;
-    top:auto !important;
+  body.portal-mode #portal-sidebar > div:first-child { display:none !important; }
+  body.portal-mode #portal-sidebar nav {
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:stretch !important;
+    gap:.4rem !important;
+    width:100% !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+    padding:.05rem .05rem .18rem !important;
+    touch-action:pan-x !important;
+  }
+  body.portal-mode #portal-sidebar nav::-webkit-scrollbar { display:none !important; }
+  body.portal-mode #portal-sidebar nav > p { display:none !important; }
+  body.portal-mode #portal-sidebar .nav-item {
     flex:0 0 auto !important;
-    min-height:64px !important;
-    padding:.65rem .7rem !important;
+    width:auto !important;
+    min-width:max-content !important;
+    min-height:2.65rem !important;
+    margin:0 !important;
+    padding:.55rem .72rem !important;
+    border-radius:.5rem !important;
+    color:#fff !important;
+    font-size:.76rem !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:.4rem !important;
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+    -webkit-tap-highlight-color:transparent !important;
+    cursor:pointer !important;
   }
-  body.portal-mode.mobile-portal-section-open #portal-content .portal-view {
-    flex:1 1 auto !important;
+  body.portal-mode #portal-sidebar .nav-item svg {
+    width:1rem !important; height:1rem !important; flex:0 0 auto !important;
+  }
+  body.portal-mode #portal-sidebar .nav-item.active-nav { background:#4a2f24 !important; color:#fff !important; }
+
+  body.portal-mode #portal-content,
+  body.portal-mode.mobile-portal-menu-open #portal-content,
+  body.portal-mode.mobile-portal-section-open #portal-content {
+    display:block !important;
     width:100% !important;
     height:auto !important;
     min-height:0 !important;
     max-height:none !important;
-    overflow-y:auto !important;
-    overflow-x:hidden !important;
-    -webkit-overflow-scrolling:touch !important;
-    overscroll-behavior-y:contain !important;
+    overflow:visible !important;
+  }
+  body.portal-mode #portal-content > .bg-white {
+    position:sticky !important;
+    top:0 !important;
+    z-index:900 !important;
+    min-height:58px !important;
+    padding:.55rem .65rem !important;
+  }
+  body.portal-mode #portal-content .portal-view,
+  body.portal-mode.mobile-portal-section-open #portal-content .portal-view {
+    width:100% !important;
+    height:auto !important;
+    min-height:calc(100dvh - 145px) !important;
+    max-height:none !important;
+    overflow:visible !important;
     padding:.75rem .65rem 5rem !important;
     box-sizing:border-box !important;
   }
-  body.portal-mode.mobile-portal-section-open #mobile-portal-menu-btn {
-    display:flex !important;
-  }
+  body.portal-mode #mobile-portal-menu-btn { display:none !important; }
 
-  /* Compact menu, like a dedicated phone menu rather than a desktop sidebar. */
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child {
-    display:block !important;
-    margin-bottom:1rem !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child > div:first-child {
-    width:58px !important;
-    height:58px !important;
-    font-size:1.35rem !important;
-    margin-bottom:.5rem !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child h3 {
-    font-size:1rem !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar > div:first-child p {
-    font-size:.68rem !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar nav {
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    gap:.35rem !important;
-    width:100% !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item {
-    min-height:3rem !important;
-    width:100% !important;
-    font-size:.88rem !important;
-    line-height:1.2 !important;
-    padding:.7rem .75rem !important;
-    gap:.65rem !important;
-  }
-  body.portal-mode.mobile-portal-menu-open #portal-sidebar .nav-item svg {
-    width:1.15rem !important;
-    height:1.15rem !important;
-  }
-
-  /* Prevent wide tables from widening the section itself. */
-  body.portal-mode.mobile-portal-section-open .portal-view .overflow-x-auto {
-    width:100% !important;
-    max-width:100% !important;
-    overflow-x:auto !important;
-    overflow-y:hidden !important;
-  }
-  body.portal-mode.mobile-portal-section-open .portal-view table {
-    min-width:650px !important;
-  }
-
-  /* Keep the mobile header controls usable. */
-  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white .flex.items-center.gap-4 {
-    gap:.35rem !important;
-  }
-  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white .text-sm {
-    font-size:.62rem !important;
-    padding:.35rem .5rem !important;
-  }
-  body.portal-mode.mobile-portal-section-open #portal-content > .bg-white button[onclick="logout()"] {
-    padding:.5rem .65rem !important;
-    font-size:.72rem !important;
+  /* Search/profile buttons must always receive a real phone tap. */
+  body.portal-mode #library-search button,
+  body.portal-mode #library-search a,
+  body.portal-mode #library-search [onclick*="openLibraryStudentProfile"] {
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
   }
 }
 </style>
@@ -6416,28 +6389,69 @@ Learner: ${patronName}`);
     });
 
     window.addEventListener('DOMContentLoaded', function () {
-        // Never restore a previous portal automatically when this page is opened.
-        clearPortalSession();
-        currentRole = 'public';
-        loggedUser = null;
-        try { history.replaceState({ publicPage: true }, '', window.location.pathname + window.location.search); } catch (_) {}
-        showView('public');
+        // A refresh must keep the active portal session. Closing the browser tab or
+        // using the explicit Logout button still ends the session.
+        const restored = restorePortalSession();
+
+        if (!restored) {
+            currentRole = 'public';
+            loggedUser = null;
+            try { history.replaceState({ publicPage: true }, '', window.location.pathname + window.location.search); } catch (_) {}
+            showView('public');
+        } else {
+            const role = currentRole;
+            showView(role);
+
+            // Rebuild the role-specific header/menu state after a refresh.
+            const badge = document.getElementById('user-badge');
+            const teacherNav = document.getElementById('teacher-nav-items');
+            const adminNav = document.getElementById('admin-nav-items');
+            const librarianNav = document.getElementById('librarian-nav-items');
+            const storekeeperNav = document.getElementById('storekeeper-nav-items');
+            [teacherNav, adminNav, librarianNav, storekeeperNav].forEach(el => el && el.classList.add('hidden'));
+            if (role === 'teacher') {
+                if (badge) badge.textContent = `Teacher: ${loggedUser.name || ''}`;
+                teacherNav && teacherNav.classList.remove('hidden');
+                const n=document.getElementById('teacher-logged-name'); if(n) n.textContent=loggedUser.name||'';
+                const d=document.getElementById('t-logged-dept'); if(d) d.textContent=loggedUser.dept||'';
+                const st=document.getElementById('t-logged-streams'); if(st) st.textContent=loggedUser.streams||'';
+            } else if (role === 'admin') {
+                if (badge) badge.textContent = 'Administrator';
+                adminNav && adminNav.classList.remove('hidden');
+            } else if (role === 'librarian') {
+                if (badge) badge.textContent = 'Librarian Portal';
+                librarianNav && librarianNav.classList.remove('hidden');
+            } else if (role === 'storekeeper') {
+                if (badge) badge.textContent = 'Store Keeper Portal';
+                storekeeperNav && storekeeperNav.classList.remove('hidden');
+            }
+
+            // Restore the exact section represented by the URL hash after refresh.
+            // If no valid hash exists, stay on that portal's dashboard.
+            if (!restoreRoute()) {
+                const defaults = {admin:'a-dashboard', teacher:'t-dashboard', librarian:'l-dashboard', storekeeper:'sk-dashboard'};
+                switchTab(role, defaults[role], false);
+            }
+        }
 
         if (window.firebase && typeof firebase.auth === 'function') {
-            let firstAuthCheck = true;
-            firebase.auth().onAuthStateChanged(async function (user) {
-                if (firstAuthCheck) {
-                    firstAuthCheck = false;
-                    if (user) {
-                        try { await firebase.auth().signOut(); } catch (_) {}
+            firebase.auth().onAuthStateChanged(function (user) {
+                // Firebase Auth is used for Administrator. Do not sign out on refresh
+                // when a valid sessionStorage portal session exists.
+                if (currentRole === 'admin') {
+                    if (!user) {
                         clearPortalSession();
                         currentRole = 'public';
                         loggedUser = null;
                         showView('public');
-                        return;
                     }
+                    return;
                 }
-                if (currentRole === 'public') showView('public');
+                if (currentRole === 'public' && user) {
+                    // A stale Firebase session without a portal session must not
+                    // silently log the user into the portal.
+                    firebase.auth().signOut().catch(()=>{});
+                }
             });
         }
     });
