@@ -6370,6 +6370,183 @@ Learner: ${patronName}`);
   }
 }
 </style>
+
+
+<style id="mobile-horizontal-section-only-final">
+/* FINAL MOBILE LAYOUT: keep the EXISTING portal content; use a narrow phone
+   dashboard with the portal sections in a horizontally scrollable strip at TOP. */
+@media (max-width:767px){
+  html,body{width:100%!important;max-width:100%!important;overflow-x:hidden!important;}
+  body.portal-mode{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:100dvh!important;
+    height:auto!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    padding-bottom:0!important;
+    background:#f5f5f3!important;
+  }
+
+  /* Do not use the reference site's sample dashboard/cards/text. */
+  #mobile-portal-shell,
+  .mobile-app-header,
+  .mobile-section-strip,
+  .mobile-home-content,
+  .mobile-more-panel,
+  .mobile-bottom-nav{display:none!important;}
+
+  body.portal-mode main{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+  }
+
+  /* Section access bar — always at the top and scrolls LEFT/RIGHT on a phone. */
+  body.portal-mode #portal-sidebar,
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar,
+  body.portal-mode.mobile-portal-section-open #portal-sidebar{
+    display:block!important;
+    position:sticky!important;
+    top:0!important;
+    z-index:5000!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    padding:.35rem .45rem!important;
+    margin:0!important;
+    background:#123d2b!important;
+    border:0!important;
+    box-shadow:0 2px 8px rgba(0,0,0,.18)!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode #portal-sidebar > div:first-child{display:none!important;}
+  body.portal-mode #portal-sidebar nav{
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:.4rem!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    white-space:nowrap!important;
+    padding:.15rem .05rem .2rem!important;
+    margin:0!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+  }
+  body.portal-mode #portal-sidebar nav::-webkit-scrollbar{display:none!important;}
+  body.portal-mode #portal-sidebar nav>p{display:none!important;}
+  body.portal-mode #portal-sidebar .nav-item{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:max-content!important;
+    min-height:2.45rem!important;
+    margin:0!important;
+    padding:.55rem .78rem!important;
+    border-radius:.5rem!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:.38rem!important;
+    white-space:nowrap!important;
+    color:#fff!important;
+    font-size:.74rem!important;
+    line-height:1!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+  body.portal-mode #portal-sidebar .nav-item.active-nav{
+    background:#4a2f24!important;
+    color:#fff!important;
+  }
+  body.portal-mode #portal-sidebar .nav-item svg{
+    width:1rem!important;
+    height:1rem!important;
+    flex:0 0 auto!important;
+  }
+
+  /* Keep the actual portal dashboard/section narrow and phone-friendly. */
+  body.portal-mode #portal-content{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    background:#f5f5f3!important;
+  }
+  body.portal-mode #portal-content>.bg-white{
+    display:block!important;
+    position:relative!important;
+    width:100%!important;
+    min-height:56px!important;
+    padding:.55rem .65rem!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode #portal-content .portal-view,
+  body.portal-mode.mobile-portal-section-open #portal-content .portal-view,
+  body.portal-mode.mobile-portal-menu-open #portal-content .portal-view{
+    display:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:calc(100dvh - 110px)!important;
+    max-height:none!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+    padding:.65rem .65rem 2rem!important;
+  }
+  body.portal-mode #portal-content .portal-view.active{
+    display:block!important;
+  }
+  body.portal-mode.mobile-dashboard-home #portal-content .portal-view.active{
+    display:block!important;
+  }
+
+  /* Existing portal tab content remains the source of the dashboard content. */
+  body.portal-mode .portal-view.active .tab-content{display:none!important;}
+  body.portal-mode .portal-view.active .tab-content.active{display:block!important;}
+  body.portal-mode .portal-view .tab-content,
+  body.portal-mode .portal-view .grid,
+  body.portal-mode .portal-view form,
+  body.portal-mode .portal-view section,
+  body.portal-mode .portal-view article,
+  body.portal-mode .portal-view .flex{
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode .portal-view table{min-width:650px!important;}
+  body.portal-mode .portal-view .overflow-x-auto{
+    max-width:100%!important;
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  body.portal-mode input,
+  body.portal-mode select,
+  body.portal-mode textarea,
+  body.portal-mode button{max-width:100%;box-sizing:border-box;}
+
+  /* Old mobile menu button is unnecessary because sections are always visible at top. */
+  body.portal-mode #mobile-portal-menu-btn{display:none!important;}
+}
+</style>
 </body>
 </html>
 
