@@ -735,6 +735,53 @@ body:not(.portal-mode) #public-view > section{
 
         <!-- PORTAL CONTENT WRAPPER -->
         <div id="portal-content" class="hidden flex-grow bg-[--light-cream]">
+<div id="mobile-portal-shell" aria-label="Mobile portal navigation">
+  <div class="mobile-app-header">
+    <div class="mobile-brand">BLISS</div>
+    <div class="mobile-header-actions">
+      <button type="button" class="mobile-icon-btn" onclick="mobilePortalSearch()" aria-label="Search"><i data-lucide="search"></i></button>
+      <button type="button" class="mobile-icon-btn" onclick="mobilePortalMessages()" aria-label="Messages"><i data-lucide="mail"></i></button>
+      <button type="button" class="mobile-avatar" id="mobile-user-avatar" onclick="mobilePortalMore()" aria-label="Account">BL</button>
+    </div>
+  </div>
+  <div class="mobile-section-strip" id="mobile-section-strip"></div>
+  <div class="mobile-home-content" id="mobile-home-content">
+    <div class="mobile-welcome-card">
+      <div class="mobile-welcome-overlay"></div>
+      <div class="mobile-welcome-text">
+        <div class="mobile-welcome-title" id="mobile-welcome-title">Welcome</div>
+        <div class="mobile-welcome-subtitle">Manage your school portal from the comfort of your <strong>mobile phone</strong></div>
+      </div>
+    </div>
+    <div class="mobile-switch-card">
+      <div class="mobile-switch-title" id="mobile-switch-title">Portal Dashboard</div>
+      <button type="button" onclick="mobilePortalPrimary()" id="mobile-primary-btn">Open Main Section</button>
+    </div>
+    <div class="mobile-stat-grid" id="mobile-stat-grid">
+      <button type="button" class="mobile-stat-card" onclick="mobilePortalStat(0)"><span class="mobile-stat-icon"><i data-lucide="users"></i></span><span><strong id="mobile-stat-1">—</strong><small id="mobile-stat-l1">Staff</small></span><b>→</b></button>
+      <button type="button" class="mobile-stat-card" onclick="mobilePortalStat(1)"><span class="mobile-stat-icon"><i data-lucide="graduation-cap"></i></span><span><strong id="mobile-stat-2">—</strong><small id="mobile-stat-l2">Students</small></span><b>→</b></button>
+      <button type="button" class="mobile-stat-card" onclick="mobilePortalStat(2)"><span class="mobile-stat-icon"><i data-lucide="clipboard-list"></i></span><span><strong id="mobile-stat-3">—</strong><small id="mobile-stat-l3">Tasks</small></span><b>→</b></button>
+      <button type="button" class="mobile-stat-card" onclick="mobilePortalStat(3)"><span class="mobile-stat-icon"><i data-lucide="calendar-days"></i></span><span><strong id="mobile-stat-4">—</strong><small id="mobile-stat-l4">Calendar</small></span><b>→</b></button>
+    </div>
+    <div class="mobile-upcoming-title">Upcoming</div>
+    <div class="mobile-upcoming-card"><i data-lucide="calendar-clock"></i><div><strong id="mobile-upcoming-main">School activities</strong><small id="mobile-upcoming-sub">Your upcoming portal items will appear here.</small></div></div>
+  </div>
+  <div class="mobile-more-panel" id="mobile-more-panel">
+    <div class="mobile-more-sheet">
+      <div class="mobile-more-head"><strong>More sections</strong><button type="button" onclick="mobilePortalMore(false)">×</button></div>
+      <div id="mobile-more-list" class="mobile-more-list"></div>
+      <button type="button" class="mobile-logout-btn" onclick="logout()"><i data-lucide="log-out"></i> Logout</button>
+    </div>
+  </div>
+  <div class="mobile-bottom-nav" id="mobile-bottom-nav">
+    <button type="button" class="mobile-bottom-item active" data-mobile-slot="home" onclick="mobilePortalBottom('home')"><i data-lucide="home"></i><span>Home</span></button>
+    <button type="button" class="mobile-bottom-item" data-mobile-slot="tasks" onclick="mobilePortalBottom('tasks')"><i data-lucide="clipboard-check"></i><span>Tasks</span></button>
+    <button type="button" class="mobile-bottom-item" data-mobile-slot="calendar" onclick="mobilePortalBottom('calendar')"><i data-lucide="calendar-days"></i><span>Calendar</span></button>
+    <button type="button" class="mobile-bottom-item" data-mobile-slot="messages" onclick="mobilePortalBottom('messages')"><i data-lucide="mail"></i><span>Messages</span></button>
+    <button type="button" class="mobile-bottom-item" data-mobile-slot="more" onclick="mobilePortalBottom('more')"><i data-lucide="ellipsis"></i><span>More</span></button>
+  </div>
+</div>
+
             
             <!-- PORTAL TOP BAR -->
             <div class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm no-print">
@@ -6687,3 +6734,160 @@ document.addEventListener('DOMContentLoaded', function () {
   body.portal-mode #mobile-portal-menu-btn{display:none!important;}
 }
 </style>
+
+
+<style id="mobile-reference-layout">
+@media (max-width:767px){
+  :root{--mobile-green:#0d6b16;--mobile-green-2:#48b04f;--mobile-navy:#142b4a;--mobile-bg:#f4f5f7;}
+  body.portal-mode{background:var(--mobile-bg)!important;overflow-x:hidden!important;overflow-y:auto!important;height:auto!important;min-height:100dvh!important;padding-bottom:76px!important;}
+  body.portal-mode #portal-sidebar{display:none!important;}
+  body.portal-mode #portal-content{display:block!important;width:100%!important;min-height:100dvh!important;background:var(--mobile-bg)!important;overflow:visible!important;}
+  body.portal-mode #portal-content>.bg-white{display:none!important;}
+  body.portal-mode main{display:block!important;width:100%!important;height:auto!important;min-height:0!important;overflow:visible!important;}
+  body.portal-mode .portal-view{display:none!important;width:100%!important;min-height:0!important;height:auto!important;overflow:visible!important;padding:0 0 96px!important;}
+  body.portal-mode .portal-view.active{display:block!important;}
+  body.portal-mode.mobile-dashboard-home .portal-view.active{display:none!important;}
+  body.portal-mode .portal-view.active .tab-content{display:none!important;}
+  body.portal-mode .portal-view.active .tab-content.active{display:block!important;}
+  #mobile-portal-shell{display:block;position:relative;z-index:2000;}
+  .mobile-app-header{height:72px;background:#f7f9fc;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #dce2e8;box-sizing:border-box;}
+  .mobile-brand{font-size:23px;font-weight:800;color:var(--mobile-green);letter-spacing:-.5px;}
+  .mobile-header-actions{display:flex;align-items:center;gap:10px;}
+  .mobile-icon-btn{width:52px;height:46px;border:0;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#18314f;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .mobile-icon-btn svg{width:23px;height:23px;stroke-width:2.4;}
+  .mobile-avatar{width:46px;height:46px;border:0;border-radius:50%;background:#ef4b43;color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;}
+  .mobile-section-strip{height:112px;background:#43ad49;display:flex;align-items:stretch;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+  .mobile-section-strip::-webkit-scrollbar{display:none;}
+  .mobile-section-item{border:0;background:transparent;color:#fff;min-width:33.333%;padding:12px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;font-size:16px;font-weight:700;text-align:center;line-height:1.15;}
+  .mobile-section-item svg{width:25px;height:25px;stroke-width:2.2;}
+  .mobile-section-item.active{background:#086b0c;}
+  .mobile-home-content{padding:28px 20px 100px;background:var(--mobile-bg);}
+  .mobile-welcome-card{height:218px;border-radius:20px;overflow:hidden;position:relative;background:linear-gradient(100deg,#153c59,#273d45);box-shadow:0 2px 5px rgba(0,0,0,.08);}
+  .mobile-welcome-card:before{content:"";position:absolute;inset:0;background-image:linear-gradient(90deg,rgba(8,50,74,.92),rgba(8,50,74,.42),rgba(0,0,0,.12)),url('https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1200&q=80');background-size:cover;background-position:center;}
+  .mobile-welcome-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,57,82,.62),rgba(16,57,82,.08));}
+  .mobile-welcome-text{position:absolute;left:28px;right:22px;top:30px;color:#fff;z-index:2;}
+  .mobile-welcome-title{font-size:31px;font-weight:500;line-height:1.18;margin-bottom:24px;}
+  .mobile-welcome-subtitle{font-size:20px;line-height:1.35;max-width:530px;}
+  .mobile-switch-card{background:#fff;border-radius:20px;margin-top:24px;padding:38px 42px 42px;box-shadow:0 1px 4px rgba(0,0,0,.03);}
+  .mobile-switch-title{font-size:28px;font-weight:700;color:var(--mobile-navy);margin-bottom:36px;}
+  .mobile-switch-card button{height:82px;width:100%;border:2px solid #39a9d5;background:#fff;color:#3ba7d0;border-radius:9px;font-size:25px;font-weight:500;}
+  .mobile-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px 40px;margin-top:30px;}
+  .mobile-stat-card{min-height:136px;background:#fff;border:0;border-radius:18px;padding:20px 18px;display:grid;grid-template-columns:66px 1fr 20px;align-items:center;text-align:left;color:var(--mobile-navy);box-shadow:0 1px 4px rgba(0,0,0,.03);}
+  .mobile-stat-icon{width:58px;height:58px;border-radius:7px;background:#d9f3fb;display:flex;align-items:center;justify-content:center;color:#32a9d8;}
+  .mobile-stat-icon svg{width:39px;height:39px;stroke-width:1.8;}
+  .mobile-stat-card strong{display:block;font-size:28px;line-height:1.05;font-weight:700;}
+  .mobile-stat-card small{display:block;color:#7b7e8a;font-size:19px;margin-top:8px;}
+  .mobile-stat-card b{font-size:27px;font-weight:400;}
+  .mobile-upcoming-title{font-size:28px;color:var(--mobile-navy);margin:36px 0 20px;}
+  .mobile-upcoming-card{background:#fff;border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center;color:var(--mobile-navy);box-shadow:0 1px 4px rgba(0,0,0,.03);}
+  .mobile-upcoming-card svg{width:30px;height:30px;color:#36a8d4;flex:0 0 auto;}
+  .mobile-upcoming-card strong{display:block;font-size:16px;}
+  .mobile-upcoming-card small{display:block;color:#777f8d;margin-top:3px;}
+  .mobile-more-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:7000;align-items:flex-end;}
+  .mobile-more-panel.open{display:flex;}
+  .mobile-more-sheet{width:100%;max-height:78dvh;background:#fff;border-radius:24px 24px 0 0;padding:18px 18px 24px;overflow:auto;box-sizing:border-box;}
+  .mobile-more-head{display:flex;justify-content:space-between;align-items:center;font-size:20px;color:var(--mobile-navy);margin-bottom:12px;}
+  .mobile-more-head button{border:0;background:#f0f2f4;width:36px;height:36px;border-radius:50%;font-size:24px;line-height:1;}
+  .mobile-more-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .mobile-more-item{border:1px solid #e2e6eb;background:#f8fafb;border-radius:12px;padding:13px;text-align:left;display:flex;align-items:center;gap:9px;color:#19304b;font-weight:600;}
+  .mobile-more-item svg{width:20px;height:20px;color:#14831b;flex:0 0 auto;}
+  .mobile-logout-btn{margin-top:14px;width:100%;height:48px;border:0;border-radius:12px;background:#b42318;color:#fff;font-weight:700;display:flex;justify-content:center;align-items:center;gap:8px;}
+  .mobile-logout-btn svg{width:19px;height:19px;}
+  .mobile-bottom-nav{position:fixed;left:0;right:0;bottom:0;height:76px;background:#fff;border-top:1px solid #dfe4e9;display:grid;grid-template-columns:repeat(5,1fr);z-index:6000;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -3px 12px rgba(0,0,0,.06);}
+  .mobile-bottom-item{border:0;background:#fff;color:#202630;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:600;}
+  .mobile-bottom-item svg{width:25px;height:25px;stroke-width:1.9;}
+  .mobile-bottom-item.active{color:#0d213a;}
+  .mobile-bottom-item.active svg{stroke-width:2.5;}
+  .mobile-bottom-item:active,.mobile-section-item:active,.mobile-stat-card:active{transform:scale(.98);}
+  /* Existing portal cards/forms should inherit the reference page spacing on phones. */
+  body.portal-mode .portal-view .bg-white{border-radius:14px!important;}
+  body.portal-mode .portal-view .p-8{padding:20px!important;}
+  body.portal-mode .portal-view .p-6{padding:18px!important;}
+  body.portal-mode .portal-view h2{font-size:24px!important;}
+}
+@media (max-width:390px){
+  .mobile-app-header{padding:0 14px}.mobile-icon-btn{width:45px;height:43px}.mobile-avatar{width:43px;height:43px}
+  .mobile-home-content{padding-left:14px;padding-right:14px}.mobile-welcome-title{font-size:27px}.mobile-welcome-subtitle{font-size:18px}
+  .mobile-switch-card{padding:28px 22px 30px}.mobile-switch-title{font-size:24px}.mobile-switch-card button{font-size:21px;height:70px}
+  .mobile-stat-grid{gap:16px}.mobile-stat-card{min-height:118px;grid-template-columns:48px 1fr 14px;padding:14px 11px}.mobile-stat-icon{width:46px;height:46px}.mobile-stat-icon svg{width:31px;height:31px}.mobile-stat-card strong{font-size:24px}.mobile-stat-card small{font-size:16px}.mobile-stat-card b{font-size:22px}
+}
+@media (min-width:768px){#mobile-portal-shell{display:none!important;}}
+</style>
+
+
+<script id="mobile-reference-layout-js">
+(function(){
+  const configs={
+    teacher:{top:[['t-dashboard','Dashboard','layout-dashboard'],['t-cats','My Subjects','book-open'],['t-attendance','Staff Attendance','calendar-check']],bottom:{home:'t-dashboard',tasks:'t-cats',calendar:'t-attendance',messages:'t-swapping'}},
+    admin:{top:[['a-dashboard','Dashboard','layout-dashboard'],['a-manage-teachers','Manage Staff','users'],['a-admissions','Admissions','graduation-cap']],bottom:{home:'a-dashboard',tasks:'a-review-remedials',calendar:'a-manage-weeks',messages:'a-inquiries'}},
+    librarian:{top:[['l-dashboard','Dashboard','layout-dashboard'],['l-search','Library Search','search'],['l-circulations','Issue / Return','repeat']],bottom:{home:'l-dashboard',tasks:'l-search',calendar:'l-circulations',messages:'l-patrons'}},
+    storekeeper:{top:[['sk-dashboard','Dashboard','layout-dashboard'],['sk-books-stationery','My Stock','boxes'],['sk-reports','Reports','file-bar-chart']],bottom:{home:'sk-dashboard',tasks:'sk-books-stationery',calendar:'sk-history',messages:'sk-reports'}}
+  };
+  let mobileRole='teacher';
+  function navItems(role){
+    const cls=role==='teacher'?'.t-nav':role==='admin'?'.a-nav':role==='librarian'?'.l-nav':'.sk-nav';
+    return Array.from(document.querySelectorAll(cls)).map(a=>({id:(a.getAttribute('onclick')||'').match(/switchTab\([^,]+,\s*[\'\"]([^\'\"]+)/)?.[1],label:(a.textContent||'').replace(/\s+/g,' ').trim(),icon:a.querySelector('svg')?.getAttribute('data-lucide')||'circle'})).filter(x=>x.id);
+  }
+  function roleName(){return (loggedUser&&loggedUser.name)||({teacher:'Teacher',admin:'Administrator',librarian:'School Librarian',storekeeper:'School Store Keeper'}[currentRole]||'User');}
+  function initials(n){return String(n||'BL').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'BL';}
+  function build(){
+    if(!document.body.classList.contains('portal-mode')) return;
+    mobileRole=currentRole||'teacher';
+    const cfg=configs[mobileRole]||configs.teacher;
+    const strip=document.getElementById('mobile-section-strip');
+    if(!strip)return;
+    strip.innerHTML=cfg.top.map((x,i)=>`<button type="button" class="mobile-section-item ${i===0?'active':''}" data-mobile-tab="${x[0]}" onclick="mobilePortalTab('${x[0]}')"><i data-lucide="${x[2]}"></i><span>${x[1]}</span></button>`).join('');
+    const all=navItems(mobileRole);
+    document.getElementById('mobile-more-list').innerHTML=all.map(x=>`<button type="button" class="mobile-more-item" onclick="mobilePortalTab('${x.id}');mobilePortalMore(false)"><i data-lucide="${x.icon}"></i><span>${x.label}</span></button>`).join('');
+    document.getElementById('mobile-welcome-title').textContent='Welcome '+roleName()+',';
+    document.getElementById('mobile-user-avatar').textContent=initials(roleName());
+    const statMap={
+      teacher:[['—','Teachers'],['—','Students'],['—','Subjects'],['—','Attendance']],
+      admin:[['—','Teachers'],['—','Students'],['—','Admissions'],['—','Messages']],
+      librarian:[['—','Books'],['—','Learners'],['—','Issued'],['—','Fines']],
+      storekeeper:[['—','Items'],['—','Received'],['—','Issued'],['—','Balance']]
+    };
+    const vals=statMap[mobileRole]||statMap.teacher;
+    vals.forEach((v,i)=>{document.getElementById('mobile-stat-'+(i+1)).textContent=v[0];document.getElementById('mobile-stat-l'+(i+1)).textContent=v[1];});
+    if(window.lucide&&lucide.createIcons)try{lucide.createIcons();}catch(e){}
+    updateActive();
+  }
+  function updateActive(tab){
+    const current=tab||document.querySelector('.tab-content.active')?.id||((configs[mobileRole]||configs.teacher).top[0][0]);
+    document.querySelectorAll('.mobile-section-item').forEach(b=>b.classList.toggle('active',b.dataset.mobileTab===current));
+    const cfg=configs[mobileRole]||configs.teacher;
+    document.querySelectorAll('.mobile-bottom-item').forEach(b=>b.classList.remove('active'));
+    const slot=Object.keys(cfg.bottom).find(k=>cfg.bottom[k]===current)|| (current.endsWith('dashboard')?'home':null);
+    if(slot){const b=document.querySelector(`.mobile-bottom-item[data-mobile-slot="${slot}"]`);if(b)b.classList.add('active');}
+    const home=current.endsWith('dashboard')||current==='t-dashboard'||current==='a-dashboard'||current==='l-dashboard'||current==='sk-dashboard';
+    document.getElementById('mobile-home-content').style.display=home?'block':'none';
+    document.body.classList.toggle('mobile-dashboard-home',home);
+    const primary=document.getElementById('mobile-primary-btn');
+    if(primary){primary.textContent=mobileRole==='teacher'?'My Subjects':mobileRole==='admin'?'Manage Staff':mobileRole==='librarian'?'Library Search':'My Stock';}
+    const sw=document.getElementById('mobile-switch-title');
+    if(sw){sw.textContent=mobileRole==='teacher'?'My Subjects':mobileRole==='admin'?'Manage Staff':mobileRole==='librarian'?'Library Search':'My Stock';}
+  }
+  window.mobilePortalTab=function(tab){
+    if(!mobileRole)return;
+    switchTab(mobileRole,tab,true); updateActive(tab);
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+  window.mobilePortalBottom=function(slot){
+    if(slot==='more'){mobilePortalMore(true);return;}
+    const cfg=configs[mobileRole]||configs.teacher; const tab=cfg.bottom[slot]; if(tab) mobilePortalTab(tab);
+  };
+  window.mobilePortalMore=function(open){
+    const p=document.getElementById('mobile-more-panel'); if(!p)return;
+    if(open===false){p.classList.remove('open');return;} p.classList.add('open');
+    if(window.lucide&&lucide.createIcons)try{lucide.createIcons();}catch(e){}
+  };
+  window.mobilePortalPrimary=function(){const cfg=configs[mobileRole]||configs.teacher; mobilePortalTab(cfg.top[1]?.[0]||cfg.top[0][0]);};
+  window.mobilePortalStat=function(i){const cfg=configs[mobileRole]||configs.teacher; const tabs=[cfg.top[1]?.[0],cfg.bottom.calendar,cfg.bottom.tasks,cfg.bottom.messages]; if(tabs[i])mobilePortalTab(tabs[i]);};
+  window.mobilePortalSearch=function(){const t=mobileRole==='librarian'?'l-search':mobileRole==='admin'?'a-manage-teachers':mobileRole==='storekeeper'?'sk-books-stationery':'t-cats';mobilePortalTab(t);};
+  window.mobilePortalMessages=function(){const cfg=configs[mobileRole]||configs.teacher;mobilePortalTab(cfg.bottom.messages||cfg.top[0][0]);};
+  const oldShow=window.showView; window.showView=function(viewId){oldShow.apply(this,arguments); if(viewId!=='public'){setTimeout(build,0);} };
+  const oldSwitch=window.switchTab; window.switchTab=function(role,tabId,pushHistory){oldSwitch.apply(this,arguments); if(window.matchMedia&&window.matchMedia('(max-width: 767px)').matches){mobileRole=role;setTimeout(()=>updateActive(tabId),0);} };
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(build,250));
+  window.addEventListener('resize',()=>{if(window.innerWidth<=767)build();});
+})();
+</script>
