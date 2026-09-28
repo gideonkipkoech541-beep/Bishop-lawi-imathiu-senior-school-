@@ -433,6 +433,172 @@ body:not(.portal-mode) #public-view > section{
   color:var(--home-cream,#f7f1e3)!important;
 }
 </style>
+
+<style id="mobile-narrow-top-sidebar-fix">
+@media (max-width: 767px){
+  /* Use the existing portal only. The reference mobile shell is hidden. */
+  body.portal-mode #mobile-portal-shell{display:none!important;}
+
+  /* Make the portal itself a narrow, phone-width vertical page. */
+  body.portal-mode main{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:100vh!important;
+    overflow:visible!important;
+  }
+
+  /* Existing sidebar becomes a short horizontal section bar at the very top. */
+  body.portal-mode #portal-sidebar,
+  body.portal-mode.mobile-portal-menu-open #portal-sidebar,
+  body.portal-mode.mobile-portal-section-open #portal-sidebar{
+    display:block!important;
+    position:sticky!important;
+    top:0!important;
+    z-index:9999!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    box-sizing:border-box!important;
+    padding:0!important;
+    margin:0!important;
+    background:#123d2b!important;
+    border:0!important;
+    box-shadow:0 2px 8px rgba(0,0,0,.18)!important;
+    overflow:hidden!important;
+  }
+
+  /* Hide the large school/portal logo block and footer so they don't consume phone space. */
+  body.portal-mode #portal-sidebar > div:first-child,
+  body.portal-mode #portal-sidebar > div:last-child{
+    display:none!important;
+  }
+
+  /* Only the currently active role's navigation is displayed. */
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden){
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:4px!important;
+    width:100%!important;
+    height:60px!important;
+    margin:0!important;
+    padding:4px!important;
+    box-sizing:border-box!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+  }
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden)::-webkit-scrollbar{display:none!important;}
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden) > p{display:none!important;}
+
+  /* Each section follows the previous one horizontally. */
+  body.portal-mode #portal-sidebar .nav-item,
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden) > button{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:112px!important;
+    max-width:150px!important;
+    height:52px!important;
+    min-height:52px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    border:0!important;
+    border-radius:8px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:7px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    color:#fff!important;
+    background:transparent!important;
+    font-size:12px!important;
+    line-height:1!important;
+    text-align:center!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+  body.portal-mode #portal-sidebar .nav-item.active-nav,
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden) > button.active-nav{
+    background:#4a2f24!important;
+    color:#fff!important;
+  }
+  body.portal-mode #portal-sidebar .nav-item svg,
+  body.portal-mode #portal-sidebar > div[id$="-nav-items"]:not(.hidden) > button svg{
+    width:18px!important;
+    height:18px!important;
+    flex:0 0 auto!important;
+  }
+
+  /* Portal content is full phone width and begins immediately below the section bar. */
+  body.portal-mode #portal-content{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode #portal-content > .bg-white{
+    width:100%!important;
+    min-width:0!important;
+    min-height:48px!important;
+    padding:8px 10px!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode #portal-content .portal-view{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:calc(100vh - 108px)!important;
+    padding:12px 12px 28px!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+  body.portal-mode #portal-content .portal-view .tab-content{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Prevent dashboard cards/grids from becoming wider than the phone. */
+  body.portal-mode #portal-content .portal-view .grid{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  body.portal-mode #portal-content .portal-view .grid > *{
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  body.portal-mode #portal-content img,
+  body.portal-mode #portal-content iframe,
+  body.portal-mode #portal-content canvas,
+  body.portal-mode #portal-content svg{
+    max-width:100%;
+  }
+
+  /* Tables can scroll horizontally inside their own area rather than widening the page. */
+  body.portal-mode #portal-content .overflow-x-auto{
+    max-width:100%!important;
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+}
+</style>
 </head>
 <body class="min-h-screen flex flex-col">
 
