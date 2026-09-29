@@ -3557,6 +3557,8 @@ try { localStorage.removeItem("schoolPortalLastHash"); } catch (e) {}
             el.classList.remove('hidden');
         }
 
+        let adminAuthLoginInProgress = false;
+
         async function handleFirebaseAdminLogin(email, password) {
             if (!window.firebase || typeof firebase.auth !== 'function') {
                 throw new Error('Firebase Authentication has not loaded. Check your internet connection and refresh the page.');
@@ -3565,9 +3567,14 @@ try { localStorage.removeItem("schoolPortalLastHash"); } catch (e) {}
                 throw new Error('Enter the Administrator email and password.');
             }
             const auth = firebase.auth();
-            await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
-            const result = await auth.signInWithEmailAndPassword(email, password);
-            return result.user;
+            adminAuthLoginInProgress = true;
+            try {
+                await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+                const result = await auth.signInWithEmailAndPassword(email, password);
+                return result.user;
+            } finally {
+                adminAuthLoginInProgress = false;
+            }
         }
 
         // ================= LIBRARIAN / STORE KEEPER PASSWORD MANAGEMENT =================
@@ -6829,7 +6836,7 @@ Learner: ${patronName}`);
                 // Firebase Auth is used for Administrator. Do not sign out on refresh
                 // when a valid sessionStorage portal session exists.
                 if (currentRole === 'admin') {
-                    if (!user) {
+                    if (!user && !adminAuthLoginInProgress) {
                         clearPortalSession();
                         currentRole = 'public';
                         loggedUser = null;
@@ -6838,6 +6845,11 @@ Learner: ${patronName}`);
                     return;
                 }
                 if (currentRole === 'public' && user) {
+                    // During an Administrator login, Firebase fires onAuthStateChanged
+                    // before handleLogin() resumes and sets currentRole to 'admin'.
+                    // Do NOT sign the user out during that short transition.
+                    if (adminAuthLoginInProgress) return;
+
                     // A stale Firebase session without a portal session must not
                     // silently log the user into the portal.
                     firebase.auth().signOut().catch(()=>{});
@@ -7235,3 +7247,63 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 </script>
 
+
+
+<!-- FINAL FUNCTIONAL FIXES: admin login routing + mobile portal tab layout -->
+<style id="final-functional-fixes">
+@media (max-width: 767px){
+  /* Keep each portal page directly below the top navigation. */
+  body.portal-mode #portal-content .portal-view{
+    position:static!important;
+    margin:0!important;
+    float:none!important;
+    clear:both!important;
+    overflow:visible!important;
+    height:auto!important;
+    max-height:none!important;
+  }
+  body.portal-mode #portal-content .portal-view .tab-content{
+    position:static!important;
+    margin:0!important;
+    float:none!important;
+    clear:both!important;
+    overflow:visible!important;
+    height:auto!important;
+    max-height:none!important;
+  }
+  body.portal-mode #portal-content .portal-view .tab-content.active{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+  body.portal-mode #portal-content .portal-view .tab-content:not(.active){
+    display:none!important;
+    visibility:hidden!important;
+  }
+  #storekeeper-view #sk-security{padding-top:4px!important;}
+  #storekeeper-view #sk-security form{display:block!important;position:static!important;}
+}
+</style>
+<script id="final-functional-fixes-js">
+(function(){
+  // Make portal tab switching defensive and always reset the visible page to its top.
+  var originalSwitch = window.switchTab;
+  if (typeof originalSwitch === 'function') {
+    window.switchTab = function(role, tabId, pushHistory) {
+      originalSwitch.apply(this, arguments);
+      setTimeout(function(){
+        var view = document.getElementById(role + '-view');
+        var tab = document.getElementById(tabId);
+        if (!view || !tab) return;
+        view.querySelectorAll('.tab-content').forEach(function(el){
+          el.classList.toggle('active', el === tab);
+        });
+        tab.scrollIntoView({block:'start', behavior:'auto'});
+        window.scrollTo(0,0);
+        var content=document.getElementById('portal-content');
+        if(content) content.scrollTop=0;
+      }, 0);
+    };
+  }
+})();
+</script>
